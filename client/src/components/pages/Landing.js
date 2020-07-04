@@ -428,7 +428,7 @@ class Landing extends React.Component {
                         marginBottom: "50px",
                      }}
                   >
-                     <h1 className="mt-5 text-white">Loadout x</h1>
+                     <h1 className="mt-5 text-white">Loadout</h1>
                      {/* render either the log-in or new account cards depending on landingMode */}
                      {this.state.landingMode === "log-in" &&
                         this.renderLogInCard()}
