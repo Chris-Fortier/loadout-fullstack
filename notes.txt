@@ -89,3 +89,10 @@ use Heroku
          this opens the webpage
 *npm run server in root (server) folder locally starts the server
 *npm run start in client/ folder locally starts the client
+
+Change your Heroku domain
+   in your Heroku Setting tab for the app
+      change the app name
+   in your root folder console
+      heroku git:remote -a yourdomain
+         don't enter the herokuapp.com part
