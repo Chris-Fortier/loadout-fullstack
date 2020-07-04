@@ -1,0 +1,44 @@
+new project folder called my-app-fullstack
+in that folder console
+   npm init
+      instead of index.js, make the entry point server.js
+make your .prettierrc file
+   { "tabWidth": 3 }
+create server.js
+   console.log(“Hello world”);
+console project folder
+   npm start
+      this should return Hello world
+   npm install mysql
+   npm install dotenv
+   npm i express
+get these files set up from previous project and make changes necessary
+   server.js
+   db.js
+   .env
+make a .gitignore (or copy from prev project)
+   make sure to have .env
+console project folder
+   git init
+make a new repo on git called my-app-fullstack
+make an initial commit
+console project folder
+   git remote add origin (...and the rest of it)
+   git push -u origin master
+
+In package.json “scripts”:
+   "start": "nodemon server.js"
+      now npm start at the root folder will run the server and it will update whenever changes are made
+
+get the client stuff from previous project, make a monolithic application
+   new folder in root called client
+      copy everything from your previous project here not including:
+         .git
+         build
+         node_modules
+   in console in client folder
+      npm install
+   commit a new change "add client folder"
+
+npm run start in root (server) folder locally starts the server
+npm run start in client/ folder locally starts the client

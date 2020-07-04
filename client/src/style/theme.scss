@@ -1,0 +1,428 @@
+// colors
+
+$white: #ffffff;
+$black: #000;
+
+$gray-050: #e5e6e8;
+$gray-100: #cccdd2;
+$gray-200: #b4b4bb;
+$gray-300: #999aa4;
+$gray-400: #80818d;
+$gray-500: #666877;
+$gray-600: #52535f;
+$gray-700: #3d3e47;
+$gray-800: #292a30;
+$gray-900: #141518;
+
+$blue-050: #dae8f4;
+$blue-100: #bfccf5;
+$blue-200: #97adf1;
+$blue-300: #7693ec;
+$blue-400: #587be7;
+$blue-500: #4366d3;
+$blue-600: #2f52b9;
+$blue-700: #1c3688;
+$blue-800: #0c205a;
+$blue-900: #010b2d;
+
+$red-050: #f6dce2;
+$red-100: #ecb8c5;
+$red-200: #e38ea3;
+$red-300: #da6a84;
+$red-400: #cb4666;
+$red-500: #c13958;
+$red-600: #a42443;
+$red-700: #770d26;
+$red-800: #500416;
+$red-900: #290505;
+
+$grays: ();
+$grays: map-merge(
+   (
+      "100": $gray-100,
+      "200": $gray-200,
+      "300": $gray-300,
+      "400": $gray-400,
+      "500": $gray-500,
+      "600": $gray-600,
+      "700": $gray-700,
+      "800": $gray-800,
+      "900": $gray-900,
+   ),
+   $grays
+);
+
+$blue: $blue-600;
+$red: $red-600;
+$gray: $gray-600;
+
+$colors: ();
+// stylelint-disable-next-line scss/dollar-variable-default
+$colors: map-merge(
+   (
+      "blue": $blue,
+      "red": $red,
+      "white": $white,
+      "gray": $gray,
+      "gray-dark": $gray-800,
+   ),
+   $colors
+);
+
+$primary: $gray-700;
+$secondary: $gray-400;
+$success: $blue;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-800;
+
+$theme-colors: ();
+// stylelint-disable-next-line scss/dollar-variable-default
+$theme-colors: map-merge(
+   (
+      "primary": $primary,
+      "secondary": $secondary,
+      "success": $success,
+      "danger": $danger,
+      "light": $light,
+      "dark": $dark,
+   ),
+   $theme-colors
+);
+
+// loadout colors
+
+$level-colors: (
+   // 25% saturation
+      // 0: #6686a6,
+      // 1: #58986d,
+      // 2: #798d4d,
+      // 3: #937e53,
+      // 4: #ad6d6d,
+      // 15% saturation
+      // 0: #718497,
+      // 1: #688e74,
+      // 2: #7c8862,
+      // 3: #8b7f65,
+      // 4: #9b7575,
+      // all gray
+      // 0: gray,
+      // 1: gray,
+      // 2: gray,
+      // 3: gray,
+      // 4: gray,
+      // blue-teal straight to brown
+      // 0: #5c7a99,
+      // 1: #6b7a8a,
+      // 2: #7a7a7b,
+      // 3: #8a7a6b,
+      // 4: #997a5c,
+      // blue-teal straight to brown 2 (more even luminance)
+      //    0: #6886a5,
+      // 1: #748393,
+      // 2: #808081,
+      // 3: #8d7d6e,
+      // 4: #997a5c,
+      // blue-teal to green to brown
+      // 0: #6b859e,
+      // 1: #629563,
+      // 2: #748d5a,
+      // 3: #898356,
+      // 4: #947b61,
+      // blue-teal to brown 3
+      0: #7081a3,
+   1: #5c8f8f,
+   2: #6e905d,
+   3: #838754,
+   4: #957b62,
+   5: #a37078,
+   6: #9270a3
+);
+
+$level-change: 12%; // how much each lighter or darker the parent and child levels are compared to the current level
+$packed-change: 9%; // how much each lighter or darker the parent and child levels are compared to the current level
+// 10-15% work well
+
+$parent-colors: (
+   0: lighten(map-get($level-colors, 0), $level-change),
+   1: lighten(map-get($level-colors, 1), $level-change),
+   2: lighten(map-get($level-colors, 2), $level-change),
+   3: lighten(map-get($level-colors, 3), $level-change),
+   4: lighten(map-get($level-colors, 4), $level-change),
+   5: lighten(map-get($level-colors, 5), $level-change),
+   6: lighten(map-get($level-colors, 6), $level-change),
+);
+
+$child-colors: (
+   0: darken(map-get($level-colors, 0), $level-change),
+   1: darken(map-get($level-colors, 1), $level-change),
+   2: darken(map-get($level-colors, 2), $level-change),
+   3: darken(map-get($level-colors, 3), $level-change),
+   4: darken(map-get($level-colors, 4), $level-change),
+   5: darken(map-get($level-colors, 5), $level-change),
+   6: darken(map-get($level-colors, 6), $level-change),
+);
+
+$packed-colors: (
+   // 0: darken(map-get($level-colors, 0), $level-change + $packed-change),
+      // 1: darken(map-get($level-colors, 1), $level-change + $packed-change),
+      // 2: darken(map-get($level-colors, 2), $level-change + $packed-change),
+      // 3: darken(map-get($level-colors, 3), $level-change + $packed-change),
+      // 4: darken(map-get($level-colors, 4), $level-change + $packed-change),
+      // 5: darken(map-get($level-colors, 5), $level-change + $packed-change),
+      // 6: darken(map-get($level-colors, 6), $level-change + $packed-change),
+      0: transparentize(map-get($child-colors, 0), 0.5),
+   1: transparentize(map-get($child-colors, 1), 0.5),
+   2: transparentize(map-get($child-colors, 2), 0.5),
+   3: transparentize(map-get($child-colors, 3), 0.5),
+   4: transparentize(map-get($child-colors, 4), 0.5),
+   5: transparentize(map-get($child-colors, 5), 0.5),
+   6: transparentize(map-get($child-colors, 6), 0.5)
+);
+
+$header-bg-color: darken(map-get($level-colors, 0), 40%);
+$header-text-color: map-get($level-colors, 4);
+
+$darker-stuff: rgba(
+   0,
+   0,
+   0,
+   0.7
+); // make this a darker version of whatever color is behind it
+$lighter-stuff: rgba(
+   255,
+   255,
+   255,
+   0.7
+); // this this a lighter version of whatever color is behind it
+
+// colored text for light mode and dark mode
+$level-text-colors: (
+   0: #4969a9,
+   1: #238383,
+   2: #448424,
+   3: #6b7313,
+   4: #8d5c2d,
+   5: #a74757,
+   6: #8848a8,
+);
+
+// dark mode background colors
+$this-bg-dark: hsl(0, 0, 16);
+$parent-bg-dark: hsl(0, 0, 20);
+$child-bg-dark: hsl(0, 0, 12);
+$child-bg-dark-packed: hsla(0, 0, 12, 0.6);
+
+// light mode background colors
+$this-bg-light: hsl(0, 0, 80);
+$parent-bg-light: lighten($this-bg-light, 12%);
+$child-bg-light: darken($this-bg-light, 12%);
+$child-bg-light-packed: hsla(0, 0, 72, 0.6);
+
+// SPACING
+
+$spacer: 1rem; // 16px in most browsers
+$spacers: ();
+$spacers: map-merge(
+   (
+      0: 0px,
+      1: 4px,
+      2: 8px,
+      3: 12px,
+      4: 16px,
+      5: 24px,
+      6: 32px,
+      7: 48px,
+      8: 64px,
+      9: 128px,
+   ),
+   $spacers
+);
+
+// Links
+
+$link-color: theme-color("primary");
+$link-decoration: none;
+$link-hover-color: darken($link-color, 15%);
+$link-hover-decoration: underline;
+// Darken percentage for links with `.text-*` class (e.g. `.text-success`)
+$emphasized-link-hover-darken-percentage: 15%;
+
+// Font Stuff
+
+// @import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500&family=Noto+Sans:wght@400;700&family=Noto+Serif&display=swap"); // White Bear
+@import url("https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap"); // Loadout
+
+// $font-family-sans-serif: "Noto Sans", sans-serif, "Apple Color Emoji"; // White Bear
+$font-family-sans-serif: "Teko", sans-serif; // Loadout
+// $font-family-serif: "Noto Serif", serif;
+// $font-family-brand: "Fira Sans";
+// $font-family-base: $font-family-sans-serif; // White Bear
+$font-family-base: $font-family-sans-serif; // Loadout
+
+// $font-weight-normal: 400;
+// $font-weight-bold: 700;
+
+// $line-height-base: 1.5;
+// $line-height-base: 1.5;
+
+// $font-size-base: 1rem; // Assumes the browser default, typically `16px`
+// $font-size-lg: $font-size-base * 1.25;
+// $font-size-sm: $font-size-base * 0.875;
+
+// $h1-font-size: $font-size-base * 3.75;
+// $h2-font-size: $font-size-base * 1.6875;
+// $h3-font-size: $font-size-base * 1.25;
+// $h4-font-size: $font-size-base * 1.25;
+
+// $lead-font-size: $font-size-base * 1.25;
+// $lead-font-weight: $font-weight-normal;
+
+// cards
+
+// $card-spacer-y: map-get($spacers, 4);
+// $card-spacer-x: map-get($spacers, 4);
+// $card-border-width: $border-width;
+
+// border
+
+// $border-width: 2px;
+// $input-btn-border-width: $border-width;
+// $btn-border-width: $input-btn-border-width;
+
+// $border-color: $primary;
+
+// $border-radius: map-get($spacers, 1);
+// $border-radius-lg: $border-radius;
+// $border-radius-sm: $border-radius;
+
+// buttons and inputs
+
+$input-btn-padding-y: map-get($spacers, 2);
+$input-btn-padding-x: map-get($spacers, 4);
+$input-btn-font-size: $font-size-base;
+$input-btn-line-height: $line-height-base;
+
+$input-btn-padding-y-sm: map-get($spacers, 1);
+$input-btn-padding-x-sm: map-get($spacers, 4);
+$input-btn-font-size-sm: $font-size-base;
+$input-btn-line-height-sm: $line-height-base;
+
+$input-btn-padding-y-lg: map-get($spacers, 2);
+$input-btn-padding-x-lg: map-get($spacers, 6);
+$input-btn-font-size-lg: $font-size-base;
+$input-btn-line-height-lg: $line-height-base;
+
+// Buttons
+
+$btn-padding-y: $input-btn-padding-y;
+$btn-padding-x: $input-btn-padding-x;
+$btn-font-size: $font-size-base;
+$btn-line-height: $line-height-base;
+
+$btn-padding-y-sm: $input-btn-padding-y-sm;
+$btn-padding-x-sm: $input-btn-padding-x-sm;
+$btn-font-size-sm: $font-size-base;
+$btn-line-height-sm: $line-height-base;
+
+$btn-padding-y-lg: $input-btn-padding-y-lg;
+$btn-padding-x-lg: $input-btn-padding-x-lg;
+$btn-font-size-lg: $font-size-base;
+$btn-line-height-lg: $line-height-base;
+
+$btn-font-weight: $font-weight-bold;
+
+// INPUTS
+
+$input-padding-y: $input-btn-padding-y;
+$input-padding-x: $input-btn-padding-x;
+$input-font-size: $font-size-base;
+$input-line-height: $line-height-base;
+
+$input-padding-y-sm: $input-btn-padding-y-sm;
+$input-padding-x-sm: $input-btn-padding-x-sm;
+$input-font-size-sm: $font-size-base;
+$input-line-height-sm: $line-height-base;
+
+$input-padding-y-lg: $input-btn-padding-y-lg;
+$input-padding-x-lg: $input-btn-padding-x-lg;
+$input-font-size-lg: $font-size-base;
+$input-line-height-lg: $line-height-base;
+
+// Input border-radius
+$btn-border-radius: $border-radius;
+// $btn-border-radius-lg: $border-radius-lg;
+// $btn-border-radius-sm: $border-radius-sm;
+
+// $border-radius: 0.25rem;
+// $border-radius: 4px;
+// $border-radius: map-get($spacers, 1);
+
+// $border-radius-lg: 0.3rem;
+// $border-radius-sm: 0.2rem;
+$input-border-radius: $border-radius;
+
+// $border-width: 2px;
+// $border-color: $gray-600;
+$input-btn-border-width: $border-width;
+// changes the border color
+$input-border-color: $secondary;
+$input-border-width: $input-btn-border-width;
+
+// CHECKBOX
+
+// $custom-checkbox-indicator-border-radius: $border-radius;
+// // $custom-checkbox-indicator-icon-checked:        url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><path fill='#{$custom-control-indicator-checked-color}' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/></svg>");
+
+// $custom-checkbox-indicator-indeterminate-bg: $component-active-bg;
+// $custom-checkbox-indicator-indeterminate-color: $custom-control-indicator-checked-color;
+// $custom-checkbox-indicator-icon-indeterminate: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'><path stroke='#{$custom-checkbox-indicator-indeterminate-color}' d='M0 2h4'/></svg>");
+// $custom-checkbox-indicator-indeterminate-box-shadow: none;
+// $custom-checkbox-indicator-indeterminate-border-color: $custom-checkbox-indicator-indeterminate-bg;
+
+$component-active-color: $white;
+$component-active-bg: $dark; // set this to dark, bg of active checks and switches
+$custom-control-indicator-checked-color: $component-active-color;
+$custom-control-indicator-checked-bg: $component-active-bg;
+// $custom-control-indicator-checked-border-color: $custom-control-indicator-checked-bg;
+// $custom-control-indicator-checked-box-shadow: none;
+
+// BREAKPOINTS
+
+$item-card-min-width: 263px; // minimum width of the item cards before the layout changes
+// 263px is how wide a 2-column card would be on iPhone 5/SE lanscape with the margins
+$item-card-max-width: 350px; // maximum width of the item cards before the layout changes
+$item-card-spacing: 12px; // space between the item cards
+
+// // changed sm from 576px because iPhone 5/SE landscape is 568 px and I want it to go to sm
+// $grid-breakpoints: (
+//    // xs single column edge to edge fluid cards
+//       xs: 0,
+//    // sm single column fixed width with fluid margins
+//       sm: $item-card-max-width + 15 * 2,
+//    // md double column edge to edge fluid cards
+//       md: $item-card-min-width * 2 + $item-card-spacing + 15 * 2,
+//    // lg double column fixed width with fluid margins
+//       lg: 992px,
+//    xl: 1200px
+// );
+
+// common rules
+
+// shadows
+$item-card-shadow: 0 3px 3px rgba(0, 0, 0, 0.23);
+$button-shadow: 0 3px 3px rgba(0, 0, 0, 0.23);
+$inner-shadow: inset 0 3px 3px rgba(0, 0, 0, 0.23);
+$pack-icon-shadow: 0 0 2px rgba(0, 0, 0, 1);
+
+// spacing
+$space-between-button-rows: 9px;
+$space-between-sections: 16px;
+$card-section-padding: 9px;
+
+$outline-style: 1px solid rgba(0, 0, 0, 0.5);
+
+// font colors
+$light-text-color: rgba(255, 255, 255, 0.6);
+$light-text-color-dim: rgba(255, 255, 255, 0.25);
+$dark-text-color: rgba(0, 0, 0, 0.7);

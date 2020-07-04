@@ -1,0 +1,975 @@
+html {
+   font-size: 20px; // Teko is a smaller looking font so setting the base size as 20px
+}
+
+.card-body {
+   padding: 1rem; // override the default of 1.25rem
+}
+
+.red {
+   background-color: red;
+}
+
+.green {
+   background-color: green;
+}
+
+.blue {
+   background-color: blue;
+}
+
+.cyan {
+   background-color: cyan;
+}
+
+.background-image {
+   /* https://css-tricks.com/perfect-full-page-background-image/ */
+   background: url("../img/mt-charleston.jpg") no-repeat center center fixed;
+   background-size: cover;
+   min-height: 100vh;
+}
+
+.this-bg-light {
+   background-color: $this-bg-light;
+}
+.this-bg-dark {
+   background-color: $this-bg-dark;
+}
+
+// colors for gear cards
+.level-color-0 {
+   background-color: map-get($level-colors, 0);
+}
+.level-color-1 {
+   background-color: map-get($level-colors, 1);
+}
+.level-color-2 {
+   background-color: map-get($level-colors, 2);
+}
+.level-color-3 {
+   background-color: map-get($level-colors, 3);
+}
+.level-color-4 {
+   background-color: map-get($level-colors, 4);
+}
+.level-color-5 {
+   background-color: map-get($level-colors, 5);
+}
+.level-color-6 {
+   background-color: map-get($level-colors, 6);
+}
+
+.parent-bg-light {
+   background-color: $parent-bg-light;
+}
+.parent-bg-dark {
+   background-color: $parent-bg-dark;
+}
+
+.parent-color-0 {
+   background-color: map-get($parent-colors, 0);
+}
+.parent-color-1 {
+   background-color: map-get($parent-colors, 1);
+}
+.parent-color-2 {
+   background-color: map-get($parent-colors, 2);
+}
+.parent-color-3 {
+   background-color: map-get($parent-colors, 3);
+}
+.parent-color-4 {
+   background-color: map-get($parent-colors, 4);
+}
+.parent-color-5 {
+   background-color: map-get($parent-colors, 5);
+}
+.parent-color-6 {
+   background-color: map-get($parent-colors, 6);
+}
+
+.child-bg-light {
+   background-color: $child-bg-light;
+}
+.child-bg-light-packed {
+   background-color: $child-bg-light-packed;
+}
+.child-bg-dark {
+   background-color: $child-bg-dark;
+}
+.child-bg-dark-packed {
+   background-color: $child-bg-dark-packed;
+}
+
+.child-color-0 {
+   background-color: map-get($child-colors, 0);
+}
+.child-color-1 {
+   background-color: map-get($child-colors, 1);
+}
+.child-color-2 {
+   background-color: map-get($child-colors, 2);
+}
+.child-color-3 {
+   background-color: map-get($child-colors, 3);
+}
+.child-color-4 {
+   background-color: map-get($child-colors, 4);
+}
+.child-color-5 {
+   background-color: map-get($child-colors, 5);
+}
+.child-color-6 {
+   background-color: map-get($child-colors, 6);
+}
+
+.packed-color-0 {
+   background-color: map-get($packed-colors, 0);
+}
+.packed-color-1 {
+   background-color: map-get($packed-colors, 1);
+}
+.packed-color-2 {
+   background-color: map-get($packed-colors, 2);
+}
+.packed-color-3 {
+   background-color: map-get($packed-colors, 3);
+}
+.packed-color-4 {
+   background-color: map-get($packed-colors, 4);
+}
+.packed-color-5 {
+   background-color: map-get($packed-colors, 5);
+}
+.packed-color-6 {
+   background-color: map-get($packed-colors, 6);
+}
+
+// when using "color" ui appearance, this is for the packed icons
+.item-icon-colors {
+   .parent-item {
+      fill: $dark-text-color;
+   }
+   .this-item {
+      fill: $light-text-color;
+   }
+   .child-item {
+      fill: $dark-text-color;
+   }
+}
+
+.item-icon-colors-0 {
+   // colors for the packing icons
+   .parent-item {
+      fill: map-get($level-text-colors, 6);
+   }
+   .this-item {
+      fill: map-get($level-text-colors, 0);
+   }
+   .child-item {
+      fill: map-get($level-text-colors, 1);
+   }
+}
+.item-icon-colors-1 {
+   // colors for the packing icons
+   .parent-item {
+      fill: map-get($level-text-colors, 0);
+   }
+   .this-item {
+      fill: map-get($level-text-colors, 1);
+   }
+   .child-item {
+      fill: map-get($level-text-colors, 2);
+   }
+}
+.item-icon-colors-2 {
+   // colors for the packing icons
+   .parent-item {
+      fill: map-get($level-text-colors, 1);
+   }
+   .this-item {
+      fill: map-get($level-text-colors, 2);
+   }
+   .child-item {
+      fill: map-get($level-text-colors, 3);
+   }
+}
+.item-icon-colors-3 {
+   // colors for the packing icons
+   .parent-item {
+      fill: map-get($level-text-colors, 2);
+   }
+   .this-item {
+      fill: map-get($level-text-colors, 3);
+   }
+   .child-item {
+      fill: map-get($level-text-colors, 4);
+   }
+}
+.item-icon-colors-4 {
+   // colors for the packing icons
+   .parent-item {
+      fill: map-get($level-text-colors, 3);
+   }
+   .this-item {
+      fill: map-get($level-text-colors, 4);
+   }
+   .child-item {
+      fill: map-get($level-text-colors, 5);
+   }
+}
+.item-icon-colors-5 {
+   // colors for the packing icons
+   .parent-item {
+      fill: map-get($level-text-colors, 4);
+   }
+   .this-item {
+      fill: map-get($level-text-colors, 5);
+   }
+   .child-item {
+      fill: map-get($level-text-colors, 6);
+   }
+}
+.item-icon-colors-6 {
+   // colors for the packing icons
+   .parent-item {
+      fill: map-get($level-text-colors, 5);
+   }
+   .this-item {
+      fill: map-get($level-text-colors, 6);
+   }
+   .child-item {
+      fill: map-get($level-text-colors, 0);
+   }
+}
+
+.level-text-color-0 {
+   color: map-get($level-text-colors, 0);
+}
+.level-text-color-1 {
+   color: map-get($level-text-colors, 1);
+}
+.level-text-color-2 {
+   color: map-get($level-text-colors, 2);
+}
+.level-text-color-3 {
+   color: map-get($level-text-colors, 3);
+}
+.level-text-color-4 {
+   color: map-get($level-text-colors, 4);
+}
+.level-text-color-5 {
+   color: map-get($level-text-colors, 5);
+}
+.level-text-color-6 {
+   color: map-get($level-text-colors, 6);
+}
+
+.light-text-color {
+   color: $light-text-color;
+}
+.dark-text-color {
+   color: $dark-text-color;
+}
+
+.item-list {
+   min-height: 100vh; // makes it extend to bottom of page
+   padding-top: 16px; // some space at top below the header
+}
+
+// .scroll-fix {
+//    // padding-left: calc(100vw - 100%);
+//    background-color: red;
+// }
+
+// body {
+//    overflow-x: hidden;
+//    overflow-y: overlay;
+//    // padding-right: calc(100vw - 100%);
+// }
+
+// html {
+//    overflow-y: scroll;
+// }
+
+// seems to fix the horizontal extra space issue
+html,
+body {
+   margin: 0;
+   // height: 100%;
+   min-height: 100vh; // changed this
+   overflow-x: hidden;
+   line-height: 1.25rem;
+}
+
+.card {
+   // border: 1px solid rgba(0, 0, 0, 0.125); // Bootstrap default
+   border: 2px solid rgba(0, 0, 0, 0.25); //  make more noticable
+}
+
+.card-header {
+   // border-bottom: 1px solid rgba(0, 0, 0, 0.125); // Bootstrap default
+   border-bottom: 1px solid rgba(0, 0, 0, 0.25); // make more noticable
+
+   // background-color: rgba(0, 0, 0, 0.03)
+   background-color: rgba(0, 0, 0, 0.06); // make more noticable
+
+   h4 {
+      margin-top: 0; // cancels the margin on top of an h4 if its in a card header
+   }
+}
+
+// .rootPaddingFix {
+//    margin-left: -30px;
+//    margin-right: -30px;
+// }
+
+// style specific to the landing page
+.landing-page {
+   // input,
+   // p {
+   //    font-size: 1.25rem;
+   // }
+
+   h1 {
+      text-shadow: 3px 3px 2px $darker-stuff;
+   }
+   .card {
+      background-color: rgba(
+         255,
+         255,
+         255,
+         0.8
+      ); // sets opacity of the card but not its decendants, so I can have opaque sub-elements
+
+      // input {
+      //    opacity: default;
+      // }
+   }
+
+   .btn-primary {
+      color: $lighter-stuff;
+      text-transform: uppercase;
+      // font-size: 1.25rem;
+      font-weight: 600;
+   }
+
+   .btn-secondary {
+      color: $lighter-stuff;
+      text-transform: capitalize;
+      // font-size: 1.25rem;
+      font-weight: 300;
+   }
+}
+
+.big-checkbox {
+   width: 20px;
+   height: 20px;
+}
+
+// h2 {
+//    font-size: 75px;
+// }
+
+// style text for switch labels
+.display-switch-label {
+   font-weight: 300;
+   color: rgba(0, 0, 0, 0.5);
+   text-transform: uppercase;
+   // font-size: 1.25rem;
+}
+
+.item-card {
+   // border-radius: 0.25rem; // Bootstrap default
+   border: 2px solid rgba(0, 0, 0, 0.25);
+   border-radius: 6px; // make more noticable
+   // margin-bottom: $item-card-spacing; // space between item cards
+
+   padding: 5px;
+
+   line-height: 0.9; // this works well with this font if multiple lines are needed
+   font-size: 24px;
+   text-transform: capitalize; // makes first letter of each word uppercase
+
+   // height: 42px; // this is a good fixed size, but if the title spills over multiple lines, it runs off the card
+
+   // background-color: gray; // troubleshooting default color
+
+   // box-shadow: 0 6px 6px rgba(0, 0, 0, 0.3), 0 3px 3px rgba(0, 0, 0, 0.23);
+   box-shadow: $item-card-shadow;
+
+   // remove margin when a button is inside of an item card
+   .button {
+      margin: 0;
+   }
+
+   margin-top: $item-card-spacing/2; // for space between card sections and buttons
+   margin-bottom: $item-card-spacing/2; // for space between card sections and buttons
+
+   display: inline-block; // make it so multiple cards appear on the same row in larger widths
+   width: 100%; // base size in small widths
+}
+.item-card:first-child {
+   margin-top: 0;
+}
+.item-card:last-child {
+   margin-bottom: 0;
+}
+
+// for loadout level cards
+.loadout-card {
+   border: 2px solid rgba(0, 0, 0, 0);
+   margin-bottom: $item-card-spacing; // space between item cards
+
+   padding: 5px;
+
+   line-height: 0.9; // this works well with this font if multiple lines are needed
+   font-size: 24px;
+   text-transform: capitalize; // makes first letter of each word uppercase
+
+   // remove margin when a button is inside of an item card
+   .button {
+      margin: 0;
+   }
+}
+
+.item-card-edit {
+   // border-radius: 0.25rem; // Bootstrap default
+   border: 2px solid rgba(0, 0, 0, 0.25);
+   border-radius: 6px; // make more noticable
+
+   padding-top: 0; // remove the padding inside the card as it will be controlled by the contents
+   padding-bottom: 0; // remove the padding inside the card as it will be controlled by the contents
+   padding-left: 5px; // still want padding on the sides
+   padding-right: 5px; // still want padding on the sides
+
+   line-height: 0.9; // this works well with this font if multiple lines are needed
+   font-size: 24px;
+   text-transform: capitalize; // makes first letter of each word uppercase
+
+   box-shadow: $item-card-shadow;
+
+   // remove margin when a button is inside of an item card
+   .button {
+      margin: 0;
+   }
+
+   margin-top: $item-card-spacing/2; // for space between card sections and buttons
+   margin-bottom: $item-card-spacing/2; // for space between card sections and buttons
+
+   display: inline-block; // make it so multiple cards appear on the same row in larger widths
+   width: 100%; // base size in small widths
+}
+.item-card-edit:first-child {
+   margin-top: 0;
+}
+.item-card-edit:last-child {
+   margin-bottom: 0;
+}
+
+// this used if the screen is wide enough for two "columns" of item cards
+// .item-card-double {
+//    display: inline-block;
+//    width: calc(50% - 6px);
+// }
+
+// .item-card-double:nth-child(odd) {
+//    margin-right: $item-card-spacing;
+// }
+
+// // for text within an item card
+// .item-card-text {
+//    // this is to center the text vertically within the card
+//    padding-top: 8px;
+//    padding-bottom: 6px;
+
+//    // line-height: 0.9; // this works well with this font if multiple lines are needed
+//    // font-size: 1.2rem;
+
+//    color: rgba(255, 255, 255, 0.8);
+// }
+
+// style text for the packed / total items numbers
+.packed-counter {
+   // font-weight: 500;
+   color: $darker-stuff;
+}
+
+.edit-name {
+   // this is to center the text vertically within the card
+   padding-top: 1px;
+   padding-bottom: 0px;
+
+   // line-height: 0.9; // this works well with this font if multiple lines are needed
+   // font-size: 1.2rem;
+   // text-transform: capitalize; // makes first letter of each word uppercase
+
+   color: rgba(0, 0, 0, 0.8);
+
+   background-color: rgba(255, 255, 255, 0.5);
+   // margin-top: -10px;
+   // margin-bottom: -10px;
+   // margin: 0;
+   border: none;
+   width: 100%;
+}
+
+.super-item-card {
+   // border-radius: 0.25rem; // Bootstrap default
+   border-radius: 6px; // make more noticable
+   margin-bottom: $item-card-spacing;
+
+   // padding inside the full page card
+   .card-header,
+   .card-body {
+      padding: $item-card-spacing;
+      // padding-bottom: 0px;
+   }
+}
+
+// no space after last item-card
+// .item-card:last-of-type {
+//    margin-bottom: 0;
+// }
+
+// .btn {
+//    text-transform: uppercase;
+//    font-weight: 700;
+//    color: $darker-stuff;
+// }
+
+// style for the header on the top of the page
+.page-header {
+   background-color: $header-bg-color;
+
+   // padding for the entire header
+   padding-top: 16px;
+   padding-bottom: 8px;
+
+   .btn-link {
+      color: $lighter-stuff; //$header-text-color;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding: 4px 16px; // padding between each button
+      line-height: 1;
+      // font-size: 1.25rem;
+   }
+
+   // for the email address display
+   p {
+      color: $lighter-stuff; //$header-text-color;
+      font-weight: 300;
+      padding: 0 16px; // padding between each button
+      line-height: 1;
+      // font-size: 1.25rem;
+   }
+}
+
+.account-settings {
+   color: red;
+   background-color: blue;
+}
+
+// main title on landing page
+h1 {
+   font-size: 75px;
+   line-height: 0.9; // makes the title tighter if it used multiple lines
+}
+
+// this is for the name of the item on that item's page we are looking at
+h4 {
+   font-size: 32px;
+   text-transform: capitalize; // makes first letter of each word uppercase
+   color: rgba(255, 255, 255, 0.8);
+   line-height: 0.9; // makes the title tighter if it used multiple lines
+   margin-top: 0.5em;
+}
+
+// this is for the titles of the landing page cards
+h5 {
+   font-size: 32px;
+   text-transform: capitalize; // makes first letter of each word uppercase
+   color: $darker-stuff;
+   line-height: 0.9; // makes the title tighter if it used multiple lines
+}
+
+// for buttons that do something to the entire list
+.text-button {
+   background-color: $darker-stuff;
+   border-radius: 6px;
+   border: none;
+   padding-top: 5px; // this is to center it vertically
+   padding-bottom: 0;
+   padding-left: 10px;
+   padding-right: 10px;
+   margin-left: 0;
+   margin-bottom: 8px;
+   // margin: 4px;
+   color: $lighter-stuff;
+
+   // font-size: 1.25rem;
+   text-transform: uppercase;
+   font-weight: 500;
+}
+
+.text-button.muted {
+   opacity: 0.5;
+}
+
+// hover state of the action buttons
+.text-button:hover {
+   // flip the colors
+   background-color: $lighter-stuff;
+   color: $darker-stuff;
+}
+
+// for the button link that goes up a level
+.up-level {
+   font-size: 24px;
+   // color: $darker-stuff;
+}
+
+.faint {
+   opacity: 0.25;
+}
+
+$iconWidth: 30px;
+
+// size and color of icons
+.icon-dark {
+   width: 1em; //$iconWidth;
+
+   align-self: center;
+
+   // margin-top: -4px;
+
+   .primary {
+      fill: rgba(0, 0, 0, 0.25);
+   }
+
+   .secondary {
+      fill: rgba(0, 0, 0, 0.75);
+   }
+}
+
+// size and color of icons
+.icon-light {
+   width: 1em; //$iconWidth;
+
+   align-self: center;
+
+   .primary {
+      fill: $light-text-color;
+   }
+
+   .secondary {
+      fill: $light-text-color-dim;
+   }
+}
+
+// use to enlarge item card icons (1rem is no change)
+.item-card-icon {
+   width: 1.25rem;
+   // -webkit-filter: drop-shadow($pack-icon-shadow);
+   // filter: drop-shadow($pack-icon-shadow);
+}
+
+// vertically align item card text
+.item-card-text {
+   align-self: center;
+}
+
+// assign this class to the div around an inline icon
+.packed-checkbox-container {
+   width: $iconWidth;
+   // display: inline-block;
+   // margin-left: 10px;
+   margin-right: -5px;
+   margin-top: 5px;
+}
+
+// assign this class to anything that is clickable
+.clickable:not(.disabled),
+.navigation-link:not(.disabled),
+.primary-action-button:not(.disabled),
+.danger-action-button:not(.disabled) {
+   // width: $iconWidth;
+   // display: inline-block;
+   // border: none;
+   cursor: pointer;
+   // background-color: transparent;
+   // padding: 0;
+}
+
+// style for disabled icon buttons
+.icon-disabled {
+   pointer-events: fill !important;
+   cursor: not-allowed;
+}
+
+// assign this class to the div around the text input assuming it has 3 icons on the same line
+// .text-input-container {
+//    width: calc(
+//       100% - 90px
+//    ); // the full width of the div minus the three icons left and right
+//    display: inline-block;
+// }
+
+// for icons at the right of the line
+.icon-dark.right,
+.icon-light.left {
+   float: right;
+   margin-left: 4px;
+}
+
+// for icons at the left of the line
+.icon-dark.left,
+.icon-light.left {
+   float: left;
+   margin-right: 4px;
+}
+
+// .item-card-icon {
+//    width: $iconWidth * 0.8;
+
+//    // float: right;
+//    // margin-left: 4px;
+//    // margin-right: 4px;
+//    margin-top: -3px;
+
+//    .primary {
+//       fill: rgba(0, 0, 0, 0.25);
+//    }
+
+//    .secondary {
+//       fill: rgba(0, 0, 0, 0.75);
+//    }
+// }
+
+.card-section {
+   margin-top: $space-between-sections/2; // for space between card sections and buttons
+   margin-bottom: $space-between-sections/2; // for space between card sections and buttons
+   border: $outline-style;
+   background: none;
+   padding: $card-section-padding;
+   box-shadow: $inner-shadow;
+
+   // width: 100%;
+}
+.card-section:first-child {
+   margin-top: 0;
+}
+.card-section:last-child {
+   margin-bottom: 0;
+}
+
+.my-input {
+   margin-top: $space-between-button-rows/2; // for space between card sections and buttons
+   margin-bottom: $space-between-button-rows/2; // for space between card sections and buttons
+   background-color: rgba(255, 255, 255, 0.75);
+   width: 100%;
+   padding: 6px;
+   box-shadow: $inner-shadow;
+   border: $outline-style;
+}
+.my-input:first-child {
+   margin-top: 0;
+}
+.my-input:last-child {
+   margin-bottom: 0;
+}
+
+.my-input-label {
+   margin-top: 0.5rem;
+   margin-bottom: 0;
+}
+
+// for an invalid input
+.input-invalid {
+   // background-color: rgba(255, 191, 191, 0.75);
+   color: rgb(191, 0, 0);
+   border-color: rgb(191, 0, 0);
+}
+.input-invalid::placeholder {
+   color: rgba(191, 0, 0, 0.5);
+}
+
+// common to all my buttons
+.button {
+   margin-top: $space-between-button-rows/2; // for space between card sections and buttons
+   margin-bottom: $space-between-button-rows/2; // for space between card sections and buttons
+   display: inline-block;
+}
+.button:first-child {
+   margin-top: 0;
+}
+.button:last-child {
+   margin-bottom: 0;
+}
+// .button:not(.disabled) {
+//    cursor: pointer;
+//    // color: red;
+// }
+
+.navigation-link {
+   // padding: 0;
+   background-color: transparent;
+   border: 0px solid transparent;
+   padding-left: 0;
+   // color: rgba(0, 0, 0, 0.7);
+   text-transform: capitalize;
+}
+
+.navigation-link:hover:not(.disabled) {
+   text-decoration: underline;
+}
+
+// .rollout-button {
+//    border: 1px solid rgba(0, 0, 0, 0.7);
+//    width: 100%;
+//    background: none;
+//    color: rgba(0, 0, 0, 0.7);
+//    text-align: center;
+// }
+
+// .rollout-button:hover:not(.disabled) {
+//    background-color: rgba(0, 0, 0, 0.125);
+// }
+
+// .rollout-button:active:not(.disabled) {
+//    background-color: rgba(0, 0, 0, 0.25);
+// }
+
+.primary-action-button {
+   background-color: #404040;
+   opacity: 0.7;
+   color: white;
+   font-weight: 500;
+   width: 100%;
+   border: 1px solid transparent;
+   text-align: center;
+   box-shadow: $button-shadow;
+   text-transform: uppercase;
+   padding-top: 0.25rem+0.15rem;
+   padding-bottom: 0.25rem;
+   padding-left: 0.25rem;
+   padding-right: 0.25rem;
+}
+
+.primary-action-button:hover:not(.disabled) {
+   background-color: #212121;
+   color: #dedede;
+}
+
+.primary-action-button:active:not(.disabled) {
+   background-color: rgb(0, 0, 0);
+   color: #bfbfbf;
+   box-shadow: $inner-shadow;
+}
+
+.danger-action-button {
+   background-color: rgb(255, 0, 0);
+   opacity: 0.7;
+   color: white;
+   font-weight: 500;
+   width: 100%;
+   border: 1px solid transparent;
+   text-align: center;
+   box-shadow: $button-shadow;
+   text-transform: uppercase;
+   padding-top: 0.25rem+0.15rem;
+   padding-bottom: 0.25rem;
+   padding-left: 0.25rem;
+   padding-right: 0.25rem;
+}
+
+.danger-action-button:hover:not(.disabled) {
+   background-color: rgb(223, 0, 0);
+   color: #dedede;
+}
+
+.danger-action-button:active:not(.disabled) {
+   background-color: rgb(191, 0, 0);
+   color: #bfbfbf;
+   box-shadow: $inner-shadow;
+}
+
+// button modifiers
+.disabled {
+   opacity: 0.5;
+   pointer-events: fill !important;
+   cursor: not-allowed;
+}
+
+// used for labels on forms and headers on tables
+.form-label {
+   text-transform: uppercase;
+   font-weight: 300;
+   color: rgba(0, 0, 0, 0.5);
+}
+
+// .my-button {
+//    border: none;
+//    border-radius: 0.25em;
+//    font-size: 1.25rem;
+//    font-weight: 400;
+//    padding-left: 6px;
+//    padding-right: 6px;
+//    padding-top: 3px;
+//    padding-bottom: 1px;
+//    // margin-top: 6px;
+//    // display: table-cell;
+//    // width: 100%;
+// }
+
+.tab-separator {
+   border-left: 1px $gray-800 solid;
+}
+
+.hidden {
+   visibility: hidden;
+}
+
+// disable annoying selection of text on certain kinds of elements that the user might click on
+// https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting
+label,
+.button,
+.clickable,
+.item-card {
+   -webkit-touch-callout: none; /* iOS Safari */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Old versions of Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+   user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+// smallest size is single column edge to edge fluid cards
+
+// sm single column fixed width with fluid margins
+@media (min-width: $item-card-max-width + 15 * 2) {
+   .container-fluid.item-cards-container {
+      max-width: $item-card-max-width + 15 * 2;
+   }
+}
+
+// md and larger double column edge to edge fluid cards, then after a certain point double column fixed width with fluid margins
+@media (min-width: $item-card-min-width * 2 + $item-card-spacing + 15 * 2) {
+   // set the maximum width of the container to be two maximum widthed cards plus the 15px margins and space between them
+   .container-fluid.item-cards-container {
+      max-width: $item-card-max-width * 2 + $item-card-spacing + 15 * 2;
+   }
+
+   // set the width of each item card
+   .item-card,
+   .item-card-edit {
+      display: inline-block; // make it so multiple cards appear on the same row
+      width: calc(50% - 6px);
+   }
+
+   // puts a margin between the two item cards on the same "row"
+   .item-card:nth-child(odd),
+   .item-card-edit:nth-child(odd) {
+      margin-right: $item-card-spacing;
+   }
+}
