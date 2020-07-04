@@ -1,34 +1,36 @@
-new project folder called my-app-fullstack
-in that folder console
-   npm init
-      instead of index.js, make the entry point server.js
-make your .prettierrc file
-   { "tabWidth": 3 }
-create server.js
-   console.log(“Hello world”);
-console project folder
-   npm start
-      this should return Hello world
-   npm install mysql
-   npm install dotenv
-   npm i express
-get these files set up from previous project and make changes necessary
-   server.js
-   db.js
-   .env
-make a .gitignore (or copy from prev project)
-   make sure to have .env
-console project folder
-   git init
-make a new repo on git called my-app-fullstack
-make an initial commit
-console project folder
-   git remote add origin (...and the rest of it)
-   git push -u origin master
+new fullstack project based on previous client-only project
+   new project folder called my-app-fullstack
+   in that folder console
+      npm init
+         instead of index.js, make the entry point server.js
+   make your .prettierrc file
+      { "tabWidth": 3 }
+   create server.js
+      console.log(“Hello world”);
+   console project folder
+      npm start
+         this should return Hello world
+      npm install mysql
+      npm install dotenv
+      npm i express
+   get these files set up from previous project and make changes necessary
+      server.js
+      db.js
+      .env
+   make a .gitignore (or copy from prev project)
+      make sure to have .env
+   console project folder
+      git init
+   make a new repo on git called my-app-fullstack
+   make an initial commit
+   console project folder
+      git remote add origin (...and the rest of it)
+      git push -u origin master
 
-In package.json “scripts”:
-   "start": "nodemon server.js"
-      now npm start at the root folder will run the server and it will update whenever changes are made
+use nodemon
+   In package.json “scripts”:
+      "start": "nodemon server.js"
+         now npm start at the root folder will run the server and it will update whenever changes are made
 
 get the client stuff from previous project, make a monolithic application
    new folder in root called client
@@ -39,6 +41,39 @@ get the client stuff from previous project, make a monolithic application
    in console in client folder
       npm install
    commit a new change "add client folder"
+*npm run start in root (server) folder locally starts the server
+*npm run start in client/ folder locally starts the client
 
-npm run start in root (server) folder locally starts the server
-npm run start in client/ folder locally starts the client
+use Heroku
+   console project folder:
+      heroku create
+   log into Heroku from browser if needed
+   go to https://dashboard.heroku.com/apps
+      Click on the new app
+      click settings tab
+      Click reveal config variables
+         These are what you have in .env [server/.env]
+         Add them all here (without quotes around strings)
+      Click deploy tab
+      Scroll to bottom
+      Run the command under “For existing repositories, simply add the heroku remote” in the server folder
+   server.js
+      add to top
+         const path = require("path");
+      add below all the other app.use
+         app.use(express.static("client/build"));
+         app.get("*", (req, res) => {
+            res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+         });
+   delete the client/build folder if it exists
+      we are no longer making production builds on our computer and then sending them to Surge
+      we will now be sending pre-build filds to Heroku and then making a build remotely on Heroku
+      Heroku will only get what is being tracked by git, which is why we had to manually give it the .env variables
+   root package.json (not the one in client):
+      add this to scripts:
+         "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
+            this will do remote stuff on Heroku
+      I needed to add this back to package.json also for some reason:
+         "start": "nodemon server.js"
+   Heroku only sees changes in git so
+      make a commit "prepare for deploy"

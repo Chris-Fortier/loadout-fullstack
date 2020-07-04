@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 
 // need one of these for every url route
 
@@ -12,10 +13,10 @@ app.use("/api/v1/child-items", require("./api/v1/child-items"));
 // if none of the routes are hit ("*"), use what's in the build folder
 // for loadout, since the client folder is one level up from the server folder, the paths need to be changed
 // is this relative to the folder server.js is in or relative to the root of the repo?
-app.use(express.static("build"));
+app.use(express.static("client/build"));
 app.get("*", (req, res) => {
    // "*" is a wildcard
-   res.sendFile(path.resolve(__dirname, "build", "index.html")); // __dirname means present directory
+   res.sendFile(path.resolve(__dirname, "client", "build", "index.html")); // __dirname means present directory
 });
 
 const port = process.env.PORT || 3060; // use the variable we have for the port or a default port of 3060
