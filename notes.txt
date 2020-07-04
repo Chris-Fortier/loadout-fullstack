@@ -86,4 +86,6 @@ use Heroku
          this is to send or update your project to Heroku
          it takes awhile to make the production build (just the first time?)
       heroku open
-         this opens the webpage and it doesn't work
+         this opens the webpage
+*npm run server in root (server) folder locally starts the server
+*npm run start in client/ folder locally starts the client
