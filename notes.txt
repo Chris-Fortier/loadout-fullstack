@@ -76,9 +76,14 @@ use Heroku
       I needed to add this back to package.json also for some reason:
          "start": "nodemon server.js"
          make this should be "server" instead of "start"
+      also
+         "start": "node server.js"
+            this is what Heroku runs to start the server
    Heroku only sees changes in git so
       make a commit "prepare for deploy"
    *in console in root:
       git push heroku master
          this is to send or update your project to Heroku
          it takes awhile to make the production build (just the first time?)
+      heroku open
+         this opens the webpage and it doesn't work
