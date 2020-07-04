@@ -266,22 +266,27 @@ class Landing extends React.Component {
 
          console.log("created user object for POST: ", user);
 
-         // Mimic API response:
+         // post to API
          axios
-            .get(
-               "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/user.json"
-            )
+            // .get(
+            //    "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/user.json"
+            // )
+            .post("/api/v1/users", user) // post to this endpoint the user object we just made
             .then((res) => {
-               const currentUser = res.data;
-               console.log(currentUser);
-               this.props.dispatch({
-                  type: actions.UPDATE_CURRENT_USER,
-                  payload: res.data,
-               });
+               // const currentUser = res.data;
+               // console.log(currentUser);
+               // this.props.dispatch({
+               //    type: actions.UPDATE_CURRENT_USER,
+               //    payload: res.data,
+               // });
+               console.log("new user res", res);
             })
-            .catch((error) => {
-               console.log(error);
+            .catch((err) => {
+               console.log(err);
             });
+
+         // update currentUser in global state with API response
+         // go to next page: this.props.history.push("/loadout");
 
          // redirect the user
          // todo: make this its own function

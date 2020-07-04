@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
+app.use(express.json());
+
 // need one of these for every url route
 
 // app.use(route, require(file));

@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../db");
 const selectUser = require("../../queries/selectUser");
-// const { toJson, toSafeParse } = require("../../utils/helpers");
+const { toJson, toSafeParse, toHash } = require("../../utils/helpers");
 
 // @route      GET api/v1/users
 // @desc       Get a valid user via email and password
@@ -36,5 +36,16 @@ router.get("/", (req, res) => {
          res.status(400).json(err);
       });
 });
+
+// @route      POST api/v1/users (going to post one thing to this list of things)
+// @desc       Creat a new user
+// @access     Public
+router.post("/", (req, res) => {
+   const user = req.body;
+   // hash the password
+   // npm install bcrypt
+   user.password = toHash(user.password);
+   console.log(user);
+}); // this is an express function
 
 module.exports = router;

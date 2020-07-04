@@ -1,3 +1,5 @@
+These notes cover making converting an app to be monolithic and getting it on Heroku
+
 new fullstack project based on previous client-only project
    new project folder called my-app-fullstack
    in that folder console
@@ -96,3 +98,6 @@ Change your Heroku domain
    in your root folder console
       heroku git:remote -a yourdomain
          don't enter the herokuapp.com part
+
+
+npm install bcrypt

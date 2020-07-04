@@ -1,3 +1,5 @@
+const bcrypt = require("bcrypt");
+
 // this file is for short functions we will use throughout the app on the server side
 
 module.exports = {
@@ -15,5 +17,18 @@ module.exports = {
          return str;
       }
       return JSON.parse(str); // Could be undefined
+   },
+
+   // returns a hashed version of a given password
+   toHash(myPlaintextPassword) {
+      const saltRounds = 11;
+      bcrypt.hash(myPlaintextPassword, saltRounds, (err, hash) => {
+         if (err) {
+            console.log(err);
+         } else {
+            console.log(hash);
+            return hash;
+         }
+      });
    },
 };
