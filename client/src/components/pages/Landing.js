@@ -262,7 +262,6 @@ class Landing extends React.Component {
             password: passwordInput, // send the plain text password over secure connection, the server will hash it
             createdAt: Date.now(),
          };
-         console.log("created a new user object", user);
 
          console.log("created user object for POST: ", user);
 
@@ -282,7 +281,7 @@ class Landing extends React.Component {
                console.log("new user res", res);
             })
             .catch((err) => {
-               console.log(err);
+               console.log("new user error", err);
             });
 
          // update currentUser in global state with API response
