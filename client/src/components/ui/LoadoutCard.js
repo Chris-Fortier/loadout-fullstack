@@ -1,5 +1,5 @@
 import React from "react";
-// import { Link } from "react-router-dom"; // a React element for linking
+import { Link } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
 // import actions from "../../store/actions";
 // import { LEVEL_COLORS } from "../../utils/helpers";
@@ -19,6 +19,7 @@ import {
    ChildrenPackedIcon2,
 } from "../../icons/loadout-icons.js";
 import actions from "../../store/actions";
+import movePageToDifferentItem from "../../utils/movePageToDifferentItem2";
 
 class LoadoutCard extends React.Component {
    // constructor(props) {
@@ -71,20 +72,21 @@ class LoadoutCard extends React.Component {
                      UI_APPEARANCE === "colors" && "dark-text-color"
                   )}
                >
-                  <span
+                  <Link
                      className="navigation-link"
-                     // onClick={(e) => {
-                     //    movePageToDifferentItem(thisItemPath); // move to current path with the subitem index added on
-                     // }}
-                     onClick={() =>
-                        this.moveToLoadout(this.props.loadout.loadoutId)
-                     }
+                     onClick={() => {
+                        movePageToDifferentItem(
+                           this.props.loadout.loadoutId,
+                           +1
+                        );
+                     }}
+                     to="/item-list"
                   >
                      {item.name}
                      {loadout.canEdit === 1 && <>&nbsp;E</>}
                      {loadout.canPack === 1 && <>&nbsp;P</>}
                      {loadout.isAdmin === 1 && <>&nbsp;A</>}
-                  </span>
+                  </Link>
                </span>
 
                <span

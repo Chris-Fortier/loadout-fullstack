@@ -23,7 +23,7 @@ import {
    UI_APPEARANCE,
 } from "../../utils/helpers";
 import classnames from "classnames";
-import axios from "axios";
+// import axios from "axios";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import ItemCard from "../ui/ItemCard";
@@ -48,9 +48,6 @@ class ItemList2 extends React.Component {
 
       console.log("props.currentLoadout", props.currentLoadout);
 
-      // queryChildItems(this.props.currentItem.id)
-      this.setCurrentItem("41b9bde9-4731-44d2-b471-d46d21aca680"); // day pack test
-
       // set default state values
 
       this.state = {
@@ -58,102 +55,10 @@ class ItemList2 extends React.Component {
          isPackedOnBottom: false,
          isEditMode: false,
          isShowingUnpackConfirmation: false,
-         // childItems: [],
-         // currentItem: {
-         //    name: "Loading...",
-         //    numPackedChildren: 0,
-         //    numUnpackedChildren: 0,
-         //    contentSummaryText: "Loading...",
-         //    parentName: "Loading...",
-         // },
       };
-      this.queryChildItems("41b9bde9-4731-44d2-b471-d46d21aca680"); // day pack test
    }
 
    // methods happen here, such as what happens when you click on a button
-
-   // this gets an item info from the database and puts it in the state
-   setCurrentItem(itemId) {
-      axios
-         .get("/api/v1/item-info?itemId=" + itemId)
-         .then((res) => {
-            // handle success
-            console.log("setCurrentItem res", res);
-
-            // // putting in the state
-            // this.setState({
-            //    currentItem: res.data[0],
-            // });
-            // return res.data[0];
-
-            this.props.dispatch({
-               type: actions.STORE_CURRENT_ITEM,
-               payload: res.data[0],
-            }); // dispatching an action
-         })
-         .catch((error) => {
-            // handle error
-            console.log(error);
-         });
-   }
-
-   // this gets an item info from the database and returns it
-   getItemInfo(itemId) {
-      axios
-         .get("/api/v1/item-info?itemId=" + itemId)
-         .then((res) => {
-            // handle success
-            console.log("getItemInfo res", res);
-
-            return res.data[0];
-         })
-         .catch((error) => {
-            // handle error
-            console.log(error);
-         });
-   }
-
-   // this gets a list of child items from an item from the database and puts them in the store
-   queryChildItems(itemId) {
-      axios
-         .get("/api/v1/child-items?itemId=" + itemId)
-         .then((res) => {
-            // handle success
-            // res is shorthand for response
-            console.log("queryChildItems res", res);
-
-            // // putting in the store
-            // props.dispatch({
-            //    type: actions.STORE_CHILD_ITEMS,
-            //    payload: res.data,
-            // }); // dispatching an action
-
-            // processAllItems(res.data); // initial processing of items that creates derived properties
-            // res.data is the data from the response
-
-            // putting in the state
-            // this.setState({
-            //    childItems: res.data,
-            // });
-
-            this.props.dispatch({
-               type: actions.STORE_CHILD_ITEMS,
-               payload: res.data,
-            }); // dispatching an action
-         })
-         .catch((error) => {
-            // handle error
-            console.log(error);
-         });
-
-      // run the get info query for every child item and put the data inside the child
-      // console.log(this.state.childItems);
-      // let childItems = [];
-      // for (let c in this.state.childItems) {
-      //    childItems.push(this.getItemInfo(this.state.childItems[c].id));
-      // }
-      // this.setState({ childItems: childItems });
-   }
 
    // roll out a dialog for unpacking an item's contents
    rolloutUnpackConfirmation() {

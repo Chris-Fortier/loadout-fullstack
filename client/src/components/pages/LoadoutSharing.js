@@ -46,7 +46,7 @@ class LoadoutSharing extends React.Component {
                      <div className="col">
                         <Link
                            className="up-level navigation-link"
-                           to="/loadout"
+                           to="/item-list"
                         >
                            <div className="icon-dark left">
                               <IconArrowThinLeftCircle />
