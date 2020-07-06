@@ -76,9 +76,10 @@ class ItemCard extends React.Component {
       // let level = item.level;
 
       // temporary stuff just to get it working to test
-      let level = 2;
       // item.contentSummaryText = "FIX";
       item.items = [];
+
+      const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 ebecause it is one level below the page's level
 
       let thisItemPath = this.props.currentLoadout.itemIndexPath.concat([
          item.index,
@@ -140,7 +141,7 @@ class ItemCard extends React.Component {
                      <span
                         className="navigation-link"
                         onClick={(e) => {
-                           movePageToDifferentItem(this.props.item.id); // move to current path with the subitem index added on
+                           movePageToDifferentItem(this.props.item.id, +1);
                         }}
                      >
                         {item.name}
@@ -211,7 +212,7 @@ class ItemCard extends React.Component {
                      <span
                         onClick={(e) => {
                            item.status === 0 &&
-                              movePageToDifferentItem(this.props.item.id); // move to current path with the subitem index added on
+                              movePageToDifferentItem(this.props.item.id, +1);
                         }}
                         className={classnames(
                            "button navigation-link item-card-text",
@@ -240,7 +241,7 @@ class ItemCard extends React.Component {
                         )}
                         onClick={(e) => {
                            item.status === 0 &&
-                              movePageToDifferentItem(this.props.item.id); // move to current path with the subitem index added on
+                              movePageToDifferentItem(this.props.item.id, +1);
                         }}
                      >
                         {item.status === 1 && <ChildrenPackedIcon2 />}
@@ -265,7 +266,8 @@ class ItemCard extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      currentLoadout: state.currentLoadout,
+      currentLoadout: state.currentLoadout, // TODO, do I need this anymore?
+      currentLevel: state.currentLevel,
    };
 }
 

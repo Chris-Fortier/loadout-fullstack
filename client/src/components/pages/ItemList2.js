@@ -446,7 +446,7 @@ class ItemList2 extends React.Component {
       // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
       // console.log("currentItem.level", currentItem.level);
       // let level = currentItem.level;
-      let level = 1;
+      const level = this.props.currentLevel;
 
       return (
          <div>
@@ -486,9 +486,11 @@ class ItemList2 extends React.Component {
                                     }
                                  )}
                                  onClick={(e) => {
+                                    // move to the parent item
                                     movePageToDifferentItem(
-                                       this.props.currentItem.parentId
-                                    ); // move to the parent item
+                                       this.props.currentItem.parentId,
+                                       -1
+                                    );
                                  }}
                               >
                                  <div
@@ -749,6 +751,7 @@ function mapStateToProps(state) {
       currentLoadout: state.currentLoadout,
       currentItem: state.currentItem,
       childItems: state.childItems,
+      currentLevel: state.currentLevel,
    };
 }
 

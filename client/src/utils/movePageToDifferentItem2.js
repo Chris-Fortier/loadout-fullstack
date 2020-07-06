@@ -5,12 +5,8 @@ import axios from "axios";
 // this version uses changes the current item id in the store
 
 // move page to a different item
-export default function movePageToDifferentItem2(itemId) {
+export default function movePageToDifferentItem2(itemId, levelChange = 0) {
    console.log("movePageToDifferentItem2()...itemId:", itemId);
-   // store.dispatch({
-   //    type: actions.STORE_CURRENT_ITEM,
-   //    payload: { id: itemId },
-   // });
 
    // this part gets data from the database
    // TODO this is duplicated
@@ -19,12 +15,6 @@ export default function movePageToDifferentItem2(itemId) {
       .then((res) => {
          // handle success
          console.log("setCurrentItem res.data[0]", res.data[0]);
-
-         // // putting in the state
-         // this.setState({
-         //    currentItem: res.data[0],
-         // });
-         // return res.data[0];
 
          store.dispatch({
             type: actions.STORE_CURRENT_ITEM,
@@ -55,6 +45,14 @@ export default function movePageToDifferentItem2(itemId) {
          // handle error
          console.log(error);
       });
+
+   // change the current level
+   if (levelChange !== 0) {
+      store.dispatch({
+         type: actions.CHANGE_CURRENT_LEVEL,
+         payload: levelChange,
+      }); // dispatching an action
+   }
 
    window.scrollTo(0, 0); // sets focus to the top of the page
 }
