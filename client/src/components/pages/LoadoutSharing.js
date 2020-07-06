@@ -10,10 +10,10 @@ class LoadoutSharing extends React.Component {
    constructor(props) {
       super(props); // boilerplate
 
+      console.log("this.props", this.props);
+
       axios
-         .get(
-            "/api/v1/loadout-users?loadoutId=42655170-7e10-4431-8d98-c2774f6414a4"
-         )
+         .get("/api/v1/loadout-users?loadoutId=" + this.props.currentItem.id)
          .then((res) => {
             console.log("axios res", res);
             // processAllItems(res.data); // initial processing of items that creates derived properties
@@ -205,7 +205,7 @@ class LoadoutSharing extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      currentLoadout: state.currentLoadout,
+      currentItem: state.currentItem,
    };
 }
 
