@@ -118,4 +118,4 @@ getting it working on second computer (windows pc)
       npm install
    anywhere (needed to install this globally)
       npm install -g nodemon
-   need to manually copy .env file to 
+   needed to manually copy over /.env file
