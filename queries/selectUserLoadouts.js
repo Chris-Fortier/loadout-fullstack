@@ -6,7 +6,8 @@ const selectUserLoadouts = `
       loadouts.name AS loadout_name,
       can_edit,
       can_pack,
-      is_admin
+      is_admin,
+      loadouts.id AS loadout_id
    FROM
       users
    INNER JOIN

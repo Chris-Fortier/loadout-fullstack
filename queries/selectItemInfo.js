@@ -20,6 +20,12 @@ const selectItemInfo = `
             loadouts
          WHERE
             loadouts.id = ?) AS id,
+      (SELECT 
+            loadouts.parent_id
+         FROM
+            loadouts
+         WHERE
+            loadouts.id = ?) AS parent_id,
       (SELECT
             parent_loadouts.name
          FROM
@@ -40,7 +46,7 @@ const selectItemInfo = `
             loadouts
          WHERE
             loadouts.parent_id = ?
-                  AND loadouts.status = 0) AS num_packed_children;
+                  AND loadouts.status = 1) AS num_packed_children;
    `;
 
 module.exports = selectItemInfo;

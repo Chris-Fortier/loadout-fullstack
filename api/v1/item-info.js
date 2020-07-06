@@ -16,7 +16,15 @@ router.get("/", (req, res) => {
    // change this
    // db.query(selectItemInfo(itemId))
    // https://www.npmjs.com/package/mysql#escaping-query-values
-   db.query(selectItemInfo, [itemId, itemId, itemId, itemId, itemId, itemId]) // this syntax style prevents hackers
+   db.query(selectItemInfo, [
+      itemId,
+      itemId,
+      itemId,
+      itemId,
+      itemId,
+      itemId,
+      itemId,
+   ]) // this syntax style prevents hackers
       .then((itemInfo) => {
          // successful response
          // console.log(itemInfo);
@@ -26,13 +34,27 @@ router.get("/", (req, res) => {
          // this is where we can "shrink out payload", the data we sent to the client
          const camelCaseItemInfo = itemInfo.map((item) => {
             // for every item, return a new object
+            const numUnpackedChildren =
+               item.num_children - item.num_packed_children;
+            let contentSummaryText;
+            if (numUnpackedChildren > 0) {
+               contentSummaryText = numUnpackedChildren + " left";
+            } else if (!item.isPacked) {
+               contentSummaryText = "ready";
+            } else {
+               contentSummaryText = "";
+            }
+
             return {
                name: item.name,
                status: item.status,
                id: item.id,
                parentName: item.parent_name,
+               parentId: item.parent_id,
                numChildren: item.num_children,
                numPackedChildren: item.num_packed_children,
+               numUnpackedChildren: numUnpackedChildren,
+               contentSummaryText: contentSummaryText,
             };
          });
 

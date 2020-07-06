@@ -7,7 +7,12 @@ const initialState = {
    currentLoadout: {
       gear: [],
       itemIndexPath: [], // the default path of what item we are looking at ([2, 8, 0] is a good test)
+      id: "", // the uuid of the current loadout
    },
+   currentItem: {
+      id: "", // the uuid of the curren item
+   },
+   childItems: [],
 
    // // from ItemList state
 

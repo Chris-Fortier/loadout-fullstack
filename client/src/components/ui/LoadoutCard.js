@@ -18,8 +18,26 @@ import {
    ChildrenUnpackedIcon,
    ChildrenPackedIcon2,
 } from "../../icons/loadout-icons.js";
+import actions from "../../store/actions";
 
 class LoadoutCard extends React.Component {
+   // constructor(props) {
+   //    super(props); // boilerplate
+   //    this.state = {};
+   // }
+
+   moveToLoadout(loadoutId) {
+      this.props.dispatch({
+         type: actions.STORE_CURRENT_ITEM,
+         payload: loadoutId,
+      });
+
+      // doesn't work, for now after clicking this, change the end of the url from loadout-list to loadout
+      // redirect the user
+      // this.props.history.push("/loadout");
+      // window.scrollTo(0, 0); // sets focus to the top of the page
+   }
+
    render() {
       console.log("props", this.props);
       const loadout = this.props.loadout; // this is to simplify code below
@@ -58,6 +76,9 @@ class LoadoutCard extends React.Component {
                      // onClick={(e) => {
                      //    movePageToDifferentItem(thisItemPath); // move to current path with the subitem index added on
                      // }}
+                     onClick={() =>
+                        this.moveToLoadout(this.props.loadout.loadoutId)
+                     }
                   >
                      {item.name}
                      {loadout.canEdit === 1 && <>&nbsp;E</>}

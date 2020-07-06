@@ -214,7 +214,7 @@ class Landing extends React.Component {
 
          // redirect the user
          // todo: make this its own function
-         this.props.history.push("/loadout");
+         this.props.history.push("/loadout-list");
          window.scrollTo(0, 0); // sets focus to the top of the page
       }
    }
@@ -241,7 +241,7 @@ class Landing extends React.Component {
 
       // redirect the user
       // todo: make this its own function
-      this.props.history.push("/loadout");
+      this.props.history.push("/loadout-list");
       window.scrollTo(0, 0); // sets focus to the top of the page
    }
 
@@ -285,11 +285,11 @@ class Landing extends React.Component {
             });
 
          // update currentUser in global state with API response
-         // go to next page: this.props.history.push("/loadout");
+         // go to next page: this.props.history.push("/loadout-list");
 
          // redirect the user
          // todo: make this its own function
-         this.props.history.push("/loadout");
+         this.props.history.push("/loadout-list");
          window.scrollTo(0, 0); // sets focus to the top of the page
       }
    }

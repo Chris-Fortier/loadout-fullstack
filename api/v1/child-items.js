@@ -23,11 +23,20 @@ router.get("/", (req, res) => {
          // we can also use this to "shape the data" for the client
          // this is where we can "shrink out payload", the data we sent to the client
          // I suspect this is where I am going to convert flattened loadouts to nested
-         const camelCaseChildItems = childItems.map((userLoadout) => {
-            // for every userLoadout, return a new object
+         const camelCaseChildItems = childItems.map((item) => {
+            // for every item, return a new object
+
+            // this is a hack becaise I can't get my query to get zeros instead of nulls if the count is zero
+            let num_children = item.num_children;
+            if (item.num_children === null) {
+               num_children = 0;
+            }
+
             return {
-               name: userLoadout.name,
-               status: userLoadout.status,
+               name: item.name,
+               status: item.status,
+               id: item.id,
+               numChildren: num_children,
             };
          });
 

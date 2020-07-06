@@ -27,10 +27,11 @@ import axios from "axios";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import ItemCard from "../ui/ItemCard";
+import ItemCard2 from "../ui/ItemCard2";
 import ItemCardEdit from "../ui/ItemCardEdit";
 // import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
-import movePageToDifferentItem from "../../utils/movePageToDifferentItem";
+import movePageToDifferentItem from "../../utils/movePageToDifferentItem2";
 import {
    // getItemFromPath,
    // getParentItemFromPath,
@@ -41,36 +42,14 @@ import {
 
 // ItemList2 is an alternate version that queries a single item's children to display from the database
 
-class ItemList extends React.Component {
+class ItemList2 extends React.Component {
    constructor(props) {
       super(props); // boilerplate
 
       console.log("props.currentLoadout", props.currentLoadout);
 
-      if (props.currentLoadout.gear.length === 0) {
-         axios
-            .get(
-               "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/loadouts.json"
-            )
-            // .get(
-            //    "http://localhost:3060/api/v1/user-loadouts/?userId=84fbbb78-b2a2-11ea-b3de-0242ac130004"
-            // )
-            .then((res) => {
-               // handle success
-               // res is shorthand for response
-               console.log(res);
-               // props.dispatch({
-               //    type: actions.STORE_CURRENT_LOADOUT,
-               //    payload: res.data,
-               // }); // dispatching an action
-               processAllItems(res.data); // initial processing of items that creates derived properties
-               // res.data is the data from the response
-            })
-            .catch((error) => {
-               // handle error
-               console.log(error);
-            });
-      }
+      // queryChildItems(this.props.currentItem.id)
+      this.setCurrentItem("41b9bde9-4731-44d2-b471-d46d21aca680"); // day pack test
 
       // set default state values
 
@@ -79,10 +58,102 @@ class ItemList extends React.Component {
          isPackedOnBottom: false,
          isEditMode: false,
          isShowingUnpackConfirmation: false,
+         // childItems: [],
+         // currentItem: {
+         //    name: "Loading...",
+         //    numPackedChildren: 0,
+         //    numUnpackedChildren: 0,
+         //    contentSummaryText: "Loading...",
+         //    parentName: "Loading...",
+         // },
       };
+      this.queryChildItems("41b9bde9-4731-44d2-b471-d46d21aca680"); // day pack test
    }
 
    // methods happen here, such as what happens when you click on a button
+
+   // this gets an item info from the database and puts it in the state
+   setCurrentItem(itemId) {
+      axios
+         .get("/api/v1/item-info?itemId=" + itemId)
+         .then((res) => {
+            // handle success
+            console.log("setCurrentItem res", res);
+
+            // // putting in the state
+            // this.setState({
+            //    currentItem: res.data[0],
+            // });
+            // return res.data[0];
+
+            this.props.dispatch({
+               type: actions.STORE_CURRENT_ITEM,
+               payload: res.data[0],
+            }); // dispatching an action
+         })
+         .catch((error) => {
+            // handle error
+            console.log(error);
+         });
+   }
+
+   // this gets an item info from the database and returns it
+   getItemInfo(itemId) {
+      axios
+         .get("/api/v1/item-info?itemId=" + itemId)
+         .then((res) => {
+            // handle success
+            console.log("getItemInfo res", res);
+
+            return res.data[0];
+         })
+         .catch((error) => {
+            // handle error
+            console.log(error);
+         });
+   }
+
+   // this gets a list of child items from an item from the database and puts them in the store
+   queryChildItems(itemId) {
+      axios
+         .get("/api/v1/child-items?itemId=" + itemId)
+         .then((res) => {
+            // handle success
+            // res is shorthand for response
+            console.log("queryChildItems res", res);
+
+            // // putting in the store
+            // props.dispatch({
+            //    type: actions.STORE_CHILD_ITEMS,
+            //    payload: res.data,
+            // }); // dispatching an action
+
+            // processAllItems(res.data); // initial processing of items that creates derived properties
+            // res.data is the data from the response
+
+            // putting in the state
+            // this.setState({
+            //    childItems: res.data,
+            // });
+
+            this.props.dispatch({
+               type: actions.STORE_CHILD_ITEMS,
+               payload: res.data,
+            }); // dispatching an action
+         })
+         .catch((error) => {
+            // handle error
+            console.log(error);
+         });
+
+      // run the get info query for every child item and put the data inside the child
+      // console.log(this.state.childItems);
+      // let childItems = [];
+      // for (let c in this.state.childItems) {
+      //    childItems.push(this.getItemInfo(this.state.childItems[c].id));
+      // }
+      // this.setState({ childItems: childItems });
+   }
 
    // roll out a dialog for unpacking an item's contents
    rolloutUnpackConfirmation() {
@@ -371,26 +442,11 @@ class ItemList extends React.Component {
    render() {
       console.log("Rendering page...");
 
-      // these are classes that are different if we are at the top level or a lower level
-      // let pageBgClasses = "";
-      // let pageContentClasses = "";
-      // let levelHeaderClasses = "";
-      // let levelBodyClasses = "";
-
       // get the current item
-      // const currentItem = this.state.currentItem; // old value
-      // const currentItem = this.props.currentLoadout.gear; // redux value
-      const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
-      console.log("currentItem.level", currentItem.level);
-
-      // this.props.item = currentItem; // set the props of item for this component to the current item
-
-      let level = currentItem.level;
-      // if (level !== 0) {
-      //    // pageContentClasses = "card super-item-card this-bg-light";
-      //    levelHeaderClasses = "card-header";
-      //    levelBodyClasses = "card-body";
-      // }
+      // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
+      // console.log("currentItem.level", currentItem.level);
+      // let level = currentItem.level;
+      let level = 1;
 
       return (
          <div>
@@ -431,11 +487,8 @@ class ItemList extends React.Component {
                                  )}
                                  onClick={(e) => {
                                     movePageToDifferentItem(
-                                       this.props.currentLoadout.itemIndexPath.slice(
-                                          0,
-                                          -1
-                                       )
-                                    ); // move to current path with the last part removed to go up a level
+                                       this.props.currentItem.parentId
+                                    ); // move to the parent item
                                  }}
                               >
                                  <div
@@ -448,7 +501,7 @@ class ItemList extends React.Component {
                                  >
                                     <IconArrowThinLeftCircle />
                                  </div>
-                                 Back to {currentItem.parentName}
+                                 Back to {this.props.currentItem.parentName}
                               </span>
                            )}
                         </div>
@@ -492,7 +545,7 @@ class ItemList extends React.Component {
                                                    "dark-text-color"
                                              )}
                                           >
-                                             {currentItem.name}
+                                             {this.props.currentItem.name}
                                           </h4>
                                        </div>
                                        {level > 0 && (
@@ -512,7 +565,10 @@ class ItemList extends React.Component {
                                                       "light-text-color"
                                                 )}
                                              >
-                                                {currentItem.contentSummaryText}
+                                                {
+                                                   this.props.currentItem
+                                                      .contentSummaryText
+                                                }
                                              </h4>
                                           </div>
                                        )}
@@ -524,7 +580,9 @@ class ItemList extends React.Component {
                                           <h4>
                                              <input
                                                 className="edit-name"
-                                                defaultValue={currentItem.name}
+                                                defaultValue={
+                                                   this.state.currentItem.name
+                                                }
                                                 onChange={(e) =>
                                                    renameItem(
                                                       this.props.currentLoadout
@@ -611,7 +669,10 @@ class ItemList extends React.Component {
                            <div className={level > 1 && "card-body"}>
                               <div className="row">
                                  <div className="col">
-                                    {this.renderContainingItems(currentItem)}
+                                    {/* {this.renderContainingItems(currentItem)} */}
+                                    {this.props.childItems.map((item) => (
+                                       <ItemCard2 item={item} key={item.id} />
+                                    ))}
                                  </div>
                               </div>
                               {!this.state.isEditMode && level !== 0 && (
@@ -619,8 +680,8 @@ class ItemList extends React.Component {
                                     <div
                                        className={classnames("card-section", {
                                           disabled:
-                                             currentItem.numPackedDescendants ===
-                                             0,
+                                             this.props.currentItem
+                                                .numPackedChildren === 0,
                                        })}
                                     >
                                        <span
@@ -686,7 +747,9 @@ class ItemList extends React.Component {
 function mapStateToProps(state) {
    return {
       currentLoadout: state.currentLoadout,
+      currentItem: state.currentItem,
+      childItems: state.childItems,
    };
 }
 
-export default connect(mapStateToProps)(ItemList); // this is "currying"
+export default connect(mapStateToProps)(ItemList2); // this is "currying"
