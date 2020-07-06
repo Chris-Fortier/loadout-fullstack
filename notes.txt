@@ -106,3 +106,16 @@ Change your Heroku domain
 
 
 npm install bcrypt
+
+getting it working on second computer (windows pc)
+   cloned the repo
+   in server folder
+      npm install
+      npm install mysql
+      npm install dotenv
+      npm i express
+   in client folder
+      npm install
+   anywhere (needed to install this globally)
+      npm install -g nodemon
+   need to manually copy .env file to 
