@@ -29,7 +29,7 @@ import actions from "../../store/actions";
 import ItemCard from "../ui/ItemCard";
 import ItemCard2 from "../ui/ItemCard2";
 import ItemCardEdit from "../ui/ItemCardEdit";
-// import { Link } from "react-router-dom"; // a React element for linking
+import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
 import movePageToDifferentItem from "../../utils/movePageToDifferentItem2";
 import {
@@ -485,25 +485,48 @@ class ItemList2 extends React.Component {
                                        hidden: this.state.isEditMode,
                                     }
                                  )}
-                                 onClick={(e) => {
-                                    // move to the parent item
-                                    movePageToDifferentItem(
-                                       this.props.currentItem.parentId,
-                                       -1
-                                    );
-                                 }}
                               >
-                                 <div
-                                    className={classnames(
-                                       "icon-dark left",
-                                       UI_APPEARANCE === "colors" &&
-                                          "icon-light",
-                                       UI_APPEARANCE !== "colors" && "icon-dark"
-                                    )}
-                                 >
-                                    <IconArrowThinLeftCircle />
-                                 </div>
-                                 Back to {this.props.currentItem.parentName}
+                                 {this.props.currentItem.parentId !== null && (
+                                    <span
+                                       onClick={(e) => {
+                                          // move to the parent item
+                                          movePageToDifferentItem(
+                                             this.props.currentItem.parentId,
+                                             -1
+                                          );
+                                       }}
+                                    >
+                                       <div
+                                          className={classnames(
+                                             "icon-dark left",
+                                             UI_APPEARANCE === "colors" &&
+                                                "icon-light",
+                                             UI_APPEARANCE !== "colors" &&
+                                                "icon-dark"
+                                          )}
+                                       >
+                                          <IconArrowThinLeftCircle />
+                                       </div>
+                                       Back to{" "}
+                                       {this.props.currentItem.parentName}
+                                    </span>
+                                 )}
+                                 {this.props.currentItem.parentId === null && (
+                                    <Link to="/loadout-list">
+                                       <div
+                                          className={classnames(
+                                             "icon-dark left",
+                                             UI_APPEARANCE === "colors" &&
+                                                "icon-light",
+                                             UI_APPEARANCE !== "colors" &&
+                                                "icon-dark"
+                                          )}
+                                       >
+                                          <IconArrowThinLeftCircle />
+                                       </div>
+                                       Back to Loadouts
+                                    </Link>
+                                 )}
                               </span>
                            )}
                         </div>

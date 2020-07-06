@@ -5,7 +5,7 @@ import Header from "../ui/Header";
 // import { MAX_ITEM_NAME_LENGTH, LEVEL_COLORS } from "../../utils/helpers";
 // import axios from "axios";
 import { connect } from "react-redux";
-// import actions from "../../store/actions";
+import actions from "../../store/actions";
 import LoadoutCard from "../ui/LoadoutCard";
 // import ItemCardEdit from "../ui/ItemCardEdit";
 import {
@@ -70,6 +70,11 @@ class LoadoutList extends React.Component {
          loadouts: [],
          isEditMode: false,
       };
+
+      // set the level to zero
+      this.props.dispatch({
+         type: actions.RESET_CURRENT_LEVEL,
+      }); // dispatching an action
    }
 
    // methods happen here, such as what happens when you click on a button

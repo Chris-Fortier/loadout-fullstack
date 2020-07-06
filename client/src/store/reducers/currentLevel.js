@@ -12,6 +12,10 @@ export default function currentLevel(currentLevel = 0, action) {
          console.log("FIRED CHANGE_CURRENT_LEVEL");
          newCurrentLevel += action.payload; // change the currentLevel up or down
          return newCurrentLevel;
+      case actions.RESET_CURRENT_LEVEL:
+         console.log("FIRED RESET_CURRENT_LEVEL");
+         newCurrentLevel = 0; // reset the level to zero
+         return newCurrentLevel;
       default:
          return currentLevel;
    }
