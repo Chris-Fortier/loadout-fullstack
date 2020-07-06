@@ -89,8 +89,13 @@ use Heroku
          it takes a few minutes
       heroku open
          this opens the webpage
-*npm run server in root (server) folder locally starts the server
-*npm run start in client/ folder locally starts the client
+*npm run server
+   in root (server) folder locally starts the server
+*npm run start
+   in client/ folder locally starts the client
+*git push heroku master
+   from the root server folder will push the latest version to the heroku server (you need to commit the changes to git first)
+
 
 Change your Heroku domain
    in your Heroku Setting tab for the app

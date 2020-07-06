@@ -9,8 +9,17 @@ export default function movePageToDifferentItem2(itemId, levelChange = 0) {
    console.log("movePageToDifferentItem2()...itemId:", itemId);
 
    if (itemId !== null) {
+      // dispatching some blank data while we wait for the db response so it won't look strange having old data there for a split second
+      store.dispatch({
+         type: actions.STORE_CURRENT_ITEM,
+         payload: {},
+      });
+      store.dispatch({
+         type: actions.STORE_CHILD_ITEMS,
+         payload: [],
+      });
+
       // this part gets data from the database
-      // TODO this is duplicated
       axios
          .get("/api/v1/item-info?itemId=" + itemId)
          .then((res) => {
@@ -30,7 +39,6 @@ export default function movePageToDifferentItem2(itemId, levelChange = 0) {
       // TODO how can I do this?
       // this.setState({ isEditMode: false, isShowingUnpackConfirmation: false }); // get out of edit mode if the current item changes
 
-      // TODO this is also duplicated code
       axios
          .get("/api/v1/child-items?itemId=" + itemId)
          .then((res) => {
