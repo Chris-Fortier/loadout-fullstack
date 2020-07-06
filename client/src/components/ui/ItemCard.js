@@ -19,16 +19,18 @@ import {
 import { processAllItems } from "../../utils/processItems";
 import movePageToDifferentItem from "../../utils/movePageToDifferentItem";
 
-class ItemCard extends React.Component {
+// new version of item card that deals with database data
+
+class ItemCard2 extends React.Component {
    // toggle the packed status of this item
    toggleIsPacked(itemIndexPath) {
       console.log("toggleIsPacked()...");
       // if (
-      //    !this.props.item.isPacked &&
+      //    this.props.item.status === 0 &&
       //    this.props.item.numPackedChildren === this.props.item.numChildren
       // ) {
       //    console.log("packing " + this.props.item.name);
-      // } else if (this.props.item.isPacked) {
+      // } else if (this.props.item.status === 1) {
       //    console.log("unpacking " + this.props.item.name);
       // }
 
@@ -49,7 +51,13 @@ class ItemCard extends React.Component {
 
          // copyOfGear.items[0].items[1].isPacked = !copyOfGear.items[0].items[1]
          //    .isPacked;
-         currentItem.isPacked = !currentItem.isPacked;
+         // currentItem.isPacked = !currentItem.isPacked;
+
+         if (currentItem.status === 0) {
+            currentItem.status = 1;
+         } else if (currentItem.status === 1) {
+            currentItem.status = 0;
+         }
 
          // put the data back into the store
          // this.props.dispatch({
@@ -65,11 +73,17 @@ class ItemCard extends React.Component {
       // let counterIsFaint = true;
       // let packedBoxIsFaint = false;
       const item = this.props.item; // this is to simplify code below
-      let level = item.level;
+      // let level = item.level;
 
-      let thisItemPath = this.props.currentLoadout.itemIndexPath.concat([
-         item.index,
-      ]); // stores the complete index path to the item referred to on this item card
+      // temporary stuff just to get it working to test
+      // item.contentSummaryText = "FIX";
+      item.items = [];
+
+      const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 ebecause it is one level below the page's level
+
+      // let thisItemPath = this.props.currentLoadout.itemIndexPath.concat([
+      //    item.index,
+      // ]); // stores the complete index path to the item referred to on this item card
 
       // do this if this item has subitems
       // if (item.hasOwnProperty("items")) {
@@ -80,6 +94,8 @@ class ItemCard extends React.Component {
       //    }
       // }
 
+      const thisItemPath = ""; // TODO, this will be obsolete
+
       return (
          <div
             className={classnames(
@@ -87,27 +103,27 @@ class ItemCard extends React.Component {
                level <= 1 && "loadout-card",
                UI_APPEARANCE === "light" &&
                   level > 1 &&
-                  !item.isPacked &&
+                  item.status === 0 &&
                   "child-bg-light",
                UI_APPEARANCE === "light" &&
                   level > 1 &&
-                  item.isPacked &&
+                  item.status === 1 &&
                   "child-bg-light-packed",
                UI_APPEARANCE === "dark" &&
                   level > 1 &&
-                  !item.isPacked &&
+                  item.status === 0 &&
                   "child-bg-dark",
                UI_APPEARANCE === "dark" &&
                   level > 1 &&
-                  item.isPacked &&
+                  item.status === 1 &&
                   "child-bg-dark-packed",
                UI_APPEARANCE === "colors" &&
                   level > 1 &&
-                  !item.isPacked &&
+                  item.status === 0 &&
                   "child-color-" + String(level % LEVEL_COLORS),
                UI_APPEARANCE === "colors" &&
                   level > 1 &&
-                  item.isPacked &&
+                  item.status === 1 &&
                   "packed-color-" + String(level % LEVEL_COLORS)
             )}
             id={"item-card-" + item.index}
@@ -127,7 +143,7 @@ class ItemCard extends React.Component {
                      <span
                         className="navigation-link"
                         onClick={(e) => {
-                           movePageToDifferentItem(thisItemPath); // move to current path with the subitem index added on
+                           movePageToDifferentItem(this.props.item.id, +1);
                         }}
                      >
                         {item.name}
@@ -156,12 +172,12 @@ class ItemCard extends React.Component {
                            this.toggleIsPacked(thisItemPath);
                         }}
                      >
-                        {item.isPacked && <PackedIcon />}
-                        {!item.isPacked &&
+                        {item.status === 1 && <PackedIcon />}
+                        {item.status === 0 &&
                            item.numPackedChildren >= item.numChildren && (
                               <ReadyToPackIcon />
                            )}
-                        {!item.isPacked &&
+                        {item.status === 0 &&
                            item.numPackedChildren < item.numChildren && (
                               <NotReadyToPackIcon />
                            )}
@@ -193,12 +209,12 @@ class ItemCard extends React.Component {
                   </>
                )}
 
-               {item.hasOwnProperty("items") && (
+               {item.numChildren > 0 && (
                   <>
                      <span
                         onClick={(e) => {
-                           !item.isPacked &&
-                              movePageToDifferentItem(thisItemPath); // move to current path with the subitem index added on
+                           item.status === 0 &&
+                              movePageToDifferentItem(this.props.item.id, +1);
                         }}
                         className={classnames(
                            "button navigation-link item-card-text",
@@ -207,12 +223,11 @@ class ItemCard extends React.Component {
                               "level-text-color-" +
                                  String((level + 1) % LEVEL_COLORS),
                            UI_APPEARANCE === "colors" && "dark-text-color",
-                           { disabled: item.isPacked }
+                           { disabled: item.status === 1 }
                         )}
                      >
                         {item.contentSummaryText}&nbsp;&nbsp;
                      </span>
-
                      <span
                         className={classnames(
                            "icon-dark item-card-icon",
@@ -222,24 +237,25 @@ class ItemCard extends React.Component {
                                  String(level % LEVEL_COLORS),
                            UI_APPEARANCE === "colors" && "item-icon-colors",
                            {
-                              clickable: !item.isPacked,
-                              disabled: item.isPacked,
+                              clickable: item.status === 0,
+                              disabled: item.status === 1,
                            }
                         )}
                         onClick={(e) => {
-                           !item.isPacked &&
-                              movePageToDifferentItem(thisItemPath); // move to current path with the subitem index added on
+                           item.status === 0 &&
+                              movePageToDifferentItem(this.props.item.id, +1);
                         }}
                      >
-                        {item.isPacked && <ChildrenPackedIcon2 />}
-                        {!item.isPacked &&
+                        {item.status === 1 && <ChildrenPackedIcon2 />}
+                        {item.status === 0 &&
                            item.numPackedChildren >= item.numChildren && (
                               <ChildrenPackedIcon2 />
                            )}
-                        {!item.isPacked &&
+                        {item.status === 0 &&
                            item.numPackedChildren < item.numChildren && (
                               <ChildrenUnpackedIcon />
                            )}
+                        FIXME
                      </span>
                   </>
                )}
@@ -252,8 +268,9 @@ class ItemCard extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      currentLoadout: state.currentLoadout,
+      // currentLoadout: state.currentLoadout, // TODO, do I need this anymore?
+      currentLevel: state.currentLevel,
    };
 }
 
-export default connect(mapStateToProps)(ItemCard); // this is "currying"
+export default connect(mapStateToProps)(ItemCard2); // this is "currying"

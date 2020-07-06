@@ -19,7 +19,7 @@ import {
    ChildrenPackedIcon2,
 } from "../../icons/loadout-icons.js";
 import actions from "../../store/actions";
-import movePageToDifferentItem from "../../utils/movePageToDifferentItem2";
+import movePageToDifferentItem from "../../utils/movePageToDifferentItem";
 
 class LoadoutCard extends React.Component {
    // constructor(props) {
