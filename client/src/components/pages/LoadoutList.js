@@ -35,9 +35,9 @@ class LoadoutList extends React.Component {
       }); // dispatching an action
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
-      console.log(this.props.currentUser);
+      // TODO, this is duplicated code
       if (JSON.stringify(this.props.currentUser) === JSON.stringify({})) {
-         console.log("You are not logged in");
+         console.log("There is no user object, kicking to landing page.");
          this.props.history.push("/");
       }
    }

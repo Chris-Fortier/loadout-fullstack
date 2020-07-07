@@ -55,6 +55,13 @@ class ItemList2 extends React.Component {
          isEditMode: false,
          isShowingUnpackConfirmation: false,
       };
+
+      // if the user finds themselves on this page but they are not logged in, send them to the landing page
+      // TODO, this is duplicated code
+      if (JSON.stringify(this.props.currentUser) === JSON.stringify({})) {
+         console.log("There is no user object, kicking to landing page.");
+         this.props.history.push("/");
+      }
    }
 
    // methods happen here, such as what happens when you click on a button
@@ -496,7 +503,7 @@ class ItemList2 extends React.Component {
                                              >
                                                 {
                                                    this.props.currentItem
-                                                      .contentSummaryText
+                                                      .contentSummary
                                                 }
                                              </h4>
                                           </div>
@@ -679,6 +686,7 @@ function mapStateToProps(state) {
       currentItem: state.currentItem,
       childItems: state.childItems,
       currentLevel: state.currentLevel,
+      currentUser: state.currentUser,
    };
 }
 

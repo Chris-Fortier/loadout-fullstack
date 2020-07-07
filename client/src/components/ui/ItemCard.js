@@ -76,8 +76,8 @@ class ItemCard2 extends React.Component {
       // let level = item.level;
 
       // temporary stuff just to get it working to test
-      // item.contentSummaryText = "FIX";
-      item.items = [];
+      // item.contentSummary = "FIX";
+      // item.items = [];
 
       const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 ebecause it is one level below the page's level
 
@@ -226,7 +226,7 @@ class ItemCard2 extends React.Component {
                            { disabled: item.status === 1 }
                         )}
                      >
-                        {item.contentSummaryText}&nbsp;&nbsp;
+                        {item.contentSummary}&nbsp;&nbsp;
                      </span>
                      <span
                         className={classnames(
@@ -255,7 +255,6 @@ class ItemCard2 extends React.Component {
                            item.numPackedChildren < item.numChildren && (
                               <ChildrenUnpackedIcon />
                            )}
-                        FIXME
                      </span>
                   </>
                )}

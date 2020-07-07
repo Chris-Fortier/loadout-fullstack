@@ -56,23 +56,22 @@ function processItemAndDescendants(item, level = null) {
 
    // generate the text that would be displayed to summarize the packed status of the contents of this item
    if (SUBITEM_DISPLAY_MODE === "packedChildrenOutOfTotalChildren") {
-      item.contentSummaryText =
-         item.numPackedChildren + " / " + item.numChildren;
+      item.contentSummary = item.numPackedChildren + " / " + item.numChildren;
    } else if (SUBITEM_DISPLAY_MODE === "numUnpackedDescendants") {
       if (item.numUnpackedDescendants > 0) {
-         item.contentSummaryText = item.numUnpackedDescendants + " left";
+         item.contentSummary = item.numUnpackedDescendants + " left";
       } else if (!item.isPacked) {
-         item.contentSummaryText = "ready";
+         item.contentSummary = "ready";
       } else {
-         item.contentSummaryText = "";
+         item.contentSummary = "";
       }
    } else if (SUBITEM_DISPLAY_MODE === "numUnpackedChildren") {
       if (item.numUnpackedChildren > 0) {
-         item.contentSummaryText = item.numUnpackedChildren + " left";
+         item.contentSummary = item.numUnpackedChildren + " left";
       } else if (!item.isPacked) {
-         item.contentSummaryText = "ready";
+         item.contentSummary = "ready";
       } else {
-         item.contentSummaryText = "";
+         item.contentSummary = "";
       }
    }
 

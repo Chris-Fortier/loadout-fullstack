@@ -103,7 +103,7 @@ class LoadoutCard extends React.Component {
                      { disabled: item.isPacked }
                   )}
                >
-                  {item.contentSummaryText}&nbsp;&nbsp;
+                  {item.contentSummary}&nbsp;&nbsp;
                </span>
 
                <span
