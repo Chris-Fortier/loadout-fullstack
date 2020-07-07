@@ -5,10 +5,10 @@ const bcrypt = require("bcrypt");
 module.exports = async function getSignUpPasswordError(password, email) {
    if (password === "") {
       // check if password input is blank
-      return "Please enter your password. -s";
+      return "Please enter your password.";
    }
    if ((await checkIsValidUser(email, password)) === false) {
-      return "The email and password combination that you entered is invalid. -s";
+      return "The email and/or password you entered is invalid.";
    }
    return "";
 };

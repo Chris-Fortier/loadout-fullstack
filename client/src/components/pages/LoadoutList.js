@@ -33,6 +33,13 @@ class LoadoutList extends React.Component {
       this.props.dispatch({
          type: actions.RESET_CURRENT_LEVEL,
       }); // dispatching an action
+
+      // if the user finds themselves on this page but they are not logged in, send them to the landing page
+      console.log(this.props.currentUser);
+      if (JSON.stringify(this.props.currentUser) === JSON.stringify({})) {
+         console.log("You are not logged in");
+         this.props.history.push("/");
+      }
    }
 
    // methods happen here, such as what happens when you click on a button
@@ -116,16 +123,20 @@ class LoadoutList extends React.Component {
                                  <div className="col">
                                     {/* One-Night Camping Trip */}
                                     {this.state.loadouts.length === 0 && (
-                                       <div
-                                          className="navigation-link"
-                                          onClick={() => {
-                                             this.loadLoadouts();
-                                          }}
-                                       >
-                                          Click here to refresh the user's
-                                          loadout list, the user is loading too
-                                          slow, need to fix
-                                       </div>
+                                       // <div
+                                       //    className="navigation-link"
+                                       //    onClick={() => {
+                                       //       this.loadLoadouts();
+                                       //    }}
+                                       // >
+                                       //    Click here to refresh the user's
+                                       //    loadout list, the user is loading too
+                                       //    slow, need to fix
+                                       // </div>
+                                       <>
+                                          {this.props.currentUser.email} does
+                                          not have any loadouts.
+                                       </>
                                     )}
                                     {this.state.loadouts.map((loadout) => (
                                        <LoadoutCard
