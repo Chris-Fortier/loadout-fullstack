@@ -763,6 +763,15 @@ $iconWidth: 30px;
    margin-bottom: 0;
 }
 
+// different font for user editable text and body text
+input,
+p {
+   font-family: $font-family-body;
+   // font-size: 0.7em; // size for Fira Sans
+   font-size: 0.8em; // size for Roboto Condensed
+   line-height: 1.5;
+}
+
 .my-input {
    margin-top: $space-between-button-rows/2; // for space between card sections and buttons
    margin-bottom: $space-between-button-rows/2; // for space between card sections and buttons
