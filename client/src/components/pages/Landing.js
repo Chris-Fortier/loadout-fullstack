@@ -1,6 +1,5 @@
 import React from "react";
 // import { Link } from "react-router-dom"; // a React element for linking
-import { EMAIL_REGEX } from "../../utils/helpers";
 import { v4 as getUuid } from "uuid";
 import classnames from "classnames";
 import {
@@ -33,10 +32,10 @@ class Landing extends React.Component {
          hasSignupPasswordError: false,
 
          // log in
-         existingEmailError: "",
-         existingPasswordError: "",
-         hasExistingEmailError: false,
-         hasExistingPasswordError: false,
+         loginEmailError: "",
+         loginPasswordError: "",
+         hasLoginEmailError: false,
+         hasLoginPasswordError: false,
       };
    }
 
@@ -53,130 +52,88 @@ class Landing extends React.Component {
    setLogInMode() {
       this.setState({
          landingMode: "log-in",
-         existingEmailError: "",
-         existingPasswordError: "",
-         hasExistingEmailError: false,
-         hasExistingPasswordError: false,
+         loginEmailError: "",
+         loginPasswordError: "",
+         hasLoginEmailError: false,
+         hasLoginPasswordError: false,
       });
    }
 
-   // tests if the sign up email is valid
-   async setExistingEmailState(emailInput) {
-      console.log("setExistingEmailState()...");
-      console.log("emailInput", emailInput);
-      const lowerCasedEmailInput = emailInput.toLowerCase();
-
-      if (emailInput === "") {
-         console.log("bad existing email");
-         this.setState({
-            existingEmailError:
-               "Please enter the email associated with your account.",
-            hasExistingEmailError: true,
-         });
-      } else if (!EMAIL_REGEX.test(lowerCasedEmailInput)) {
-         this.setState({
-            existingEmailError: "Please enter a valid email address.",
-            hasExistingEmailError: true,
-         });
-      } else {
-         this.setState({
-            existingEmailError: "",
-            hasExistingEmailError: false,
-         });
-      }
-   }
-
-   // checks if an existing email is valid
-   async setExistingPasswordState(passwordInput) {
-      console.log("setExistingPasswordState()...");
-      console.log("passwordInput", passwordInput);
-
-      if (passwordInput === "") {
-         // check if password input is blank
-         this.setState({
-            existingPasswordError: "Please enter your password.",
-            hasExistingPasswordError: true,
-         });
-      } else {
-         this.setState({
-            existingPasswordError: "",
-            hasExistingPasswordError: false,
-         });
-      }
-   }
-
-   // tests if the email and password are valid inputs for logging in
-   async validateLogInAttempt() {
-      console.log("validateLogInAttempt()...");
-      const emailInput = document.getElementById("existing-email-input").value;
-      const passwordInput = document.getElementById("existing-password-input")
+   // tests if the email and password are valid and if so creates the user
+   async validateAndLogInUser() {
+      const emailInput = document.getElementById("login-email-input").value;
+      const passwordInput = document.getElementById("login-password-input")
          .value;
 
-      // await is used on these to make sure we get the states of these before the if statement
-      await this.setExistingEmailState(emailInput);
-      await this.setExistingPasswordState(passwordInput);
-
-      if (
-         !this.state.hasExistingEmailError &&
-         !this.state.hasExistingPasswordError
-      ) {
-         const user = {
-            id: getUuid(),
-            email: emailInput,
-            password: passwordInput, // send the plain text password over secure connection, the server will hash it
-            createdAt: Date.now(),
-         };
-
-         console.log("created user object for POST: ", user);
-         // Mimic API response:
-         axios
-            .get(
-               "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/user.json"
-            )
-            .then((res) => {
-               const currentUser = res.data;
-               console.log(currentUser);
-               this.props.dispatch({
-                  type: actions.UPDATE_CURRENT_USER,
-                  payload: res.data,
-               });
-            })
-            .catch((error) => {
-               console.log(error);
-            });
-
-         // redirect the user
-         // todo: make this its own function
-         this.props.history.push("/loadout-list");
-         window.scrollTo(0, 0); // sets focus to the top of the page
-      }
-   }
-
-   // bypasses log in and goes straight to app
-   bypassLogIn() {
-      console.log("created user object for POST: ");
-      // Mimic API response:
+      const user = {
+         email: emailInput,
+         password: passwordInput, // send the plain text password over secure connection, the server will hash it
+      };
+      // call API response:
       axios
-         .get(
-            "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/user.json"
-         )
+         .post("/api/v1/users/auth", user)
          .then((res) => {
-            const currentUser = res.data;
-            console.log(currentUser);
+            // handle success
+            // update currentUser in global state with API response
             this.props.dispatch({
                type: actions.UPDATE_CURRENT_USER,
                payload: res.data,
             });
+            // go to next page
+            this.props.history.push("/loadout-list");
          })
-         .catch((error) => {
-            console.log(error);
-         });
+         .catch((err) => {
+            const data = err.response.data;
+            console.log("err.response.data", data);
+            const { loginEmailError, loginPasswordError } = data;
 
-      // redirect the user
-      // todo: make this its own function
-      this.props.history.push("/loadout-list");
-      window.scrollTo(0, 0); // sets focus to the top of the page
+            // push email error to state
+            if (loginEmailError !== "") {
+               this.setState({ hasLoginEmailError: true, loginEmailError });
+            } else {
+               this.setState({ hasLoginEmailError: false, loginEmailError });
+            }
+
+            // push password error to state
+            if (loginPasswordError !== "") {
+               this.setState({
+                  hasLoginPasswordError: true,
+                  loginPasswordError,
+               });
+            } else {
+               this.setState({
+                  hasLoginPasswordError: false,
+                  loginPasswordError,
+               });
+            }
+         });
    }
+
+   // // bypasses log in and goes straight to app
+   // bypassLogIn() {
+   //    console.log("created user object for POST: ");
+   //    // Mimic API response:
+   //    axios
+   //       .get(
+   //          "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/user.json"
+   //       )
+   //       .then((res) => {
+   //          const currentUser = res.data;
+   //          console.log(currentUser);
+   //          this.props.dispatch({
+   //             type: actions.UPDATE_CURRENT_USER,
+   //             payload: res.data,
+   //          });
+   //       })
+   //       .catch((error) => {
+   //          console.log(error);
+   //       });
+
+   //    // redirect the user
+   //    // todo: make this its own function
+   //    this.props.history.push("/loadout-list");
+   //    window.scrollTo(0, 0); // sets focus to the top of the page
+   // }
 
    // tests if the email and password are valid and if so creates the user
    async validateAndCreateUser() {
@@ -191,7 +148,6 @@ class Landing extends React.Component {
          password: passwordInput, // send the plain text password over secure connection, the server will hash it
          createdAt: Date.now(),
       };
-      console.log("created user object for POST: ", user);
 
       // post to API
       axios
@@ -244,38 +200,38 @@ class Landing extends React.Component {
             <div className="card-body">
                <h5>log in</h5>
                <input
-                  id="existing-email-input"
+                  id="login-email-input"
                   placeholder="Enter Your Email"
                   required
                   type="email"
                   className={classnames({
                      "my-input": true,
-                     "input-invalid": this.state.hasExistingPasswordError,
+                     "input-invalid": this.state.hasLoginPasswordError,
                   })}
                />
-               {this.state.hasExistingEmailError && (
+               {this.state.hasLoginEmailError && (
                   <div className="text-danger">
-                     {this.state.existingEmailError}
+                     {this.state.loginEmailError}
                   </div>
                )}
                <input
                   type="password"
-                  id="existing-password-input"
+                  id="login-password-input"
                   placeholder="Enter Your Password"
                   required
                   className={classnames({
                      "my-input": true,
-                     "input-invalid": this.state.hasExistingPasswordError,
+                     "input-invalid": this.state.hasLoginPasswordError,
                   })}
                />
-               {this.state.hasExistingPasswordError && (
+               {this.state.hasLoginPasswordError && (
                   <div className="text-danger" id="password-error">
-                     {this.state.existingPasswordError}
+                     {this.state.loginPasswordError}
                   </div>
                )}
                <div
                   className="button primary-action-button"
-                  onClick={() => this.validateLogInAttempt()}
+                  onClick={() => this.validateAndLogInUser()}
                >
                   log in
                </div>
@@ -288,12 +244,12 @@ class Landing extends React.Component {
                   </span>
                   &nbsp;Make a New Account
                </div>
-               <div
+               {/* <div
                   className="button navigation-link float-right"
                   onClick={() => this.bypassLogIn()}
                >
                   bypass log in
-               </div>
+               </div> */}
             </div>
          </div>
       );
