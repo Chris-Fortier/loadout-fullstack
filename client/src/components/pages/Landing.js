@@ -27,10 +27,10 @@ class Landing extends React.Component {
          landingMode: "log-in", // set to either "log-in" or "new-account"
 
          // sign up
-         newEmailError: "",
-         newPasswordError: "",
-         hasNewEmailError: false,
-         hasNewPasswordError: false,
+         signupEmailError: "",
+         signupPasswordError: "",
+         hasSignupEmailError: false,
+         hasSignupPasswordError: false,
 
          // log in
          existingEmailError: "",
@@ -43,10 +43,10 @@ class Landing extends React.Component {
    setNewAccountMode() {
       this.setState({
          landingMode: "new-account",
-         newEmailError: "",
-         newPasswordError: "",
-         hasNewEmailError: false,
-         hasNewPasswordError: false,
+         signupEmailError: "",
+         signupPasswordError: "",
+         hasSignupEmailError: false,
+         hasSignupPasswordError: false,
       });
    }
 
@@ -58,26 +58,6 @@ class Landing extends React.Component {
          hasExistingEmailError: false,
          hasExistingPasswordError: false,
       });
-   }
-
-   // tests if the sign up email is valid
-   async setNewEmailState(emailInput) {
-      console.log("setNewEmailState()...");
-      const lowerCasedEmailInput = emailInput.toLowerCase();
-
-      if (emailInput === "")
-         this.setState({
-            newEmailError: "Please enter your email address.",
-            hasNewEmailError: true,
-         });
-      else if (!EMAIL_REGEX.test(lowerCasedEmailInput)) {
-         this.setState({
-            newEmailError: "Please enter a valid email address.",
-            hasNewEmailError: true,
-         });
-      } else {
-         this.setState({ newEmailError: "", hasNewEmailError: false });
-      }
    }
 
    // tests if the sign up email is valid
@@ -103,53 +83,6 @@ class Landing extends React.Component {
             existingEmailError: "",
             hasExistingEmailError: false,
          });
-      }
-   }
-
-   // tests if the local part of the email is inside the password
-   checkHasLocalPart(passwordInput, emailInput) {
-      if (emailInput.length < 4) {
-         return false;
-      } else {
-         const localPart = emailInput.split("@")[0];
-         return passwordInput.includes(localPart);
-      }
-   }
-
-   // checks if a new password is valid
-   async setNewPasswordState(passwordInput, emailInput) {
-      console.log("setNewPasswordState()...");
-
-      const uniqChars = [...new Set(passwordInput)];
-
-      if (passwordInput === "") {
-         // check if password input is blank
-         this.setState({
-            newPasswordError: "Please create a password.",
-            hasNewPasswordError: true,
-         });
-      } else if (passwordInput.length < 9) {
-         // check if password is less than 9 characters
-         this.setState({
-            newPasswordError: "Your password must be at least 9 characters.",
-            hasNewPasswordError: true,
-         });
-      } else if (this.checkHasLocalPart(passwordInput, emailInput)) {
-         // check if the local part of email is in the password
-         this.setState({
-            newPasswordError:
-               "Your password cannot contain your email address.",
-            hasNewPasswordError: true,
-         });
-      } else if (uniqChars.length < 3) {
-         // check if the password has less than 3 unique characters
-         this.setState({
-            newPasswordError:
-               "Your password must have at least three unique characters.",
-            hasNewPasswordError: true,
-         });
-      } else {
-         this.setState({ newPasswordError: "", hasNewPasswordError: false });
       }
    }
 
@@ -247,51 +180,62 @@ class Landing extends React.Component {
 
    // tests if the email and password are valid and if so creates the user
    async validateAndCreateUser() {
-      console.log("validateAndCreateUser...");
-      const emailInput = document.getElementById("new-email-input").value;
-      const passwordInput = document.getElementById("new-password-input").value;
+      const emailInput = document.getElementById("signup-email-input").value;
+      const passwordInput = document.getElementById("signup-password-input")
+         .value;
 
-      // await is used on these to make sure we get the states of these before the if statement
-      await this.setNewEmailState(emailInput);
-      await this.setNewPasswordState(passwordInput, emailInput);
+      // create user obj
+      const user = {
+         id: getUuid(), // make a new uuid
+         email: emailInput,
+         password: passwordInput, // send the plain text password over secure connection, the server will hash it
+         createdAt: Date.now(),
+      };
+      console.log("created user object for POST: ", user);
 
-      if (!this.state.hasNewEmailError && !this.state.hasNewPasswordError) {
-         const user = {
-            id: getUuid(),
-            email: emailInput,
-            password: passwordInput, // send the plain text password over secure connection, the server will hash it
-            createdAt: Date.now(),
-         };
-
-         console.log("created user object for POST: ", user);
-
-         // post to API
-         axios
-            // .get(
-            //    "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/user.json"
-            // )
-            .post("/api/v1/users", user) // post to this endpoint the user object we just made
-            .then((res) => {
-               // const currentUser = res.data;
-               // console.log(currentUser);
-               // this.props.dispatch({
-               //    type: actions.UPDATE_CURRENT_USER,
-               //    payload: res.data,
-               // });
-               console.log("new user res", res);
-            })
-            .catch((err) => {
-               console.log("new user error", err);
+      // post to API
+      axios
+         .post("/api/v1/users", user) // post to this endpoint the user object we just made
+         .then((res) => {
+            console.log("res.data", res.data);
+            // update currentUser in global state with API response
+            this.props.dispatch({
+               type: actions.UPDATE_CURRENT_USER,
+               payload: res.data,
             });
+            // go to next page
+            this.props.history.push("/loadout-list");
+         })
+         .catch((err) => {
+            const data = err.response.data;
+            console.log("err", data);
+            const { signupEmailError, signupPasswordError } = data;
 
-         // update currentUser in global state with API response
-         // go to next page: this.props.history.push("/loadout-list");
+            // push email error to state
+            if (signupEmailError !== "") {
+               this.setState({ hasSignupEmailError: true, signupEmailError });
+            } else {
+               this.setState({ hasSignupEmailError: false, signupEmailError });
+            }
 
-         // redirect the user
-         // todo: make this its own function
-         this.props.history.push("/loadout-list");
-         window.scrollTo(0, 0); // sets focus to the top of the page
-      }
+            // push password error to state
+            if (signupPasswordError !== "") {
+               console.log("setting the password error");
+               this.setState({
+                  hasSignupPasswordError: true,
+                  signupPasswordError,
+               });
+               console.log(
+                  this.state.hasSignupPasswordError,
+                  this.state.signupPasswordError
+               );
+            } else {
+               this.setState({
+                  hasSignupPasswordError: false,
+                  signupPasswordError,
+               });
+            }
+         });
    }
 
    renderLogInCard() {
@@ -355,7 +299,7 @@ class Landing extends React.Component {
       );
    }
 
-   renderNewAccountCard() {
+   renderSignUpCard() {
       return (
          <div className="card mb-3">
             <div className="card-body">
@@ -372,33 +316,33 @@ class Landing extends React.Component {
                   Make a New Account
                </p> */}
                <input
-                  id="new-email-input"
+                  id="signup-email-input"
                   placeholder="Enter Your Email"
                   required
                   type="email"
                   className={classnames({
                      "my-input": true,
-                     "input-invalid": this.state.hasNewEmailError,
+                     "input-invalid": this.state.hasSignupEmailError,
                   })}
                />
-               {this.state.hasNewEmailError && (
-                  <div className="text-danger" id="email-error">
-                     {this.state.newEmailError}
+               {this.state.hasSignupEmailError && (
+                  <div className="text-danger" id="signup-email-error">
+                     {this.state.signupEmailError}
                   </div>
                )}
                <input
                   type="password"
-                  id="new-password-input"
+                  id="signup-password-input"
                   placeholder="Enter Your Password"
                   required
                   className={classnames({
                      "my-input": true,
-                     "input-invalid": this.state.hasNewPasswordError,
+                     "input-invalid": this.state.hasSignupPasswordError,
                   })}
                />
-               {this.state.hasNewPasswordError && (
-                  <div className="text-danger" id="password-error">
-                     {this.state.newPasswordError}
+               {this.state.hasSignupPasswordError && (
+                  <div className="text-danger" id="signup-password-error">
+                     {this.state.signupPasswordError}
                   </div>
                )}
                <div
@@ -437,7 +381,7 @@ class Landing extends React.Component {
                      {this.state.landingMode === "log-in" &&
                         this.renderLogInCard()}
                      {this.state.landingMode === "new-account" &&
-                        this.renderNewAccountCard()}
+                        this.renderSignUpCard()}
                   </div>
                </div>
             </div>
