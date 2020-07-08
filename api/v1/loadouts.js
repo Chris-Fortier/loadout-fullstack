@@ -83,6 +83,7 @@ router.post("/set-name", (req, res) => {
 // @route      POST api/v1/loadouts/set-status
 // @desc       set the status to something
 // @access     Public
+// test: http://localhost:3060/api/v1/loadouts/set-status?newStatus=1&itemId=0674f34b-f0d8-4eac-bbc1-213d37acdf3f
 router.post("/set-status", (req, res) => {
    console.log("set-status called", [
       req.query.newStatus,
