@@ -517,14 +517,11 @@ class ItemList2 extends React.Component {
                                              <input
                                                 className="edit-name"
                                                 defaultValue={
-                                                   this.state.currentItem.name
+                                                   this.props.currentItem.name
                                                 }
                                                 onChange={(e) =>
                                                    renameItem(
-                                                      this.props.currentLoadout
-                                                         .gear,
-                                                      this.props.currentLoadout
-                                                         .itemIndexPath,
+                                                      this.props.currentItem.id,
                                                       e.target.value
                                                    )
                                                 }

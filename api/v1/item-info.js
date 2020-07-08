@@ -8,8 +8,9 @@ const { getContentSummary } = require("../../utils/helpers");
 // @route      GET api/v1/item-info (http://localhost:3045/api/v1/item-info)  // change this
 // @desc       Get all data and derived data for a given item
 // @access     Public
+// test: http://localhost:3060/api/v1/item-info/?itemId=41b9bde9-4731-44d2-b471-d46d21aca680
 router.get("/", (req, res) => {
-   console.log(req.query);
+   console.log("req.query", req.query);
 
    // put the query into some consts
    const itemId = req.query.itemId;

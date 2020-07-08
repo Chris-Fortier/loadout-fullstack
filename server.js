@@ -12,6 +12,7 @@ app.use("/api/v1/user-loadouts", require("./api/v1/user-loadouts"));
 app.use("/api/v1/loadout-users", require("./api/v1/loadout-users"));
 app.use("/api/v1/child-items", require("./api/v1/child-items"));
 app.use("/api/v1/item-info", require("./api/v1/item-info"));
+app.use("/api/v1/loadouts", require("./api/v1/loadouts"));
 
 // if none of the routes are hit ("*"), use what's in the build folder
 // for loadout, since the client folder is one level up from the server folder, the paths need to be changed
