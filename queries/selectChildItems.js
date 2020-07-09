@@ -16,7 +16,9 @@ const selectChildItems = `
          RIGHT JOIN
       loadouts ON children_counts.parent_id = loadouts.id
    WHERE
-      loadouts.parent_id = ?;
+      loadouts.parent_id = ?
+   ORDER BY
+	   loadouts.created_at ASC;
    `;
 
 module.exports = selectChildItems;

@@ -87,7 +87,7 @@ class ItemCardEdit extends React.Component {
                   <span className="flex-fill">
                      <input
                         className="edit-name"
-                        id={"edit-name-input-" + item.index}
+                        id={"edit-name-input-" + item.id}
                         defaultValue={item.name}
                         onChange={(e) =>
                            renameItem(this.props.item, e.target.value)
