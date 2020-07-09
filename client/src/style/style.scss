@@ -679,6 +679,12 @@ $iconWidth: 30px;
    // filter: drop-shadow($pack-icon-shadow);
 }
 
+// use to enlarge item card icons (1rem is no change)
+.loadout-card-icon {
+   width: 1rem;
+   opacity: 0.5;
+}
+
 // vertically align item card text
 .item-card-text {
    align-self: center;
