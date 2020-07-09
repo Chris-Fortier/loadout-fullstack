@@ -2,7 +2,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
-const selectUserLoadouts = require("../../queries/selectUserLoadouts"); // change this
+const selectUserLoadouts = require("../../queries/selectUserLoadouts");
+const { getContentSummary } = require("../../utils/helpers");
 
 // @route      GET api/v1/user-loadouts (http://localhost:3045/api/v1/user-loadouts)  // change this
 // @desc       Get all user loadouts for a user
@@ -36,12 +37,19 @@ router.get("/", (req, res) => {
                // totalSuccessfulAttempts: userLoadout.total_successful_attempts,
                // level: userLoadout.level,
 
-               email: userLoadout.email,
-               loadoutName: userLoadout.loadout_name,
+               // email: userLoadout.email,
+               loadoutName: userLoadout.name,
                canEdit: userLoadout.can_edit,
                canPack: userLoadout.can_pack,
                isAdmin: userLoadout.is_admin,
                loadoutId: userLoadout.loadout_id,
+               numChildren: userLoadout.num_children,
+               numPackedChildren: userLoadout.num_packed,
+               contentSummary: getContentSummary(
+                  userLoadout.num_children,
+                  userLoadout.num_packed,
+                  0 // sending status of 0 for a top level loadout
+               ),
             };
          });
 

@@ -101,6 +101,27 @@ export function IconArrowThinRightCircle() {
    );
 }
 
+export function IconBox() {
+   return (
+      <svg
+         xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 24 24"
+         className="icon-box"
+      >
+         <g>
+            <path
+               className="secondary"
+               d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2zm4 5a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9z"
+            />
+            <path
+               className="primary"
+               d="M4 3h16a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5c0-1.1.9-2 2-2z"
+            />
+         </g>
+      </svg>
+   );
+}
+
 export function IconCheck() {
    return (
       <svg
@@ -294,6 +315,27 @@ export function IconKey() {
             className="secondary"
             d="M6.2 18.7a1 1 0 1 1-1.4-1.4l4-4a1 1 0 1 1 1.4 1.4l-4 4z"
          />
+      </svg>
+   );
+}
+
+export function IconPackage() {
+   return (
+      <svg
+         xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 24 24"
+         className="icon-package"
+      >
+         <g>
+            <polygon
+               className="secondary"
+               points="15 3.333 15 4.67 18.008 4.67 21 6 14 12 12 22 3 18 3 6 12 2"
+            />
+            <path
+               className="primary"
+               d="M21 6v12l-9 4V10l9-4zM9 8.67v3l-3-1.34v-3l9-4 3 1.34-9 4z"
+            />
+         </g>
       </svg>
    );
 }

@@ -12,6 +12,13 @@ import {
 } from "../../utils/helpers";
 import classnames from "classnames";
 import {
+   IconPackage,
+   IconEdit,
+   IconKey,
+   IconUserCouple,
+} from "../../icons/icons.js";
+
+import {
    // PackedIcon,
    // ReadyToPackIcon,
    // NotReadyToPackIcon,
@@ -45,6 +52,7 @@ class LoadoutCard extends React.Component {
       const item = loadout; // this is to simplify code below
       item.name = item.loadoutName;
       const level = 1;
+      item.status = 0; // top level loadouts always have status of zero
 
       return (
          // <Link className={"card item-card child-bg-color"} to="/loadout">
@@ -63,8 +71,115 @@ class LoadoutCard extends React.Component {
             id={"item-card-" + item.index}
          >
             {/* <div className="float-left"> */}
-            <div className="d-flex">
-               <span
+            <Link
+               className="d-flex"
+               onClick={() => {
+                  movePageToDifferentItem(this.props.loadout.loadoutId, +1);
+               }}
+               to="/item-list"
+            >
+               <span>{item.name}&nbsp;</span>
+               {true && (
+                  <span
+                     className={classnames(
+                        "icon-dark item-card-icon",
+                        (UI_APPEARANCE === "light" ||
+                           UI_APPEARANCE === "dark") &&
+                           "item-icon-colors-" + String(level % LEVEL_COLORS)
+                     )}
+                  >
+                     <IconUserCouple />
+                  </span>
+               )}
+               {this.props.loadout.canEdit === 1 && (
+                  <span
+                     className={classnames(
+                        "icon-dark item-card-icon",
+                        (UI_APPEARANCE === "light" ||
+                           UI_APPEARANCE === "dark") &&
+                           "item-icon-colors-" + String(level % LEVEL_COLORS)
+                     )}
+                  >
+                     <IconEdit />
+                  </span>
+               )}
+               {this.props.loadout.canPack === 1 && (
+                  <span
+                     className={classnames(
+                        "icon-dark item-card-icon",
+                        (UI_APPEARANCE === "light" ||
+                           UI_APPEARANCE === "dark") &&
+                           "item-icon-colors-" + String(level % LEVEL_COLORS)
+                     )}
+                  >
+                     <IconPackage />
+                  </span>
+               )}
+               {this.props.loadout.isAdmin === 1 && (
+                  <span
+                     className={classnames(
+                        "icon-dark item-card-icon",
+                        (UI_APPEARANCE === "light" ||
+                           UI_APPEARANCE === "dark") &&
+                           "item-icon-colors-" + String(level % LEVEL_COLORS)
+                     )}
+                  >
+                     <IconKey />
+                  </span>
+               )}
+               <span className="flex-fill"></span>
+
+               {item.numChildren > 0 && (
+                  <>
+                     <span
+                        onClick={(e) => {
+                           item.status === 0 &&
+                              movePageToDifferentItem(this.props.item.id, +1);
+                        }}
+                        className={classnames(
+                           "button navigation-link item-card-text",
+                           (UI_APPEARANCE === "light" ||
+                              UI_APPEARANCE === "dark") &&
+                              "level-text-color-" +
+                                 String((level + 1) % LEVEL_COLORS),
+                           UI_APPEARANCE === "colors" && "dark-text-color",
+                           { disabled: item.status === 1 }
+                        )}
+                     >
+                        {item.contentSummary}&nbsp;&nbsp;
+                     </span>
+                     <span
+                        className={classnames(
+                           "icon-dark item-card-icon",
+                           (UI_APPEARANCE === "light" ||
+                              UI_APPEARANCE === "dark") &&
+                              "item-icon-colors-" +
+                                 String(level % LEVEL_COLORS),
+                           UI_APPEARANCE === "colors" && "item-icon-colors",
+                           {
+                              clickable: item.status === 0,
+                              disabled: item.status === 1,
+                           }
+                        )}
+                        onClick={(e) => {
+                           item.status === 0 &&
+                              movePageToDifferentItem(this.props.item.id, +1);
+                        }}
+                     >
+                        {item.status === 1 && <ChildrenPackedIcon2 />}
+                        {item.status === 0 &&
+                           item.numPackedChildren >= item.numChildren && (
+                              <ChildrenPackedIcon2 />
+                           )}
+                        {item.status === 0 &&
+                           item.numPackedChildren < item.numChildren && (
+                              <ChildrenUnpackedIcon />
+                           )}
+                     </span>
+                  </>
+               )}
+
+               {/* <span
                   className={classnames(
                      "flex-fill item-card-text",
                      (UI_APPEARANCE === "light" || UI_APPEARANCE === "dark") &&
@@ -131,8 +246,8 @@ class LoadoutCard extends React.Component {
                      item.numPackedChildren < item.numChildren && (
                         <ChildrenUnpackedIcon />
                      )}
-               </span>
-            </div>
+               </span> */}
+            </Link>
          </div>
       );
    }
