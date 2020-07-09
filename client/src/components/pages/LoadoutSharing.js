@@ -32,6 +32,13 @@ class LoadoutSharing extends React.Component {
       this.state = {
          loadoutUsers: [],
       };
+
+      // if the user finds themselves on this page but they are not logged in, send them to the landing page
+      // TODO, this is duplicated code
+      if (JSON.stringify(this.props.currentUser) === JSON.stringify({})) {
+         console.log("There is no user object, kicking to landing page.");
+         this.props.history.push("/");
+      }
    }
 
    render() {
@@ -59,7 +66,7 @@ class LoadoutSharing extends React.Component {
                                  <>
                                     <div className="col">
                                        <h4>
-                                          One-Night Camping Trip
+                                          {this.props.currentItem.name}
                                           <br />
                                           Sharing Settings
                                        </h4>
@@ -206,6 +213,7 @@ class LoadoutSharing extends React.Component {
 function mapStateToProps(state) {
    return {
       currentItem: state.currentItem,
+      currentUser: state.currentUser,
    };
 }
 
