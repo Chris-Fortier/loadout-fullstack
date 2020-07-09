@@ -8,11 +8,12 @@ import {
    // IconArrowThickUpCircle,
    // IconArrowThickDownCircle,
    // IconArchive,
-   IconArrowThinLeftCircle,
+   // IconArrowThinLeftCircle,
    // IconArrowThinRightCircle,
    // IconTrash,
    // IconChevronDown,
    // IconChevronUp,
+   IconUpLevel,
    IconUserCouple,
 } from "../../icons/icons.js";
 import {
@@ -409,14 +410,14 @@ class ItemList2 extends React.Component {
                                     >
                                        <div
                                           className={classnames(
-                                             "icon-dark left",
-                                             UI_APPEARANCE === "colors" &&
+                                             "left",
+                                             UI_APPEARANCE !== "light" &&
                                                 "icon-light",
-                                             UI_APPEARANCE !== "colors" &&
+                                             UI_APPEARANCE === "light" &&
                                                 "icon-dark"
                                           )}
                                        >
-                                          <IconArrowThinLeftCircle />
+                                          <IconUpLevel />
                                        </div>
                                        Back to{" "}
                                        {this.props.currentItem.parentName}
@@ -426,14 +427,14 @@ class ItemList2 extends React.Component {
                                     <Link to="/loadout-list">
                                        <div
                                           className={classnames(
-                                             "icon-dark left",
-                                             UI_APPEARANCE === "colors" &&
+                                             "left",
+                                             UI_APPEARANCE !== "light" &&
                                                 "icon-light",
-                                             UI_APPEARANCE !== "colors" &&
+                                             UI_APPEARANCE === "light" &&
                                                 "icon-dark"
                                           )}
                                        >
-                                          <IconArrowThinLeftCircle />
+                                          <IconUpLevel />
                                        </div>
                                        Back to Loadouts
                                     </Link>

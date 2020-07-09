@@ -2,6 +2,11 @@ html {
    font-size: 20px; // Teko is a smaller looking font so setting the base size as 20px
 }
 
+a,
+a:hover {
+   color: inherit; // removes the color assignment associated with Link components
+}
+
 .card-body {
    padding: 1rem; // override the default of 1.25rem
 }

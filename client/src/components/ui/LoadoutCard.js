@@ -78,14 +78,22 @@ class LoadoutCard extends React.Component {
                }}
                to="/item-list"
             >
-               <span>{item.name}&nbsp;</span>
+               <span
+                  className={classnames(
+                     "item-card-text",
+                     (UI_APPEARANCE === "light" || UI_APPEARANCE === "dark") &&
+                        "level-text-color-" + String(level % LEVEL_COLORS),
+                     UI_APPEARANCE === "colors" && "dark-text-color"
+                  )}
+               >
+                  {item.name}&nbsp;
+               </span>
                {true && (
                   <span
                      className={classnames(
                         "icon-dark item-card-icon",
-                        (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "dark") &&
-                           "item-icon-colors-" + String(level % LEVEL_COLORS)
+                        UI_APPEARANCE === "dark" && "icon-light",
+                        UI_APPEARANCE !== "dark" && "icon-dark"
                      )}
                   >
                      <IconUserCouple />
@@ -95,9 +103,8 @@ class LoadoutCard extends React.Component {
                   <span
                      className={classnames(
                         "icon-dark item-card-icon",
-                        (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "dark") &&
-                           "item-icon-colors-" + String(level % LEVEL_COLORS)
+                        UI_APPEARANCE === "dark" && "icon-light",
+                        UI_APPEARANCE !== "dark" && "icon-dark"
                      )}
                   >
                      <IconEdit />
@@ -107,9 +114,8 @@ class LoadoutCard extends React.Component {
                   <span
                      className={classnames(
                         "icon-dark item-card-icon",
-                        (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "dark") &&
-                           "item-icon-colors-" + String(level % LEVEL_COLORS)
+                        UI_APPEARANCE === "dark" && "icon-light",
+                        UI_APPEARANCE !== "dark" && "icon-dark"
                      )}
                   >
                      <IconPackage />
@@ -119,9 +125,8 @@ class LoadoutCard extends React.Component {
                   <span
                      className={classnames(
                         "icon-dark item-card-icon",
-                        (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "dark") &&
-                           "item-icon-colors-" + String(level % LEVEL_COLORS)
+                        UI_APPEARANCE === "dark" && "icon-light",
+                        UI_APPEARANCE !== "dark" && "icon-dark"
                      )}
                   >
                      <IconKey />
@@ -134,7 +139,7 @@ class LoadoutCard extends React.Component {
                      <span
                         onClick={(e) => {
                            item.status === 0 &&
-                              movePageToDifferentItem(this.props.item.id, +1);
+                              movePageToDifferentItem(item.id, +1);
                         }}
                         className={classnames(
                            "button navigation-link item-card-text",
