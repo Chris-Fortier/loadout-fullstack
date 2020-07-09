@@ -38,6 +38,7 @@ router.get("/", (req, res) => {
                name: item.name,
                status: item.status,
                id: item.id,
+               parentId: item.parent_id,
                numChildren: num_children,
                numPackedChildren: num_packed_children,
                numUnpackedChildren: num_children - num_packed_children,

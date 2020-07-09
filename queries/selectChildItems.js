@@ -4,7 +4,7 @@
 // this version also gets the number of child items each child item has
 const selectChildItems = `
    SELECT 
-      loadouts.name, loadouts.status, loadouts.id, num_children, num_packed_children
+      loadouts.name, loadouts.status, loadouts.id, loadouts.parent_id, num_children, num_packed_children
    FROM
       (SELECT 
          loadouts.parent_id,

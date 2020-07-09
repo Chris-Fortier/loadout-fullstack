@@ -60,11 +60,7 @@ class Landing extends React.Component {
    }
 
    // tests if the email and password are valid and if so creates the user
-   async validateAndLogInUser() {
-      const emailInput = document.getElementById("login-email-input").value;
-      const passwordInput = document.getElementById("login-password-input")
-         .value;
-
+   async validateAndLogInUser(emailInput, passwordInput) {
       const user = {
          email: emailInput,
          password: passwordInput, // send the plain text password over secure connection, the server will hash it
@@ -81,6 +77,7 @@ class Landing extends React.Component {
             });
             // go to next page
             this.props.history.push("/loadout-list");
+            window.scrollTo(0, 0); // sets focus to the top of the page
          })
          .catch((err) => {
             const data = err.response.data;
@@ -109,31 +106,16 @@ class Landing extends React.Component {
          });
    }
 
-   // // bypasses log in and goes straight to app
-   // bypassLogIn() {
-   //    console.log("created user object for POST: ");
-   //    // Mimic API response:
-   //    axios
-   //       .get(
-   //          "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/user.json"
-   //       )
-   //       .then((res) => {
-   //          const currentUser = res.data;
-   //          console.log(currentUser);
-   //          this.props.dispatch({
-   //             type: actions.UPDATE_CURRENT_USER,
-   //             payload: res.data,
-   //          });
-   //       })
-   //       .catch((error) => {
-   //          console.log(error);
-   //       });
-
-   //    // redirect the user
-   //    // todo: make this its own function
-   //    this.props.history.push("/loadout-list");
-   //    window.scrollTo(0, 0); // sets focus to the top of the page
-   // }
+   // bypasses log in and goes straight to app using the given user object
+   bypassLogIn(user) {
+      this.props.dispatch({
+         type: actions.UPDATE_CURRENT_USER,
+         payload: user,
+      });
+      // go to next page
+      this.props.history.push("/loadout-list");
+      window.scrollTo(0, 0); // sets focus to the top of the page
+   }
 
    // tests if the email and password are valid and if so creates the user
    async validateAndCreateUser() {
@@ -161,6 +143,7 @@ class Landing extends React.Component {
             });
             // go to next page
             this.props.history.push("/loadout-list");
+            window.scrollTo(0, 0); // sets focus to the top of the page
          })
          .catch((err) => {
             const data = err.response.data;
@@ -231,7 +214,12 @@ class Landing extends React.Component {
                )}
                <div
                   className="button primary-action-button"
-                  onClick={() => this.validateAndLogInUser()}
+                  onClick={() =>
+                     this.validateAndLogInUser(
+                        document.getElementById("login-email-input").value,
+                        document.getElementById("login-password-input").value
+                     )
+                  }
                >
                   log in
                </div>
@@ -244,12 +232,18 @@ class Landing extends React.Component {
                   </span>
                   &nbsp;Make a New Account
                </div>
-               {/* <div
+               <div
                   className="button navigation-link float-right"
-                  onClick={() => this.bypassLogIn()}
+                  onClick={() =>
+                     this.bypassLogIn({
+                        id: "0e3e3882-1264-467c-94bf-f9850b7edbd4",
+                        email: "chris@email.com",
+                        createdAt: "1594145052944",
+                     })
+                  }
                >
                   bypass log in
-               </div> */}
+               </div>
             </div>
          </div>
       );

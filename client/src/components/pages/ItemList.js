@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../ui/Header";
-import orderBy from "lodash/orderBy";
+// import orderBy from "lodash/orderBy";
 import {
    IconEdit,
    // IconCog,
@@ -36,7 +36,7 @@ import {
    // getParentItemFromPath,
    renameItem,
    addItemTo,
-   addContainerTo,
+   // addContainerTo,
 } from "../../utils/items";
 
 // ItemList2 is an alternate version that queries a single item's children to display from the database
@@ -309,46 +309,46 @@ class ItemList2 extends React.Component {
    //    // this.setState({ currentItem: itemDataCopy }); // makes it update the input that the user can see
    // }
 
-   renderContainingItems(parentItem) {
-      const items = parentItem.items; // to simplify code below
+   // renderContainingItems(parentItem) {
+   //    const items = parentItem.items; // to simplify code below
 
-      console.log("Rendering containing items of", parentItem.name);
+   //    console.log("Rendering containing items of", parentItem.name);
 
-      let displayedItems = items; // initialize a new list for displayed items
+   //    let displayedItems = items; // initialize a new list for displayed items
 
-      displayedItems = orderBy(displayedItems, "name", "asc"); // sort the items by name
-      // displayedItems = items;
+   //    displayedItems = orderBy(displayedItems, "name", "asc"); // sort the items by name
+   //    // displayedItems = items;
 
-      // order by which items have the most unpacked subitems
-      // displayedItems = orderBy(displayedItems, "numUnpackedDescendants", "asc");
+   //    // order by which items have the most unpacked subitems
+   //    // displayedItems = orderBy(displayedItems, "numUnpackedDescendants", "asc");
 
-      // sort the items by packed status if desired, with packed items on bottom
-      if (this.state.isPackedOnBottom) {
-         displayedItems = orderBy(displayedItems, "isPacked", "asc");
-      }
+   //    // sort the items by packed status if desired, with packed items on bottom
+   //    if (this.state.isPackedOnBottom) {
+   //       displayedItems = orderBy(displayedItems, "isPacked", "asc");
+   //    }
 
-      // hide packed items if desired
-      if (this.state.isShowingPacked === false) {
-         displayedItems = displayedItems.filter(
-            (item) => item.isPacked === false
-         ); // keep only the unpacked items
-      }
+   //    // hide packed items if desired
+   //    if (this.state.isShowingPacked === false) {
+   //       displayedItems = displayedItems.filter(
+   //          (item) => item.isPacked === false
+   //       ); // keep only the unpacked items
+   //    }
 
-      console.log("displayedItems:", displayedItems);
-      // render each sub item
+   //    console.log("displayedItems:", displayedItems);
+   //    // render each sub item
 
-      if (this.state.isEditMode) {
-         // do edit mode version of item cards
-         return displayedItems.map((item) => (
-            <ItemCardEdit item={item} key={item.id} />
-         ));
-      } else {
-         // do packing mode version of item cards
-         return displayedItems.map((item) => (
-            <ItemCard item={item} key={item.id} />
-         ));
-      }
-   }
+   //    if (this.state.isEditMode) {
+   //       // do edit mode version of item cards
+   //       return displayedItems.map((item) => (
+   //          <ItemCardEdit item={item} key={item.id} />
+   //       ));
+   //    } else {
+   //       // do packing mode version of item cards
+   //       return displayedItems.map((item) => (
+   //          <ItemCard item={item} key={item.id} />
+   //       ));
+   //    }
+   // }
 
    render() {
       console.log("Rendering page...");
@@ -603,9 +603,17 @@ class ItemList2 extends React.Component {
                               <div className="row">
                                  <div className="col">
                                     {/* {this.renderContainingItems(currentItem)} */}
-                                    {this.props.childItems.map((item) => (
-                                       <ItemCard item={item} key={item.id} />
-                                    ))}
+                                    {!this.state.isEditMode &&
+                                       this.props.childItems.map((item) => (
+                                          <ItemCard item={item} key={item.id} />
+                                       ))}
+                                    {this.state.isEditMode &&
+                                       this.props.childItems.map((item) => (
+                                          <ItemCardEdit
+                                             item={item}
+                                             key={item.id}
+                                          />
+                                       ))}
                                  </div>
                               </div>
                               {!this.state.isEditMode && level !== 0 && (
@@ -642,16 +650,12 @@ class ItemList2 extends React.Component {
                                     <div
                                        className="button primary-action-button"
                                        onClick={(e) => {
-                                          addItemTo(
-                                             this.props.currentLoadout.gear,
-                                             this.props.currentLoadout
-                                                .itemIndexPath
-                                          );
+                                          addItemTo(this.props.currentItem.id);
                                        }}
                                     >
                                        Add Item
                                     </div>
-                                    <div
+                                    {/* <div
                                        className="button primary-action-button"
                                        onClick={(e) => {
                                           addContainerTo(
@@ -662,7 +666,7 @@ class ItemList2 extends React.Component {
                                        }}
                                     >
                                        Add Container
-                                    </div>
+                                    </div> */}
                                  </>
                               )}
                            </div>

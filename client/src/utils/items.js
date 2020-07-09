@@ -1,5 +1,12 @@
-import { processAllItems } from "./processItems";
-import { v4 as getUuid } from "uuid";
+// import { processAllItems } from "./processItems";
+// import { v4 as getUuid } from "uuid";
+import axios from "axios";
+import {
+   // movePageToDifferentItem,
+   refreshPage,
+} from "./movePageToDifferentItem";
+// import store from "../store/store";
+// import actions from "../store/actions";
 
 // this file will store functions relating to changing items in the loadouts
 
@@ -24,7 +31,7 @@ export function getParentItemFromPath(gear, itemIndexPath) {
 }
 
 // updates the name of an item
-export function renameItem(itemId, newName) {
+export function renameItem(item, newName) {
    // console.log("rename " + this.props.item.name + " to " + newName);
    // console.log("itemIndexPath:", itemIndexPath);
    // get the actual item I want to change based on the index path
@@ -51,65 +58,86 @@ export function renameItem(itemId, newName) {
 }
 
 // add an item
-export function addItemTo(gear, itemIndexPath) {
-   // get the actual item I want to add an item inside
-   const currentItem = getItemFromPath(gear, itemIndexPath);
+export function addItemTo(parentId) {
+   // server update
+   axios
+      .post(
+         "http://localhost:3060/api/v1/loadouts/insert?parentId=" +
+            parentId +
+            "&name=new%20item"
+      )
+      .then((res) => {
+         console.log("axios res", res);
+      })
+      .catch((error) => {
+         // handle error
+         console.log("axios error", error);
+      });
 
-   // meat of what this funtion does
-   currentItem.items.push({
-      name: "New Item",
-      id: getUuid(),
-      parentId: currentItem.id,
-      isPacked: false,
-   }); // add a new item inside the current item
-
-   // this must happen whenever something in the loadout changes
-   processAllItems(gear);
+   // client side part (this is too keep what we see consistent with the database until it refreshes from the database)
+   refreshPage(parentId);
+   // console.log("store", store);
+   // // const newChildItems = store.childItems;
+   // store.dispatch({
+   //    type: actions.STORE_CHILD_ITEMS,
+   //    payload: [],
+   // });
 }
 
-// add an item that can contain other items
-export function addContainerTo(gear, itemIndexPath) {
-   // get the actual item I want to add an item inside
-   const currentItem = getItemFromPath(gear, itemIndexPath);
+// // add an item that can contain other items
+// export function addContainerTo(gear, itemIndexPath) {
+//    // get the actual item I want to add an item inside
+//    const currentItem = getItemFromPath(gear, itemIndexPath);
 
-   // meat of what this funtion does
-   currentItem.items.push({
-      name: "New Container",
-      id: getUuid(),
-      parentId: currentItem.id,
-      isPacked: false,
-      items: [], // having this lets it contain other items
-   }); // add a new item inside the current item
+//    // meat of what this funtion does
+//    currentItem.items.push({
+//       name: "New Container",
+//       id: getUuid(),
+//       parentId: currentItem.id,
+//       isPacked: false,
+//       items: [], // having this lets it contain other items
+//    }); // add a new item inside the current item
 
-   // this must happen whenever something in the loadout changes
-   processAllItems(gear);
+//    // this must happen whenever something in the loadout changes
+//    processAllItems(gear);
+// }
+
+export function setItemStatus(item, newStatus) {
+   // server update
+   axios
+      .post(
+         "http://localhost:3060/api/v1/loadouts/set-status?newStatus=" +
+            newStatus +
+            "&itemId=" +
+            item.id
+      )
+      .then((res) => {
+         console.log("axios res", res);
+      })
+      .catch((error) => {
+         // handle error
+         console.log("axios error", error);
+      });
+
+   // client side part (this is too keep what we see consistent with the database)
+   // this.props.item.status = newStatus;
+   // this.forceUpdate();
+   refreshPage(item.parentId);
 }
 
-// deletes an item
-export function deleteItem(gear, itemIndexPath) {
-   // if (this.props.item.numDescendants > 0) {
-   //    console.log(
-   //       "Are you sure you want to delete " +
-   //          this.props.item.name +
-   //          " and its " +
-   //          this.props.item.numDescendants +
-   //          " subitems?"
-   //    );
-   // } else {
-   //    console.log("deleting " + this.props.item.name);
-   // }
+// delete an item
+export function deleteItem(item) {
+   // server update
+   axios
+      .post("http://localhost:3060/api/v1/loadouts/delete?itemId=" + item.id)
+      .then((res) => {
+         console.log("axios res", res);
+      })
+      .catch((error) => {
+         // handle error
+         console.log("axios error", error);
+      });
 
-   // console.log("itemIndexPath:", itemIndexPath);
-
-   // get the parent item because that is the item that's items I want to delete from
-   const parentItem = getParentItemFromPath(gear, itemIndexPath);
-   // console.log("name of parent item:", parentItem.name);
-
-   const itemIndex = itemIndexPath[itemIndexPath.length - 1];
-
-   // meat of what this funtion does
-   parentItem.items.splice(itemIndex, 1); // delete the item
-
-   // this must happen whenever something in the loadout changes
-   processAllItems(gear);
+   // client side part (this is too keep what we see consistent with the database until it refreshes from the database)
+   refreshPage(item.parent_id);
 }

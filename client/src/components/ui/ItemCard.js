@@ -16,37 +16,14 @@ import {
    ChildrenUnpackedIcon,
    ChildrenPackedIcon2,
 } from "../../icons/loadout-icons.js";
-import { processAllItems } from "../../utils/processItems";
+// import { processAllItems } from "../../utils/processItems";
 import movePageToDifferentItem from "../../utils/movePageToDifferentItem";
-import axios from "axios";
+// import axios from "axios";
+import { setItemStatus } from "../../utils/items";
 
 // new version of item card that deals with database data
 
 class ItemCard2 extends React.Component {
-   setItemStatus(newStatus) {
-      // server update
-      axios
-         .post(
-            "http://localhost:3060/api/v1/loadouts/set-status?newStatus=" +
-               newStatus +
-               "&itemId=" +
-               this.props.item.id
-         )
-         .then((res) => {
-            console.log("axios res", res);
-            // processAllItems(res.data); // initial processing of items that creates derived properties
-            const loadouts = res.data;
-         })
-         .catch((error) => {
-            // handle error
-            console.log("axios error", error);
-         });
-
-      // client side part (this is too keep what we see consistent with the database)
-      this.props.item.status = newStatus;
-      this.forceUpdate();
-   }
-
    // toggle the packed status of this item
    toggleIsPacked(itemIndexPath) {
       console.log("toggleIsPacked()...");
@@ -56,11 +33,11 @@ class ItemCard2 extends React.Component {
          if (this.props.item.status === 0) {
             console.log("set this item's status to packed");
 
-            this.setItemStatus(1);
+            setItemStatus(this.props.item, 1);
          } else if (this.props.item.status === 1) {
             console.log("set this item's status to unpacked");
 
-            this.setItemStatus(0);
+            setItemStatus(this.props.item, 0);
          }
       }
    }

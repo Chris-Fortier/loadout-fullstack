@@ -41,13 +41,13 @@ class ItemCardEdit extends React.Component {
       });
    }
 
-   rolloutDeleteConfirmation(thisItemPath) {
+   rolloutDeleteConfirmation() {
       return (
          <>
             <div
                className="button primary-action-button"
                onClick={(e) => {
-                  deleteItem(this.props.currentLoadout.gear, thisItemPath);
+                  deleteItem(this.props.item);
                }}
             >
                Delete {this.props.item.name}
@@ -71,9 +71,9 @@ class ItemCardEdit extends React.Component {
    render() {
       const item = this.props.item; // this is to simplify code below
 
-      let thisItemPath = this.props.currentLoadout.itemIndexPath.concat([
-         item.index,
-      ]); // stores the complete index path to the item referred to on this item card
+      // let thisItemPath = this.props.currentLoadout.itemIndexPath.concat([
+      //    item.index,
+      // ]); // stores the complete index path to the item referred to on this item card
 
       return (
          <>
@@ -90,11 +90,7 @@ class ItemCardEdit extends React.Component {
                         id={"edit-name-input-" + item.index}
                         defaultValue={item.name}
                         onChange={(e) =>
-                           renameItem(
-                              this.props.currentLoadout.gear,
-                              thisItemPath,
-                              e.target.value
-                           )
+                           renameItem(this.props.item, e.target.value)
                         }
                         maxLength={MAX_ITEM_NAME_LENGTH}
                      />
@@ -128,7 +124,7 @@ class ItemCardEdit extends React.Component {
                   )}
                </div>
                {this.state.isShowingDeleteConfirmation &&
-                  this.rolloutDeleteConfirmation(thisItemPath)}
+                  this.rolloutDeleteConfirmation()}
             </div>
          </>
       );
