@@ -5,6 +5,8 @@ import UserLoadoutSettings from "../ui/UserLoadoutSettings";
 import { IconArrowThinLeftCircle, IconTrash } from "../../icons/icons.js";
 import { Link } from "react-router-dom"; // a React element for linking
 import axios from "axios";
+import { UI_APPEARANCE } from "../../utils/helpers";
+import classnames from "classnames";
 
 class LoadoutSharing extends React.Component {
    constructor(props) {
@@ -47,7 +49,7 @@ class LoadoutSharing extends React.Component {
       return (
          <div>
             <Header />
-            <div className="item-list parent-color-0">
+            <div className="item-list parent-color-1">
                <div className="container-fluid item-cards-container scroll-fix">
                   <div className="row">
                      <div className="col">
@@ -65,7 +67,7 @@ class LoadoutSharing extends React.Component {
                               <div className="row">
                                  <>
                                     <div className="col">
-                                       <h4>
+                                       <h4 className="dark-text-color">
                                           {this.props.currentItem.name}
                                           <br />
                                           Sharing Settings
@@ -181,16 +183,16 @@ class LoadoutSharing extends React.Component {
                                                       ></label>
                                                    </div>
                                                 </td>
-                                                <td>
-                                                   <button
-                                                      className="clickable icon-dark"
-                                                      id={
-                                                         "delete-shared-user-" +
-                                                         1
-                                                      }
-                                                   >
-                                                      <IconTrash />
-                                                   </button>
+                                                <td
+                                                   className={classnames(
+                                                      "clickable",
+                                                      UI_APPEARANCE ===
+                                                         "dark" && "icon-light",
+                                                      UI_APPEARANCE !==
+                                                         "dark" && "icon-dark"
+                                                   )}
+                                                >
+                                                   <IconTrash />
                                                 </td>
                                              </tr>
                                           </tbody>
