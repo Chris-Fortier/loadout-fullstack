@@ -120,9 +120,9 @@ export function setItemStatus(item, newStatus) {
       });
 
    // client side part (this is too keep what we see consistent with the database)
-   // this.props.item.status = newStatus;
+   item.status = newStatus;
    // this.forceUpdate();
-   refreshPage(item.parentId);
+   // refreshPage(item.parentId);
 }
 
 // delete an item

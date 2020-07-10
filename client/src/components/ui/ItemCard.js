@@ -34,10 +34,12 @@ class ItemCard2 extends React.Component {
             console.log("set this item's status to packed");
 
             setItemStatus(this.props.item, 1);
+            this.forceUpdate();
          } else if (this.props.item.status === 1) {
             console.log("set this item's status to unpacked");
 
             setItemStatus(this.props.item, 0);
+            this.forceUpdate();
          }
       }
    }
