@@ -17,8 +17,8 @@ import { withRouter } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
 
 class AccountSettings extends React.Component {
-   constructor() {
-      super(); // boilerplate line that needs to be in the constructor
+   constructor(props) {
+      super(props); // boilerplate line that needs to be in the constructor
 
       // initialize state inside the constructor via this.state = {key: value, key: value,};
       // set default state values for each component
@@ -28,6 +28,13 @@ class AccountSettings extends React.Component {
          hasPasswordRollout: false,
          hasDeleteRollout: false,
       };
+
+      // if the user finds themselves on this page but they are not logged in, send them to the landing page
+      // TODO, this is duplicated code
+      if (JSON.stringify(this.props.currentUser) === JSON.stringify({})) {
+         console.log("There is no user object, kicking to landing page.");
+         this.props.history.push("/");
+      }
    }
 
    backToLoadout() {
@@ -209,7 +216,7 @@ class AccountSettings extends React.Component {
 
 // maps the store to props
 function mapStateToProps(state) {
-   return {};
+   return { currentUser: state.currentUser };
 }
 
 export default withRouter(connect(mapStateToProps)(AccountSettings)); // this is "currying"

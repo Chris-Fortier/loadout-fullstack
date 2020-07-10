@@ -5,7 +5,7 @@ import axios from "axios";
 // this version uses changes the current item id in the store
 
 // move page to a different item
-export default function movePageToDifferentItem(itemId, levelChange = 0) {
+export function movePageToDifferentItem(itemId, levelChange = 0) {
    console.log("movePageToDifferentItem()...itemId:", itemId);
 
    if (itemId !== null) {

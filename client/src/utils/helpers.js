@@ -53,6 +53,19 @@ export function checkIsOver(num, limit) {
    return num > limit;
 }
 
+// // returns a short human-readable sumamry of the packed content of an item given the number of children and packed childred it has
+// // TODO this is duplicated on client and server
+// export function getContentSummary(numChildren, numPackedChildren, status) {
+//    const numUnpackedChildren = numChildren - numPackedChildren;
+//    if (numUnpackedChildren > 0) {
+//       return numUnpackedChildren + " left";
+//    }
+//    if (status === 0) {
+//       return "ready";
+//    }
+//    return "";
+// }
+
 // app master preferences
 export const LEVEL_COLORS = 7; // the amount of level colors there are
 export const MAX_ITEM_NAME_LENGTH = 30; // the maximum length of characters for an item name

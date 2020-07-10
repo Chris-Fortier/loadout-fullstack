@@ -31,7 +31,7 @@ import ItemCard from "../ui/ItemCard";
 import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
-import movePageToDifferentItem from "../../utils/movePageToDifferentItem";
+import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import {
    // getItemFromPath,
    // getParentItemFromPath,
