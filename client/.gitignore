@@ -22,9 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# cjf
-*.svg
-
 # cjf server stuff
 server/.env
 server/node_modules
