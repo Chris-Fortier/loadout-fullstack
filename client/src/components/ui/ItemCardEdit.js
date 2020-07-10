@@ -51,10 +51,16 @@ class ItemCardEdit extends React.Component {
                }}
             >
                Delete {this.props.item.name}
-               {this.props.item.numDescendants > 0 && (
+               {/* {this.props.item.numDescendants > 0 && (
                   <>
                      <br />
                      and {this.props.item.numDescendants} subitems
+                  </>
+               )} */}
+               {this.props.item.numChildren > 0 && (
+                  <>
+                     <br />
+                     and {this.props.item.numChildren} subitems
                   </>
                )}
             </div>

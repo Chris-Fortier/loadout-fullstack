@@ -8,11 +8,12 @@ import {
    // IconArrowThickUpCircle,
    // IconArrowThickDownCircle,
    // IconArchive,
-   IconArrowThinLeftCircle,
+   // IconArrowThinLeftCircle,
    // IconArrowThinRightCircle,
    // IconTrash,
    // IconChevronDown,
    // IconChevronUp,
+   IconUpLevel,
    IconUserCouple,
 } from "../../icons/icons.js";
 import {
@@ -68,42 +69,48 @@ class ItemList2 extends React.Component {
 
    // roll out a dialog for unpacking an item's contents
    rolloutUnpackConfirmation() {
-      const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
+      // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
+      const currentItem = this.props.currentItem; // to simplify code below
 
-      let itemsText = "";
-      if (currentItem.numPackedChildren > 1) {
-         itemsText = currentItem.numPackedChildren + " items";
-      } else if (currentItem.numPackedChildren === 1) {
-         itemsText = "1 item";
-      }
+      // TODO this doesn't work currently
 
-      const numSubItems =
-         currentItem.numPackedDescendants - currentItem.numPackedChildren;
+      // let itemsText = "";
+      // if (currentItem.numPackedChildren > 1) {
+      //    itemsText = currentItem.numPackedChildren + " items";
+      // } else if (currentItem.numPackedChildren === 1) {
+      //    itemsText = "1 item";
+      // }
 
-      let subItemsText = "";
-      if (numSubItems > 1) {
-         subItemsText = numSubItems + " subitems";
-      } else if (numSubItems === 1) {
-         subItemsText = "1 subitem";
-      }
+      // const numSubItems =
+      //    currentItem.numPackedDescendants - currentItem.numPackedChildren;
 
-      // set up the text of the unpack children button if there are packed children
-      let unpackChildrenText = "";
-      if (itemsText !== "") {
-         unpackChildrenText = "unpack " + itemsText;
-      }
+      // let subItemsText = "";
+      // if (numSubItems > 1) {
+      //    subItemsText = numSubItems + " subitems";
+      // } else if (numSubItems === 1) {
+      //    subItemsText = "1 subitem";
+      // }
 
-      // set up the text of the unpack descendants button if there are packed descendants
-      let unpackDescendantsText = "";
-      if (itemsText !== "" && subItemsText !== "") {
-         unpackDescendantsText = "unpack " + itemsText + " and " + subItemsText;
-      } else if (subItemsText !== "") {
-         unpackDescendantsText = "unpack " + subItemsText;
-      }
+      // // set up the text of the unpack children button if there are packed children
+      // let unpackChildrenText = "";
+      // if (itemsText !== "") {
+      //    unpackChildrenText = "unpack " + itemsText;
+      // }
+
+      // // set up the text of the unpack descendants button if there are packed descendants
+      // let unpackDescendantsText = "";
+      // if (itemsText !== "" && subItemsText !== "") {
+      //    unpackDescendantsText = "unpack " + itemsText + " and " + subItemsText;
+      // } else if (subItemsText !== "") {
+      //    unpackDescendantsText = "unpack " + subItemsText;
+      // }
+
+      const unpackDescendantsText =
+         "Unpack all 141 items and subitems inside " + currentItem.name;
 
       return (
          <div>
-            {unpackChildrenText !== "" && (
+            {/* {unpackChildrenText !== "" && (
                <div
                   className="button primary-action-button"
                   onClick={(e) => {
@@ -112,14 +119,14 @@ class ItemList2 extends React.Component {
                >
                   {unpackChildrenText}
                </div>
-            )}
+            )} */}
 
             {unpackDescendantsText !== "" && (
                <div
                   className="button primary-action-button"
-                  onClick={(e) => {
-                     this.confirmUnpackDescendants();
-                  }}
+                  // onClick={(e) => {
+                  //    this.confirmUnpackDescendants();
+                  // }}
                >
                   {unpackDescendantsText}
                </div>
@@ -409,14 +416,14 @@ class ItemList2 extends React.Component {
                                     >
                                        <div
                                           className={classnames(
-                                             "icon-dark left",
-                                             UI_APPEARANCE === "colors" &&
+                                             "left",
+                                             UI_APPEARANCE !== "light" &&
                                                 "icon-light",
-                                             UI_APPEARANCE !== "colors" &&
+                                             UI_APPEARANCE === "light" &&
                                                 "icon-dark"
                                           )}
                                        >
-                                          <IconArrowThinLeftCircle />
+                                          <IconUpLevel />
                                        </div>
                                        Back to{" "}
                                        {this.props.currentItem.parentName}
@@ -426,14 +433,14 @@ class ItemList2 extends React.Component {
                                     <Link to="/loadout-list">
                                        <div
                                           className={classnames(
-                                             "icon-dark left",
-                                             UI_APPEARANCE === "colors" &&
+                                             "left",
+                                             UI_APPEARANCE !== "light" &&
                                                 "icon-light",
-                                             UI_APPEARANCE !== "colors" &&
+                                             UI_APPEARANCE === "light" &&
                                                 "icon-dark"
                                           )}
                                        >
-                                          <IconArrowThinLeftCircle />
+                                          <IconUpLevel />
                                        </div>
                                        Back to Loadouts
                                     </Link>
@@ -637,7 +644,8 @@ class ItemList2 extends React.Component {
                                              this.toggleUnpackRollout()
                                           }
                                        >
-                                          Unpack...
+                                          Unpack {this.props.currentItem.name}
+                                          ...
                                        </span>
                                        {this.state
                                           .isShowingUnpackConfirmation &&

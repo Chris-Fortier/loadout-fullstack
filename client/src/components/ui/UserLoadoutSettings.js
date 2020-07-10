@@ -4,6 +4,8 @@ import {
    // IconArrowThinRightCircle,
    IconTrash,
 } from "../../icons/icons.js";
+import { UI_APPEARANCE } from "../../utils/helpers";
+import classnames from "classnames";
 
 class UserLoadoutSettings extends React.Component {
    render() {
@@ -52,13 +54,14 @@ class UserLoadoutSettings extends React.Component {
                   ></label>
                </div>
             </td>
-            <td>
-               <button
-                  className="clickable icon-dark"
-                  id={"delete-shared-user-" + 1}
-               >
-                  <IconTrash />
-               </button>
+            <td
+               className={classnames(
+                  "clickable",
+                  UI_APPEARANCE === "dark" && "icon-light",
+                  UI_APPEARANCE !== "dark" && "icon-dark"
+               )}
+            >
+               <IconTrash />
             </td>
          </tr>
       );

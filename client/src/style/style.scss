@@ -2,6 +2,11 @@ html {
    font-size: 20px; // Teko is a smaller looking font so setting the base size as 20px
 }
 
+a,
+a:hover {
+   color: inherit; // removes the color assignment associated with Link components
+}
+
 .card-body {
    padding: 1rem; // override the default of 1.25rem
 }
@@ -464,6 +469,12 @@ body {
 
    display: inline-block; // make it so multiple cards appear on the same row in larger widths
    width: 100%; // base size in small widths
+
+   .primary-action-button {
+      font-size: 1rem; // override so that buttons inside the item cards have base size font
+      margin-top: $space-between-button-rows/2; // for space between card sections and buttons
+      margin-bottom: $space-between-button-rows/2; // for space between card sections and buttons
+   }
 }
 .item-card-edit:first-child {
    margin-top: 0;
@@ -677,6 +688,12 @@ $iconWidth: 30px;
    width: 1.25rem;
    // -webkit-filter: drop-shadow($pack-icon-shadow);
    // filter: drop-shadow($pack-icon-shadow);
+}
+
+// use to enlarge item card icons (1rem is no change)
+.loadout-card-icon {
+   width: 1rem;
+   opacity: 0.5;
 }
 
 // vertically align item card text
