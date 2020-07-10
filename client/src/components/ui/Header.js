@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
 import actions from "../../store/actions";
+import LoadoutLogoSmall from "../../logo/loadout-small.svg";
 
 // export default function Header() {
 class Header extends React.Component {
@@ -123,7 +124,15 @@ class Header extends React.Component {
                      onClick={() => this.toggleLoadoutRollout()}
                      className="btn btn-link"
                   >
-                     Loadout
+                     {/* Loadout */}
+                     <img
+                        src={LoadoutLogoSmall}
+                        alt="Loadout"
+                        height="18px"
+                        style={{
+                           marginTop: "-5px",
+                        }}
+                     />
                   </button>
                   <button
                      onClick={() => this.toggleAccountRollout()}

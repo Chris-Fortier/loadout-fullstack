@@ -13,6 +13,7 @@ import { withRouter } from "react-router-dom"; // a React element for linking
 import axios from "axios";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
+import LoadoutLogo from "../../logo/loadout.svg";
 
 // export default function Landing() {
 class Landing extends React.Component {
@@ -326,7 +327,13 @@ class Landing extends React.Component {
                         marginBottom: "50px",
                      }}
                   >
-                     <h1 className="mt-5 text-white">Loadout</h1>
+                     {/* <h1 className="mt-5 text-white">Loadout</h1> */}
+                     <img
+                        src={LoadoutLogo}
+                        alt="Loadout"
+                        width="100%"
+                        className="mb-4 mt-8"
+                     />
                      {/* render either the log-in or new account cards depending on landingMode */}
                      {this.state.landingMode === "log-in" &&
                         this.renderLogInCard()}

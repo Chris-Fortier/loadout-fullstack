@@ -360,6 +360,11 @@ body {
       // font-size: 1.25rem;
       font-weight: 300;
    }
+
+   img {
+      -webkit-filter: drop-shadow(0 0 4px rgba(0, 0, 0, 1));
+      filter: drop-shadow(0 0 4px rgba(0, 0, 0, 1));
+   }
 }
 
 .big-checkbox {
