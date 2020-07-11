@@ -14,6 +14,7 @@ import axios from "axios";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
 import LoadoutLogo from "../../logo/loadout.svg";
+import { NUM_BACKGROUNDS } from "../../utils/helpers";
 
 // export default function Landing() {
 class Landing extends React.Component {
@@ -324,9 +325,16 @@ class Landing extends React.Component {
       );
    }
 
+   // Math.floor(Math.random() * NUM_BACKGROUNDS
+
    render() {
       return (
-         <div className="background-image">
+         <div
+            className={classnames(
+               this.state.landingMode === "log-in" && "landing-bg-0",
+               this.state.landingMode === "new-account" && "landing-bg-1"
+            )}
+         >
             <div className="container-fluid landing-page">
                <div className="row">
                   <div

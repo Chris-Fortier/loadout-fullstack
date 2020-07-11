@@ -47,7 +47,7 @@ class AccountSettings extends React.Component {
 
    render() {
       return (
-         <div className="background-image">
+         <div className="landing-bg-2">
             <div className="container-fluid landing-page">
                <div className="row">
                   <div

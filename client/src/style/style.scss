@@ -27,9 +27,23 @@ a:hover {
    background-color: cyan;
 }
 
-.background-image {
+.landing-bg-0 {
    /* https://css-tricks.com/perfect-full-page-background-image/ */
    background: url("../img/mt-charleston.jpg") no-repeat center center fixed;
+   background-size: cover;
+   min-height: 100vh;
+}
+
+.landing-bg-1 {
+   /* https://css-tricks.com/perfect-full-page-background-image/ */
+   background: url("../img/tiger-mountain.jpg") no-repeat center center fixed;
+   background-size: cover;
+   min-height: 100vh;
+}
+
+.landing-bg-2 {
+   /* https://css-tricks.com/perfect-full-page-background-image/ */
+   background: url("../img/calico-hills.jpg") no-repeat center center fixed;
    background-size: cover;
    min-height: 100vh;
 }
