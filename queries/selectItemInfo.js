@@ -1,5 +1,5 @@
 // returns the details and derived information from a single item based on the item's id
-// test: http://localhost:3060/api/v1/item-info/?itemId=41b9bde9-4731-44d2-b471-d46d21aca680 shows all items inside daypack
+// test: http://localhost:3060/api/v1/loadouts/info/?itemId=41b9bde9-4731-44d2-b471-d46d21aca680 shows all items inside daypack
 const selectItemInfo = `
    SELECT 
       (SELECT 

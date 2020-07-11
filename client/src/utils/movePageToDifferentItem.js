@@ -21,7 +21,7 @@ export function movePageToDifferentItem(itemId, levelChange = 0) {
 
       // this part gets data from the database
       axios
-         .get("/api/v1/item-info?itemId=" + itemId)
+         .get("/api/v1/loadouts/info?itemId=" + itemId)
          .then((res) => {
             // handle success
             console.log("setCurrentItem res.data[0]", res.data[0]);
@@ -40,7 +40,7 @@ export function movePageToDifferentItem(itemId, levelChange = 0) {
       // this.setState({ isEditMode: false, isShowingUnpackConfirmation: false }); // get out of edit mode if the current item changes
 
       axios
-         .get("/api/v1/child-items?itemId=" + itemId)
+         .get("/api/v1/loadouts/children?itemId=" + itemId)
          .then((res) => {
             // handle success
             console.log("queryChildItems res.data", res.data);
@@ -76,7 +76,7 @@ export function refreshPage(itemId) {
 
    // this part gets data from the database
    axios
-      .get("/api/v1/item-info?itemId=" + itemId)
+      .get("/api/v1/loadouts/info?itemId=" + itemId)
       .then((res) => {
          // handle success
          store.dispatch({
@@ -93,7 +93,7 @@ export function refreshPage(itemId) {
    // this.setState({ isEditMode: false, isShowingUnpackConfirmation: false }); // get out of edit mode if the current item changes
 
    axios
-      .get("/api/v1/child-items?itemId=" + itemId)
+      .get("/api/v1/loadouts/children?itemId=" + itemId)
       .then((res) => {
          // handle success
          console.log("queryChildItems res.data", res.data);
