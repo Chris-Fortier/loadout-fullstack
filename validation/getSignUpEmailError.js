@@ -1,35 +1,16 @@
-const { EMAIL_REGEX } = require("../utils/helpers");
-const db = require("../db");
-const selectUserByEmail = require("../queries/selectUserByEmail");
+const { EMAIL_REGEX, checkUserEmailExists } = require("../utils/helpers");
 
 module.exports = async function getSignUpEmailError(email) {
    console.log("getSignUpEmailError()...");
    if (email === "") {
-      return "Please enter your email address. -Server";
+      return "Please enter your email address.";
    }
    if (!EMAIL_REGEX.test(email)) {
-      return "Please enter a valid email address. -Server";
+      return "Please enter a valid email address.";
    }
-   console.log("checkIsInDb(email)", checkIsInDb(email));
-   if (await checkIsInDb(email)) {
-      return "This email address already exists in the database. -Server";
+   console.log("checkUserEmailExists(email)", checkUserEmailExists(email));
+   if (await checkUserEmailExists(email)) {
+      return "This email address already exists in the database.";
    }
    return "";
 };
-
-function checkIsInDb(email) {
-   console.log("checkIsInDb()...");
-   return db
-      .query(selectUserByEmail, email)
-      .then((users) => {
-         if (users.length === 0) {
-            return false;
-         } else {
-            console.log("email already in the db");
-            return true;
-         }
-      })
-      .catch((err) => {
-         console.log("err", err);
-      });
-}
