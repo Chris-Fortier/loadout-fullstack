@@ -66,16 +66,6 @@ class Header extends React.Component {
    renderAccountRollout() {
       return (
          <>
-            {/* <div className="row">
-               <div className="col">
-                  <p className="float-right">username12345</p>
-               </div>
-            </div> */}
-            <div className="row">
-               <div className="col">
-                  <p className="float-right">name@gmail.com</p>
-               </div>
-            </div>
             <div className="row">
                <div className="col">
                   <Link
@@ -101,20 +91,6 @@ class Header extends React.Component {
       );
    }
 
-   // // renders a rollout for either Loadout or About, its a wrapper for both
-   // renderRollout() {
-   //    return (
-   //       // <div className="row">
-   //       //    <div className="col">
-   //       <>
-   //          {this.state.rollout === "Loadout" && this.renderLoadoutRollout()}
-   //          {this.state.rollout === "Account" && this.renderAccountRollout()}
-   //       </>
-   //       //    </div>
-   //       // </div>
-   //    );
-   // }
-
    render() {
       return (
          <div className="page-header">
@@ -138,7 +114,7 @@ class Header extends React.Component {
                      onClick={() => this.toggleAccountRollout()}
                      className="btn btn-link float-right"
                   >
-                     Account
+                     {this.props.currentUser.username}
                   </button>
                </div>
             </div>
@@ -153,6 +129,7 @@ class Header extends React.Component {
 function mapStateToProps(state) {
    return {
       // put all the things in state we need access to in this component
+      currentUser: state.currentUser,
    };
 }
 
