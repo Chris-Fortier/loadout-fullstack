@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
-import actions from "../../store/actions";
 import LoadoutLogoSmall from "../../logo/loadout-small.svg";
+import { logOutCurrentUser } from "../../utils/helpers";
 
 // export default function Header() {
 class Header extends React.Component {
@@ -13,20 +13,6 @@ class Header extends React.Component {
       this.state = {
          rollout: "none", // which rollout is active, either "Loadout", "Account" or "none"
       };
-   }
-
-   // log out of the current user
-   logOutCurrentUser() {
-      console.log("logOutCurrentUser()...");
-      this.props.dispatch({
-         type: actions.UPDATE_CURRENT_USER,
-         payload: {},
-      });
-      // also remove the store of the loadout
-      this.props.dispatch({
-         type: actions.CLEAR_CURRENT_LOADOUT,
-         payload: {},
-      });
    }
 
    toggleLoadoutRollout() {
@@ -81,7 +67,7 @@ class Header extends React.Component {
                   <Link
                      to="/"
                      className="btn btn-link float-right"
-                     onClick={() => this.logOutCurrentUser()}
+                     onClick={() => logOutCurrentUser(this.props)}
                   >
                      Log Out
                   </Link>

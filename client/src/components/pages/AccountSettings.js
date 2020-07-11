@@ -1,20 +1,8 @@
 import React from "react";
-// import { Link } from "react-router-dom"; // a React element for linking
-// import { EMAIL_REGEX } from "../../utils/helpers";
-// import { v4 as getUuid } from "uuid";
-// import hash from "object-hash";
-// import classnames from "classnames";
-// import {
-//    IconUserAdd,
-//    // IconUserCheck,
-//    // IconKey,
-//    // IconHome,
-//    // IconEdit,
-// } from "../../icons/icons.js";
+import { Link } from "react-router-dom"; // a React element for linking
 import { withRouter } from "react-router-dom"; // a React element for linking
-// import axios from "axios";
-// import actions from "../../store/actions";
 import { connect } from "react-redux";
+import { logOutCurrentUser } from "../../utils/helpers";
 
 class AccountSettings extends React.Component {
    constructor(props) {
@@ -71,10 +59,13 @@ class AccountSettings extends React.Component {
                         marginBottom: "50px",
                      }}
                   >
-                     <h1 className="mt-5 text-white">Account Settings</h1>
-                     <div className="card mb-3">
+                     {/* <h1 className="mt-5 text-white">Account Settings</h1> */}
+                     <div className="card mt-8 mb-3">
                         <div className="card-body">
-                           <h5>chris@gmail.com</h5>
+                           <h5>
+                              Account Settings for&nbsp;
+                              {this.props.currentUser.username}
+                           </h5>
                            <div className="card-section">
                               <span
                                  className="button navigation-link w-100"
@@ -92,7 +83,7 @@ class AccountSettings extends React.Component {
                                     </label>
                                     <input
                                        className="my-input"
-                                       value="chris@gmail.com"
+                                       value={this.props.currentUser.username}
                                        id="new-username"
                                     />
                                     <label
@@ -180,7 +171,8 @@ class AccountSettings extends React.Component {
                                        anyone else.
                                     </p>
                                     <div className="button danger-action-button">
-                                       Confirm Account Delete
+                                       Confirm Delete of&nbsp;
+                                       {this.props.currentUser.username}
                                     </div>
                                     <div
                                        className="button navigation-link"
@@ -202,9 +194,13 @@ class AccountSettings extends React.Component {
                               Back to Loadout
                            </button>
                            {/* </div> */}
-                           <div className="button primary-action-button">
-                              Log Out
-                           </div>
+                           <Link
+                              to="/"
+                              className="button primary-action-button"
+                              onClick={() => logOutCurrentUser(this.props)}
+                           >
+                              Log Out&nbsp;{this.props.currentUser.username}
+                           </Link>
                         </div>
                      </div>
                   </div>

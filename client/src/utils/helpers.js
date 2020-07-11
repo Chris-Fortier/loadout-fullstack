@@ -1,3 +1,5 @@
+import actions from "../store/actions";
+
 // file of small application-wide helpers
 
 export const safelyParseJSON = (str) => {
@@ -64,6 +66,27 @@ export function getContentSummary(numChildren, numPackedChildren, status) {
       return "ready";
    }
    return "";
+}
+
+// log out of the current user
+export function logOutCurrentUser(props) {
+   console.log("logOutCurrentUser()...");
+   props.dispatch({
+      type: actions.UPDATE_CURRENT_USER,
+      payload: {},
+   });
+   // also remove the store of stuff
+   props.dispatch({
+      type: actions.STORE_CURRENT_ITEM,
+      payload: {},
+   });
+   props.dispatch({
+      type: actions.STORE_CHILD_ITEMS,
+      payload: [],
+   });
+   props.dispatch({
+      type: actions.RESET_CURRENT_LEVEL,
+   });
 }
 
 // app master preferences
