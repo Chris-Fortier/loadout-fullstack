@@ -24,7 +24,7 @@ class AccountSettings extends React.Component {
       // set default state values for each component
       // define a component's initial state
       this.state = {
-         hasEmailRollout: false,
+         hasUsernameRollout: false,
          hasPasswordRollout: false,
          hasDeleteRollout: false,
       };
@@ -42,9 +42,9 @@ class AccountSettings extends React.Component {
       window.scrollTo(0, 0); // sets focus to the top of the page
    }
 
-   toggleEmailRollout() {
-      console.log("toggleEmailRollout()...");
-      this.setState({ hasEmailRollout: !this.state.hasEmailRollout });
+   toggleUsernameRollout() {
+      console.log("toggleUsernameRollout()...");
+      this.setState({ hasUsernameRollout: !this.state.hasUsernameRollout });
    }
 
    togglePasswordRollout() {
@@ -78,41 +78,42 @@ class AccountSettings extends React.Component {
                            <div className="card-section">
                               <span
                                  className="button navigation-link w-100"
-                                 onClick={() => this.toggleEmailRollout()}
+                                 onClick={() => this.toggleUsernameRollout()}
                               >
-                                 Change Your Email
+                                 Change Your Username
                               </span>
-                              {this.state.hasEmailRollout && (
+                              {this.state.hasUsernameRollout && (
                                  <>
                                     <label
                                        className="my-input-label form-label"
-                                       for="new-email"
+                                       for="new-username"
                                     >
-                                       Enter your new email address
+                                       Enter your new username
                                     </label>
                                     <input
-                                       type="email"
                                        className="my-input"
                                        value="chris@gmail.com"
-                                       id="new-email"
+                                       id="new-username"
                                     />
                                     <label
                                        className="my-input-label form-label"
-                                       for="password-for-email-change"
+                                       for="password-for-username-change"
                                     >
                                        Enter your password
                                     </label>
                                     <input
                                        type="password"
                                        className="my-input"
-                                       id="password-for-email-change"
+                                       id="password-for-username-change"
                                     />
                                     <div className="button primary-action-button">
-                                       Confirm Email Change
+                                       Confirm Username Change
                                     </div>
                                     <div
                                        className="button navigation-link"
-                                       onClick={() => this.toggleEmailRollout()}
+                                       onClick={() =>
+                                          this.toggleUsernameRollout()
+                                       }
                                     >
                                        Cancel
                                     </div>

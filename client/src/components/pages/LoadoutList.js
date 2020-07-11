@@ -134,7 +134,7 @@ class LoadoutList extends React.Component {
                                        //    slow, need to fix
                                        // </div>
                                        <>
-                                          {this.props.currentUser.email} does
+                                          {this.props.currentUser.username} does
                                           not have any loadouts.
                                        </>
                                     )}

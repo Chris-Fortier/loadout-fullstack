@@ -7,7 +7,7 @@ const insertUserLoadout = require("../../queries/insertUserLoadout");
 const deleteUserLoadout = require("../../queries/deleteUserLoadout");
 const {
    getContentSummary,
-   getUserIdFromEmail,
+   getUserIdByUsername,
 } = require("../../utils/helpers");
 const getAddUserError = require("../../validation/getAddUserError");
 const uuid = require("uuid");
@@ -44,7 +44,7 @@ router.get("/", (req, res) => {
                // totalSuccessfulAttempts: userLoadout.total_successful_attempts,
                // level: userLoadout.level,
 
-               // email: userLoadout.email,
+               // username: userLoadout.username,
                loadoutName: userLoadout.name,
                canEdit: userLoadout.can_edit,
                canPack: userLoadout.can_pack,
@@ -72,25 +72,25 @@ router.get("/", (req, res) => {
 // @route      POST api/v1/user-loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new user loadout
 // @access     Public
-// test: http://localhost:3060/api/v1/user-loadouts/insert?email=mike@email.com&loadoutId=42655170-7e10-4431-8d98-c2774f6414a4
+// test: http://localhost:3060/api/v1/user-loadouts/insert?username=mike@email.com&loadoutId=42655170-7e10-4431-8d98-c2774f6414a4
 router.post("/insert", async (req, res) => {
    console.log("router.post api/v1/user-loadouts/insert...");
-   const { email, loadoutId, canEdit, canPack, isAdmin } = req.query; // destructuring to simplify code below, grabbing variables from req.body
-   const addUserError = await getAddUserError(email, loadoutId); // check if there are any errors with the email that the user is trying to add
+   const { username, loadoutId, canEdit, canPack, isAdmin } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+   const addUserError = await getAddUserError(username, loadoutId); // check if there are any errors with the username that the user is trying to add
    let dbError = ""; // this will store some text describing an error from the database
 
-   console.log({ email, loadoutId, addUserError });
+   console.log({ username, loadoutId, addUserError });
 
    // if there are no errors:
    if (addUserError === "") {
-      const userId = await getUserIdFromEmail(email); // TODO this is actually the second time this is run during this whole process, it is also run inside getAddUserError
+      const userId = await getUserIdByUsername(username); // TODO this is actually the second time this is run during this whole process, it is also run inside getAddUserError
 
       // await getAddUserLoadoutError(userId, loadoutId); // check if this user loadout combo already exists
 
       // this is an express function
       const userLoadout = {
          id: uuid.v4(), // generate a uuid
-         user_id: userId, // get the user id from the email
+         user_id: userId, // get the user id from the username
          loadout_id: loadoutId,
          can_edit: canEdit,
          can_pack: canPack,

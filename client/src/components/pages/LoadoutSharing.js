@@ -62,9 +62,9 @@ class LoadoutSharing extends React.Component {
    // delete a user's access
    // delete the userLoadout from the database
 
-   // creates a new user loadout if possible given a user email and a loadout id
+   // creates a new user loadout if possible given a user username and a loadout id
    async validateAndAddUserLoadout(
-      email,
+      username,
       loadoutId,
       canEdit = 0,
       canPack = 0,
@@ -79,7 +79,7 @@ class LoadoutSharing extends React.Component {
       if (isAdmin === true) isAdmin = 1;
 
       console.log("validateAndAddUserLoadout()...", {
-         email,
+         username,
          loadoutId,
          canEdit,
          canPack,
@@ -89,8 +89,8 @@ class LoadoutSharing extends React.Component {
       // post to API
       axios
          .post(
-            "/api/v1/user-loadouts/insert?email=" +
-               email +
+            "/api/v1/user-loadouts/insert?username=" +
+               username +
                "&loadoutId=" +
                loadoutId +
                "&canEdit=" +
@@ -106,8 +106,8 @@ class LoadoutSharing extends React.Component {
             // remove error if there is one
             this.setState({ hasAddUserError: false, addUserError: "" });
 
-            // clear the add user email field
-            document.getElementById("add-user-email-input").value = "";
+            // clear the add user username field
+            document.getElementById("add-user-username-input").value = "";
 
             this.refreshPage(); // refresh page to see the change
          })
@@ -116,7 +116,7 @@ class LoadoutSharing extends React.Component {
             console.log("err", data);
             const { addUserError } = data;
 
-            // push email error to state
+            // push username error to state
             if (addUserError !== "") {
                this.setState({ hasAddUserError: true, addUserError });
             } else {
@@ -161,7 +161,7 @@ class LoadoutSharing extends React.Component {
                                                    scope="col"
                                                    className="display-switch-label"
                                                 >
-                                                   Shared with Email
+                                                   Shared with Username
                                                 </th>
                                                 <th
                                                    scope="col"
@@ -201,16 +201,15 @@ class LoadoutSharing extends React.Component {
                                              <tr>
                                                 <th scope="row">
                                                    <input
-                                                      type="email"
                                                       className={classnames({
                                                          "my-input": true,
                                                          "input-invalid": this
                                                             .state
                                                             .hasAddUserError,
                                                       })}
-                                                      id="add-user-email-input"
-                                                      aria-describedby="emailHelp"
-                                                      placeholder="Enter another user's email"
+                                                      id="add-user-username-input"
+                                                      aria-describedby="UsernameHelp"
+                                                      placeholder="Enter another user's username"
                                                    />
                                                    {this.state
                                                       .hasAddUserError && (
@@ -290,7 +289,7 @@ class LoadoutSharing extends React.Component {
                                                       onClick={() =>
                                                          this.validateAndAddUserLoadout(
                                                             document.getElementById(
-                                                               "add-user-email-input"
+                                                               "add-user-username-input"
                                                             ).value,
                                                             this.props
                                                                .currentItem.id,

@@ -40,7 +40,7 @@ class UserLoadoutSettings extends React.Component {
          <tr>
             {!this.state.isDeleted && (
                <>
-                  <th scope="row">{this.props.loadoutUser.email}</th>
+                  <th scope="row">{this.props.loadoutUser.username}</th>
                   <td>
                      <div className="custom-control custom-checkbox">
                         <input
@@ -103,7 +103,7 @@ class UserLoadoutSettings extends React.Component {
             )}
             {this.state.isDeleted && (
                <>
-                  <th scope="row">{this.props.loadoutUser.email} Deleted</th>
+                  <th scope="row">{this.props.loadoutUser.username} Deleted</th>
                   <td></td>
                   <td></td>
                   <td></td>

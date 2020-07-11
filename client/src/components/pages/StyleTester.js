@@ -29,10 +29,9 @@ export default function StyleTester() {
                         <form className="mb-0 needs-validation" noValidate>
                            <div className="form-group">
                               <input
-                                 id="existing-email-input"
-                                 placeholder="Enter Your Email"
+                                 id="existing-username-input"
+                                 placeholder="Enter Your Username"
                                  required
-                                 type="email"
                                  className={classnames({
                                     "form-control": true,
                                     "is-invalid": false,

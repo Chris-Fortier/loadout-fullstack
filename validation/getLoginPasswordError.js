@@ -1,24 +1,24 @@
 const db = require("../db");
-const selectUserByEmail = require("../queries/selectUserByEmail");
+const selectUserByUsername = require("../queries/selectUserByUsername");
 const bcrypt = require("bcrypt");
 
-module.exports = async function getSignUpPasswordError(password, email) {
+module.exports = async function getSignUpPasswordError(password, username) {
    if (password === "") {
       // check if password input is blank
       return "Please enter your password.";
    }
-   if ((await checkIsValidUser(email, password)) === false) {
-      return "The email and/or password you entered is invalid.";
+   if ((await checkIsValidUser(username, password)) === false) {
+      return "The username and/or password you entered is invalid.";
    }
    return "";
 };
 
-function checkIsValidUser(email, password) {
-   // get the user by email address
+function checkIsValidUser(username, password) {
+   // get the user by username
    // compare user.password with password
    // if a match, return true, else false
    return db
-      .query(selectUserByEmail, email)
+      .query(selectUserByUsername, username)
       .then(async (users) => {
          // console.log("users", users);
          const user = users[0];

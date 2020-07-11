@@ -36,7 +36,7 @@ router.get("/", (req, res) => {
                // totalSuccessfulAttempts: loadoutUser.total_successful_attempts,
                // level: loadoutUser.level,
 
-               email: loadoutUser.email,
+               username: loadoutUser.username,
                loadoutName: loadoutUser.loadout_name,
                canEdit: loadoutUser.can_edit,
                canPack: loadoutUser.can_pack,

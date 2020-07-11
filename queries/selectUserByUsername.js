@@ -1,11 +1,12 @@
 // this runs a query on the database to get a user from an username
-const selectUserById = `
+const selectUserByUsername = `
    SELECT 
-      id, username, created_at
+      *
    FROM
       users
    WHERE
-      id = ?
+      username = ?
    LIMIT 1;
    `;
-module.exports = selectUserById;
+
+module.exports = selectUserByUsername;

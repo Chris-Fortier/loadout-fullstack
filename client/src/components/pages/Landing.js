@@ -27,15 +27,15 @@ class Landing extends React.Component {
          landingMode: "log-in", // set to either "log-in" or "new-account"
 
          // sign up
-         signupEmailError: "",
+         signupUsernameError: "",
          signupPasswordError: "",
-         hasSignupEmailError: false,
+         hasSignupUsernameError: false,
          hasSignupPasswordError: false,
 
          // log in
-         loginEmailError: "",
+         loginUsernameError: "",
          loginPasswordError: "",
-         hasLoginEmailError: false,
+         hasLoginUsernameError: false,
          hasLoginPasswordError: false,
       };
    }
@@ -43,9 +43,9 @@ class Landing extends React.Component {
    setNewAccountMode() {
       this.setState({
          landingMode: "new-account",
-         signupEmailError: "",
+         signupUsernameError: "",
          signupPasswordError: "",
-         hasSignupEmailError: false,
+         hasSignupUsernameError: false,
          hasSignupPasswordError: false,
       });
    }
@@ -53,17 +53,17 @@ class Landing extends React.Component {
    setLogInMode() {
       this.setState({
          landingMode: "log-in",
-         loginEmailError: "",
+         loginUsernameError: "",
          loginPasswordError: "",
-         hasLoginEmailError: false,
+         hasLoginUsernameError: false,
          hasLoginPasswordError: false,
       });
    }
 
-   // tests if the email and password are valid and if so creates the user
-   async validateAndLogInUser(emailInput, passwordInput) {
+   // tests if the username and password are valid and if so creates the user
+   async validateAndLogInUser(usernameInput, passwordInput) {
       const user = {
-         email: emailInput,
+         username: usernameInput,
          password: passwordInput, // send the plain text password over secure connection, the server will hash it
       };
       // call API response:
@@ -83,13 +83,19 @@ class Landing extends React.Component {
          .catch((err) => {
             const data = err.response.data;
             console.log("err.response.data", data);
-            const { loginEmailError, loginPasswordError } = data;
+            const { loginUsernameError, loginPasswordError } = data;
 
-            // push email error to state
-            if (loginEmailError !== "") {
-               this.setState({ hasLoginEmailError: true, loginEmailError });
+            // push username error to state
+            if (loginUsernameError !== "") {
+               this.setState({
+                  hasLoginUsernameError: true,
+                  loginUsernameError,
+               });
             } else {
-               this.setState({ hasLoginEmailError: false, loginEmailError });
+               this.setState({
+                  hasLoginUsernameError: false,
+                  loginUsernameError,
+               });
             }
 
             // push password error to state
@@ -118,16 +124,17 @@ class Landing extends React.Component {
       window.scrollTo(0, 0); // sets focus to the top of the page
    }
 
-   // tests if the email and password are valid and if so creates the user
+   // tests if the username and password are valid and if so creates the user
    async validateAndCreateUser() {
-      const emailInput = document.getElementById("signup-email-input").value;
+      const usernameInput = document.getElementById("signup-username-input")
+         .value;
       const passwordInput = document.getElementById("signup-password-input")
          .value;
 
       // create user obj
       const user = {
          id: getUuid(), // make a new uuid
-         email: emailInput,
+         username: usernameInput,
          password: passwordInput, // send the plain text password over secure connection, the server will hash it
          createdAt: Date.now(),
       };
@@ -149,13 +156,19 @@ class Landing extends React.Component {
          .catch((err) => {
             const data = err.response.data;
             console.log("err", data);
-            const { signupEmailError, signupPasswordError } = data;
+            const { signupUsernameError, signupPasswordError } = data;
 
-            // push email error to state
-            if (signupEmailError !== "") {
-               this.setState({ hasSignupEmailError: true, signupEmailError });
+            // push username error to state
+            if (signupUsernameError !== "") {
+               this.setState({
+                  hasSignupUsernameError: true,
+                  signupUsernameError,
+               });
             } else {
-               this.setState({ hasSignupEmailError: false, signupEmailError });
+               this.setState({
+                  hasSignupUsernameError: false,
+                  signupUsernameError,
+               });
             }
 
             // push password error to state
@@ -184,18 +197,17 @@ class Landing extends React.Component {
             <div className="card-body">
                <h5>log in</h5>
                <input
-                  id="login-email-input"
-                  placeholder="Enter Your Email"
+                  id="login-username-input"
+                  placeholder="Enter Your Username"
                   required
-                  type="email"
                   className={classnames({
                      "my-input": true,
                      "input-invalid": this.state.hasLoginPasswordError,
                   })}
                />
-               {this.state.hasLoginEmailError && (
+               {this.state.hasLoginUsernameError && (
                   <div className="text-danger">
-                     {this.state.loginEmailError}
+                     {this.state.loginUsernameError}
                   </div>
                )}
                <input
@@ -217,7 +229,7 @@ class Landing extends React.Component {
                   className="button primary-action-button"
                   onClick={() =>
                      this.validateAndLogInUser(
-                        document.getElementById("login-email-input").value,
+                        document.getElementById("login-username-input").value,
                         document.getElementById("login-password-input").value
                      )
                   }
@@ -238,7 +250,7 @@ class Landing extends React.Component {
                   onClick={() =>
                      this.bypassLogIn({
                         id: "0e3e3882-1264-467c-94bf-f9850b7edbd4",
-                        email: "chris@email.com",
+                        username: "chris",
                         createdAt: "1594145052944",
                      })
                   }
@@ -267,18 +279,17 @@ class Landing extends React.Component {
                   Make a New Account
                </p> */}
                <input
-                  id="signup-email-input"
-                  placeholder="Enter Your Email"
+                  id="signup-username-input"
+                  placeholder="Enter Your Username"
                   required
-                  type="email"
                   className={classnames({
                      "my-input": true,
-                     "input-invalid": this.state.hasSignupEmailError,
+                     "input-invalid": this.state.hasSignupUsernameError,
                   })}
                />
-               {this.state.hasSignupEmailError && (
-                  <div className="text-danger" id="signup-email-error">
-                     {this.state.signupEmailError}
+               {this.state.hasSignupUsernameError && (
+                  <div className="text-danger" id="signup-username-error">
+                     {this.state.signupUsernameError}
                   </div>
                )}
                <input
