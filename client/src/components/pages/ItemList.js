@@ -63,9 +63,16 @@ class ItemList2 extends React.Component {
          console.log("There is no user object, kicking to landing page.");
          this.props.history.push("/");
       }
+
+      // https://stackoverflow.com/questions/53441584/how-to-re-render-parent-component-when-anything-changes-in-child-component/53441679#:~:text=To%20rerender%20the%20parent%20you,forceUpdate()%20function.
+      this.rerenderParentCallback = this.rerenderParentCallback.bind(this);
    }
 
    // methods happen here, such as what happens when you click on a button
+
+   rerenderParentCallback() {
+      this.forceUpdate();
+   }
 
    // roll out a dialog for unpacking an item's contents
    rolloutUnpackConfirmation() {
@@ -612,7 +619,13 @@ class ItemList2 extends React.Component {
                                     {/* {this.renderContainingItems(currentItem)} */}
                                     {!this.state.isEditMode &&
                                        this.props.childItems.map((item) => (
-                                          <ItemCard item={item} key={item.id} />
+                                          <ItemCard
+                                             item={item}
+                                             key={item.id}
+                                             rerenderParentCallback={
+                                                this.rerenderParentCallback
+                                             }
+                                          />
                                        ))}
                                     {this.state.isEditMode &&
                                        this.props.childItems.map((item) => (

@@ -6,7 +6,7 @@ import {
    LEVEL_COLORS,
    // SUBITEM_DISPLAY_MODE,
    UI_APPEARANCE,
-   // getContentSummary,
+   getContentSummary,
 } from "../../utils/helpers";
 import classnames from "classnames";
 // import { IconArrowThinRightCircle } from "../../icons/icons.js";
@@ -20,11 +20,11 @@ import {
 // import { processAllItems } from "../../utils/processItems";
 import {
    movePageToDifferentItem,
-   refreshPage,
+   // refreshPage,
 } from "../../utils/movePageToDifferentItem";
 // import axios from "axios";
 import { setItemStatus } from "../../utils/items";
-// import actions from "../../store/actions";
+import actions from "../../store/actions";
 
 // new version of item card that deals with database data
 
@@ -44,40 +44,51 @@ class ItemCard2 extends React.Component {
          if (this.props.item.status === 0) {
             console.log("set this item's status to packed");
 
-            setItemStatus(this.props.item, 1);
-            // this.props.currentItem.numPackedChildren += 1;
-            // this.props.currentItem.numUnpackedChildren -= 1;
-            // this.props.currentItem.contentSummary = getContentSummary(
-            //    this.props.currentItem.numChildren,
-            //    this.props.currentItem.numPackedChildren,
-            //    this.props.currentItem.status
-            // );
-            // this.props.dispatch({
-            //    type: actions.STORE_CURRENT_ITEM,
-            //    payload: this.props.currentItem,
-            // });
+            setItemStatus(this.props.item, 1); // update the database
+
+            // trying to update the counter on the client side
+            this.props.currentItem.numPackedChildren += 1;
+            this.props.currentItem.numUnpackedChildren -= 1;
+            this.props.currentItem.contentSummary = getContentSummary(
+               this.props.currentItem.numChildren,
+               this.props.currentItem.numPackedChildren,
+               this.props.currentItem.status
+            );
+            this.props.dispatch({
+               type: actions.STORE_CURRENT_ITEM,
+               payload: this.props.currentItem,
+            });
 
             // this.recountPageItems();
-            this.forceUpdate();
-            refreshPage(this.props.item.parentId);
+
+            this.forceUpdate(); // needed to show the packed indicator change on in this component
+            this.props.rerenderParentCallback(); // call back to re-render the parent page component
+
+            // refreshPage(this.props.item.parentId);
          } else if (this.props.item.status === 1) {
             console.log("set this item's status to unpacked");
 
-            setItemStatus(this.props.item, 0);
-            // this.props.currentItem.numPackedChildren -= 1;
-            // this.props.currentItem.numUnpackedChildren += 1;
-            // this.props.currentItem.contentSummary = getContentSummary(
-            //    this.props.currentItem.numChildren,
-            //    this.props.currentItem.numPackedChildren,
-            //    this.props.currentItem.status
-            // );
-            // this.props.dispatch({
-            //    type: actions.STORE_CURRENT_ITEM,
-            //    payload: this.props.currentItem,
-            // });
+            setItemStatus(this.props.item, 0); // update the database
+
+            // trying to update the counter on the client side
+            this.props.currentItem.numPackedChildren -= 1;
+            this.props.currentItem.numUnpackedChildren += 1;
+            this.props.currentItem.contentSummary = getContentSummary(
+               this.props.currentItem.numChildren,
+               this.props.currentItem.numPackedChildren,
+               this.props.currentItem.status
+            );
+            this.props.dispatch({
+               type: actions.STORE_CURRENT_ITEM,
+               payload: this.props.currentItem,
+            });
+
             // this.recountPageItems();
-            this.forceUpdate();
-            refreshPage(this.props.item.parentId);
+
+            this.forceUpdate(); // needed to show the packed indicator change on in this component
+            this.props.rerenderParentCallback(); // call back to re-render the parent page component
+
+            // refreshPage(this.props.item.parentId);
          }
       }
    }
@@ -260,7 +271,7 @@ function mapStateToProps(state) {
    return {
       // currentLoadout: state.currentLoadout, // TODO, do I need this anymore?
       currentLevel: state.currentLevel,
-      // currentItem: state.currentItem,
+      currentItem: state.currentItem,
       // childItems: state.childItems,
    };
 }
