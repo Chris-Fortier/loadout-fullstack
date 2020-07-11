@@ -160,7 +160,7 @@ class LoadoutList extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      currentLoadout: state.currentLoadout,
+      // currentLoadout: state.currentLoadout,
       currentUser: state.currentUser,
    };
 }

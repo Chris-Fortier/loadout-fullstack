@@ -704,7 +704,7 @@ class ItemList2 extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      currentLoadout: state.currentLoadout,
+      // currentLoadout: state.currentLoadout,
       currentItem: state.currentItem,
       childItems: state.childItems,
       currentLevel: state.currentLevel,

@@ -71,7 +71,7 @@ class UserLoadoutSettings extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      currentLoadout: state.currentLoadout,
+      // currentLoadout: state.currentLoadout,
    };
 }
 
