@@ -10,10 +10,12 @@ import {
 // import classnames from "classnames";
 import {
    // IconArrowThinRightCircle,
-   IconTrash,
+   // IconTrash,
    IconChevronDown,
    IconChevronUp,
 } from "../../icons/icons.js";
+import { DeleteItemIcon, ChildrenAddIcon } from "../../icons/loadout-icons.js";
+
 // import { processAllItems } from "../../utils/processItems";
 import classnames from "classnames";
 import {
@@ -21,8 +23,12 @@ import {
    // getParentItemFromPath,
    renameItem,
    deleteItem,
+   addItemTo,
 } from "../../utils/items";
 import actions from "../../store/actions";
+import { v4 as getUuid } from "uuid";
+import { setItemStatus } from "../../utils/items";
+import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 
 class ItemCardEdit extends React.Component {
    constructor(props) {
@@ -80,7 +86,10 @@ class ItemCardEdit extends React.Component {
       return (
          <>
             <div
-               className="button primary-action-button"
+               className={classnames("button", {
+                  "primary-action-button": this.props.item.numChildren === 0,
+                  "danger-action-button": this.props.item.numChildren > 0,
+               })}
                onClick={(e) => {
                   this.deleteThisItem();
                }}
@@ -130,8 +139,51 @@ class ItemCardEdit extends React.Component {
       });
    }
 
+   // adds a new sub item on the server, then moves to the see the subitems of this item while still in edit mode
+   async addSubItemAndMoveTo() {
+      setItemStatus(this.props.item, 0); // unpack this item in order to add a new (default unpacked) subitem
+      const newItemId = getUuid(); // get the uuid client side that way it is easier to reference the id of the input element
+      const otherId = await addItemTo(this.props.item.id, newItemId); // add an item as a child of the current item
+      console.log({ otherId });
+      // refreshPage(this.props.currentItem.parentId); // refresh the page AFTER we generate the new item and before we set the focus on the new element
+      const inputElementId = "edit-name-input-" + newItemId;
+      console.log({ inputElementId });
+
+      // move to the item's page to view the new subitem
+      movePageToDifferentItem(this.props.item.id, +1);
+
+      document.getElementById(
+         "page-item-name-input"
+      ).value = this.props.item.name; // set the text inside of the page item name
+
+      // // add a new card for the new item without refreshing page
+      // const newChildItems = [
+      //    ...this.props.childItems,
+      //    {
+      //       name: "newestest item",
+      //       id: newItemId,
+      //       status: 0,
+      //       parentId: this.props.currentItem.id,
+      //       numChildren: 0,
+      //       numPackedChildren: 0,
+      //       numUnpackedChildren: 0,
+      //       contentSummary: "ready",
+      //    },
+      // ];
+      // this.props.dispatch({
+      //    type: actions.STORE_CHILD_ITEMS,
+      //    payload: newChildItems,
+      // });
+
+      // sets focus to the new item card and selects it's text
+      // const input = document.getElementById(inputElementId);
+      // input.focus();
+      // input.select();
+   }
+
    render() {
       const item = this.props.item; // this is to simplify code below
+      const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 ebecause it is one level below the page's level
 
       // let thisItemPath = this.props.currentLoadout.itemIndexPath.concat([
       //    item.index,
@@ -140,12 +192,34 @@ class ItemCardEdit extends React.Component {
       return (
          <>
             <div
-               className={
-                  "item-card-edit child-color-" +
-                  String(item.level % LEVEL_COLORS)
-               }
+               // className={
+               //    "item-card-edit child-color-" +
+               //    String(item.level % LEVEL_COLORS)
+               // }
+               className={classnames(
+                  "item-card-edit",
+                  UI_APPEARANCE === "light" && "child-bg-light",
+                  UI_APPEARANCE === "dark" && "child-bg-dark",
+                  UI_APPEARANCE === "colors" &&
+                     "child-color-" + String(level % LEVEL_COLORS)
+               )}
             >
                <div className="d-flex">
+                  <span
+                     className={classnames(
+                        "icon-dark item-card-icon clickable",
+                        (UI_APPEARANCE === "light" ||
+                           UI_APPEARANCE === "dark") &&
+                           "item-icon-colors-" + String(level % LEVEL_COLORS),
+                        UI_APPEARANCE === "colors" && "item-icon-colors"
+                     )}
+                     onClick={() => this.toggleDeleteRollout()}
+                  >
+                     <DeleteItemIcon />
+                  </span>
+
+                  <span style={{ width: "8px" }}></span>
+
                   <span className="flex-fill">
                      <input
                         className="edit-name"
@@ -156,21 +230,25 @@ class ItemCardEdit extends React.Component {
                      />
                   </span>
 
-                  <span
-                     className={classnames(
-                        "item-card-icon clickable",
-                        UI_APPEARANCE === "light" && "icon-dark",
-                        UI_APPEARANCE === "dark" && "icon-light",
-                        UI_APPEARANCE === "colors" && "icon-dark"
-                     )}
-                     // onClick={(e) => {
-                     //    this.deleteItem(thisItemPath);
+                  {this.props.item.numChildren === 0 && (
+                     <>
+                        <span style={{ width: "8px" }}></span>
 
-                     // }}
-                     onClick={() => this.toggleDeleteRollout()}
-                  >
-                     <IconTrash />
-                  </span>
+                        <span
+                           className={classnames(
+                              "icon-dark item-card-icon clickable",
+                              (UI_APPEARANCE === "light" ||
+                                 UI_APPEARANCE === "dark") &&
+                                 "item-icon-colors-" +
+                                    String(level % LEVEL_COLORS),
+                              UI_APPEARANCE === "colors" && "item-icon-colors"
+                           )}
+                           onClick={() => this.addSubItemAndMoveTo()}
+                        >
+                           <ChildrenAddIcon />
+                        </span>
+                     </>
+                  )}
 
                   {MOVE_UPDOWN && (
                      <>
@@ -196,6 +274,7 @@ function mapStateToProps(state) {
    return {
       // currentLoadout: state.currentLoadout,
       childItems: state.childItems,
+      currentLevel: state.currentLevel,
    };
 }
 

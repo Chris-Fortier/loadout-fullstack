@@ -177,7 +177,7 @@ export function DeleteItemIcon() {
    return (
       <svg viewBox="0 0 24 24">
          <path
-            className="this-item"
+            className="child-item"
             d="M 16.535156,1.0996094 12.585938,5.0507812 H 0 V 19.050781 H 12.585938 L 16.535156,23 17.949219,21.585938 13.414062,17.050781 H 2 V 7.0507812 H 13.414062 L 17.949219,2.515625 Z"
          />
          <path

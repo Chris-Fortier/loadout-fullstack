@@ -245,7 +245,7 @@ class ItemList2 extends React.Component {
       this.hideUnpackConfirmation();
    }
 
-   // adds a new item on the server, refreshes the page and focues on the text of the new item
+   // adds a new item on the server, updates the page and focuses on the text of the new item
    async addItemAndFocus() {
       const newItemId = getUuid(); // get the uuid client side that way it is easier to reference the id of the input element
       const otherId = await addItemTo(this.props.currentItem.id, newItemId); // add an item as a child of the current item
@@ -580,6 +580,7 @@ class ItemList2 extends React.Component {
                                                    )
                                                 }
                                                 maxLength={MAX_ITEM_NAME_LENGTH}
+                                                id="page-item-name-input"
                                              />
                                           </h4>
                                        </span>
