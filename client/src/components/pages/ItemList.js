@@ -478,7 +478,9 @@ class ItemList2 extends React.Component {
                                  "level-color-" + String(level % LEVEL_COLORS)
                            )}
                         >
-                           <div className={level > 1 && "card-header"}>
+                           <div
+                              className={classnames(level > 1 && "card-header")}
+                           >
                               <div className="row">
                                  {!this.state.isEditMode && (
                                     <>
@@ -613,7 +615,9 @@ class ItemList2 extends React.Component {
                                  </div>
                               </div>
                            </div>
-                           <div className={level > 1 && "card-body"}>
+                           <div
+                              className={classnames(level > 1 && "card-body")}
+                           >
                               <div className="row">
                                  <div className="col">
                                     {/* {this.renderContainingItems(currentItem)} */}

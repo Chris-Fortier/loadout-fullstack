@@ -77,7 +77,7 @@ class AccountSettings extends React.Component {
                                  <>
                                     <label
                                        className="my-input-label form-label"
-                                       for="new-username"
+                                       htmlFor="new-username"
                                     >
                                        Enter your new username
                                     </label>
@@ -88,7 +88,7 @@ class AccountSettings extends React.Component {
                                     />
                                     <label
                                        className="my-input-label form-label"
-                                       for="password-for-username-change"
+                                       htmlFor="password-for-username-change"
                                     >
                                        Enter your password
                                     </label>
@@ -121,7 +121,7 @@ class AccountSettings extends React.Component {
                               {this.state.hasPasswordRollout && (
                                  <>
                                     <label
-                                       for="old-password"
+                                       htmlFor="old-password"
                                        className="my-input-label form-label"
                                     >
                                        Enter your old password
@@ -132,7 +132,7 @@ class AccountSettings extends React.Component {
                                        id="old-password"
                                     />
                                     <label
-                                       for="new-password"
+                                       htmlFor="new-password"
                                        className="my-input-label form-label"
                                     >
                                        Enter your new password

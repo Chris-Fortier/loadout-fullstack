@@ -14,7 +14,7 @@ import axios from "axios";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
 import LoadoutLogo from "../../logo/loadout.svg";
-import { NUM_BACKGROUNDS } from "../../utils/helpers";
+// import { NUM_BACKGROUNDS } from "../../utils/helpers";
 
 // export default function Landing() {
 class Landing extends React.Component {

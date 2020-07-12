@@ -68,7 +68,7 @@ class LoadoutCard extends React.Component {
 
          <div
             className={classnames("loadout-card")}
-            id={"item-card-" + item.index}
+            id={"item-card-" + item.loadoutId}
          >
             <div>
                {/* <div className="float-left"> */}
