@@ -39,8 +39,11 @@ class ItemCard2 extends React.Component {
    toggleIsPacked(itemIndexPath) {
       console.log("toggleIsPacked()...");
 
-      // only toggle packed if all its descendants are packed
-      if (this.props.item.numUnpackedChildren === 0) {
+      // only toggle packed if all its descendants are packed and if the user has permission to pack
+      if (
+         this.props.item.numUnpackedChildren === 0 &&
+         this.props.currentUserLoadout.canPack === 1
+      ) {
          if (this.props.item.status === 0) {
             console.log("set this item's status to packed");
 
@@ -165,9 +168,11 @@ class ItemCard2 extends React.Component {
                            UI_APPEARANCE === "colors" && "item-icon-colors",
                            {
                               clickable:
-                                 item.numPackedChildren === item.numChildren,
+                                 item.numPackedChildren === item.numChildren &&
+                                 this.props.currentUserLoadout.canPack === 1,
                               disabled:
-                                 item.numPackedChildren < item.numChildren,
+                                 item.numPackedChildren < item.numChildren ||
+                                 this.props.currentUserLoadout.canPack === 0,
                            }
                         )}
                         onClick={(e) => {
@@ -197,7 +202,8 @@ class ItemCard2 extends React.Component {
                         <span
                            className={classnames({
                               clickable:
-                                 item.numPackedChildren === item.numChildren,
+                                 item.numPackedChildren === item.numChildren &&
+                                 this.props.currentUserLoadout.canPack === 1,
                               // disabled:
                               //    item.numPackedChildren < item.numChildren,
                            })}
@@ -239,12 +245,17 @@ class ItemCard2 extends React.Component {
                                  String(level % LEVEL_COLORS),
                            UI_APPEARANCE === "colors" && "item-icon-colors",
                            {
-                              clickable: item.status === 0,
-                              disabled: item.status === 1,
+                              clickable:
+                                 item.status === 0 ||
+                                 this.props.currentUserLoadout.canPack === 0,
+                              disabled:
+                                 item.status === 1 &&
+                                 this.props.currentUserLoadout.canPack === 1,
                            }
                         )}
                         onClick={(e) => {
-                           item.status === 0 &&
+                           (item.status === 0 ||
+                              this.props.currentUserLoadout.canPack === 0) &&
                               movePageToDifferentItem(this.props.item.id, +1);
                         }}
                      >
@@ -273,6 +284,7 @@ function mapStateToProps(state) {
       currentLevel: state.currentLevel,
       currentItem: state.currentItem,
       // childItems: state.childItems,
+      currentUserLoadout: state.currentUserLoadout,
    };
 }
 

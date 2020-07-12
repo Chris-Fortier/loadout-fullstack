@@ -587,10 +587,14 @@ class ItemList2 extends React.Component {
                                              UI_APPEARANCE === "dark" &&
                                                 "light-text-color",
                                              UI_APPEARANCE !== "dark" &&
-                                                "dark-text-color"
+                                                "dark-text-color",
+                                             this.props.currentUserLoadout
+                                                .canEdit === 0 && "disabled"
                                           )}
                                           onClick={(e) => {
-                                             this.toggleEditMode(e);
+                                             this.props.currentUserLoadout
+                                                .canEdit === 1 &&
+                                                this.toggleEditMode(e);
                                           }}
                                        >
                                           <div
@@ -642,22 +646,25 @@ class ItemList2 extends React.Component {
                               </div>
                               {!this.state.isEditMode && level !== 0 && (
                                  <>
-                                    <div
-                                       className={classnames("card-section", {
-                                          disabled:
-                                             this.props.currentItem
-                                                .numPackedChildren === 0,
-                                       })}
-                                    >
+                                    <div className={classnames("card-section")}>
                                        <span
                                           className={classnames(
                                              "button navigation-link w-100",
                                              UI_APPEARANCE === "dark" &&
                                                 "light-text-color",
                                              UI_APPEARANCE !== "dark" &&
-                                                "dark-text-color"
+                                                "dark-text-color",
+                                             (this.props.currentItem
+                                                .numPackedChildren === 0 ||
+                                                this.props.currentUserLoadout
+                                                   .canPack === 0) &&
+                                                "disabled"
                                           )}
                                           onClick={() =>
+                                             this.props.currentItem
+                                                .numPackedChildren !== 0 &&
+                                             this.props.currentUserLoadout
+                                                .canPack === 1 &&
                                              this.toggleUnpackRollout()
                                           }
                                        >
@@ -713,6 +720,7 @@ function mapStateToProps(state) {
       childItems: state.childItems,
       currentLevel: state.currentLevel,
       currentUser: state.currentUser,
+      currentUserLoadout: state.currentUserLoadout,
    };
 }
 
