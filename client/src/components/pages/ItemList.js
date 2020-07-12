@@ -279,6 +279,33 @@ class ItemList2 extends React.Component {
       input.select();
    }
 
+   // renames item on server and also in redux store
+   renameThisItem(e) {
+      console.log("the focus left this item");
+      if (e.target.value !== this.props.currentItem.name) {
+         console.log("the name was changed");
+         console.log(
+            "will rename ",
+            this.props.currentItem.name,
+            "to",
+            e.target.value
+         );
+         renameItem(this.props.currentItem.id, e.target.value); // send the change of the name to the server
+
+         // make local changes so we can see them immediately
+         // its that all I have to do is this, direclty edit the name in props, no need to dispatch it
+         this.props.currentItem.name = e.target.value; // rename the child to the new name
+
+         // send the updated item to the store, even without this I see the changes with the code above
+         this.props.dispatch({
+            type: actions.STORE_CURRENT_ITEM,
+            payload: this.props.currentItem,
+         });
+      } else {
+         console.log("the name was not changed");
+      }
+   }
+
    // this unpacks all a given item's children and all their descendants
    unpackDescendants(itemIndexPath) {
       console.log("unpackDescendants()...");
@@ -573,11 +600,8 @@ class ItemList2 extends React.Component {
                                                 defaultValue={
                                                    this.props.currentItem.name
                                                 }
-                                                onChange={(e) =>
-                                                   renameItem(
-                                                      this.props.currentItem.id,
-                                                      e.target.value
-                                                   )
+                                                onBlur={(e) =>
+                                                   this.renameThisItem(e)
                                                 }
                                                 maxLength={MAX_ITEM_NAME_LENGTH}
                                                 id="page-item-name-input"
