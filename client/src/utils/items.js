@@ -120,12 +120,12 @@ export function setItemStatus(item, newStatus) {
 }
 
 // delete an item
-export function deleteItem(item) {
-   console.log("deleting this item", item);
+export function deleteItem(itemId) {
+   console.log("deleting this item", itemId);
 
    // server update
    axios
-      .post("/api/v1/loadouts/delete?itemId=" + item.id)
+      .post("/api/v1/loadouts/delete?itemId=" + itemId)
       .then((res) => {
          console.log("axios res", res);
       })
@@ -135,5 +135,5 @@ export function deleteItem(item) {
       });
 
    // client side part (this is too keep what we see consistent with the database until it refreshes from the database)
-   refreshPage(item.parentId);
+   // refreshPage(item.parentId);
 }

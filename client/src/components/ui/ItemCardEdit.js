@@ -82,7 +82,7 @@ class ItemCardEdit extends React.Component {
             <div
                className="button primary-action-button"
                onClick={(e) => {
-                  deleteItem(this.props.item);
+                  this.deleteThisItem();
                }}
             >
                Delete {this.props.item.name}
@@ -107,6 +107,27 @@ class ItemCardEdit extends React.Component {
             </div>
          </>
       );
+   }
+
+   // renames item on server and also in redux store
+   deleteThisItem() {
+      console.log("will delete ", this.props.item.name);
+      deleteItem(this.props.item.id); // send the change of the name to the server
+
+      // make local changes so we can see them immediately
+      // its that all I have to do is this, direclty edit the name in props, no need to dispatch it
+      const foundChildIndex = this.props.childItems.findIndex(
+         (childItem) => childItem.id === this.props.item.id
+      ); // find the specific child item to change the name of
+      console.log("foundChildIndex", foundChildIndex);
+      const newChildItems = [...this.props.childItems]; // make a new array of children with the deleted child removed
+      newChildItems.splice(foundChildIndex, 1);
+
+      // send the updated child items to the store
+      this.props.dispatch({
+         type: actions.STORE_CHILD_ITEMS,
+         payload: newChildItems,
+      });
    }
 
    render() {
