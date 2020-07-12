@@ -173,7 +173,7 @@ export function ChildrenAddIcon() {
    );
 }
 
-export function ChildrenAddIcon() {
+export function DeleteItemIcon() {
    return (
       <svg viewBox="0 0 24 24">
          <path
