@@ -61,11 +61,7 @@ export function renameItem(item, newName) {
 export function addItemTo(parentId) {
    // server update
    axios
-      .post(
-         "http://localhost:3060/api/v1/loadouts/insert?parentId=" +
-            parentId +
-            "&name=new%20item"
-      )
+      .post("/api/v1/loadouts/insert?parentId=" + parentId + "&name=new%20item")
       .then((res) => {
          console.log("axios res", res);
       })
@@ -106,7 +102,7 @@ export function setItemStatus(item, newStatus) {
    // server update
    axios
       .post(
-         "http://localhost:3060/api/v1/loadouts/set-status?newStatus=" +
+         "/api/v1/loadouts/set-status?newStatus=" +
             newStatus +
             "&itemId=" +
             item.id
@@ -131,7 +127,7 @@ export function deleteItem(item) {
 
    // server update
    axios
-      .post("http://localhost:3060/api/v1/loadouts/delete?itemId=" + item.id)
+      .post("/api/v1/loadouts/delete?itemId=" + item.id)
       .then((res) => {
          console.log("axios res", res);
       })
