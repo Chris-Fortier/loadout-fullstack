@@ -273,6 +273,7 @@ class ItemList2 extends React.Component {
          payload: newChildItems,
       });
 
+      // sets focus to the new item card and selects it's text
       const input = document.getElementById(inputElementId);
       input.focus();
       input.select();

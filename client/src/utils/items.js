@@ -31,30 +31,21 @@ export function getParentItemFromPath(gear, itemIndexPath) {
 }
 
 // updates the name of an item
-export function renameItem(item, newName) {
-   // console.log("rename " + this.props.item.name + " to " + newName);
-   // console.log("itemIndexPath:", itemIndexPath);
-   // get the actual item I want to change based on the index path
-   // const currentItem = getItemFromPath(gear, itemIndexPath);
-   // meat of what this funtion does
-   // currentItem.name = newName;
-   // this must happen whenever something in the loadout changes
-   // processAllItems(gear);
-   // do an api call to rename an item
-   // axios
-   //    .get("/api/v1/loadouts/rename-item", )
-   //    .then((res) => {
-   //       // handle success
-   //       console.log("setCurrentItem res.data[0]", res.data[0]);
-   //       store.dispatch({
-   //          type: actions.STORE_CURRENT_ITEM,
-   //          payload: res.data[0],
-   //       }); // dispatching an action
-   //    })
-   //    .catch((error) => {
-   //       // handle error
-   //       console.log(error);
-   //    });
+export function renameItem(itemId, newName) {
+   console.log("will rename " + itemId + " to " + newName);
+
+   // do an api call to rename an item on server
+   axios
+      .post(
+         "/api/v1/loadouts/set-name?itemId=" + itemId + "&newName=" + newName
+      )
+      .then((res) => {
+         console.log("axios res", res);
+      })
+      .catch((error) => {
+         // handle error
+         console.log("axios error", error);
+      });
 }
 
 // add an item

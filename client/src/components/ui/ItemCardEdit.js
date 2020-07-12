@@ -22,6 +22,7 @@ import {
    renameItem,
    deleteItem,
 } from "../../utils/items";
+import actions from "../../store/actions";
 
 class ItemCardEdit extends React.Component {
    constructor(props) {
@@ -31,6 +32,40 @@ class ItemCardEdit extends React.Component {
       this.state = {
          isShowingDeleteConfirmation: false,
       };
+   }
+
+   // renames item on server and also in redux store
+   renameThisItem(e) {
+      console.log("the focus left this item");
+      if (e.target.value !== this.props.item.name) {
+         console.log("the name was changed");
+         console.log(
+            "will rename ",
+            this.props.item.name,
+            "to",
+            e.target.value
+         );
+         renameItem(this.props.item.id, e.target.value); // send the change of the name to the server
+
+         // make local changes so we can see them immediately
+         // const newChildItems = [...this.props.childItems]; // makes a deep copy of child items to edit locally
+         // console.log(newChildItems);
+
+         // its that all I have to do is this, direclty edit the name in props, no need to dispatch it
+         const foundChild = this.props.childItems.find(
+            (childItem) => childItem.id === this.props.item.id
+         ); // find the specific child item to change the name of
+         console.log("foundChild.name", foundChild.name);
+         foundChild.name = e.target.value; // rename the child to the new name
+
+         // send the updated child items to the store, even without this I see the changes with the code above
+         this.props.dispatch({
+            type: actions.STORE_CHILD_ITEMS,
+            payload: this.props.childItems,
+         });
+      } else {
+         console.log("the name was not changed");
+      }
    }
 
    // toggle the delete confirmation
@@ -95,9 +130,7 @@ class ItemCardEdit extends React.Component {
                         className="edit-name"
                         id={"edit-name-input-" + item.id}
                         defaultValue={item.name}
-                        onChange={(e) =>
-                           renameItem(this.props.item, e.target.value)
-                        }
+                        onBlur={(e) => this.renameThisItem(e)}
                         maxLength={MAX_ITEM_NAME_LENGTH}
                      />
                   </span>
@@ -141,6 +174,7 @@ class ItemCardEdit extends React.Component {
 function mapStateToProps(state) {
    return {
       // currentLoadout: state.currentLoadout,
+      childItems: state.childItems,
    };
 }
 
