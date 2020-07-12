@@ -246,7 +246,7 @@ class Landing extends React.Component {
                   </span>
                   &nbsp;Make a New Account
                </div>
-               <div
+               {/* <div
                   className="button navigation-link float-right"
                   onClick={() =>
                      this.bypassLogIn({
@@ -257,7 +257,7 @@ class Landing extends React.Component {
                   }
                >
                   bypass log in
-               </div>
+               </div> */}
             </div>
          </div>
       );
