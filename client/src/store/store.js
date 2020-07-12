@@ -14,6 +14,7 @@ const initialState = {
    },
    childItems: [],
    currentLevel: 2, // TODO the default should be zero, testing a different one
+   currentUserLoadout: {},
 };
 const store = createStore(combineReducers, initialState, composeWithDevTools());
 export default store;

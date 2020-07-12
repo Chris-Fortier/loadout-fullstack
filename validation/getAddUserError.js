@@ -1,7 +1,7 @@
 const {
    checkIfUsernameExists,
    getUserIdByUsername,
-   getUserLoadoutByIds,
+   checkIfUserLoadoutExists,
 } = require("../utils/helpers");
 
 // returns errors for adding an existing user to a loadout
@@ -19,7 +19,7 @@ module.exports = async function getAddUserError(username, loadoutId) {
    if (userId === "") {
       return "This username is either misspelled or doesn't exist.";
    }
-   userLoadoutId = await getUserLoadoutByIds(userId, loadoutId);
+   userLoadoutId = await checkIfUserLoadoutExists(userId, loadoutId);
    if (userLoadoutId !== "") {
       return "This loadout is already shared with this user.";
    }

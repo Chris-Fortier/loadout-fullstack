@@ -75,7 +75,11 @@ class LoadoutCard extends React.Component {
                <Link
                   className="d-flex"
                   onClick={() => {
-                     movePageToDifferentItem(this.props.loadout.loadoutId, +1);
+                     movePageToDifferentItem(
+                        this.props.loadout.loadoutId,
+                        +1,
+                        this.props.loadout
+                     );
                   }}
                   to="/item-list"
                >

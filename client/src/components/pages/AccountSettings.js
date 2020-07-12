@@ -71,6 +71,8 @@ class AccountSettings extends React.Component {
             console.log("axios error", error);
          });
 
+      logOutCurrentUser(this.props);
+
       this.props.history.push("/"); // send to landing page
    }
 

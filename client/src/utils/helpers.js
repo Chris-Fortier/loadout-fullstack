@@ -87,6 +87,10 @@ export function logOutCurrentUser(props) {
    props.dispatch({
       type: actions.RESET_CURRENT_LEVEL,
    });
+   props.dispatch({
+      type: actions.STORE_CURRENT_USER_LOADOUT,
+      payload: {},
+   });
 }
 
 // app master preferences

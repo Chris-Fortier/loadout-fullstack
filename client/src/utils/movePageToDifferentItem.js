@@ -5,7 +5,11 @@ import axios from "axios";
 // this version uses changes the current item id in the store
 
 // move page to a different item
-export function movePageToDifferentItem(itemId, levelChange = 0) {
+export function movePageToDifferentItem(
+   itemId,
+   levelChange = 0,
+   newCurrentLoadout = null
+) {
    console.log("movePageToDifferentItem()...itemId:", itemId);
 
    if (itemId !== null) {
@@ -18,6 +22,15 @@ export function movePageToDifferentItem(itemId, levelChange = 0) {
          type: actions.STORE_CHILD_ITEMS,
          payload: [],
       });
+
+      // this stores the current user loadout, which has the user's permissions for this loadout
+      // this only happens when entering a new loadout
+      if (newCurrentLoadout !== null) {
+         store.dispatch({
+            type: actions.STORE_CURRENT_USER_LOADOUT,
+            payload: newCurrentLoadout,
+         });
+      }
 
       // this part gets data from the database
       axios
