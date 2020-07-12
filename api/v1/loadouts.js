@@ -7,18 +7,23 @@ const insertItem = require("../../queries/insertItem");
 const deleteItem = require("../../queries/deleteItem");
 const setItemName = require("../../queries/setItemName");
 const setItemStatus = require("../../queries/setItemStatus");
+const selectItemInfo = require("../../queries/selectItemInfo");
+const { getContentSummary } = require("../../utils/helpers");
+const selectChildItems = require("../../queries/selectChildItems");
 
 // @route      POST api/v1/loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new item
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/insert?parentId=e109827f-4bfa-4384-9ac9-979776d2512b&name=newTestItem
 router.post("/insert", async (req, res) => {
-   const { parentId, name } = req.query; // destructuring to simplify code below, grabbing variables from req.body
-   console.log({ parentId, name });
+   const { parentId, name, newItemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+   console.log({ parentId, name, newItemId });
    // console.log("uuid", uuid.v4());
 
+   // newItemId = uuid.v4();
+
    const newItem = {
-      id: uuid.v4(), // generate a uuid
+      id: newItemId, // use the uuid generated client side
       name: name, // use given value for parent
       parent_id: parentId, // use given value for parent
       status: 0, // default status to zero (unpacked)
@@ -30,7 +35,7 @@ router.post("/insert", async (req, res) => {
    db.query(insertItem, newItem)
       .then((dbRes) => {
          console.log("dbRes", dbRes);
-         res.status(200).json("New item created");
+         res.status(200).json(newItemId);
       })
       .catch((err) => {
          console.log("err", err);
@@ -99,6 +104,125 @@ router.post("/set-status", (req, res) => {
       })
       .catch((err) => {
          console.log("err", err);
+         res.status(400).json(err);
+      });
+});
+
+// @route      GET api/v1/loadouts/info
+// @desc       Get all data and derived data for a given item
+// @access     Public
+// test:
+router.get("/info", (req, res) => {
+   console.log("req.query", req.query);
+
+   // put the query into some consts
+   const itemId = req.query.itemId;
+
+   // change this
+   // db.query(selectItemInfo(itemId))
+   // https://www.npmjs.com/package/mysql#escaping-query-values
+   db.query(selectItemInfo, [
+      itemId,
+      itemId,
+      itemId,
+      itemId,
+      itemId,
+      itemId,
+      itemId,
+   ]) // this syntax style prevents hackers
+      .then((itemInfo) => {
+         // successful response
+         // console.log(itemInfo);
+
+         // we need to convert the names of our data from database-side snake_case to camelCase
+         // we can also use this to "shape the data" for the client
+         // this is where we can "shrink out payload", the data we sent to the client
+         const camelCaseItemInfo = itemInfo.map((item) => {
+            // for every item, return a new object
+
+            // this is a hack because I can't get my query to get zeros instead of nulls if the count is zero
+            // TODO duplicated code
+            let num_children = item.num_children;
+            if (num_children === null) num_children = 0;
+            let num_packed_children = item.num_packed_children;
+            if (num_packed_children === null) num_packed_children = 0;
+
+            return {
+               name: item.name,
+               status: item.status,
+               id: item.id,
+               parentName: item.parent_name,
+               parentId: item.parent_id,
+               numChildren: num_children,
+               numPackedChildren: num_packed_children,
+               numUnpackedChildren: num_children - num_packed_children,
+               contentSummary: getContentSummary(
+                  num_children,
+                  num_packed_children,
+                  item.status
+               ),
+            };
+         });
+
+         res.json(camelCaseItemInfo);
+      })
+      .catch((err) => {
+         // report error
+         console.log(err);
+         res.status(400).json(err);
+      });
+});
+
+// @route      GET api/v1/loadouts/children
+// @desc       Get all the child items of an item
+// @access     Public
+router.get("/children", (req, res) => {
+   console.log(req.query);
+   const itemId = req.query.itemId; // put the query into some consts
+
+   // change this
+   // db.query(selectChildItems(itemId))
+   // https://www.npmjs.com/package/mysql#escaping-query-values
+   db.query(selectChildItems, [itemId]) // this syntax style prevents hackers
+      .then((childItems) => {
+         // successful response
+         // console.log(childItems);
+
+         // we need to convert the names of our data from database-side snake_case to camelCase
+         // we can also use this to "shape the data" for the client
+         // this is where we can "shrink out payload", the data we sent to the client
+         // I suspect this is where I am going to convert flattened loadouts to nested
+         const camelCaseChildItems = childItems.map((item) => {
+            // for every item, return a new object
+
+            // this is a hack because I can't get my query to get zeros instead of nulls if the count is zero
+            // TODO duplicated code
+            let num_children = item.num_children;
+            if (num_children === null) num_children = 0;
+            let num_packed_children = item.num_packed_children;
+            if (num_packed_children === null) num_packed_children = 0;
+
+            return {
+               name: item.name,
+               status: item.status,
+               id: item.id,
+               parentId: item.parent_id,
+               numChildren: num_children,
+               numPackedChildren: num_packed_children,
+               numUnpackedChildren: num_children - num_packed_children,
+               contentSummary: getContentSummary(
+                  num_children,
+                  num_packed_children,
+                  item.status
+               ),
+            };
+         });
+
+         res.json(camelCaseChildItems);
+      })
+      .catch((err) => {
+         // report error
+         console.log(err);
          res.status(400).json(err);
       });
 });

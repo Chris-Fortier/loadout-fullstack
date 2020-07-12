@@ -31,7 +31,10 @@ import ItemCard from "../ui/ItemCard";
 import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
-import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
+import {
+   movePageToDifferentItem,
+   // refreshPage,
+} from "../../utils/movePageToDifferentItem";
 import {
    // getItemFromPath,
    // getParentItemFromPath,
@@ -39,6 +42,7 @@ import {
    addItemTo,
    // addContainerTo,
 } from "../../utils/items";
+import { v4 as getUuid } from "uuid";
 
 // ItemList2 is an alternate version that queries a single item's children to display from the database
 
@@ -63,9 +67,16 @@ class ItemList2 extends React.Component {
          console.log("There is no user object, kicking to landing page.");
          this.props.history.push("/");
       }
+
+      // https://stackoverflow.com/questions/53441584/how-to-re-render-parent-component-when-anything-changes-in-child-component/53441679#:~:text=To%20rerender%20the%20parent%20you,forceUpdate()%20function.
+      this.rerenderParentCallback = this.rerenderParentCallback.bind(this);
    }
 
    // methods happen here, such as what happens when you click on a button
+
+   rerenderParentCallback() {
+      this.forceUpdate();
+   }
 
    // roll out a dialog for unpacking an item's contents
    rolloutUnpackConfirmation() {
@@ -232,6 +243,40 @@ class ItemList2 extends React.Component {
    toggleEditMode() {
       this.setState({ isEditMode: !this.state.isEditMode });
       this.hideUnpackConfirmation();
+   }
+
+   // adds a new item on the server, refreshes the page and focues on the text of the new item
+   async addItemAndFocus() {
+      const newItemId = getUuid(); // get the uuid client side that way it is easier to reference the id of the input element
+      const otherId = await addItemTo(this.props.currentItem.id, newItemId); // add an item as a child of the current item
+      console.log({ otherId });
+      // refreshPage(this.props.currentItem.parentId); // refresh the page AFTER we generate the new item and before we set the focus on the new element
+      const inputElementId = "edit-name-input-" + newItemId;
+      console.log({ inputElementId });
+
+      // add a new card for the new item without refreshing page
+      const newChildItems = [
+         ...this.props.childItems,
+         {
+            name: "newestest item",
+            id: newItemId,
+            status: 0,
+            parentId: this.props.currentItem.id,
+            numChildren: 0,
+            numPackedChildren: 0,
+            numUnpackedChildren: 0,
+            contentSummary: "ready",
+         },
+      ];
+      this.props.dispatch({
+         type: actions.STORE_CHILD_ITEMS,
+         payload: newChildItems,
+      });
+
+      // sets focus to the new item card and selects it's text
+      const input = document.getElementById(inputElementId);
+      input.focus();
+      input.select();
    }
 
    // this unpacks all a given item's children and all their descendants
@@ -471,7 +516,9 @@ class ItemList2 extends React.Component {
                                  "level-color-" + String(level % LEVEL_COLORS)
                            )}
                         >
-                           <div className={level > 1 && "card-header"}>
+                           <div
+                              className={classnames(level > 1 && "card-header")}
+                           >
                               <div className="row">
                                  {!this.state.isEditMode && (
                                     <>
@@ -578,10 +625,14 @@ class ItemList2 extends React.Component {
                                              UI_APPEARANCE === "dark" &&
                                                 "light-text-color",
                                              UI_APPEARANCE !== "dark" &&
-                                                "dark-text-color"
+                                                "dark-text-color",
+                                             this.props.currentUserLoadout
+                                                .canEdit === 0 && "disabled"
                                           )}
                                           onClick={(e) => {
-                                             this.toggleEditMode(e);
+                                             this.props.currentUserLoadout
+                                                .canEdit === 1 &&
+                                                this.toggleEditMode(e);
                                           }}
                                        >
                                           <div
@@ -606,13 +657,21 @@ class ItemList2 extends React.Component {
                                  </div>
                               </div>
                            </div>
-                           <div className={level > 1 && "card-body"}>
+                           <div
+                              className={classnames(level > 1 && "card-body")}
+                           >
                               <div className="row">
                                  <div className="col">
                                     {/* {this.renderContainingItems(currentItem)} */}
                                     {!this.state.isEditMode &&
                                        this.props.childItems.map((item) => (
-                                          <ItemCard item={item} key={item.id} />
+                                          <ItemCard
+                                             item={item}
+                                             key={item.id}
+                                             rerenderParentCallback={
+                                                this.rerenderParentCallback
+                                             }
+                                          />
                                        ))}
                                     {this.state.isEditMode &&
                                        this.props.childItems.map((item) => (
@@ -625,22 +684,25 @@ class ItemList2 extends React.Component {
                               </div>
                               {!this.state.isEditMode && level !== 0 && (
                                  <>
-                                    <div
-                                       className={classnames("card-section", {
-                                          disabled:
-                                             this.props.currentItem
-                                                .numPackedChildren === 0,
-                                       })}
-                                    >
+                                    <div className={classnames("card-section")}>
                                        <span
                                           className={classnames(
                                              "button navigation-link w-100",
                                              UI_APPEARANCE === "dark" &&
                                                 "light-text-color",
                                              UI_APPEARANCE !== "dark" &&
-                                                "dark-text-color"
+                                                "dark-text-color",
+                                             (this.props.currentItem
+                                                .numPackedChildren === 0 ||
+                                                this.props.currentUserLoadout
+                                                   .canPack === 0) &&
+                                                "disabled"
                                           )}
                                           onClick={() =>
+                                             this.props.currentItem
+                                                .numPackedChildren !== 0 &&
+                                             this.props.currentUserLoadout
+                                                .canPack === 1 &&
                                              this.toggleUnpackRollout()
                                           }
                                        >
@@ -658,7 +720,7 @@ class ItemList2 extends React.Component {
                                     <div
                                        className="button primary-action-button"
                                        onClick={(e) => {
-                                          addItemTo(this.props.currentItem.id);
+                                          this.addItemAndFocus();
                                        }}
                                     >
                                        Add Item
@@ -691,11 +753,12 @@ class ItemList2 extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      currentLoadout: state.currentLoadout,
+      // currentLoadout: state.currentLoadout,
       currentItem: state.currentItem,
       childItems: state.childItems,
       currentLevel: state.currentLevel,
       currentUser: state.currentUser,
+      currentUserLoadout: state.currentUserLoadout,
    };
 }
 

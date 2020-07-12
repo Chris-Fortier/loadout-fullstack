@@ -1,3 +1,5 @@
+import actions from "../store/actions";
+
 // file of small application-wide helpers
 
 export const safelyParseJSON = (str) => {
@@ -53,18 +55,43 @@ export function checkIsOver(num, limit) {
    return num > limit;
 }
 
-// // returns a short human-readable sumamry of the packed content of an item given the number of children and packed childred it has
-// // TODO this is duplicated on client and server
-// export function getContentSummary(numChildren, numPackedChildren, status) {
-//    const numUnpackedChildren = numChildren - numPackedChildren;
-//    if (numUnpackedChildren > 0) {
-//       return numUnpackedChildren + " left";
-//    }
-//    if (status === 0) {
-//       return "ready";
-//    }
-//    return "";
-// }
+// returns a short human-readable sumamry of the packed content of an item given the number of children and packed childred it has
+// TODO this is duplicated on client and server
+export function getContentSummary(numChildren, numPackedChildren, status) {
+   const numUnpackedChildren = numChildren - numPackedChildren;
+   if (numUnpackedChildren > 0) {
+      return numUnpackedChildren + " left";
+   }
+   if (status === 0) {
+      return "ready";
+   }
+   return "";
+}
+
+// log out of the current user
+export function logOutCurrentUser(props) {
+   console.log("logOutCurrentUser()...");
+   props.dispatch({
+      type: actions.UPDATE_CURRENT_USER,
+      payload: {},
+   });
+   // also remove the store of stuff
+   props.dispatch({
+      type: actions.STORE_CURRENT_ITEM,
+      payload: {},
+   });
+   props.dispatch({
+      type: actions.STORE_CHILD_ITEMS,
+      payload: [],
+   });
+   props.dispatch({
+      type: actions.RESET_CURRENT_LEVEL,
+   });
+   props.dispatch({
+      type: actions.STORE_CURRENT_USER_LOADOUT,
+      payload: {},
+   });
+}
 
 // app master preferences
 export const LEVEL_COLORS = 7; // the amount of level colors there are

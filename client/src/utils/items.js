@@ -31,40 +31,13 @@ export function getParentItemFromPath(gear, itemIndexPath) {
 }
 
 // updates the name of an item
-export function renameItem(item, newName) {
-   // console.log("rename " + this.props.item.name + " to " + newName);
-   // console.log("itemIndexPath:", itemIndexPath);
-   // get the actual item I want to change based on the index path
-   // const currentItem = getItemFromPath(gear, itemIndexPath);
-   // meat of what this funtion does
-   // currentItem.name = newName;
-   // this must happen whenever something in the loadout changes
-   // processAllItems(gear);
-   // do an api call to rename an item
-   // axios
-   //    .get("/api/v1/loadouts/rename-item", )
-   //    .then((res) => {
-   //       // handle success
-   //       console.log("setCurrentItem res.data[0]", res.data[0]);
-   //       store.dispatch({
-   //          type: actions.STORE_CURRENT_ITEM,
-   //          payload: res.data[0],
-   //       }); // dispatching an action
-   //    })
-   //    .catch((error) => {
-   //       // handle error
-   //       console.log(error);
-   //    });
-}
+export function renameItem(itemId, newName) {
+   console.log("will rename " + itemId + " to " + newName);
 
-// add an item
-export function addItemTo(parentId) {
-   // server update
+   // do an api call to rename an item on server
    axios
       .post(
-         "http://localhost:3060/api/v1/loadouts/insert?parentId=" +
-            parentId +
-            "&name=new%20item"
+         "/api/v1/loadouts/set-name?itemId=" + itemId + "&newName=" + newName
       )
       .then((res) => {
          console.log("axios res", res);
@@ -73,9 +46,30 @@ export function addItemTo(parentId) {
          // handle error
          console.log("axios error", error);
       });
+}
+
+// add an item
+export function addItemTo(parentId, newItemId) {
+   // server update
+   axios
+      .post(
+         "/api/v1/loadouts/insert?parentId=" +
+            parentId +
+            "&name=new%20item&newItemId=" +
+            newItemId
+      )
+      .then((res) => {
+         console.log("axios res", res);
+         newItemId = res.data;
+      })
+      .catch((error) => {
+         // handle error
+         console.log("axios error", error);
+      });
 
    // client side part (this is too keep what we see consistent with the database until it refreshes from the database)
-   refreshPage(parentId);
+
+   return newItemId; // returns the uuid for the new item
    // console.log("store", store);
    // // const newChildItems = store.childItems;
    // store.dispatch({
@@ -106,7 +100,7 @@ export function setItemStatus(item, newStatus) {
    // server update
    axios
       .post(
-         "http://localhost:3060/api/v1/loadouts/set-status?newStatus=" +
+         "/api/v1/loadouts/set-status?newStatus=" +
             newStatus +
             "&itemId=" +
             item.id
@@ -126,12 +120,12 @@ export function setItemStatus(item, newStatus) {
 }
 
 // delete an item
-export function deleteItem(item) {
-   console.log("deleting this item", item);
+export function deleteItem(itemId) {
+   console.log("deleting this item", itemId);
 
    // server update
    axios
-      .post("http://localhost:3060/api/v1/loadouts/delete?itemId=" + item.id)
+      .post("/api/v1/loadouts/delete?itemId=" + itemId)
       .then((res) => {
          console.log("axios res", res);
       })
@@ -141,5 +135,5 @@ export function deleteItem(item) {
       });
 
    // client side part (this is too keep what we see consistent with the database until it refreshes from the database)
-   refreshPage(item.parentId);
+   // refreshPage(item.parentId);
 }

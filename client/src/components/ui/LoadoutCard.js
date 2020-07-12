@@ -68,14 +68,18 @@ class LoadoutCard extends React.Component {
 
          <div
             className={classnames("loadout-card")}
-            id={"item-card-" + item.index}
+            id={"item-card-" + item.loadoutId}
          >
             <div>
                {/* <div className="float-left"> */}
                <Link
                   className="d-flex"
                   onClick={() => {
-                     movePageToDifferentItem(this.props.loadout.loadoutId, +1);
+                     movePageToDifferentItem(
+                        this.props.loadout.loadoutId,
+                        +1,
+                        this.props.loadout
+                     );
                   }}
                   to="/item-list"
                >

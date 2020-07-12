@@ -4,10 +4,12 @@ import currentUser from "./reducers/currentUser";
 import currentItem from "./reducers/currentItem";
 import childItems from "./reducers/childItems";
 import currentLevel from "./reducers/currentLevel";
+import currentUserLoadout from "./reducers/currentUserLoadout";
 
 export default combineReducers({
    currentUser,
    currentItem,
    childItems,
    currentLevel,
+   currentUserLoadout,
 });

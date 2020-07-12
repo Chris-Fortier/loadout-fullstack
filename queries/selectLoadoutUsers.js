@@ -2,7 +2,7 @@
 // test: http://localhost:3060/api/v1/loadout-users?loadoutId=42655170-7e10-4431-8d98-c2774f6414a4 shows all users who have access to "One-Night Camping Trip"
 const selectLoadoutUsers = `
    SELECT
-      users.email,
+      users.username,
       loadouts.name AS loadout_name,
       xref_user_loadouts.can_edit,
       xref_user_loadouts.can_pack,

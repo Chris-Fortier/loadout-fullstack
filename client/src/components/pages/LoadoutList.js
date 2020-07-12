@@ -134,7 +134,7 @@ class LoadoutList extends React.Component {
                                        //    slow, need to fix
                                        // </div>
                                        <>
-                                          {this.props.currentUser.email} does
+                                          {this.props.currentUser.username} does
                                           not have any loadouts.
                                        </>
                                     )}
@@ -160,7 +160,7 @@ class LoadoutList extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      currentLoadout: state.currentLoadout,
+      // currentLoadout: state.currentLoadout,
       currentUser: state.currentUser,
    };
 }

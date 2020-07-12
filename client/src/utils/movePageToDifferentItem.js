@@ -5,7 +5,11 @@ import axios from "axios";
 // this version uses changes the current item id in the store
 
 // move page to a different item
-export function movePageToDifferentItem(itemId, levelChange = 0) {
+export function movePageToDifferentItem(
+   itemId,
+   levelChange = 0,
+   newCurrentLoadout = null
+) {
    console.log("movePageToDifferentItem()...itemId:", itemId);
 
    if (itemId !== null) {
@@ -19,9 +23,18 @@ export function movePageToDifferentItem(itemId, levelChange = 0) {
          payload: [],
       });
 
+      // this stores the current user loadout, which has the user's permissions for this loadout
+      // this only happens when entering a new loadout
+      if (newCurrentLoadout !== null) {
+         store.dispatch({
+            type: actions.STORE_CURRENT_USER_LOADOUT,
+            payload: newCurrentLoadout,
+         });
+      }
+
       // this part gets data from the database
       axios
-         .get("/api/v1/item-info?itemId=" + itemId)
+         .get("/api/v1/loadouts/info?itemId=" + itemId)
          .then((res) => {
             // handle success
             console.log("setCurrentItem res.data[0]", res.data[0]);
@@ -40,7 +53,7 @@ export function movePageToDifferentItem(itemId, levelChange = 0) {
       // this.setState({ isEditMode: false, isShowingUnpackConfirmation: false }); // get out of edit mode if the current item changes
 
       axios
-         .get("/api/v1/child-items?itemId=" + itemId)
+         .get("/api/v1/loadouts/children?itemId=" + itemId)
          .then((res) => {
             // handle success
             console.log("queryChildItems res.data", res.data);
@@ -76,7 +89,7 @@ export function refreshPage(itemId) {
 
    // this part gets data from the database
    axios
-      .get("/api/v1/item-info?itemId=" + itemId)
+      .get("/api/v1/loadouts/info?itemId=" + itemId)
       .then((res) => {
          // handle success
          store.dispatch({
@@ -93,7 +106,7 @@ export function refreshPage(itemId) {
    // this.setState({ isEditMode: false, isShowingUnpackConfirmation: false }); // get out of edit mode if the current item changes
 
    axios
-      .get("/api/v1/child-items?itemId=" + itemId)
+      .get("/api/v1/loadouts/children?itemId=" + itemId)
       .then((res) => {
          // handle success
          console.log("queryChildItems res.data", res.data);

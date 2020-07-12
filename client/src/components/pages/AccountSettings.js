@@ -1,20 +1,9 @@
 import React from "react";
-// import { Link } from "react-router-dom"; // a React element for linking
-// import { EMAIL_REGEX } from "../../utils/helpers";
-// import { v4 as getUuid } from "uuid";
-// import hash from "object-hash";
-// import classnames from "classnames";
-// import {
-//    IconUserAdd,
-//    // IconUserCheck,
-//    // IconKey,
-//    // IconHome,
-//    // IconEdit,
-// } from "../../icons/icons.js";
+import { Link } from "react-router-dom"; // a React element for linking
 import { withRouter } from "react-router-dom"; // a React element for linking
-// import axios from "axios";
-// import actions from "../../store/actions";
 import { connect } from "react-redux";
+import { logOutCurrentUser } from "../../utils/helpers";
+import axios from "axios";
 
 class AccountSettings extends React.Component {
    constructor(props) {
@@ -24,7 +13,7 @@ class AccountSettings extends React.Component {
       // set default state values for each component
       // define a component's initial state
       this.state = {
-         hasEmailRollout: false,
+         hasUsernameRollout: false,
          hasPasswordRollout: false,
          hasDeleteRollout: false,
       };
@@ -42,9 +31,9 @@ class AccountSettings extends React.Component {
       window.scrollTo(0, 0); // sets focus to the top of the page
    }
 
-   toggleEmailRollout() {
-      console.log("toggleEmailRollout()...");
-      this.setState({ hasEmailRollout: !this.state.hasEmailRollout });
+   toggleUsernameRollout() {
+      console.log("toggleUsernameRollout()...");
+      this.setState({ hasUsernameRollout: !this.state.hasUsernameRollout });
    }
 
    togglePasswordRollout() {
@@ -57,9 +46,39 @@ class AccountSettings extends React.Component {
       this.setState({ hasDeleteRollout: !this.state.hasDeleteRollout });
    }
 
+   deleteUser(userId) {
+      console.log("deleting user", { userId });
+
+      // first we need to delte all of this user's user loadouts
+      axios
+         .post("/api/v1/user-loadouts/delete-all-by-user?userId=" + userId)
+         .then((res) => {
+            console.log("axios res", res);
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
+
+      // then we can delete the user
+      axios
+         .post("/api/v1/users/delete?userId=" + userId)
+         .then((res) => {
+            console.log("axios res", res);
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
+
+      logOutCurrentUser(this.props);
+
+      this.props.history.push("/"); // send to landing page
+   }
+
    render() {
       return (
-         <div className="background-image">
+         <div className="landing-bg-2">
             <div className="container-fluid landing-page">
                <div className="row">
                   <div
@@ -71,48 +90,52 @@ class AccountSettings extends React.Component {
                         marginBottom: "50px",
                      }}
                   >
-                     <h1 className="mt-5 text-white">Account Settings</h1>
-                     <div className="card mb-3">
+                     {/* <h1 className="mt-5 text-white">Account Settings</h1> */}
+                     <div className="card mt-8 mb-3">
                         <div className="card-body">
-                           <h5>chris@gmail.com</h5>
+                           <h5>
+                              Account Settings for&nbsp;
+                              {this.props.currentUser.username}
+                           </h5>
                            <div className="card-section">
                               <span
                                  className="button navigation-link w-100"
-                                 onClick={() => this.toggleEmailRollout()}
+                                 onClick={() => this.toggleUsernameRollout()}
                               >
-                                 Change Your Email
+                                 Change Your Username
                               </span>
-                              {this.state.hasEmailRollout && (
+                              {this.state.hasUsernameRollout && (
                                  <>
                                     <label
                                        className="my-input-label form-label"
-                                       for="new-email"
+                                       htmlFor="new-username"
                                     >
-                                       Enter your new email address
+                                       Enter your new username
                                     </label>
                                     <input
-                                       type="email"
                                        className="my-input"
-                                       value="chris@gmail.com"
-                                       id="new-email"
+                                       value={this.props.currentUser.username}
+                                       id="new-username"
                                     />
                                     <label
                                        className="my-input-label form-label"
-                                       for="password-for-email-change"
+                                       htmlFor="password-for-username-change"
                                     >
                                        Enter your password
                                     </label>
                                     <input
                                        type="password"
                                        className="my-input"
-                                       id="password-for-email-change"
+                                       id="password-for-username-change"
                                     />
                                     <div className="button primary-action-button">
-                                       Confirm Email Change
+                                       Confirm Username Change
                                     </div>
                                     <div
                                        className="button navigation-link"
-                                       onClick={() => this.toggleEmailRollout()}
+                                       onClick={() =>
+                                          this.toggleUsernameRollout()
+                                       }
                                     >
                                        Cancel
                                     </div>
@@ -129,7 +152,7 @@ class AccountSettings extends React.Component {
                               {this.state.hasPasswordRollout && (
                                  <>
                                     <label
-                                       for="old-password"
+                                       htmlFor="old-password"
                                        className="my-input-label form-label"
                                     >
                                        Enter your old password
@@ -140,7 +163,7 @@ class AccountSettings extends React.Component {
                                        id="old-password"
                                     />
                                     <label
-                                       for="new-password"
+                                       htmlFor="new-password"
                                        className="my-input-label form-label"
                                     >
                                        Enter your new password
@@ -178,8 +201,17 @@ class AccountSettings extends React.Component {
                                        all the loadouts that are not shared with
                                        anyone else.
                                     </p>
-                                    <div className="button danger-action-button">
-                                       Confirm Account Delete
+                                    <div
+                                       className="button danger-action-button"
+                                       onClick={() =>
+                                          this.deleteUser(
+                                             this.props.currentUser.id
+                                          )
+                                       }
+                                    >
+                                       Confirm Delete of
+                                       <br />
+                                       {this.props.currentUser.username}
                                     </div>
                                     <div
                                        className="button navigation-link"
@@ -201,9 +233,13 @@ class AccountSettings extends React.Component {
                               Back to Loadout
                            </button>
                            {/* </div> */}
-                           <div className="button primary-action-button">
-                              Log Out
-                           </div>
+                           <Link
+                              to="/"
+                              className="button primary-action-button"
+                              onClick={() => logOutCurrentUser(this.props)}
+                           >
+                              Log Out&nbsp;{this.props.currentUser.username}
+                           </Link>
                         </div>
                      </div>
                   </div>

@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../ui/Header";
 import { connect } from "react-redux";
 import UserLoadoutSettings from "../ui/UserLoadoutSettings";
-import { IconArrowThinLeftCircle, IconTrash } from "../../icons/icons.js";
+import { IconArrowThinLeftCircle } from "../../icons/icons.js";
 import { Link } from "react-router-dom"; // a React element for linking
 import axios from "axios";
 import { UI_APPEARANCE } from "../../utils/helpers";
@@ -14,6 +14,26 @@ class LoadoutSharing extends React.Component {
 
       console.log("this.props", this.props);
 
+      this.refreshPage();
+
+      // set default state values
+
+      this.state = {
+         loadoutUsers: [],
+         addUserError: "", // stores the error message when trying to add a user to this loadout
+         hasAddUserError: false, // stores whether there is an error when trying to add a user to this loadout
+      };
+
+      // if the user finds themselves on this page but they are not logged in, send them to the landing page
+      // TODO, this is duplicated code
+      if (JSON.stringify(this.props.currentUser) === JSON.stringify({})) {
+         console.log("There is no user object, kicking to landing page.");
+         this.props.history.push("/");
+      }
+   }
+
+   refreshPage() {
+      console.log("refreshing page...");
       axios
          .get("/api/v1/loadout-users?loadoutId=" + this.props.currentItem.id)
          .then((res) => {
@@ -28,19 +48,81 @@ class LoadoutSharing extends React.Component {
             // handle error
             console.log("axios error", error);
          });
+   }
 
-      // set default state values
+   // give an existing user access to this loadout
+   // if the user doesn't already have access
+   // insert a new userLoadout into the database with the permissions indicated
+   // else
+   // display a message saying "This loadout is already shared with _"
 
-      this.state = {
-         loadoutUsers: [],
-      };
+   // update permissions for a user
+   // (this happens whenever a checkbox is clicked)
 
-      // if the user finds themselves on this page but they are not logged in, send them to the landing page
-      // TODO, this is duplicated code
-      if (JSON.stringify(this.props.currentUser) === JSON.stringify({})) {
-         console.log("There is no user object, kicking to landing page.");
-         this.props.history.push("/");
-      }
+   // delete a user's access
+   // delete the userLoadout from the database
+
+   // creates a new user loadout if possible given a user username and a loadout id
+   async validateAndAddUserLoadout(
+      username,
+      loadoutId,
+      canEdit = 0,
+      canPack = 0,
+      isAdmin = 0
+   ) {
+      // convert booleans to numbers
+      if (canEdit === false) canEdit = 0;
+      if (canEdit === true) canEdit = 1;
+      if (canPack === false) canPack = 0;
+      if (canPack === true) canPack = 1;
+      if (isAdmin === false) isAdmin = 0;
+      if (isAdmin === true) isAdmin = 1;
+
+      console.log("validateAndAddUserLoadout()...", {
+         username,
+         loadoutId,
+         canEdit,
+         canPack,
+         isAdmin,
+      });
+
+      // post to API
+      axios
+         .post(
+            "/api/v1/user-loadouts/insert?username=" +
+               username +
+               "&loadoutId=" +
+               loadoutId +
+               "&canEdit=" +
+               canEdit +
+               "&canPack=" +
+               canPack +
+               "&isAdmin=" +
+               isAdmin
+         )
+         .then((res) => {
+            console.log("res.data", res.data);
+
+            // remove error if there is one
+            this.setState({ hasAddUserError: false, addUserError: "" });
+
+            // clear the add user username field
+            document.getElementById("add-user-username-input").value = "";
+
+            this.refreshPage(); // refresh page to see the change
+         })
+         .catch((err) => {
+            const data = err.response.data;
+            console.log("err", data);
+            const { addUserError } = data;
+
+            // push username error to state
+            if (addUserError !== "") {
+               this.setState({ hasAddUserError: true, addUserError });
+            } else {
+               this.setState({ hasAddUserError: false, addUserError });
+            }
+         });
    }
 
    render() {
@@ -79,7 +161,7 @@ class LoadoutSharing extends React.Component {
                                                    scope="col"
                                                    className="display-switch-label"
                                                 >
-                                                   Shared with Email
+                                                   Shared with Username
                                                 </th>
                                                 <th
                                                    scope="col"
@@ -119,12 +201,28 @@ class LoadoutSharing extends React.Component {
                                              <tr>
                                                 <th scope="row">
                                                    <input
-                                                      type="email"
-                                                      className="edit-name"
-                                                      id="exampleInputEmail1"
-                                                      aria-describedby="emailHelp"
-                                                      placeholder="Enter email"
+                                                      className={classnames({
+                                                         "my-input": true,
+                                                         "input-invalid": this
+                                                            .state
+                                                            .hasAddUserError,
+                                                      })}
+                                                      id="add-user-username-input"
+                                                      aria-describedby="UsernameHelp"
+                                                      placeholder="Enter another user's username"
                                                    />
+                                                   {this.state
+                                                      .hasAddUserError && (
+                                                      <div
+                                                         className="text-danger"
+                                                         id="add-user-error"
+                                                      >
+                                                         {
+                                                            this.state
+                                                               .addUserError
+                                                         }
+                                                      </div>
+                                                   )}
                                                 </th>
                                                 <td>
                                                    <div className="custom-control custom-checkbox">
@@ -132,15 +230,13 @@ class LoadoutSharing extends React.Component {
                                                          type="checkbox"
                                                          className="custom-control-input"
                                                          id={
-                                                            "can-edit-switch-" +
-                                                            this.props.id
+                                                            "new-can-edit-switch"
                                                          }
                                                       />
                                                       <label
                                                          className="custom-control-label"
                                                          htmlFor={
-                                                            "can-edit-switch-" +
-                                                            this.props.id
+                                                            "new-can-edit-switch"
                                                          }
                                                       ></label>
                                                    </div>
@@ -151,15 +247,13 @@ class LoadoutSharing extends React.Component {
                                                          type="checkbox"
                                                          className="custom-control-input"
                                                          id={
-                                                            "can-pack-switch-" +
-                                                            this.props.id
+                                                            "new-can-pack-switch"
                                                          }
                                                       />
                                                       <label
                                                          className="custom-control-label"
                                                          htmlFor={
-                                                            "can-pack-switch-" +
-                                                            this.props.id
+                                                            "new-can-pack-switch"
                                                          }
                                                       ></label>
                                                    </div>
@@ -170,15 +264,13 @@ class LoadoutSharing extends React.Component {
                                                          type="checkbox"
                                                          className="custom-control-input"
                                                          id={
-                                                            "admin-switch-" +
-                                                            this.props.id
+                                                            "new-is-admin-switch"
                                                          }
                                                       />
                                                       <label
                                                          className="custom-control-label"
                                                          htmlFor={
-                                                            "admin-switch-" +
-                                                            this.props.id
+                                                            "new-is-admin-switch"
                                                          }
                                                       ></label>
                                                    </div>
@@ -192,11 +284,33 @@ class LoadoutSharing extends React.Component {
                                                          "dark" && "icon-dark"
                                                    )}
                                                 >
-                                                   <IconTrash />
+                                                   <div
+                                                      className="button primary-action-button"
+                                                      onClick={() =>
+                                                         this.validateAndAddUserLoadout(
+                                                            document.getElementById(
+                                                               "add-user-username-input"
+                                                            ).value,
+                                                            this.props
+                                                               .currentItem.id,
+                                                            document.getElementById(
+                                                               "new-can-edit-switch"
+                                                            ).checked,
+                                                            document.getElementById(
+                                                               "new-can-pack-switch"
+                                                            ).checked,
+                                                            document.getElementById(
+                                                               "new-is-admin-switch"
+                                                            ).checked
+                                                         )
+                                                      }
+                                                   >
+                                                      Add
+                                                   </div>
                                                 </td>
                                              </tr>
                                           </tbody>
-                                       </table>{" "}
+                                       </table>
                                     </div>
                                  </>
                               </div>

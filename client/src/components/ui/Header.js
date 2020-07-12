@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
-import actions from "../../store/actions";
 import LoadoutLogoSmall from "../../logo/loadout-small.svg";
+import { logOutCurrentUser } from "../../utils/helpers";
 
 // export default function Header() {
 class Header extends React.Component {
@@ -13,20 +13,6 @@ class Header extends React.Component {
       this.state = {
          rollout: "none", // which rollout is active, either "Loadout", "Account" or "none"
       };
-   }
-
-   // log out of the current user
-   logOutCurrentUser() {
-      console.log("logOutCurrentUser()...");
-      this.props.dispatch({
-         type: actions.UPDATE_CURRENT_USER,
-         payload: {},
-      });
-      // also remove the store of the loadout
-      this.props.dispatch({
-         type: actions.CLEAR_CURRENT_LOADOUT,
-         payload: {},
-      });
    }
 
    toggleLoadoutRollout() {
@@ -66,16 +52,6 @@ class Header extends React.Component {
    renderAccountRollout() {
       return (
          <>
-            {/* <div className="row">
-               <div className="col">
-                  <p className="float-right">username12345</p>
-               </div>
-            </div> */}
-            <div className="row">
-               <div className="col">
-                  <p className="float-right">name@gmail.com</p>
-               </div>
-            </div>
             <div className="row">
                <div className="col">
                   <Link
@@ -91,7 +67,7 @@ class Header extends React.Component {
                   <Link
                      to="/"
                      className="btn btn-link float-right"
-                     onClick={() => this.logOutCurrentUser()}
+                     onClick={() => logOutCurrentUser(this.props)}
                   >
                      Log Out
                   </Link>
@@ -100,20 +76,6 @@ class Header extends React.Component {
          </>
       );
    }
-
-   // // renders a rollout for either Loadout or About, its a wrapper for both
-   // renderRollout() {
-   //    return (
-   //       // <div className="row">
-   //       //    <div className="col">
-   //       <>
-   //          {this.state.rollout === "Loadout" && this.renderLoadoutRollout()}
-   //          {this.state.rollout === "Account" && this.renderAccountRollout()}
-   //       </>
-   //       //    </div>
-   //       // </div>
-   //    );
-   // }
 
    render() {
       return (
@@ -138,7 +100,7 @@ class Header extends React.Component {
                      onClick={() => this.toggleAccountRollout()}
                      className="btn btn-link float-right"
                   >
-                     Account
+                     {this.props.currentUser.username}
                   </button>
                </div>
             </div>
@@ -153,6 +115,7 @@ class Header extends React.Component {
 function mapStateToProps(state) {
    return {
       // put all the things in state we need access to in this component
+      currentUser: state.currentUser,
    };
 }
 
