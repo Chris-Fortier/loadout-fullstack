@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"; // a React element for linking
 import { withRouter } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
 import { logOutCurrentUser } from "../../utils/helpers";
+import axios from "axios";
 
 class AccountSettings extends React.Component {
    constructor(props) {
@@ -43,6 +44,34 @@ class AccountSettings extends React.Component {
    toggleDeleteRollout() {
       console.log("toggleDeleteRollout()...");
       this.setState({ hasDeleteRollout: !this.state.hasDeleteRollout });
+   }
+
+   deleteUser(userId) {
+      console.log("deleting user", { userId });
+
+      // first we need to delte all of this user's user loadouts
+      axios
+         .post("/api/v1/user-loadouts/delete-all-by-user?userId=" + userId)
+         .then((res) => {
+            console.log("axios res", res);
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
+
+      // then we can delete the user
+      axios
+         .post("/api/v1/users/delete?userId=" + userId)
+         .then((res) => {
+            console.log("axios res", res);
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
+
+      this.props.history.push("/"); // send to landing page
    }
 
    render() {
@@ -170,8 +199,16 @@ class AccountSettings extends React.Component {
                                        all the loadouts that are not shared with
                                        anyone else.
                                     </p>
-                                    <div className="button danger-action-button">
-                                       Confirm Delete of&nbsp;
+                                    <div
+                                       className="button danger-action-button"
+                                       onClick={() =>
+                                          this.deleteUser(
+                                             this.props.currentUser.id
+                                          )
+                                       }
+                                    >
+                                       Confirm Delete of
+                                       <br />
                                        {this.props.currentUser.username}
                                     </div>
                                     <div

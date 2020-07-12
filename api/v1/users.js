@@ -5,6 +5,7 @@ const db = require("../../db");
 const insertUser = require("../../queries/insertUser");
 const selectUserById = require("../../queries/selectUserById");
 const selectUserByUsername = require("../../queries/selectUserByUsername");
+const deleteUser = require("../../queries/deleteUser");
 const { toHash } = require("../../utils/helpers");
 const getSignUpUsernameError = require("../../validation/getSignUpUsernameError");
 const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
@@ -66,7 +67,7 @@ router.post("/", async (req, res) => {
    }
 });
 
-// @route      POST api/v1/auth
+// @route      POST api/v1/users/auth
 // @desc       Check this user against the db via username and password
 // @access     Public
 router.post("/auth", async (req, res) => {
@@ -99,6 +100,25 @@ router.post("/auth", async (req, res) => {
       // return a 400 error to user
       res.status(400).json({ loginUsernameError, loginPasswordError });
    }
+});
+
+// @route      POST api/v1/users/delete
+// @desc       Delete an existing user
+// @access     Public
+// test:
+router.post("/delete", async (req, res) => {
+   const { userId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+   console.log({ userId });
+
+   db.query(deleteUser, [userId])
+      .then((dbRes) => {
+         console.log("dbRes", dbRes);
+         res.status(200).json("User deleted");
+      })
+      .catch((err) => {
+         console.log("err", err);
+         res.status(400).json(err);
+      });
 });
 
 module.exports = router;

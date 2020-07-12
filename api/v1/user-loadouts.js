@@ -5,6 +5,7 @@ const db = require("../../db");
 const selectUserLoadouts = require("../../queries/selectUserLoadouts");
 const insertUserLoadout = require("../../queries/insertUserLoadout");
 const deleteUserLoadout = require("../../queries/deleteUserLoadout");
+const deleteUserLoadoutsByUser = require("../../queries/deleteUserLoadoutsByUser");
 const {
    getContentSummary,
    getUserIdByUsername,
@@ -133,6 +134,24 @@ router.post("/delete", async (req, res) => {
       .catch((err) => {
          console.log("err", err);
          res.status(400).json({ dbError });
+      });
+});
+
+// @route      POST api/v1/user-loadouts/delete-all-by-user
+// @desc       Delete all the user loadouts of a user (needed before deleting a user)
+// @access     Public
+// test: http://localhost:3060/api/v1/user-loadouts/delete-all-by-user?userId=6a175ea6-335c-4328-8989-7f25467f54a0
+router.post("/delete-all-by-user", async (req, res) => {
+   const { userId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+
+   db.query(deleteUserLoadoutsByUser, [userId])
+      .then((dbRes) => {
+         console.log("dbRes", dbRes);
+         res.status(200).json("all user-loadouts of a user deleted");
+      })
+      .catch((err) => {
+         console.log("err", err);
+         res.status(400).json(err);
       });
 });
 
