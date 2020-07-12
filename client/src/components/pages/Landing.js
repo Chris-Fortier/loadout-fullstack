@@ -281,7 +281,7 @@ class Landing extends React.Component {
                </p> */}
                <input
                   id="signup-username-input"
-                  placeholder="Enter Your Username"
+                  placeholder="Enter A Username"
                   required
                   className={classnames({
                      "my-input": true,
