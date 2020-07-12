@@ -16,12 +16,14 @@ const selectChildItems = require("../../queries/selectChildItems");
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/insert?parentId=e109827f-4bfa-4384-9ac9-979776d2512b&name=newTestItem
 router.post("/insert", async (req, res) => {
-   const { parentId, name } = req.query; // destructuring to simplify code below, grabbing variables from req.body
-   console.log({ parentId, name });
+   const { parentId, name, newItemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+   console.log({ parentId, name, newItemId });
    // console.log("uuid", uuid.v4());
 
+   // newItemId = uuid.v4();
+
    const newItem = {
-      id: uuid.v4(), // generate a uuid
+      id: newItemId, // use the uuid generated client side
       name: name, // use given value for parent
       parent_id: parentId, // use given value for parent
       status: 0, // default status to zero (unpacked)
@@ -33,7 +35,7 @@ router.post("/insert", async (req, res) => {
    db.query(insertItem, newItem)
       .then((dbRes) => {
          console.log("dbRes", dbRes);
-         res.status(200).json("New item created");
+         res.status(200).json(newItemId);
       })
       .catch((err) => {
          console.log("err", err);

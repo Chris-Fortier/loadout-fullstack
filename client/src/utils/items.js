@@ -58,12 +58,18 @@ export function renameItem(item, newName) {
 }
 
 // add an item
-export function addItemTo(parentId) {
+export function addItemTo(parentId, newItemId) {
    // server update
    axios
-      .post("/api/v1/loadouts/insert?parentId=" + parentId + "&name=new%20item")
+      .post(
+         "/api/v1/loadouts/insert?parentId=" +
+            parentId +
+            "&name=new%20item&newItemId=" +
+            newItemId
+      )
       .then((res) => {
          console.log("axios res", res);
+         newItemId = res.data;
       })
       .catch((error) => {
          // handle error
@@ -71,7 +77,8 @@ export function addItemTo(parentId) {
       });
 
    // client side part (this is too keep what we see consistent with the database until it refreshes from the database)
-   refreshPage(parentId);
+
+   return newItemId; // returns the uuid for the new item
    // console.log("store", store);
    // // const newChildItems = store.childItems;
    // store.dispatch({

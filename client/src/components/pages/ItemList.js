@@ -31,7 +31,10 @@ import ItemCard from "../ui/ItemCard";
 import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
-import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
+import {
+   movePageToDifferentItem,
+   // refreshPage,
+} from "../../utils/movePageToDifferentItem";
 import {
    // getItemFromPath,
    // getParentItemFromPath,
@@ -39,6 +42,7 @@ import {
    addItemTo,
    // addContainerTo,
 } from "../../utils/items";
+import { v4 as getUuid } from "uuid";
 
 // ItemList2 is an alternate version that queries a single item's children to display from the database
 
@@ -239,6 +243,39 @@ class ItemList2 extends React.Component {
    toggleEditMode() {
       this.setState({ isEditMode: !this.state.isEditMode });
       this.hideUnpackConfirmation();
+   }
+
+   // adds a new item on the server, refreshes the page and focues on the text of the new item
+   async addItemAndFocus() {
+      const newItemId = getUuid(); // get the uuid client side that way it is easier to reference the id of the input element
+      const otherId = await addItemTo(this.props.currentItem.id, newItemId); // add an item as a child of the current item
+      console.log({ otherId });
+      // refreshPage(this.props.currentItem.parentId); // refresh the page AFTER we generate the new item and before we set the focus on the new element
+      const inputElementId = "edit-name-input-" + newItemId;
+      console.log({ inputElementId });
+
+      // add a new card for the new item without refreshing page
+      const newChildItems = [
+         ...this.props.childItems,
+         {
+            name: "newestest item",
+            id: newItemId,
+            status: 0,
+            parentId: this.props.currentItem.id,
+            numChildren: 0,
+            numPackedChildren: 0,
+            numUnpackedChildren: 0,
+            contentSummary: "ready",
+         },
+      ];
+      this.props.dispatch({
+         type: actions.STORE_CHILD_ITEMS,
+         payload: newChildItems,
+      });
+
+      const input = document.getElementById(inputElementId);
+      input.focus();
+      input.select();
    }
 
    // this unpacks all a given item's children and all their descendants
@@ -682,7 +719,7 @@ class ItemList2 extends React.Component {
                                     <div
                                        className="button primary-action-button"
                                        onClick={(e) => {
-                                          addItemTo(this.props.currentItem.id);
+                                          this.addItemAndFocus();
                                        }}
                                     >
                                        Add Item
