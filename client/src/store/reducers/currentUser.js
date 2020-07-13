@@ -1,6 +1,5 @@
-// this file copied from white bear
-
 import actions from "../actions";
+import isEmpty from "lodash/isEmpty";
 
 export default function currentUser(currentUser = {}, action) {
    // default for state is an empty object
@@ -9,7 +8,11 @@ export default function currentUser(currentUser = {}, action) {
 
    switch (action.type) {
       case actions.UPDATE_CURRENT_USER:
-         return action.payload;
+         // remove the auth token when they log out
+         if (isEmpty(action.payload)) {
+            localStorage.removeItem("authToken");
+         }
+         return action.payload; // if its empty or not, return it to the redux store
       default:
          return currentUser;
    }

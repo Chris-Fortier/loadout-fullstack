@@ -15,6 +15,7 @@ import actions from "../../store/actions";
 import { connect } from "react-redux";
 import LoadoutLogo from "../../logo/loadout.svg";
 // import { NUM_BACKGROUNDS } from "../../utils/helpers";
+import jwtDecode from "jwt-decode";
 
 // export default function Landing() {
 class Landing extends React.Component {
@@ -71,19 +72,26 @@ class Landing extends React.Component {
       axios
          .post("/api/v1/users/auth", user)
          .then((res) => {
-            // handle success
-            // update currentUser in global state with API response
+            // set token in localStorage
+            const authToken = res.data.accessToken;
+            localStorage.setItem("authToken", authToken);
+            console.log("authToken", authToken);
+
+            const user = jwtDecode(authToken); // decode the user from the access token
+
+            // send the user to Redux
             this.props.dispatch({
                type: actions.UPDATE_CURRENT_USER,
-               payload: res.data,
+               payload: user,
             });
             // go to next page
             this.props.history.push("/loadout-list");
             window.scrollTo(0, 0); // sets focus to the top of the page
          })
          .catch((err) => {
-            const data = err.response.data;
-            console.log("err.response.data", data);
+            console.log("err", err);
+            const { data } = err.response;
+            console.log("data", data);
             const { loginUsernameError, loginPasswordError } = data;
 
             // push username error to state

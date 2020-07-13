@@ -1,4 +1,5 @@
 // The users resource
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
@@ -11,6 +12,7 @@ const getSignUpUsernameError = require("../../validation/getSignUpUsernameError"
 const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
 const getLoginUsernameError = require("../../validation/getLoginUsernameError");
 const getLoginPasswordError = require("../../validation/getLoginPasswordError");
+const jwt = require("jsonwebtoken");
 
 // @route      POST api/v1/users (going to post one thing to this list of things)
 // @desc       Create a new user
@@ -82,12 +84,22 @@ router.post("/auth", async (req, res) => {
       // return the user to the client
       db.query(selectUserByUsername, username)
          .then((users) => {
-            const user = users[0]; // the user is the first user in the array of 1 item
-            res.status(200).json({
-               id: user.id,
-               username: user.username,
-               createdAt: user.created_at,
+            // TODO: repeat when creating a user
+            // what the user is
+            // the user is the first user in the array of 1 item (users[0])
+            const user = {
+               id: users[0].id,
+               username: users[0].username,
+               createdAt: users[0].created_at,
+            };
+
+            // this contains the user, a secret and the timeframe
+            // 1m fopr testing, could be longer like 3h, 7d etc
+            const accessToken = jwt.sign(user, process.env.JWT_ACCESS_SECRET, {
+               expiresIn: "1m",
             });
+
+            res.status(200).json({ accessToken }); // instead of passing the user as the response, pass the access token
             // this then statement is executing a side-effect
          })
          .catch((err) => {
