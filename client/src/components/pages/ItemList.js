@@ -33,6 +33,7 @@ import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
 import {
    movePageToDifferentItem,
+   refreshPage,
    // refreshPage,
 } from "../../utils/movePageToDifferentItem";
 import {
@@ -41,6 +42,7 @@ import {
    renameItem,
    addItemTo,
    // addContainerTo,
+   setDescendantsStatus,
 } from "../../utils/items";
 import { v4 as getUuid } from "uuid";
 
@@ -83,41 +85,8 @@ class ItemList2 extends React.Component {
       // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
       const currentItem = this.props.currentItem; // to simplify code below
 
-      // TODO this doesn't work currently
-
-      // let itemsText = "";
-      // if (currentItem.numPackedChildren > 1) {
-      //    itemsText = currentItem.numPackedChildren + " items";
-      // } else if (currentItem.numPackedChildren === 1) {
-      //    itemsText = "1 item";
-      // }
-
-      // const numSubItems =
-      //    currentItem.numPackedDescendants - currentItem.numPackedChildren;
-
-      // let subItemsText = "";
-      // if (numSubItems > 1) {
-      //    subItemsText = numSubItems + " subitems";
-      // } else if (numSubItems === 1) {
-      //    subItemsText = "1 subitem";
-      // }
-
-      // // set up the text of the unpack children button if there are packed children
-      // let unpackChildrenText = "";
-      // if (itemsText !== "") {
-      //    unpackChildrenText = "unpack " + itemsText;
-      // }
-
-      // // set up the text of the unpack descendants button if there are packed descendants
-      // let unpackDescendantsText = "";
-      // if (itemsText !== "" && subItemsText !== "") {
-      //    unpackDescendantsText = "unpack " + itemsText + " and " + subItemsText;
-      // } else if (subItemsText !== "") {
-      //    unpackDescendantsText = "unpack " + subItemsText;
-      // }
-
       const unpackDescendantsText =
-         "Unpack all 141 items and subitems inside " + currentItem.name;
+         "Unpack all items and subitems inside " + currentItem.name;
 
       return (
          <div>
@@ -135,9 +104,9 @@ class ItemList2 extends React.Component {
             {unpackDescendantsText !== "" && (
                <div
                   className="button primary-action-button"
-                  // onClick={(e) => {
-                  //    this.confirmUnpackDescendants();
-                  // }}
+                  onClick={(e) => {
+                     this.confirmUnpackDescendants();
+                  }}
                >
                   {unpackDescendantsText}
                </div>
@@ -157,18 +126,32 @@ class ItemList2 extends React.Component {
       );
    }
 
+   // unpack all descendants of the current item
    confirmUnpackDescendants() {
-      this.unpackDescendants(this.props.currentLoadout.itemIndexPath); // unpack all descendants of the current item
+      // update the database
+      setDescendantsStatus(this.props.currentItem.id, 0); // 0 is unpacked status
 
-      // put the data back into the store
+      // // update the data in props (this is what makes the change appear in the ui)
+      // const newChildItems = [...this.props.childItems];
+      // for (let c in newChildItems) {
+      //    newChildItems[c].status = 0;
+      // }
+      // console.log("newChildItems", newChildItems);
+      // // newChildItems = newChildItems.map((child) => {
+      // //    child.status = 0;
+      // //    return child;
+      // // });
+
+      // // now update the store
       // this.props.dispatch({
-      //    type: actions.STORE_CURRENT_LOADOUT,
-      //    payload: this.props.currentLoadout.gear,
+      //    type: actions.STORE_CHILD_ITEMS,
+      //    payload: newChildItems,
       // });
-
-      processAllItems(this.props.currentLoadout.gear);
+      // // this.forceUpdate();
 
       this.hideUnpackConfirmation(); // close the message
+
+      refreshPage(this.props.currentItem.id);
    }
 
    confirmUnpackChildren() {
@@ -306,44 +289,6 @@ class ItemList2 extends React.Component {
       }
    }
 
-   // this unpacks all a given item's children and all their descendants
-   unpackDescendants(itemIndexPath) {
-      console.log("unpackDescendants()...");
-      // console.log("unpacking", item.name);
-      // for (let i in item.items) {
-      //    item.items[i].isPacked = false;
-      //    if (item.items[i].hasOwnProperty("items")) {
-      //       // unpack all this item's items and so on
-      //       this.unpackDescendants(item.items[i]);
-      //    }
-      // }
-      // this.setState({ currentItem: item });
-
-      console.log("itemIndexPath", itemIndexPath);
-
-      // get the actual item I want to change based on the index path
-      let copyOfGear = this.props.currentLoadout.gear;
-      let currentItem = copyOfGear;
-      for (let i in itemIndexPath) {
-         currentItem = currentItem.items[itemIndexPath[i]]; // go one lever deeper for each index in itemIndexPath
-      }
-      console.log("name of target item:", currentItem.name);
-
-      // copyOfGear.items[0].items[1].isPacked = !copyOfGear.items[0].items[1]
-      //    .isPacked;
-      for (let childIndex in currentItem.items) {
-         currentItem.items[childIndex].isPacked = false;
-         if (currentItem.items[childIndex].hasOwnProperty("items")) {
-            // unpack all this item's items and so on
-            // console.log("childIndex:", childIndex);
-            // console.log("itemIndexPath:", itemIndexPath);
-            // const newItemIndexPath = itemIndexPath.push(childIndex);
-            // console.log("newItemIndexPath:", newItemIndexPath);
-            this.unpackDescendants([...itemIndexPath, childIndex]);
-         }
-      }
-   }
-
    // this unpacks all a given item's children
    unpackChildren(itemIndexPath) {
       console.log("unpackChildren()...");
@@ -378,56 +323,6 @@ class ItemList2 extends React.Component {
 
       processAllItems(this.props.currentLoadout.gear);
    }
-
-   // // sets the name of the current item (the item which the entire page is currently the focus of)
-   // setCurrentItemName(e) {
-   //    const currentItem = this.getItemFromStore();
-   //    console.log("rename " + currentItem.name + " to " + e.target.value);
-   //    // let itemDataCopy = this.state.currentItem; // copy itemsData from state to local
-   //    // itemDataCopy.name = e.target.value; // change the desired item's name to match input
-   //    // this.setState({ currentItem: itemDataCopy }); // makes it update the input that the user can see
-   // }
-
-   // renderContainingItems(parentItem) {
-   //    const items = parentItem.items; // to simplify code below
-
-   //    console.log("Rendering containing items of", parentItem.name);
-
-   //    let displayedItems = items; // initialize a new list for displayed items
-
-   //    displayedItems = orderBy(displayedItems, "name", "asc"); // sort the items by name
-   //    // displayedItems = items;
-
-   //    // order by which items have the most unpacked subitems
-   //    // displayedItems = orderBy(displayedItems, "numUnpackedDescendants", "asc");
-
-   //    // sort the items by packed status if desired, with packed items on bottom
-   //    if (this.state.isPackedOnBottom) {
-   //       displayedItems = orderBy(displayedItems, "isPacked", "asc");
-   //    }
-
-   //    // hide packed items if desired
-   //    if (this.state.isShowingPacked === false) {
-   //       displayedItems = displayedItems.filter(
-   //          (item) => item.isPacked === false
-   //       ); // keep only the unpacked items
-   //    }
-
-   //    console.log("displayedItems:", displayedItems);
-   //    // render each sub item
-
-   //    if (this.state.isEditMode) {
-   //       // do edit mode version of item cards
-   //       return displayedItems.map((item) => (
-   //          <ItemCardEdit item={item} key={item.id} />
-   //       ));
-   //    } else {
-   //       // do packing mode version of item cards
-   //       return displayedItems.map((item) => (
-   //          <ItemCard item={item} key={item.id} />
-   //       ));
-   //    }
-   // }
 
    render() {
       console.log("Rendering page...");

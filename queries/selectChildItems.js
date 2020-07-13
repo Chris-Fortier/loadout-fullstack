@@ -1,4 +1,3 @@
-// returns the loadouts that a given user has access to
 // test: http://localhost:3060/api/v1/loadouts/children/?itemId=41b9bde9-4731-44d2-b471-d46d21aca680 shows all items inside daypack
 
 // this version also gets the number of child items each child item has

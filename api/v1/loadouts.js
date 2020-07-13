@@ -8,8 +8,10 @@ const deleteItem = require("../../queries/deleteItem");
 const setItemName = require("../../queries/setItemName");
 const setItemStatus = require("../../queries/setItemStatus");
 const selectItemInfo = require("../../queries/selectItemInfo");
+const setLoadoutDescendantsStatus = require("../../queries/setLoadoutDescendantsStatus");
 const { getContentSummary } = require("../../utils/helpers");
 const selectChildItems = require("../../queries/selectChildItems");
+const selectLoadoutDescendants = require("../../queries/selectLoadoutDescendants");
 
 // @route      POST api/v1/loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new item
@@ -223,6 +225,44 @@ router.get("/children", (req, res) => {
       .catch((err) => {
          // report error
          console.log(err);
+         res.status(400).json(err);
+      });
+});
+
+// @route      GET api/v1/loadouts/select-descendants
+// @desc       set the status of all an item's or loadout's descendants something
+// @access     Public
+// test: http://localhost:3060/api/v1/loadouts/select-descendants?newStatus=1&itemId=41b9bde9-4731-44d2-b471-d46d21aca680
+router.get("/select-descendants", (req, res) => {
+   db.query(selectLoadoutDescendants, [req.query.itemId])
+      // db.query(setItemStatus, [req.query.itemId])
+      .then((dbRes) => {
+         console.log("dbRes", dbRes);
+         res.status(200).json(dbRes);
+      })
+      .catch((err) => {
+         console.log("esrr", err);
+         res.status(400).json(err);
+      });
+});
+
+// @route      POST api/v1/loadouts/set-descendants-status
+// @desc       set the status of all an item's or loadout's descendants something
+// @access     Public
+// test: http://localhost:3060/api/v1/loadouts/set-descendants-status?newStatus=1&itemId=41b9bde9-4731-44d2-b471-d46d21aca680
+router.post("/set-descendants-status", (req, res) => {
+   db.query(setLoadoutDescendantsStatus, [
+      req.query.newStatus,
+      Date.now(),
+      req.query.itemId,
+   ])
+      // db.query(setItemStatus, [req.query.itemId])
+      .then((dbRes) => {
+         console.log("dbRes", dbRes);
+         res.status(200).json("loadout descandants status changed");
+      })
+      .catch((err) => {
+         console.log("err", err);
          res.status(400).json(err);
       });
 });

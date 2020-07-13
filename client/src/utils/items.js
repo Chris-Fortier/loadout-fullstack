@@ -119,6 +119,24 @@ export function setItemStatus(item, newStatus) {
    // refreshPage(item.parentId);
 }
 
+export function setDescendantsStatus(itemId, newStatus) {
+   // server update
+   axios
+      .post(
+         "/api/v1/loadouts/set-descendants-status?newStatus=" +
+            newStatus +
+            "&itemId=" +
+            itemId
+      )
+      .then((res) => {
+         console.log("axios res", res);
+      })
+      .catch((error) => {
+         // handle error
+         console.log("axios error", error);
+      });
+}
+
 // delete an item
 export function deleteItem(itemId) {
    console.log("deleting this item", itemId);
