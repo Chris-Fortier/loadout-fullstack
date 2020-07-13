@@ -49,7 +49,7 @@ class LoadoutList extends React.Component {
          // .get(
          //    "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/loadouts.json"
          // )
-         .get("/api/v1/user-loadouts/?userId=" + this.props.currentUser.id)
+         .get("/api/v1/user-loadouts/")
          .then((res) => {
             console.log("axios res", res);
             // processAllItems(res.data); // initial processing of items that creates derived properties

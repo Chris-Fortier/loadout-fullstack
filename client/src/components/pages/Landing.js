@@ -84,6 +84,10 @@ class Landing extends React.Component {
                type: actions.UPDATE_CURRENT_USER,
                payload: user,
             });
+
+            // set authorization headers for every request at the moment of log in
+            axios.defaults.headers.common["x-auth-token"] = authToken;
+
             // go to next page
             this.props.history.push("/loadout-list");
             window.scrollTo(0, 0); // sets focus to the top of the page
@@ -158,6 +162,11 @@ class Landing extends React.Component {
                type: actions.UPDATE_CURRENT_USER,
                payload: res.data,
             });
+
+            // set authorization headers for every request at the moment of log in
+            // TODO: add this in once we pass the authToken in our response
+            // axios.defaults.headers.common["x-auth-token"] = authToken;
+
             // go to next page
             this.props.history.push("/loadout-list");
             window.scrollTo(0, 0); // sets focus to the top of the page

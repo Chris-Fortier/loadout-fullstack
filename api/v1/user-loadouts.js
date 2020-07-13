@@ -12,13 +12,14 @@ const {
 } = require("../../utils/helpers");
 const getAddUserError = require("../../validation/getAddUserError");
 const uuid = require("uuid");
+const validateJwt = require("../../utils/validateJWT");
 
 // @route      GET api/v1/user-loadouts (http://localhost:3045/api/v1/user-loadouts)  // change this
 // @desc       Get all user loadouts for a user
-// @access     Public
-router.get("/", (req, res) => {
-   console.log(req.query);
-   const userId = req.query.userId; // put the query into some consts
+// @access     Private
+// test: http://localhost:3060/api/v1/user-loadouts
+router.get("/", validateJwt, (req, res) => {
+   const userId = req.user.id; // get the user id from the validateJwt
 
    // change this
    // db.query(selectUserLoadouts(userId))

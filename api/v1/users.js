@@ -94,7 +94,7 @@ router.post("/auth", async (req, res) => {
             };
 
             // this contains the user, a secret and the timeframe
-            // 1m fopr testing, could be longer like 3h, 7d etc
+            // 1m for testing, could be longer like 3h, 7d etc
             const accessToken = jwt.sign(user, process.env.JWT_ACCESS_SECRET, {
                expiresIn: "15m",
             });

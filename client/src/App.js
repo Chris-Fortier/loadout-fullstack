@@ -12,6 +12,7 @@ import ItemList from "./components/pages/ItemList";
 import jwtDecode from "jwt-decode";
 import store from "./store/store";
 import actions from "./store/actions";
+import axios from "axios";
 
 const authToken = localStorage.authToken; // get the auth token from local storage
 if (authToken) {
@@ -25,6 +26,9 @@ if (authToken) {
          type: actions.UPDATE_CURRENT_USER,
          payload: {},
       });
+
+      // remove the default headers
+      delete axios.defaults.headers.common["x-auth-token"];
    } else {
       // authToken is not expired
 
@@ -36,16 +40,19 @@ if (authToken) {
          payload: user,
       });
 
-      // TODO: set authorization headers
+      // set authorization headers for every request
+      axios.defaults.headers.common["x-auth-token"] = authToken;
 
       // redirect to create-answer, this is in an if statement so it won't keep refereshing forever
-      const currentUrl = window.location.pathname;
-      if (currentUrl === "/") {
+      if (window.location.pathname === "/") {
          window.location.href = "/loadout-list"; // so if the user goes to our website with a valid token, they will go here
       }
    }
 } else {
    console.log("no token");
+
+   // remove the default headers in the off chance they exist for some reason
+   delete axios.defaults.headers.common["x-auth-token"];
 }
 
 function App() {
