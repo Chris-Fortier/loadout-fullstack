@@ -131,27 +131,25 @@ class ItemList2 extends React.Component {
       // update the database
       setDescendantsStatus(this.props.currentItem.id, 0); // 0 is unpacked status
 
-      // // update the data in props (this is what makes the change appear in the ui)
-      // const newChildItems = [...this.props.childItems];
-      // for (let c in newChildItems) {
-      //    newChildItems[c].status = 0;
-      // }
-      // console.log("newChildItems", newChildItems);
-      // // newChildItems = newChildItems.map((child) => {
-      // //    child.status = 0;
-      // //    return child;
-      // // });
+      // update the data in props (this is what makes the change appear in the ui)
+      // i needed to push completely new objects otherwise the redux state is unaware that the data changed
+      const newChildItems = [];
+      for (let c in this.props.childItems) {
+         newChildItems.push({ ...this.props.childItems[c] });
+         newChildItems[c].status = 0;
+         console.log(newChildItems[c].status);
+      }
+      console.log("newChildItems", newChildItems);
 
-      // // now update the store
-      // this.props.dispatch({
-      //    type: actions.STORE_CHILD_ITEMS,
-      //    payload: newChildItems,
-      // });
-      // // this.forceUpdate();
+      // now update the store
+      this.props.dispatch({
+         type: actions.STORE_CHILD_ITEMS,
+         payload: newChildItems,
+      });
 
       this.hideUnpackConfirmation(); // close the message
 
-      refreshPage(this.props.currentItem.id);
+      refreshPage(this.props.currentItem.id); // still needed to update the sub counters (TODO do this on client side)
    }
 
    confirmUnpackChildren() {
