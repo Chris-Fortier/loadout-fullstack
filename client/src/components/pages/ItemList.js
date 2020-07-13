@@ -45,14 +45,13 @@ import {
    setDescendantsStatus,
 } from "../../utils/items";
 import { v4 as getUuid } from "uuid";
+import isEmpty from "lodash/isEmpty";
 
 // ItemList2 is an alternate version that queries a single item's children to display from the database
 
 class ItemList2 extends React.Component {
    constructor(props) {
       super(props); // boilerplate
-
-      console.log("props.currentLoadout", props.currentLoadout);
 
       // set default state values
 
@@ -65,9 +64,14 @@ class ItemList2 extends React.Component {
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
       // TODO, this is duplicated code
-      if (JSON.stringify(this.props.currentUser) === JSON.stringify({})) {
+      if (isEmpty(this.props.currentUser)) {
          console.log("There is no user object, kicking to landing page.");
          this.props.history.push("/");
+      } else if (isEmpty(this.props.currentUserLoadout)) {
+         console.log(
+            "There is no current item but there is a user, kicking to loadouts page."
+         );
+         this.props.history.push("/loadout-list");
       }
 
       // https://stackoverflow.com/questions/53441584/how-to-re-render-parent-component-when-anything-changes-in-child-component/53441679#:~:text=To%20rerender%20the%20parent%20you,forceUpdate()%20function.
