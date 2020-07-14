@@ -271,10 +271,10 @@ router.post("/set-descendants-status", (req, res) => {
 
 // @route      POST api/v1/loadouts/insert-loadout
 // @desc       create a new loadout and user loadout with full permissions for the creator
-//             this is all done on the server after a simple API call
+//             this is all done on the server after a simple API call, all the API needs is the token of the creator
 // @access     Private
 // test: http://localhost:3060/api/v1/loadouts/insert-loadout
-router.post("/insert-loadout", validateJwt, async (req, res) => {
+router.put("/insert-loadout", validateJwt, async (req, res) => {
    const userId = req.user.id; // get the user id from the validateJwt
 
    // first, make the new loadout
