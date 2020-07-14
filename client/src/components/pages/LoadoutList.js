@@ -170,10 +170,10 @@ class LoadoutList extends React.Component {
                                        //    loadout list, the user is loading too
                                        //    slow, need to fix
                                        // </div>
-                                       <>
+                                       <div>
                                           {this.props.currentUser.username} does
                                           not have any loadouts.
-                                       </>
+                                       </div>
                                     )}
                                     {this.props.userLoadouts.map((loadout) => (
                                        <LoadoutCard
@@ -182,7 +182,7 @@ class LoadoutList extends React.Component {
                                        />
                                     ))}
                                     <div
-                                       className="button primary-action-button"
+                                       className="button secondary-action-button narrow-button"
                                        onClick={() => {
                                           this.addLoadout();
                                        }}

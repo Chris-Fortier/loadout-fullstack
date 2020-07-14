@@ -124,10 +124,9 @@ class ItemCardEdit extends React.Component {
       deleteItem(this.props.item.id); // send the change of the name to the server
 
       // make local changes so we can see them immediately
-      // its that all I have to do is this, direclty edit the name in props, no need to dispatch it
       const foundChildIndex = this.props.childItems.findIndex(
          (childItem) => childItem.id === this.props.item.id
-      ); // find the specific child item to change the name of
+      ); // find the specific child item to delete
       console.log("foundChildIndex", foundChildIndex);
       // const newChildItems = [...this.props.childItems]; // make a new array of children with the deleted child removed
       this.props.childItems.splice(foundChildIndex, 1); // make a new array of children with the deleted child removed

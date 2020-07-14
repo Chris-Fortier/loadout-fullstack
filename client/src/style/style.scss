@@ -485,7 +485,7 @@ body {
    width: 100%; // base size in small widths
 
    .primary-action-button,
-   .danger-action-button {
+   .secondary-action-button .danger-action-button {
       font-size: 1rem; // override so that buttons inside the item cards have base size font
       margin-top: $space-between-button-rows/2; // for space between card sections and buttons
       margin-bottom: $space-between-button-rows/2; // for space between card sections and buttons
@@ -729,13 +729,9 @@ $iconWidth: 30px;
 .clickable:not(.disabled),
 .navigation-link:not(.disabled),
 .primary-action-button:not(.disabled),
+.secondary-action-button:not(.disabled),
 .danger-action-button:not(.disabled) {
-   // width: $iconWidth;
-   // display: inline-block;
-   // border: none;
    cursor: pointer;
-   // background-color: transparent;
-   // padding: 0;
 }
 
 // style for disabled icon buttons
@@ -870,45 +866,51 @@ $iconWidth: 30px;
    text-decoration: underline;
 }
 
-// .rollout-button {
-//    border: 1px solid rgba(0, 0, 0, 0.7);
-//    width: 100%;
-//    background: none;
-//    color: rgba(0, 0, 0, 0.7);
-//    text-align: center;
-// }
-
-// .rollout-button:hover:not(.disabled) {
-//    background-color: rgba(0, 0, 0, 0.125);
-// }
-
-// .rollout-button:active:not(.disabled) {
-//    background-color: rgba(0, 0, 0, 0.25);
-// }
-
 .primary-action-button {
    background-color: #404040;
    opacity: 0.7;
    color: white;
    font-weight: 500;
    width: 100%;
-   border: 1px solid transparent;
+   border: 2px solid #404040;
    text-align: center;
    box-shadow: $button-shadow;
    text-transform: uppercase;
    padding-top: 0.25rem+0.15rem;
    padding-bottom: 0.25rem;
-   padding-left: 0.25rem;
-   padding-right: 0.25rem;
+   padding-left: 0.25rem+0.15rem;
+   padding-right: 0.25rem+0.15rem;
 }
-
 .primary-action-button:hover:not(.disabled) {
    background-color: #212121;
    color: #dedede;
 }
-
 .primary-action-button:active:not(.disabled) {
    background-color: rgb(0, 0, 0);
+   color: #bfbfbf;
+   box-shadow: $inner-shadow;
+}
+
+.secondary-action-button {
+   background-color: transparent;
+   opacity: 0.7;
+   color: white;
+   font-weight: 500;
+   width: 100%;
+   border: 2px solid #404040;
+   text-align: center;
+   text-transform: uppercase;
+   padding-top: 0.25rem+0.15rem;
+   padding-bottom: 0.25rem;
+   padding-left: 0.25rem+0.15rem;
+   padding-right: 0.25rem+0.15rem;
+}
+.secondary-action-button:hover:not(.disabled) {
+   background-color: rgba(0, 0, 0, 0.125);
+   color: #dedede;
+}
+.secondary-action-button:active:not(.disabled) {
+   background-color: rgba(0, 0, 0, 0.25);
    color: #bfbfbf;
    box-shadow: $inner-shadow;
 }
@@ -925,19 +927,22 @@ $iconWidth: 30px;
    text-transform: uppercase;
    padding-top: 0.25rem+0.15rem;
    padding-bottom: 0.25rem;
-   padding-left: 0.25rem;
-   padding-right: 0.25rem;
+   padding-left: 0.25rem+0.15rem;
+   padding-right: 0.25rem+0.15rem;
 }
-
 .danger-action-button:hover:not(.disabled) {
    background-color: rgb(223, 0, 0);
    color: #dedede;
 }
-
 .danger-action-button:active:not(.disabled) {
    background-color: rgb(191, 0, 0);
    color: #bfbfbf;
    box-shadow: $inner-shadow;
+}
+
+// class for buttons that I don't want to fill the width
+.narrow-button {
+   width: fit-content;
 }
 
 // button modifiers

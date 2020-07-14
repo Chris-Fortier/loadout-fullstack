@@ -17,6 +17,7 @@ import {
    IconKey,
    IconUserCouple,
 } from "../../icons/icons.js";
+import axios from "axios";
 
 import {
    // PackedIcon,
@@ -46,6 +47,40 @@ class LoadoutCard extends React.Component {
       // window.scrollTo(0, 0); // sets focus to the top of the page
    }
 
+   // delete a loadout
+   deleteLoadout() {
+      console.log("clicked delete loadout");
+
+      // server update
+      axios
+         .put(
+            "/api/v1/loadouts/delete-loadout?loadoutId=" +
+               this.props.loadout.loadoutId
+         )
+         .then((res) => {
+            console.log("axios res.data", res.data);
+
+            // update the client side list of user loadouts
+
+            // make local changes so we can see them immediately
+            const foundUserLoadoutIndex = this.props.userLoadouts.findIndex(
+               (userLoadout) => userLoadout.id === this.props.loadout.loadoutId
+            ); // find the specific loadout to delete
+            console.log("foundUserLoadoutIndex", foundUserLoadoutIndex);
+            this.props.userLoadouts.splice(foundUserLoadoutIndex, 1); // make a new array of loadouts with the deleted loadout removed
+
+            // push to the store
+            this.props.dispatch({
+               type: actions.STORE_USER_LOADOUTS,
+               payload: this.props.userLoadouts,
+            });
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
+   }
+
    render() {
       console.log("props", this.props);
       const loadout = this.props.loadout; // this is to simplify code below
@@ -72,18 +107,8 @@ class LoadoutCard extends React.Component {
          >
             <div>
                {/* <div className="float-left"> */}
-               <Link
-                  className="d-flex"
-                  onClick={() => {
-                     movePageToDifferentItem(
-                        this.props.loadout.loadoutId,
-                        +1,
-                        this.props.loadout
-                     );
-                  }}
-                  to="/item-list"
-               >
-                  <span
+               <div className="d-flex">
+                  <Link
                      className={classnames(
                         "item-card-text",
                         (UI_APPEARANCE === "light" ||
@@ -91,17 +116,27 @@ class LoadoutCard extends React.Component {
                            "level-text-color-" + String(level % LEVEL_COLORS),
                         UI_APPEARANCE === "colors" && "dark-text-color"
                      )}
+                     onClick={() => {
+                        movePageToDifferentItem(
+                           this.props.loadout.loadoutId,
+                           +1,
+                           this.props.loadout
+                        );
+                     }}
+                     to="/item-list"
                   >
                      {item.name}&nbsp;
-                  </span>
-                  {/* <div
-                     className="button danger-action-button"
-                     onClick={() => {
-                        this.deleteLoadout(this.props.loadout.loadoutId);
-                     }}
-                  >
-                     Delete Loadout
-                  </div> */}
+                  </Link>
+                  {this.props.loadout.isAdmin === 1 && (
+                     <div
+                        className="button danger-action-button narrow-button"
+                        onClick={() => {
+                           this.deleteLoadout(this.props.loadout.loadoutId);
+                        }}
+                     >
+                        Delete Loadout
+                     </div>
+                  )}
 
                   {/* {true && (
                      <span
@@ -151,11 +186,7 @@ class LoadoutCard extends React.Component {
 
                   {item.numChildren > 0 && (
                      <>
-                        <span
-                           onClick={(e) => {
-                              item.status === 0 &&
-                                 movePageToDifferentItem(item.id, +1);
-                           }}
+                        <Link
                            className={classnames(
                               "button navigation-link item-card-text",
                               (UI_APPEARANCE === "light" ||
@@ -165,10 +196,18 @@ class LoadoutCard extends React.Component {
                               UI_APPEARANCE === "colors" && "dark-text-color",
                               { disabled: item.status === 1 }
                            )}
+                           onClick={() => {
+                              movePageToDifferentItem(
+                                 this.props.loadout.loadoutId,
+                                 +1,
+                                 this.props.loadout
+                              );
+                           }}
+                           to="/item-list"
                         >
                            {item.contentSummary}&nbsp;&nbsp;
-                        </span>
-                        <span
+                        </Link>
+                        <Link
                            className={classnames(
                               "icon-dark item-card-icon",
                               (UI_APPEARANCE === "light" ||
@@ -181,13 +220,14 @@ class LoadoutCard extends React.Component {
                                  disabled: item.status === 1,
                               }
                            )}
-                           onClick={(e) => {
-                              item.status === 0 &&
-                                 movePageToDifferentItem(
-                                    this.props.item.id,
-                                    +1
-                                 );
+                           onClick={() => {
+                              movePageToDifferentItem(
+                                 this.props.loadout.loadoutId,
+                                 +1,
+                                 this.props.loadout
+                              );
                            }}
+                           to="/item-list"
                         >
                            {item.status === 1 && <ChildrenPackedIcon2 />}
                            {item.status === 0 &&
@@ -198,10 +238,10 @@ class LoadoutCard extends React.Component {
                               item.numPackedChildren < item.numChildren && (
                                  <ChildrenUnpackedIcon />
                               )}
-                        </span>
+                        </Link>
                      </>
                   )}
-               </Link>
+               </div>
             </div>
             <div className="d-flex">
                {true && (
@@ -256,7 +296,7 @@ class LoadoutCard extends React.Component {
 
 // maps the store to props
 function mapStateToProps(state) {
-   return {};
+   return { userLoadouts: state.userLoadouts };
 }
 
 export default connect(mapStateToProps)(LoadoutCard); // this is "currying"

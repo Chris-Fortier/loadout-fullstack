@@ -26,7 +26,7 @@ class AccountSettings extends React.Component {
       }
    }
 
-   backToLoadout() {
+   backToMyLoadouts() {
       this.props.history.push("/loadout-list");
       window.scrollTo(0, 0); // sets focus to the top of the page
    }
@@ -228,9 +228,9 @@ class AccountSettings extends React.Component {
                            <button
                               className="button navigation-link"
                               // to="/loadout-list"
-                              onClick={() => this.backToLoadout()}
+                              onClick={() => this.backToMyLoadouts()}
                            >
-                              Back to Loadout
+                              Back to My Loadouts
                            </button>
                            {/* </div> */}
                            <Link
