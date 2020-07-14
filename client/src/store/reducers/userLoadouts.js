@@ -7,6 +7,7 @@ export default function userLoadouts(userLoadouts = [], action) {
 
    switch (action.type) {
       case actions.STORE_USER_LOADOUTS:
+         console.log("FIRED STORE_USER_LOADOUTS");
          return [...action.payload]; // make a copy of it as we cannot change the original one in place
       default:
          return userLoadouts;

@@ -13,8 +13,9 @@ const initialState = {
       id: "", // the uuid of the curren item
    },
    childItems: [],
-   currentLevel: 2, // TODO the default should be zero, testing a different one
+   currentLevel: 0, // TODO the default should be zero, testing a different one
    currentUserLoadout: {},
+   userLoadouts: [],
 };
 const store = createStore(combineReducers, initialState, composeWithDevTools());
 export default store;
