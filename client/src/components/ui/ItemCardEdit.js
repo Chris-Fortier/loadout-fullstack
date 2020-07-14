@@ -129,13 +129,13 @@ class ItemCardEdit extends React.Component {
          (childItem) => childItem.id === this.props.item.id
       ); // find the specific child item to change the name of
       console.log("foundChildIndex", foundChildIndex);
-      const newChildItems = [...this.props.childItems]; // make a new array of children with the deleted child removed
-      newChildItems.splice(foundChildIndex, 1);
+      // const newChildItems = [...this.props.childItems]; // make a new array of children with the deleted child removed
+      this.props.childItems.splice(foundChildIndex, 1); // make a new array of children with the deleted child removed
 
       // send the updated child items to the store
       this.props.dispatch({
          type: actions.STORE_CHILD_ITEMS,
-         payload: newChildItems,
+         payload: this.props.childItems,
       });
    }
 

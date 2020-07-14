@@ -33,7 +33,6 @@ import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
 import {
    movePageToDifferentItem,
-   refreshPage,
    // refreshPage,
 } from "../../utils/movePageToDifferentItem";
 import {
@@ -137,23 +136,28 @@ class ItemList2 extends React.Component {
 
       // update the data in props (this is what makes the change appear in the ui)
       // i needed to push completely new objects otherwise the redux state is unaware that the data changed
-      const newChildItems = [];
-      for (let c in this.props.childItems) {
-         newChildItems.push({ ...this.props.childItems[c] });
-         newChildItems[c].status = 0;
-         console.log(newChildItems[c].status);
-      }
-      console.log("newChildItems", newChildItems);
+      // const newChildItems = [];
+      // for (let c in this.props.childItems) {
+      //    newChildItems.push({ ...this.props.childItems[c] });
+      //    newChildItems[c].status = 0;
+      //    console.log(newChildItems[c].status);
+      // }
+      // console.log("newChildItems", newChildItems);
 
-      // now update the store
+      for (let c in this.props.childItems) {
+         this.props.childItems[c].status = 0; // set each child item's status to 0 in the client
+         console.log(this.props.childItems[c].status);
+      }
+
+      // now update the Redux store
       this.props.dispatch({
          type: actions.STORE_CHILD_ITEMS,
-         payload: newChildItems,
+         payload: this.props.childItems,
       });
 
       this.hideUnpackConfirmation(); // close the message
 
-      refreshPage(this.props.currentItem.id); // still needed to update the sub counters (TODO do this on client side)
+      // refreshPage(this.props.currentItem.id); // still needed to update the sub counters (TODO do this on client side)
    }
 
    confirmUnpackChildren() {
@@ -240,22 +244,35 @@ class ItemList2 extends React.Component {
       console.log({ inputElementId });
 
       // add a new card for the new item without refreshing page
-      const newChildItems = [
-         ...this.props.childItems,
-         {
-            name: "New Item",
-            id: newItemId,
-            status: 0,
-            parentId: this.props.currentItem.id,
-            numChildren: 0,
-            numPackedChildren: 0,
-            numUnpackedChildren: 0,
-            contentSummary: "ready",
-         },
-      ];
+      // const newChildItems = [
+      //    ...this.props.childItems,
+      //    {
+      //       name: "New Item",
+      //       id: newItemId,
+      //       status: 0,
+      //       parentId: this.props.currentItem.id,
+      //       numChildren: 0,
+      //       numPackedChildren: 0,
+      //       numUnpackedChildren: 0,
+      //       contentSummary: "ready",
+      //    },
+      // ];
+
+      // update the client side with an equivalent new item
+      this.props.childItems.push({
+         name: "New Item",
+         id: newItemId,
+         status: 0,
+         parentId: this.props.currentItem.id,
+         numChildren: 0,
+         numPackedChildren: 0,
+         numUnpackedChildren: 0,
+         contentSummary: "ready",
+      });
+
       this.props.dispatch({
          type: actions.STORE_CHILD_ITEMS,
-         payload: newChildItems,
+         payload: this.props.childItems,
       });
 
       // sets focus to the new item card and selects it's text

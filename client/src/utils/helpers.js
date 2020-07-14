@@ -91,6 +91,10 @@ export function logOutCurrentUser(props) {
       type: actions.STORE_CURRENT_USER_LOADOUT,
       payload: {},
    });
+   props.dispatch({
+      type: actions.STORE_USER_LOADOUTS,
+      payload: [],
+   });
 }
 
 // app master preferences
