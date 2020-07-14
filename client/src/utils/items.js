@@ -96,14 +96,14 @@ export function addItemTo(parentId, newItemId) {
 //    processAllItems(gear);
 // }
 
-export function setItemStatus(item, newStatus) {
+export function setItemStatus(itemId, newStatus) {
    // server update
    axios
       .post(
          "/api/v1/loadouts/set-status?newStatus=" +
             newStatus +
             "&itemId=" +
-            item.id
+            itemId
       )
       .then((res) => {
          console.log("axios res", res);
@@ -112,11 +112,6 @@ export function setItemStatus(item, newStatus) {
          // handle error
          console.log("axios error", error);
       });
-
-   // client side part (this is too keep what we see consistent with the database)
-   item.status = newStatus;
-   // this.forceUpdate();
-   // refreshPage(item.parentId);
 }
 
 export function setDescendantsStatus(itemId, newStatus) {

@@ -36,8 +36,10 @@ class ItemCard2 extends React.Component {
    // }
 
    // toggle the packed status of this item
-   toggleIsPacked(itemIndexPath) {
+   toggleIsPacked() {
       console.log("toggleIsPacked()...");
+      let newStatus = null;
+      let parentUnpackedCounterChange = 0;
 
       // only toggle packed if all its descendants are packed and if the user has permission to pack
       if (
@@ -46,53 +48,34 @@ class ItemCard2 extends React.Component {
       ) {
          if (this.props.item.status === 0) {
             console.log("set this item's status to packed");
-
-            setItemStatus(this.props.item, 1); // update the database
-
-            // trying to update the counter on the client side
-            this.props.currentItem.numPackedChildren += 1;
-            this.props.currentItem.numUnpackedChildren -= 1;
-            this.props.currentItem.contentSummary = getContentSummary(
-               this.props.currentItem.numChildren,
-               this.props.currentItem.numPackedChildren,
-               this.props.currentItem.status
-            );
-            this.props.dispatch({
-               type: actions.STORE_CURRENT_ITEM,
-               payload: this.props.currentItem,
-            });
-
-            // this.recountPageItems();
-
-            this.forceUpdate(); // needed to show the packed indicator change on in this component
-            this.props.rerenderParentCallback(); // call back to re-render the parent page component
-
-            // refreshPage(this.props.item.parentId);
+            newStatus = 1;
+            parentUnpackedCounterChange = -1;
          } else if (this.props.item.status === 1) {
             console.log("set this item's status to unpacked");
-
-            setItemStatus(this.props.item, 0); // update the database
-
-            // trying to update the counter on the client side
-            this.props.currentItem.numPackedChildren -= 1;
-            this.props.currentItem.numUnpackedChildren += 1;
-            this.props.currentItem.contentSummary = getContentSummary(
-               this.props.currentItem.numChildren,
-               this.props.currentItem.numPackedChildren,
-               this.props.currentItem.status
-            );
-            this.props.dispatch({
-               type: actions.STORE_CURRENT_ITEM,
-               payload: this.props.currentItem,
-            });
-
-            // this.recountPageItems();
-
-            this.forceUpdate(); // needed to show the packed indicator change on in this component
-            this.props.rerenderParentCallback(); // call back to re-render the parent page component
-
-            // refreshPage(this.props.item.parentId);
+            newStatus = 0;
+            parentUnpackedCounterChange = +1;
          }
+
+         setItemStatus(this.props.item.id, newStatus); // update the database
+         this.props.item.status = newStatus; // set the status locally
+
+         // trying to update the counter on the client side
+         this.props.currentItem.numPackedChildren += -parentUnpackedCounterChange;
+         this.props.currentItem.numUnpackedChildren += parentUnpackedCounterChange;
+         this.props.currentItem.contentSummary = getContentSummary(
+            this.props.currentItem.numChildren,
+            this.props.currentItem.numPackedChildren,
+            this.props.currentItem.status
+         );
+         this.props.dispatch({
+            type: actions.STORE_CURRENT_ITEM,
+            payload: this.props.currentItem,
+         });
+
+         // this.recountPageItems();
+
+         this.forceUpdate(); // needed to show the packed indicator change on in this component
+         this.props.rerenderParentCallback(); // call back to re-render the parent page component
       }
    }
 
