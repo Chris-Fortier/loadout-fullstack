@@ -94,6 +94,15 @@ class LoadoutCard extends React.Component {
                   >
                      {item.name}&nbsp;
                   </span>
+                  {/* <div
+                     className="button danger-action-button"
+                     onClick={() => {
+                        this.deleteLoadout(this.props.loadout.loadoutId);
+                     }}
+                  >
+                     Delete Loadout
+                  </div> */}
+
                   {/* {true && (
                      <span
                         className={classnames(

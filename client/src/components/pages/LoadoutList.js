@@ -25,7 +25,7 @@ class LoadoutList extends React.Component {
       // set default state values
 
       this.state = {
-         loadouts: [],
+         // loadouts: [],
          isEditMode: false,
       };
 
@@ -54,8 +54,9 @@ class LoadoutList extends React.Component {
             console.log("axios res", res);
             // processAllItems(res.data); // initial processing of items that creates derived properties
             const loadouts = res.data;
-            this.setState({
-               loadouts: loadouts,
+            this.props.dispatch({
+               type: actions.STORE_USER_LOADOUTS,
+               payload: loadouts,
             });
          })
          .catch((error) => {
@@ -69,6 +70,42 @@ class LoadoutList extends React.Component {
    // this is a "lifecycle" method like render(), we don't need to call it manually
    componentDidMount() {
       this.loadLoadouts();
+   }
+
+   // add a loadout
+   addLoadout() {
+      console.log("clicked add loadout");
+
+      // server update
+      axios
+         .put("/api/v1/loadouts/insert-loadout")
+         .then((res) => {
+            console.log("axios res.data", res.data);
+
+            // update the client side with an equivalent new loadout
+            this.props.userLoadouts.push({
+               canEdit: 1,
+               canPack: 1,
+               contentSummary: "ready",
+               isAdmin: 1,
+               loadoutId: res.data, // use the loadout id generated on the server
+               loadoutName: "New Loadout",
+               name: "New Loadout",
+               numChildren: 0,
+               numPackedChildren: 0,
+               status: 0,
+            });
+
+            // push to the store
+            this.props.dispatch({
+               type: actions.STORE_USER_LOADOUTS,
+               payload: this.props.userLoadouts,
+            });
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
    }
 
    render() {
@@ -122,7 +159,7 @@ class LoadoutList extends React.Component {
                               <div className="row">
                                  <div className="col">
                                     {/* One-Night Camping Trip */}
-                                    {this.state.loadouts.length === 0 && (
+                                    {this.props.userLoadouts.length === 0 && (
                                        // <div
                                        //    className="navigation-link"
                                        //    onClick={() => {
@@ -138,12 +175,20 @@ class LoadoutList extends React.Component {
                                           not have any loadouts.
                                        </>
                                     )}
-                                    {this.state.loadouts.map((loadout) => (
+                                    {this.props.userLoadouts.map((loadout) => (
                                        <LoadoutCard
                                           loadout={loadout}
                                           key={loadout.id}
                                        />
                                     ))}
+                                    <div
+                                       className="button primary-action-button"
+                                       onClick={() => {
+                                          this.addLoadout();
+                                       }}
+                                    >
+                                       Add Loadout
+                                    </div>
                                  </div>
                               </div>
                            </div>
@@ -162,6 +207,7 @@ function mapStateToProps(state) {
    return {
       // currentLoadout: state.currentLoadout,
       currentUser: state.currentUser,
+      userLoadouts: state.userLoadouts,
    };
 }
 

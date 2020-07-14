@@ -5,6 +5,7 @@ import currentItem from "./reducers/currentItem";
 import childItems from "./reducers/childItems";
 import currentLevel from "./reducers/currentLevel";
 import currentUserLoadout from "./reducers/currentUserLoadout";
+import userLoadouts from "./reducers/userLoadouts";
 
 export default combineReducers({
    currentUser,
@@ -12,4 +13,5 @@ export default combineReducers({
    childItems,
    currentLevel,
    currentUserLoadout,
+   userLoadouts, // stores all the curent user's userLoadouts
 });

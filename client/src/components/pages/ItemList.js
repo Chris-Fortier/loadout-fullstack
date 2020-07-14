@@ -243,7 +243,7 @@ class ItemList2 extends React.Component {
       const newChildItems = [
          ...this.props.childItems,
          {
-            name: "newestest item",
+            name: "New Item",
             id: newItemId,
             status: 0,
             parentId: this.props.currentItem.id,

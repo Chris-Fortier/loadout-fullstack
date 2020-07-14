@@ -8,6 +8,7 @@ const actions = {
    CHANGE_CURRENT_LEVEL: "CHANGE_CURRENT_LEVEL", // adjusts current level up or down
    RESET_CURRENT_LEVEL: "RESET_CURRENT_LEVEL", // sets current level to 0
    STORE_CURRENT_USER_LOADOUT: "STORE_CURRENT_USER_LOADOUT",
+   STORE_USER_LOADOUTS: "STORE_USER_LOADOUTS",
 };
 
 export default actions;

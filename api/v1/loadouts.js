@@ -317,7 +317,7 @@ router.put("/insert-loadout", validateJwt, async (req, res) => {
 
          db.query(insertUserLoadout, userLoadout)
             .then((dbRes) => {
-               res.status(200).json("New user loadout created");
+               res.status(200).json(loadoutId);
             })
             .catch((err) => {
                console.log("err", err);
@@ -335,7 +335,7 @@ router.put("/insert-loadout", validateJwt, async (req, res) => {
 });
 
 // @route      PUT api/v1/loadouts/delete-loadout
-// @desc       Delete an a loadout and all user loadouts associated with it
+// @desc       Delete a loadout and all user loadouts associated with it
 //                only if the provided user token has admin privledges
 // @access     Private
 // test:       http://localhost:3060/api/v1/loadouts/delete-loadout?loadoutId=244331be-05f0-4dd5-ad8e-dc279a74d2aa

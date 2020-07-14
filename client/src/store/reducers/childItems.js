@@ -1,7 +1,7 @@
 import actions from "../actions";
 
 export default function childItems(childItems = {}, action) {
-   // default for state is an empty array
+   // default for state is an empty array TODO: should be empty array?
 
    // action has two things in it: action.payload and action.type
 
