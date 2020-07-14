@@ -14,6 +14,8 @@ const selectChildItems = require("../../queries/selectChildItems");
 const selectLoadoutDescendants = require("../../queries/selectLoadoutDescendants");
 const validateJwt = require("../../utils/validateJWT");
 const insertUserLoadout = require("../../queries/insertUserLoadout");
+const selectUserLoadoutByIds = require("../../queries/selectUserLoadoutByIds");
+const deleteUserLoadoutsByLoadout = require("../../queries/deleteUserLoadoutsByLoadout");
 
 // @route      POST api/v1/loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new item
@@ -180,7 +182,8 @@ router.get("/info", (req, res) => {
 // @route      GET api/v1/loadouts/children
 // @desc       Get all the child items of an item
 // @access     Public
-router.get("/children", (req, res) => {
+// test: http://localhost:3060/api/v1/loadouts/children?itemId=42655170-7e10-4431-8d98-c2774f6414a4
+router.get("/children", validateJwt, (req, res) => {
    console.log(req.query);
    const itemId = req.query.itemId; // put the query into some consts
 
@@ -269,7 +272,7 @@ router.post("/set-descendants-status", (req, res) => {
       });
 });
 
-// @route      POST api/v1/loadouts/insert-loadout
+// @route      PUT api/v1/loadouts/insert-loadout
 // @desc       create a new loadout and user loadout with full permissions for the creator
 //             this is all done on the server after a simple API call, all the API needs is the token of the creator
 // @access     Private
@@ -329,6 +332,64 @@ router.put("/insert-loadout", validateJwt, async (req, res) => {
          console.log("err", err);
          res.status(400).json({ dbError });
       });
+});
+
+// @route      PUT api/v1/loadouts/delete-loadout
+// @desc       Delete an a loadout and all user loadouts associated with it
+//                only if the provided user token has admin privledges
+// @access     Private
+// test:       http://localhost:3060/api/v1/loadouts/delete-loadout?loadoutId=244331be-05f0-4dd5-ad8e-dc279a74d2aa
+router.put("/delete-loadout", validateJwt, async (req, res) => {
+   const userId = req.user.id; // get the user id from the validateJwt
+   const loadoutId = req.query.loadoutId;
+
+   db.query(selectUserLoadoutByIds, [userId, loadoutId])
+      .then((userLoadouts) => {
+         // check if the user has access to this loadout
+         if (userLoadouts.length === 1) {
+            console.log("user has access to this loadout");
+            // check if the user has admin permissions on this loadout
+            if (userLoadouts[0].is_admin === 1) {
+               console.log("user has admin permissions on this loadout");
+               // delete all xref user loadouts that reference this loadout
+               db.query(deleteUserLoadoutsByLoadout, [loadoutId])
+                  .then((dbRes) => {
+                     console.log("all user-loadouts of a loadout deleted");
+                     // delete the loadout
+                     db.query(deleteItem, [loadoutId])
+                        .then((dbRes) => {
+                           console.log("loadout deleted");
+                           res.status(200).json(
+                              "user-loadouts and loadout deleted"
+                           );
+                        })
+                        .catch((err) => {
+                           console.log("err", err);
+                           res.status(400).json({ dbError });
+                        });
+                  })
+                  .catch((err) => {
+                     console.log("err", err);
+                     res.status(400).json(err);
+                  });
+            } else {
+               res.status(400).json(
+                  "user does not have admin permisson on this loadout"
+               );
+            }
+         } else {
+            res.status(400).json(
+               "user does not have access to this loadout or the loadout doesn't exist"
+            );
+         }
+      })
+      .catch((err) => {
+         console.log("err", err);
+         res.status(400).json({ err });
+      });
+
+   // const { itemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+   // console.log({ itemId });
 });
 
 module.exports = router;
