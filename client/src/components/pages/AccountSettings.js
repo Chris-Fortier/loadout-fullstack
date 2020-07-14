@@ -102,7 +102,7 @@ class AccountSettings extends React.Component {
                                  className="button navigation-link w-100"
                                  onClick={() => this.toggleUsernameRollout()}
                               >
-                                 Change Your Username
+                                 Change Your Username...
                               </span>
                               {this.state.hasUsernameRollout && (
                                  <>
@@ -147,7 +147,7 @@ class AccountSettings extends React.Component {
                                  className="button navigation-link w-100"
                                  onClick={() => this.togglePasswordRollout()}
                               >
-                                 Change Your Password
+                                 Change Your Password...
                               </span>
                               {this.state.hasPasswordRollout && (
                                  <>
@@ -192,7 +192,7 @@ class AccountSettings extends React.Component {
                                  className="button navigation-link w-100"
                                  onClick={() => this.toggleDeleteRollout()}
                               >
-                                 Delete Your Account
+                                 Delete Your Account...
                               </span>
                               {this.state.hasDeleteRollout && (
                                  <>
