@@ -2,10 +2,10 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
-const selectLoadoutUsers = require("../../queries/selectLoadoutUsers"); // change this
+const selectLoadoutUsers = require("../../queries/selectLoadoutUsers");
 
-// @route      GET api/v1/loadout-users (http://localhost:3045/api/v1/loadout-users)  // change this
-// @desc       Get all user loadouts for a user
+// @route      GET api/v1/loadout-users (http://localhost:3045/api/v1/loadout-users)
+// @desc       Get all users for a loadout
 // @access     Public
 router.get("/", (req, res) => {
    console.log("req.query", req.query);

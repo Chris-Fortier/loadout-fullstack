@@ -73,8 +73,8 @@ router.get("/", validateJwt, (req, res) => {
 
 // @route      POST api/v1/user-loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new user loadout
-// @access     Public
-// test: http://localhost:3060/api/v1/user-loadouts/insert?username=mike@email.com&loadoutId=42655170-7e10-4431-8d98-c2774f6414a4
+// @access     Private
+// test: http://localhost:3060/api/v1/user-loadouts/insert?username=sean&loadoutId=42655170-7e10-4431-8d98-c2774f6414a4&canEdit=0&canPack=1&isAdmin=0
 router.post("/insert", async (req, res) => {
    console.log("router.post api/v1/user-loadouts/insert...");
    const { username, loadoutId, canEdit, canPack, isAdmin } = req.query; // destructuring to simplify code below, grabbing variables from req.body
@@ -122,10 +122,10 @@ router.post("/insert", async (req, res) => {
 
 // @route      POST api/v1/user-loadouts/delete
 // @desc       Delete an existing user-loadout
-// @access     Public
+// @access     Private
 // test: http://localhost:3060/api/v1/user-loadouts/delete?userLoadoutId=a02694bd-ab0f-4b53-ac76-7ef0adb7aebe
 router.post("/delete", async (req, res) => {
-   const { userLoadoutId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+   const { userLoadoutId } = req.query; // destructuring to simplify code below
 
    db.query(deleteUserLoadout, [userLoadoutId])
       .then((dbRes) => {
@@ -140,10 +140,11 @@ router.post("/delete", async (req, res) => {
 
 // @route      POST api/v1/user-loadouts/delete-all-by-user
 // @desc       Delete all the user loadouts of a user (needed before deleting a user)
-// @access     Public
-// test: http://localhost:3060/api/v1/user-loadouts/delete-all-by-user?userId=6a175ea6-335c-4328-8989-7f25467f54a0
-router.post("/delete-all-by-user", async (req, res) => {
-   const { userId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+// @access     Private
+// test: http://localhost:3060/api/v1/user-loadouts/delete-all-by-user
+router.post("/delete-all-by-user", validateJwt, async (req, res) => {
+   const userId = req.user.id;
+   console.log({ userId });
 
    db.query(deleteUserLoadoutsByUser, [userId])
       .then((dbRes) => {

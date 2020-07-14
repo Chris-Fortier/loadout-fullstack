@@ -13,6 +13,7 @@ const getSignUpPasswordError = require("../../validation/getSignUpPasswordError"
 const getLoginUsernameError = require("../../validation/getLoginUsernameError");
 const getLoginPasswordError = require("../../validation/getLoginPasswordError");
 const jwt = require("jsonwebtoken");
+const validateJwt = require("../../utils/validateJWT");
 
 // @route      POST api/v1/users (going to post one thing to this list of things)
 // @desc       Create a new user
@@ -116,10 +117,10 @@ router.post("/auth", async (req, res) => {
 
 // @route      POST api/v1/users/delete
 // @desc       Delete an existing user
-// @access     Public
+// @access     Private
 // test:
-router.post("/delete", async (req, res) => {
-   const { userId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+router.post("/delete", validateJwt, async (req, res) => {
+   const userId = req.user.id; // get the user id from the validateJwt
    console.log({ userId });
 
    db.query(deleteUser, [userId])
