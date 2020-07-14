@@ -161,19 +161,19 @@ class LoadoutSharing extends React.Component {
                                                    scope="col"
                                                    className="display-switch-label"
                                                 >
-                                                   Shared with Username
-                                                </th>
-                                                <th
-                                                   scope="col"
-                                                   className="display-switch-label"
-                                                >
-                                                   Can Edit
+                                                   Shared with
                                                 </th>
                                                 <th
                                                    scope="col"
                                                    className="display-switch-label"
                                                 >
                                                    Can Pack
+                                                </th>
+                                                <th
+                                                   scope="col"
+                                                   className="display-switch-label"
+                                                >
+                                                   Can Edit
                                                 </th>
                                                 <th
                                                    scope="col"

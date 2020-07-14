@@ -255,17 +255,6 @@ class LoadoutCard extends React.Component {
                      <IconUserCouple />
                   </span>
                )}
-               {this.props.loadout.canEdit === 1 && (
-                  <span
-                     className={classnames(
-                        "loadout-card-icon",
-                        UI_APPEARANCE === "dark" && "icon-light",
-                        UI_APPEARANCE !== "dark" && "icon-dark"
-                     )}
-                  >
-                     <IconEdit />
-                  </span>
-               )}
                {this.props.loadout.canPack === 1 && (
                   <span
                      className={classnames(
@@ -275,6 +264,17 @@ class LoadoutCard extends React.Component {
                      )}
                   >
                      <IconPackage />
+                  </span>
+               )}
+               {this.props.loadout.canEdit === 1 && (
+                  <span
+                     className={classnames(
+                        "loadout-card-icon",
+                        UI_APPEARANCE === "dark" && "icon-light",
+                        UI_APPEARANCE !== "dark" && "icon-dark"
+                     )}
+                  >
+                     <IconEdit />
                   </span>
                )}
                {this.props.loadout.isAdmin === 1 && (

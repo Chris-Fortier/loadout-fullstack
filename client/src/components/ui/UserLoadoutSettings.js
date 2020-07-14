@@ -46,13 +46,13 @@ class UserLoadoutSettings extends React.Component {
                         <input
                            type="checkbox"
                            className="custom-control-input"
-                           id={"can-edit-switch-" + this.props.loadoutUser.id}
-                           checked={this.props.loadoutUser.canEdit === 1}
+                           id={"can-pack-switch-" + this.props.loadoutUser.id}
+                           checked={this.props.loadoutUser.canPack === 1}
                         />
                         <label
                            className="custom-control-label"
                            htmlFor={
-                              "can-edit-switch-" + this.props.loadoutUser.id
+                              "can-pack-switch-" + this.props.loadoutUser.id
                            }
                         ></label>
                      </div>
@@ -62,13 +62,13 @@ class UserLoadoutSettings extends React.Component {
                         <input
                            type="checkbox"
                            className="custom-control-input"
-                           id={"can-pack-switch-" + this.props.loadoutUser.id}
-                           checked={this.props.loadoutUser.canPack === 1}
+                           id={"can-edit-switch-" + this.props.loadoutUser.id}
+                           checked={this.props.loadoutUser.canEdit === 1}
                         />
                         <label
                            className="custom-control-label"
                            htmlFor={
-                              "can-pack-switch-" + this.props.loadoutUser.id
+                              "can-edit-switch-" + this.props.loadoutUser.id
                            }
                         ></label>
                      </div>
