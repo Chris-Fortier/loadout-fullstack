@@ -12,6 +12,8 @@ const setLoadoutDescendantsStatus = require("../../queries/setLoadoutDescendants
 const { getContentSummary } = require("../../utils/helpers");
 const selectChildItems = require("../../queries/selectChildItems");
 const selectLoadoutDescendants = require("../../queries/selectLoadoutDescendants");
+const validateJwt = require("../../utils/validateJWT");
+const insertUserLoadout = require("../../queries/insertUserLoadout");
 
 // @route      POST api/v1/loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new item
@@ -264,6 +266,68 @@ router.post("/set-descendants-status", (req, res) => {
       .catch((err) => {
          console.log("err", err);
          res.status(400).json(err);
+      });
+});
+
+// @route      POST api/v1/loadouts/insert-loadout
+// @desc       create a new loadout and user loadout with full permissions for the creator
+//             this is all done on the server after a simple API call
+// @access     Private
+// test: http://localhost:3060/api/v1/loadouts/insert-loadout
+router.post("/insert-loadout", validateJwt, async (req, res) => {
+   const userId = req.user.id; // get the user id from the validateJwt
+
+   // first, make the new loadout
+
+   loadoutId = uuid.v4();
+
+   const loadout = {
+      id: loadoutId, // use the uuid generated
+      name: "New Loadout", // use given value for parent
+      parent_id: null, // loadouts have a parent of null
+      status: 0, // default status to zero (unpacked)
+      created_at: Date.now(), // set this date to now
+      last_edit_at: Date.now(), // set this date to now
+      last_pack_at: Date.now(), // set this date to now
+   };
+
+   console.log("will create this loadout: ", loadout);
+
+   db.query(insertItem, loadout)
+      .then((dbRes) => {
+         console.log("dbRes", dbRes);
+
+         // second, make the user loadout xref
+
+         const userLoadout = {
+            id: uuid.v4(), // generate a uuid
+            user_id: userId,
+            loadout_id: loadoutId,
+
+            // give the user full permissions since they created it
+            can_edit: 1,
+            can_pack: 1,
+            is_admin: 1,
+         };
+
+         console.log("will create this userLoadout: ", userLoadout);
+
+         db.query(insertUserLoadout, userLoadout)
+            .then((dbRes) => {
+               res.status(200).json("New user loadout created");
+            })
+            .catch((err) => {
+               console.log("err", err);
+               dbError = `${err.code} ${err.sqlMessage}`; // format the database error
+               // return a 400 error to user
+               res.status(400).json({ dbError });
+            });
+
+         // res.status(200).json(loadoutId); // return the id of the new loadout to the client
+      })
+      .catch((err) => {
+         console.log("err", err);
+         res.status(400).json({ dbError });
       });
 });
 
