@@ -45,6 +45,7 @@ import {
 } from "../../utils/items";
 import { v4 as getUuid } from "uuid";
 import isEmpty from "lodash/isEmpty";
+import SharingStrip from "../ui/SharingStrip";
 
 // ItemList2 is an alternate version that queries a single item's children to display from the database
 
@@ -531,7 +532,7 @@ class ItemList2 extends React.Component {
                                     {level === 1 && (
                                        <div
                                           className={classnames(
-                                             "button navigation-link d-block",
+                                             "d-flex button navigation-link d-block",
                                              UI_APPEARANCE === "dark" &&
                                                 "light-text-color",
                                              UI_APPEARANCE !== "dark" &&
@@ -553,7 +554,12 @@ class ItemList2 extends React.Component {
                                           >
                                              <IconUserCouple />
                                           </div>
-                                          Loadout Sharing Settings
+                                          Loadout Settings&nbsp;&nbsp;
+                                          <SharingStrip
+                                             loadout={
+                                                this.props.currentUserLoadout
+                                             }
+                                          />
                                        </div>
                                     )}
 

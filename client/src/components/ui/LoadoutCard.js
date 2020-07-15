@@ -1,28 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
-// import actions from "../../store/actions";
-// import { LEVEL_COLORS } from "../../utils/helpers";
-// import classnames from "classnames";
-// import { IconArrowThinRightCircle } from "../../icons/icons.js";
-import {
-   LEVEL_COLORS,
-   // SUBITEM_DISPLAY_MODE,
-   UI_APPEARANCE,
-} from "../../utils/helpers";
+import { LEVEL_COLORS, UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
-import {
-   IconPackage,
-   IconEdit,
-   IconUserCouple,
-   IconKey,
-} from "../../icons/icons.js";
 import axios from "axios";
+import SharingStrip from "../ui/SharingStrip";
 
 import {
-   // PackedIcon,
-   // ReadyToPackIcon,
-   // NotReadyToPackIcon,
    ChildrenUnpackedIcon,
    ChildrenPackedIcon2,
 } from "../../icons/loadout-icons.js";
@@ -30,11 +14,6 @@ import actions from "../../store/actions";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 
 class LoadoutCard extends React.Component {
-   // constructor(props) {
-   //    super(props); // boilerplate
-   //    this.state = {};
-   // }
-
    moveToLoadout(loadoutId) {
       this.props.dispatch({
          type: actions.STORE_CURRENT_ITEM,
@@ -219,66 +198,7 @@ class LoadoutCard extends React.Component {
                //    this.gotoSharing();
                // }}
             >
-               {this.props.loadout.numUsers > 1 && (
-                  <>
-                     <span
-                        style={{ "font-size": "1rem", opacity: 0.5 }}
-                        className={classnames(
-                           (UI_APPEARANCE === "light" ||
-                              UI_APPEARANCE === "dark") &&
-                              "level-text-color-" +
-                                 String((level + 1) % LEVEL_COLORS),
-                           UI_APPEARANCE === "colors" && "dark-text-color",
-                           { disabled: item.status === 1 }
-                        )}
-                     >
-                        {this.props.loadout.numUsers}
-                     </span>
-                     <span
-                        className={classnames(
-                           "loadout-card-icon",
-                           UI_APPEARANCE === "dark" && "icon-light",
-                           UI_APPEARANCE !== "dark" && "icon-dark"
-                        )}
-                     >
-                        <IconUserCouple />
-                     </span>
-                     &nbsp;&nbsp;
-                  </>
-               )}
-               {this.props.loadout.canPack === 1 && (
-                  <span
-                     className={classnames(
-                        "loadout-card-icon",
-                        UI_APPEARANCE === "dark" && "icon-light",
-                        UI_APPEARANCE !== "dark" && "icon-dark"
-                     )}
-                  >
-                     <IconPackage />
-                  </span>
-               )}
-               {this.props.loadout.canEdit === 1 && (
-                  <span
-                     className={classnames(
-                        "loadout-card-icon",
-                        UI_APPEARANCE === "dark" && "icon-light",
-                        UI_APPEARANCE !== "dark" && "icon-dark"
-                     )}
-                  >
-                     <IconEdit />
-                  </span>
-               )}
-               {this.props.loadout.isAdmin === 1 && (
-                  <span
-                     className={classnames(
-                        "loadout-card-icon",
-                        UI_APPEARANCE === "dark" && "icon-light",
-                        UI_APPEARANCE !== "dark" && "icon-dark"
-                     )}
-                  >
-                     <IconKey />
-                  </span>
-               )}
+               <SharingStrip loadout={this.props.loadout} />
             </div>
          </div>
       );
