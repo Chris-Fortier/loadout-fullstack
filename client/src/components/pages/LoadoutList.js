@@ -179,6 +179,7 @@ class LoadoutList extends React.Component {
                                        <LoadoutCard
                                           loadout={loadout}
                                           key={loadout.id}
+                                          parentProps={this.props}
                                        />
                                     ))}
                                     <div

@@ -14,8 +14,8 @@ import classnames from "classnames";
 import {
    IconPackage,
    IconEdit,
-   IconKey,
    IconUserCouple,
+   IconKey,
 } from "../../icons/icons.js";
 import axios from "axios";
 
@@ -81,6 +81,19 @@ class LoadoutCard extends React.Component {
          });
    }
 
+   // open the loadout sharing settings
+   gotoSharing() {
+      // set the loadout
+      movePageToDifferentItem(
+         this.props.loadout.loadoutId,
+         +1,
+         this.props.loadout
+      );
+
+      // move the parent page to sharing settings
+      this.props.parentProps.history.push("/loadout-sharing");
+   }
+
    render() {
       console.log("props", this.props);
       const loadout = this.props.loadout; // this is to simplify code below
@@ -138,50 +151,6 @@ class LoadoutCard extends React.Component {
                      </div>
                   )}
 
-                  {/* {true && (
-                     <span
-                        className={classnames(
-                           "loadout-card-icon",
-                           UI_APPEARANCE === "dark" && "icon-light",
-                           UI_APPEARANCE !== "dark" && "icon-dark"
-                        )}
-                     >
-                        <IconUserCouple />
-                     </span>
-                  )}
-                  {this.props.loadout.canEdit === 1 && (
-                     <span
-                        className={classnames(
-                           "loadout-card-icon",
-                           UI_APPEARANCE === "dark" && "icon-light",
-                           UI_APPEARANCE !== "dark" && "icon-dark"
-                        )}
-                     >
-                        <IconEdit />
-                     </span>
-                  )}
-                  {this.props.loadout.canPack === 1 && (
-                     <span
-                        className={classnames(
-                           "loadout-card-icon",
-                           UI_APPEARANCE === "dark" && "icon-light",
-                           UI_APPEARANCE !== "dark" && "icon-dark"
-                        )}
-                     >
-                        <IconPackage />
-                     </span>
-                  )}
-                  {this.props.loadout.isAdmin === 1 && (
-                     <span
-                        className={classnames(
-                           "loadout-card-icon",
-                           UI_APPEARANCE === "dark" && "icon-light",
-                           UI_APPEARANCE !== "dark" && "icon-dark"
-                        )}
-                     >
-                        <IconKey />
-                     </span>
-                  )} */}
                   <span className="flex-fill"></span>
 
                   {item.numChildren > 0 && (
@@ -243,17 +212,39 @@ class LoadoutCard extends React.Component {
                   )}
                </div>
             </div>
-            <div className="d-flex">
-               {true && (
-                  <span
-                     className={classnames(
-                        "loadout-card-icon",
-                        UI_APPEARANCE === "dark" && "icon-light",
-                        UI_APPEARANCE !== "dark" && "icon-dark"
-                     )}
-                  >
-                     <IconUserCouple />
-                  </span>
+            <div
+               className="d-flex"
+               // "button clickable"
+               // onClick={() => {
+               //    this.gotoSharing();
+               // }}
+            >
+               {this.props.loadout.numUsers > 1 && (
+                  <>
+                     <span
+                        style={{ "font-size": "1rem", opacity: 0.5 }}
+                        className={classnames(
+                           (UI_APPEARANCE === "light" ||
+                              UI_APPEARANCE === "dark") &&
+                              "level-text-color-" +
+                                 String((level + 1) % LEVEL_COLORS),
+                           UI_APPEARANCE === "colors" && "dark-text-color",
+                           { disabled: item.status === 1 }
+                        )}
+                     >
+                        {this.props.loadout.numUsers}
+                     </span>
+                     <span
+                        className={classnames(
+                           "loadout-card-icon",
+                           UI_APPEARANCE === "dark" && "icon-light",
+                           UI_APPEARANCE !== "dark" && "icon-dark"
+                        )}
+                     >
+                        <IconUserCouple />
+                     </span>
+                     &nbsp;&nbsp;
+                  </>
                )}
                {this.props.loadout.canPack === 1 && (
                   <span

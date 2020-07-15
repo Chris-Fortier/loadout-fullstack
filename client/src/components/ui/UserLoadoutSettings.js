@@ -260,7 +260,7 @@ class UserLoadoutSettings extends React.Component {
             )}
             {this.state.isDeleted && (
                <>
-                  <th scope="row">{this.props.loadoutUser.username} Deleted</th>
+                  <th scope="row">{this.props.loadoutUser.username} Removed</th>
                   <td></td>
                   <td></td>
                   <td></td>

@@ -30,38 +30,31 @@ router.get("/", validateJwt, (req, res) => {
    db.query(selectUserLoadouts, [userId]) // this syntax style prevents hackers
       .then((userLoadouts) => {
          // successful response
-         // console.log(userLoadouts);
 
-         // we need to convert the names of our data from database-side snake_case to camelCase
-         // we can also use this to "shape the data" for the client
-         // this is where we can "shrink out payload", the data we sent to the client
-         // I suspect this is where I am going to convert flattened loadouts to nested
          const camelCaseUserLoadouts = userLoadouts.map((userLoadout) => {
             // for every userLoadout, return a new object
-            return {
-               // id: userLoadout.id,
-               // imagery: userLoadout.imagery,
-               // answer: userLoadout.answer,
-               // userId: userLoadout.user_id,
-               // createdAt: userLoadout.created_at,
-               // nextAttemptAt: userLoadout.next_attempt_at,
-               // lastAttemptAt: userLoadout.last_attempt_at,
-               // totalSuccessfulAttempts: userLoadout.total_successful_attempts,
-               // level: userLoadout.level,
 
-               // username: userLoadout.username,
+            // convert null counts to zeros
+            let numChildren = userLoadout.num_children;
+            if (numChildren === null) numChildren = 0;
+            let numPackedChildren = userLoadout.num_packed;
+            if (numPackedChildren === null) numPackedChildren = 0;
+
+            return {
                loadoutName: userLoadout.name,
                canEdit: userLoadout.can_edit,
                canPack: userLoadout.can_pack,
                isAdmin: userLoadout.is_admin,
                loadoutId: userLoadout.loadout_id,
-               numChildren: userLoadout.num_children,
-               numPackedChildren: userLoadout.num_packed,
+               numChildren: numChildren,
+               numPackedChildren: numPackedChildren,
+               numUsers: userLoadout.num_users, // the number of users who have access to the loadout
                contentSummary: getContentSummary(
-                  userLoadout.num_children,
-                  userLoadout.num_packed,
+                  numChildren,
+                  numPackedChildren,
                   0 // sending status of 0 for a top level loadout
                ),
+               // contentSummary: "Hello",
             };
          });
 
