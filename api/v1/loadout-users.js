@@ -43,6 +43,7 @@ router.get("/", (req, res) => {
                isAdmin: loadoutUser.is_admin,
                id: loadoutUser.id,
                userId: loadoutUser.user_id,
+               loadoutId: loadoutUser.loadout_id,
             };
          });
 

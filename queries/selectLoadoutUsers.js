@@ -8,7 +8,8 @@ const selectLoadoutUsers = `
       xref_user_loadouts.can_pack,
       xref_user_loadouts.is_admin,
       xref_user_loadouts.id AS id,
-      xref_user_loadouts.user_id AS user_id
+      xref_user_loadouts.user_id AS user_id,
+      xref_user_loadouts.loadout_id AS loadout_id
    FROM
       users
    INNER JOIN

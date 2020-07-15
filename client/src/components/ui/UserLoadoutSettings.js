@@ -10,11 +10,14 @@ import {
 } from "../../icons/loadout-icons";
 
 class UserLoadoutSettings extends React.Component {
-   constructor() {
-      super(); // boilerplate
+   constructor(props) {
+      super(props); // boilerplate
 
       this.state = {
          isDeleted: false,
+         canPack: this.props.loadoutUser.canPack,
+         canEdit: this.props.loadoutUser.canEdit,
+         isAdmin: this.props.loadoutUser.isAdmin,
       };
    }
 
@@ -34,6 +37,90 @@ class UserLoadoutSettings extends React.Component {
          });
 
       // refreshPage();
+   }
+
+   updatePermissionsOnServer(
+      canPack = this.state.canPack,
+      canEdit = this.state.canEdit,
+      isAdmin = this.state.isAdmin
+   ) {
+      console.log({ canPack, canEdit, isAdmin });
+      axios
+         .put(
+            "http://localhost:3060/api/v1/user-loadouts/set-permissions?userId=" +
+               this.props.loadoutUser.userId +
+               "&loadoutId=" +
+               this.props.loadoutUser.loadoutId +
+               "&canPack=" +
+               canPack +
+               "&canEdit=" +
+               canEdit +
+               "&isAdmin=" +
+               isAdmin
+         )
+         .then((res) => {
+            console.log("res.data", res.data);
+         })
+         .catch((err) => {
+            console.log("err", err);
+         });
+   }
+
+   toggleCanPack() {
+      // toggle on client
+      if (this.state.canPack === 0) {
+         this.setState({ canPack: 1 });
+         this.updatePermissionsOnServer(
+            1,
+            this.state.canEdit,
+            this.state.isAdmin
+         );
+      } else if (this.state.canPack === 1) {
+         this.setState({ canPack: 0 });
+         this.updatePermissionsOnServer(
+            0,
+            this.state.canEdit,
+            this.state.isAdmin
+         );
+      }
+   }
+
+   toggleCanEdit() {
+      // toggle on client
+      if (this.state.canEdit === 0) {
+         this.setState({ canEdit: 1 });
+         this.updatePermissionsOnServer(
+            this.state.canPack,
+            1,
+            this.state.isAdmin
+         );
+      } else if (this.state.canEdit === 1) {
+         this.setState({ canEdit: 0 });
+         this.updatePermissionsOnServer(
+            this.state.canPack,
+            0,
+            this.state.isAdmin
+         );
+      }
+   }
+
+   toggleIsAdmin() {
+      // toggle on client
+      if (this.state.isAdmin === 0) {
+         this.setState({ isAdmin: 1 });
+         this.updatePermissionsOnServer(
+            this.state.canPack,
+            this.state.canEdit,
+            1
+         );
+      } else if (this.state.isAdmin === 1) {
+         this.setState({ isAdmin: 0 });
+         this.updatePermissionsOnServer(
+            this.state.canPack,
+            this.state.canEdit,
+            0
+         );
+      }
    }
 
    render() {
@@ -68,13 +155,14 @@ class UserLoadoutSettings extends React.Component {
                                  disabled: thisUserIsAdmin === 0,
                               }
                            )}
+                           onClick={() => {
+                              if (thisUserIsAdmin === 1) {
+                                 this.toggleCanPack();
+                              }
+                           }}
                         >
-                           {this.props.loadoutUser.canPack === 1 && (
-                              <CheckedIcon />
-                           )}
-                           {this.props.loadoutUser.canPack === 0 && (
-                              <DisabledIcon />
-                           )}
+                           {this.state.canPack === 1 && <CheckedIcon />}
+                           {this.state.canPack === 0 && <DisabledIcon />}
                         </span>
                      </div>
                   </td>
@@ -92,13 +180,14 @@ class UserLoadoutSettings extends React.Component {
                                  disabled: thisUserIsAdmin === 0,
                               }
                            )}
+                           onClick={() => {
+                              if (thisUserIsAdmin === 1) {
+                                 this.toggleCanEdit();
+                              }
+                           }}
                         >
-                           {this.props.loadoutUser.canEdit === 1 && (
-                              <CheckedIcon />
-                           )}
-                           {this.props.loadoutUser.canEdit === 0 && (
-                              <DisabledIcon />
-                           )}
+                           {this.state.canEdit === 1 && <CheckedIcon />}
+                           {this.state.canEdit === 0 && <DisabledIcon />}
                         </span>
                      </div>
                   </td>
@@ -120,13 +209,17 @@ class UserLoadoutSettings extends React.Component {
                                     userLoadoutUserId === thisUserId,
                               }
                            )}
+                           onClick={() => {
+                              if (
+                                 thisUserIsAdmin === 1 &&
+                                 userLoadoutUserId !== thisUserId
+                              ) {
+                                 this.toggleIsAdmin();
+                              }
+                           }}
                         >
-                           {this.props.loadoutUser.isAdmin === 1 && (
-                              <CheckedIcon />
-                           )}
-                           {this.props.loadoutUser.isAdmin === 0 && (
-                              <DisabledIcon />
-                           )}
+                           {this.state.isAdmin === 1 && <CheckedIcon />}
+                           {this.state.isAdmin === 0 && <DisabledIcon />}
                         </span>
                      </div>
                   </td>

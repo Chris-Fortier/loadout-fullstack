@@ -6,6 +6,8 @@ const selectUserLoadouts = require("../../queries/selectUserLoadouts");
 const insertUserLoadout = require("../../queries/insertUserLoadout");
 const deleteUserLoadout = require("../../queries/deleteUserLoadout");
 const deleteUserLoadoutsByUser = require("../../queries/deleteUserLoadoutsByUser");
+const selectUserLoadoutByIds = require("../../queries/selectUserLoadoutByIds");
+const setUserLoadout = require("../../queries/setUserLoadout");
 const {
    getContentSummary,
    getUserIdByUsername,
@@ -155,6 +157,83 @@ router.post("/delete-all-by-user", validateJwt, async (req, res) => {
          console.log("err", err);
          res.status(400).json(err);
       });
+});
+
+// @route      PUT api/v1/user-loadouts/set-permissions
+// @desc       sets permissions on a user loadout
+//                only if the provided user token has admin privledges
+// @access     Private
+// test:       http://localhost:3060/api/v1/user-loadouts/set-permissions?userId=a7ce95c7-d9ca-4788-912e-a4e91b7f7e66&loadoutId=3196365f-538d-4ffe-9fd4-b45e8560397e&canPack=3&canEdit=3&isAdmin=3
+router.put("/set-permissions", validateJwt, async (req, res) => {
+   const adminUserId = req.user.id; // get the user id from the validateJwt, this is the admin's user id who is trying to make the change
+   const userId = req.query.userId; // the user id of the user's permissions we are dealing with
+   const loadoutId = req.query.loadoutId;
+   const canPack = req.query.canPack;
+   const canEdit = req.query.canEdit;
+   const isAdmin = req.query.isAdmin;
+
+   console.log({ adminUserId, userId, loadoutId, canPack, canEdit, isAdmin });
+
+   // make sure all the values are valid
+   if (
+      (canPack === "0" || canPack === "1") &&
+      (canEdit === "0" || canEdit === "1") &&
+      (isAdmin === "0" || isAdmin === "1")
+   ) {
+      // the admin cannot remove admin privledges from self, so if the adminUserId and userLoadout userId are the same, set isAdmin to 1
+      if (isAdmin === "0" && adminUserId === userId) {
+         res.status(400).json(
+            "an admin cannot take admin permissions from self"
+         );
+         console.log("an admin cannot take admin permissions from self");
+      } else {
+         db.query(selectUserLoadoutByIds, [adminUserId, loadoutId])
+            .then((userLoadouts) => {
+               // check if the user has access to this loadout
+               if (userLoadouts.length === 1) {
+                  console.log("user has access to this loadout");
+                  // check if the user has admin permissions on this loadout
+                  if (userLoadouts[0].is_admin === 1) {
+                     console.log("user has admin permissions on this loadout");
+                     // update the permissions on the user loadout
+                     db.query(setUserLoadout, [
+                        canPack,
+                        canEdit,
+                        isAdmin,
+                        userId,
+                        loadoutId,
+                     ])
+                        .then((dbRes) => {
+                           console.log("userLoadout permissions assigned");
+                           res.status(200).json({ dbRes });
+                        })
+                        .catch((err) => {
+                           console.log("err", err);
+                           res.status(400).json(err);
+                        });
+                  } else {
+                     res.status(400).json(
+                        "user does not have admin permisson on this loadout"
+                     );
+                  }
+               } else {
+                  res.status(400).json(
+                     "user does not have access to this loadout or the loadout doesn't exist"
+                  );
+               }
+            })
+            .catch((err) => {
+               console.log("err", err);
+               res.status(400).json({ err });
+            });
+      }
+   } else {
+      res.status(400).json("one or more permission values are not valid");
+      console.log("one or more permission values are not valid");
+   }
+
+   // const { itemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+   // console.log({ itemId });
 });
 
 module.exports = router;

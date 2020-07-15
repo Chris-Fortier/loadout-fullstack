@@ -7,12 +7,12 @@ import { Link } from "react-router-dom"; // a React element for linking
 import axios from "axios";
 import { UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
-import { AddIcon, DisabledIcon, CheckedIcon } from "../../icons/loadout-icons";
+// import { AddIcon, DisabledIcon, CheckedIcon } from "../../icons/loadout-icons";
 import {
    IconPackage,
    IconEdit,
    IconKey,
-   IconUserCouple,
+   // IconUserCouple,
 } from "../../icons/icons.js";
 
 class LoadoutSharing extends React.Component {
