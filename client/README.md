@@ -72,7 +72,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 ## Sharing Logic
 
 * The creator of a loadout is given full permissions to the loadouts they create.
-* Anyone a loadout is shared with can remove themselves from the loadout.
+* Anyone a loadout is shared with can remove themselves from the loadout, unless they are an admin (this is to ensure there is always at least one admin to every loadout).
 * Anyone assigned “can pack” permissions can
   * pack and 
   * pack items in the loadout.

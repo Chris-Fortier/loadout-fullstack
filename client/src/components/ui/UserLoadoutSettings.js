@@ -21,12 +21,15 @@ class UserLoadoutSettings extends React.Component {
       };
    }
 
-   deleteUserLoadout(userLoadoutId) {
-      console.log("deleting user-loadout", { userLoadoutId });
-
+   removeUserLoadout() {
       // server update
       axios
-         .post("/api/v1/user-loadouts/delete?userLoadoutId=" + userLoadoutId)
+         .put(
+            "/api/v1/user-loadouts/delete?userId=" +
+               this.props.loadoutUser.userId +
+               "&loadoutId=" +
+               this.props.loadoutUser.loadoutId
+         )
          .then((res) => {
             console.log("axios res", res);
             this.setState({ isDeleted: true });
@@ -243,6 +246,11 @@ class UserLoadoutSettings extends React.Component {
                                  }
                               )
                            }
+                           onClick={() => {
+                              if (canRemoveUserLoadout) {
+                                 this.removeUserLoadout();
+                              }
+                           }}
                         >
                            <DeleteIcon />
                         </span>

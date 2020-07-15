@@ -301,13 +301,13 @@ class LoadoutSharing extends React.Component {
                                                             type="checkbox"
                                                             className="custom-control-input"
                                                             id={
-                                                               "new-can-edit-switch"
+                                                               "new-can-pack-switch"
                                                             }
                                                          />
                                                          <label
                                                             className="custom-control-label"
                                                             htmlFor={
-                                                               "new-can-edit-switch"
+                                                               "new-can-pack-switch"
                                                             }
                                                          ></label>
                                                       </div>
@@ -318,13 +318,13 @@ class LoadoutSharing extends React.Component {
                                                             type="checkbox"
                                                             className="custom-control-input"
                                                             id={
-                                                               "new-can-pack-switch"
+                                                               "new-can-edit-switch"
                                                             }
                                                          />
                                                          <label
                                                             className="custom-control-label"
                                                             htmlFor={
-                                                               "new-can-pack-switch"
+                                                               "new-can-edit-switch"
                                                             }
                                                          ></label>
                                                       </div>

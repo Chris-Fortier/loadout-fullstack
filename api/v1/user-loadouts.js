@@ -7,6 +7,7 @@ const insertUserLoadout = require("../../queries/insertUserLoadout");
 const deleteUserLoadout = require("../../queries/deleteUserLoadout");
 const deleteUserLoadoutsByUser = require("../../queries/deleteUserLoadoutsByUser");
 const selectUserLoadoutByIds = require("../../queries/selectUserLoadoutByIds");
+const deleteUserLoadoutByIds = require("../../queries/deleteUserLoadoutByIds");
 const setUserLoadout = require("../../queries/setUserLoadout");
 const {
    getContentSummary,
@@ -122,21 +123,69 @@ router.post("/insert", async (req, res) => {
    }
 });
 
-// @route      POST api/v1/user-loadouts/delete
-// @desc       Delete an existing user-loadout
+// @route      PUT api/v1/user-loadouts/delete
+// @desc       delete a user loadout
+//                only if the provided user token has admin privledges adn they are not deleting themself
 // @access     Private
-// test: http://localhost:3060/api/v1/user-loadouts/delete?userLoadoutId=a02694bd-ab0f-4b53-ac76-7ef0adb7aebe
-router.post("/delete", async (req, res) => {
-   const { userLoadoutId } = req.query; // destructuring to simplify code below
+// test:       http://localhost:3060/api/v1/user-loadouts/delete?userId=a7ce95c7-d9ca-4788-912e-a4e91b7f7e66&loadoutId=8fc62fd2-0fd0-4b25-b3f4-7698a8301d2b
+router.put("/delete", validateJwt, async (req, res) => {
+   const deleterUserId = req.user.id; // the user id of the user who is trying to delete the user loadout
+   const userId = req.query.userId; // the user id of the user loadout
+   const loadoutId = req.query.loadoutId; // the loadout id of the user loadout
 
-   db.query(deleteUserLoadout, [userLoadoutId])
-      .then((dbRes) => {
-         console.log("dbRes", dbRes);
-         res.status(200).json("user-loadout deleted");
+   // we can delete if the user is deleting their own user loadout unless they are an admin
+   // we can also delete if the user is an admin and they are deleting a user loadout for a different user
+   db.query(selectUserLoadoutByIds, [deleterUserId, loadoutId])
+      .then((userLoadouts) => {
+         // check if the user who is performing the delete has access to this loadout
+         if (userLoadouts.length === 1) {
+            console.log("user has access to this loadout");
+            // check if the user has admin permissions on this loadout
+            if (userLoadouts[0].is_admin === 1) {
+               if (deleterUserId !== userId) {
+                  db.query(deleteUserLoadoutByIds, [userId, loadoutId])
+                     .then((dbRes) => {
+                        console.log("dbRes", dbRes);
+                        res.status(200).json(
+                           "admin removed another user from this loadout" // reproduced
+                        );
+                     })
+                     .catch((err) => {
+                        console.log("err", err);
+                        res.status(400).json({ dbError });
+                     });
+               } else {
+                  res.status(400).json(
+                     "admin cannot remove themself from loadout" // reproduced
+                  );
+               }
+            } else {
+               if (deleterUserId === userId) {
+                  db.query(deleteUserLoadout, [userLoadouts[0].id])
+                     .then((dbRes) => {
+                        console.log("dbRes", dbRes);
+                        res.status(200).json(
+                           "user removed themself from loadout" // reproduced
+                        );
+                     })
+                     .catch((err) => {
+                        console.log("err", err);
+                        res.status(400).json({ dbError });
+                     });
+               } else {
+                  res.status(400).json(
+                     "you cannot remove other users from a loadout unless you are an admin" // reproduced
+                  );
+               }
+            }
+         } else {
+            res.status(400).json(
+               "user does not have access to this loadout or the loadout doesn't exist" // reproduced
+            );
+         }
       })
       .catch((err) => {
-         console.log("err", err);
-         res.status(400).json({ dbError });
+         res.status(400).json(err);
       });
 });
 
