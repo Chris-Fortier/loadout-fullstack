@@ -4,10 +4,10 @@ import { UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
 import axios from "axios";
 import {
-   PackedIcon,
-   ReadyToPackIcon,
-   DeleteItemIcon,
-} from "../../icons/loadout-icons.js";
+   DeleteIcon,
+   DisabledIcon,
+   CheckedIcon,
+} from "../../icons/loadout-icons";
 
 class UserLoadoutSettings extends React.Component {
    constructor() {
@@ -70,10 +70,10 @@ class UserLoadoutSettings extends React.Component {
                            )}
                         >
                            {this.props.loadoutUser.canPack === 1 && (
-                              <PackedIcon />
+                              <CheckedIcon />
                            )}
                            {this.props.loadoutUser.canPack === 0 && (
-                              <ReadyToPackIcon />
+                              <DisabledIcon />
                            )}
                         </span>
                      </div>
@@ -94,10 +94,10 @@ class UserLoadoutSettings extends React.Component {
                            )}
                         >
                            {this.props.loadoutUser.canEdit === 1 && (
-                              <PackedIcon />
+                              <CheckedIcon />
                            )}
                            {this.props.loadoutUser.canEdit === 0 && (
-                              <ReadyToPackIcon />
+                              <DisabledIcon />
                            )}
                         </span>
                      </div>
@@ -122,10 +122,10 @@ class UserLoadoutSettings extends React.Component {
                            )}
                         >
                            {this.props.loadoutUser.isAdmin === 1 && (
-                              <PackedIcon />
+                              <CheckedIcon />
                            )}
                            {this.props.loadoutUser.isAdmin === 0 && (
-                              <ReadyToPackIcon />
+                              <DisabledIcon />
                            )}
                         </span>
                      </div>
@@ -151,7 +151,7 @@ class UserLoadoutSettings extends React.Component {
                               )
                            }
                         >
-                           <DeleteItemIcon />
+                           <DeleteIcon />
                         </span>
                      </div>
                   </td>

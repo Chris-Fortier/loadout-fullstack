@@ -7,6 +7,13 @@ import { Link } from "react-router-dom"; // a React element for linking
 import axios from "axios";
 import { UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
+import { AddIcon, DisabledIcon, CheckedIcon } from "../../icons/loadout-icons";
+import {
+   IconPackage,
+   IconEdit,
+   IconKey,
+   IconUserCouple,
+} from "../../icons/icons.js";
 
 class LoadoutSharing extends React.Component {
    constructor(props) {
@@ -175,19 +182,64 @@ class LoadoutSharing extends React.Component {
                                                    scope="col"
                                                    className="display-switch-label"
                                                 >
-                                                   Can Pack
+                                                   <span className="d-flex">
+                                                      <span
+                                                         className={classnames(
+                                                            "loadout-card-icon",
+                                                            UI_APPEARANCE ===
+                                                               "dark" &&
+                                                               "icon-light",
+                                                            UI_APPEARANCE !==
+                                                               "dark" &&
+                                                               "icon-dark"
+                                                         )}
+                                                      >
+                                                         <IconPackage />
+                                                      </span>
+                                                      &nbsp;Can Pack
+                                                   </span>
                                                 </th>
                                                 <th
                                                    scope="col"
                                                    className="display-switch-label"
                                                 >
-                                                   Can Edit
+                                                   <span className="d-flex">
+                                                      <span
+                                                         className={classnames(
+                                                            "loadout-card-icon",
+                                                            UI_APPEARANCE ===
+                                                               "dark" &&
+                                                               "icon-light",
+                                                            UI_APPEARANCE !==
+                                                               "dark" &&
+                                                               "icon-dark"
+                                                         )}
+                                                      >
+                                                         <IconEdit />
+                                                      </span>
+                                                      &nbsp;Can Edit
+                                                   </span>
                                                 </th>
                                                 <th
                                                    scope="col"
                                                    className="display-switch-label"
                                                 >
-                                                   Admin
+                                                   <span className="d-flex">
+                                                      <span
+                                                         className={classnames(
+                                                            "loadout-card-icon",
+                                                            UI_APPEARANCE ===
+                                                               "dark" &&
+                                                               "icon-light",
+                                                            UI_APPEARANCE !==
+                                                               "dark" &&
+                                                               "icon-dark"
+                                                         )}
+                                                      >
+                                                         <IconKey />
+                                                      </span>
+                                                      &nbsp;Is Admin
+                                                   </span>
                                                 </th>
                                                 <th
                                                    scope="col"
