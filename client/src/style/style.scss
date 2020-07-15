@@ -952,6 +952,13 @@ $iconWidth: 30px;
    cursor: not-allowed;
 }
 
+// fainter disabled icons in sharing settings
+.sharedUserRow {
+   .disabled {
+      opacity: 0.2;
+   }
+}
+
 // used for labels on forms and headers on tables
 .form-label {
    text-transform: uppercase;

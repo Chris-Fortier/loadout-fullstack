@@ -42,6 +42,7 @@ router.get("/", (req, res) => {
                canPack: loadoutUser.can_pack,
                isAdmin: loadoutUser.is_admin,
                id: loadoutUser.id,
+               userId: loadoutUser.user_id,
             };
          });
 

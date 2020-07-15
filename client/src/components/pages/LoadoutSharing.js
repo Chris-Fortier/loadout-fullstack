@@ -14,15 +14,16 @@ class LoadoutSharing extends React.Component {
 
       console.log("this.props", this.props);
 
-      this.refreshPage();
-
       // set default state values
 
       this.state = {
-         loadoutUsers: [],
+         thisLoadoutUser: [],
+         otherLoadoutUsers: [], // stores loadoutUsers besides the current user
          addUserError: "", // stores the error message when trying to add a user to this loadout
          hasAddUserError: false, // stores whether there is an error when trying to add a user to this loadout
       };
+
+      this.refreshPage();
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
       // TODO, this is duplicated code
@@ -38,10 +39,17 @@ class LoadoutSharing extends React.Component {
          .get("/api/v1/loadout-users?loadoutId=" + this.props.currentItem.id)
          .then((res) => {
             console.log("axios res", res);
-            // processAllItems(res.data); // initial processing of items that creates derived properties
             const loadoutUsers = res.data;
+            const thisLoadoutUser = loadoutUsers.filter((loadoutUser) => {
+               return loadoutUser.userId === this.props.currentUser.id;
+            });
+            thisLoadoutUser[0].username =
+               thisLoadoutUser[0].username + " (YOU)";
             this.setState({
-               loadoutUsers: loadoutUsers,
+               thisLoadoutUser: thisLoadoutUser,
+               otherLoadoutUsers: loadoutUsers.filter((loadoutUser) => {
+                  return loadoutUser.userId !== this.props.currentUser.id;
+               }),
             });
          })
          .catch((error) => {
@@ -126,7 +134,7 @@ class LoadoutSharing extends React.Component {
    }
 
    render() {
-      console.log("Rendering page...");
+      console.log("Rendering page...", this.props.currentUser.id);
 
       return (
          <div>
@@ -185,12 +193,12 @@ class LoadoutSharing extends React.Component {
                                                    scope="col"
                                                    className="display-switch-label"
                                                 >
-                                                   Delete
+                                                   Remove
                                                 </th>
                                              </tr>
                                           </thead>
                                           <tbody>
-                                             {this.state.loadoutUsers.map(
+                                             {this.state.thisLoadoutUser.map(
                                                 (loadoutUser) => (
                                                    <UserLoadoutSettings
                                                       loadoutUser={loadoutUser}
@@ -198,117 +206,132 @@ class LoadoutSharing extends React.Component {
                                                    />
                                                 )
                                              )}
-                                             <tr>
-                                                <th scope="row">
-                                                   <input
-                                                      className={classnames({
-                                                         "my-input": true,
-                                                         "input-invalid": this
-                                                            .state
-                                                            .hasAddUserError,
-                                                      })}
-                                                      id="add-user-username-input"
-                                                      aria-describedby="UsernameHelp"
-                                                      placeholder="Enter another user's username"
+                                             {this.state.otherLoadoutUsers.map(
+                                                (loadoutUser) => (
+                                                   <UserLoadoutSettings
+                                                      loadoutUser={loadoutUser}
+                                                      key={loadoutUser.id}
                                                    />
-                                                   {this.state
-                                                      .hasAddUserError && (
-                                                      <div
-                                                         className="text-danger"
-                                                         id="add-user-error"
-                                                      >
-                                                         {
-                                                            this.state
-                                                               .addUserError
-                                                         }
-                                                      </div>
-                                                   )}
-                                                </th>
-                                                <td>
-                                                   <div className="custom-control custom-checkbox">
+                                                )
+                                             )}
+
+                                             {this.props.currentUserLoadout
+                                                .isAdmin === 1 && (
+                                                <tr className="sharedUserRow">
+                                                   <th scope="row">
                                                       <input
-                                                         type="checkbox"
-                                                         className="custom-control-input"
-                                                         id={
-                                                            "new-can-edit-switch"
-                                                         }
+                                                         className={classnames({
+                                                            "my-input": true,
+                                                            "input-invalid": this
+                                                               .state
+                                                               .hasAddUserError,
+                                                         })}
+                                                         id="add-user-username-input"
+                                                         aria-describedby="UsernameHelp"
+                                                         placeholder="Enter another user's username"
                                                       />
-                                                      <label
-                                                         className="custom-control-label"
-                                                         htmlFor={
-                                                            "new-can-edit-switch"
-                                                         }
-                                                      ></label>
-                                                   </div>
-                                                </td>
-                                                <td>
-                                                   <div className="custom-control custom-checkbox">
-                                                      <input
-                                                         type="checkbox"
-                                                         className="custom-control-input"
-                                                         id={
-                                                            "new-can-pack-switch"
-                                                         }
-                                                      />
-                                                      <label
-                                                         className="custom-control-label"
-                                                         htmlFor={
-                                                            "new-can-pack-switch"
-                                                         }
-                                                      ></label>
-                                                   </div>
-                                                </td>
-                                                <td>
-                                                   <div className="custom-control custom-checkbox">
-                                                      <input
-                                                         type="checkbox"
-                                                         className="custom-control-input"
-                                                         id={
-                                                            "new-is-admin-switch"
-                                                         }
-                                                      />
-                                                      <label
-                                                         className="custom-control-label"
-                                                         htmlFor={
-                                                            "new-is-admin-switch"
-                                                         }
-                                                      ></label>
-                                                   </div>
-                                                </td>
-                                                <td
-                                                   className={classnames(
-                                                      "clickable",
-                                                      UI_APPEARANCE ===
-                                                         "dark" && "icon-light",
-                                                      UI_APPEARANCE !==
-                                                         "dark" && "icon-dark"
-                                                   )}
-                                                >
-                                                   <div
-                                                      className="button primary-action-button"
-                                                      onClick={() =>
-                                                         this.validateAndAddUserLoadout(
-                                                            document.getElementById(
-                                                               "add-user-username-input"
-                                                            ).value,
-                                                            this.props
-                                                               .currentItem.id,
-                                                            document.getElementById(
+                                                      {this.state
+                                                         .hasAddUserError && (
+                                                         <div
+                                                            className="text-danger"
+                                                            id="add-user-error"
+                                                         >
+                                                            {
+                                                               this.state
+                                                                  .addUserError
+                                                            }
+                                                         </div>
+                                                      )}
+                                                   </th>
+                                                   <td>
+                                                      <div className="custom-control custom-checkbox">
+                                                         <input
+                                                            type="checkbox"
+                                                            className="custom-control-input"
+                                                            id={
                                                                "new-can-edit-switch"
-                                                            ).checked,
-                                                            document.getElementById(
+                                                            }
+                                                         />
+                                                         <label
+                                                            className="custom-control-label"
+                                                            htmlFor={
+                                                               "new-can-edit-switch"
+                                                            }
+                                                         ></label>
+                                                      </div>
+                                                   </td>
+                                                   <td>
+                                                      <div className="custom-control custom-checkbox">
+                                                         <input
+                                                            type="checkbox"
+                                                            className="custom-control-input"
+                                                            id={
                                                                "new-can-pack-switch"
-                                                            ).checked,
-                                                            document.getElementById(
+                                                            }
+                                                         />
+                                                         <label
+                                                            className="custom-control-label"
+                                                            htmlFor={
+                                                               "new-can-pack-switch"
+                                                            }
+                                                         ></label>
+                                                      </div>
+                                                   </td>
+                                                   <td>
+                                                      <div className="custom-control custom-checkbox">
+                                                         <input
+                                                            type="checkbox"
+                                                            className="custom-control-input"
+                                                            id={
                                                                "new-is-admin-switch"
-                                                            ).checked
-                                                         )
-                                                      }
+                                                            }
+                                                         />
+                                                         <label
+                                                            className="custom-control-label"
+                                                            htmlFor={
+                                                               "new-is-admin-switch"
+                                                            }
+                                                         ></label>
+                                                      </div>
+                                                   </td>
+                                                   <td
+                                                      className={classnames(
+                                                         "clickable",
+                                                         UI_APPEARANCE ===
+                                                            "dark" &&
+                                                            "icon-light",
+                                                         UI_APPEARANCE !==
+                                                            "dark" &&
+                                                            "icon-dark"
+                                                      )}
                                                    >
-                                                      Add
-                                                   </div>
-                                                </td>
-                                             </tr>
+                                                      <div
+                                                         className="button primary-action-button"
+                                                         onClick={() =>
+                                                            this.validateAndAddUserLoadout(
+                                                               document.getElementById(
+                                                                  "add-user-username-input"
+                                                               ).value,
+                                                               this.props
+                                                                  .currentItem
+                                                                  .id,
+                                                               document.getElementById(
+                                                                  "new-can-edit-switch"
+                                                               ).checked,
+                                                               document.getElementById(
+                                                                  "new-can-pack-switch"
+                                                               ).checked,
+                                                               document.getElementById(
+                                                                  "new-is-admin-switch"
+                                                               ).checked
+                                                            )
+                                                         }
+                                                      >
+                                                         Add
+                                                      </div>
+                                                   </td>
+                                                </tr>
+                                             )}
                                           </tbody>
                                        </table>
                                     </div>
@@ -330,6 +353,7 @@ function mapStateToProps(state) {
    return {
       currentItem: state.currentItem,
       currentUser: state.currentUser,
+      currentUserLoadout: state.currentUserLoadout,
    };
 }
 

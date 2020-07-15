@@ -89,8 +89,8 @@ class LoadoutList extends React.Component {
                contentSummary: "ready",
                isAdmin: 1,
                loadoutId: res.data, // use the loadout id generated on the server
-               loadoutName: "New Loadout",
-               name: "New Loadout",
+               loadoutName: "Untitled Loadout",
+               name: "Untitled Loadout",
                numChildren: 0,
                numPackedChildren: 0,
                status: 0,

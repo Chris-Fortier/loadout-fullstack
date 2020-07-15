@@ -66,3 +66,24 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+# Loadout
+
+## Sharing Logic
+
+* The creator of a loadout is given full permissions to the loadouts they create.
+* Anyone a loadout is shared with can remove themselves from the loadout.
+* Anyone assigned “can pack” permissions can
+  * pack and 
+  * pack items in the loadout.
+* Anyone assigned “can edit” permissions can
+  * add,
+  * delete and
+  * rename items within the loadout and
+  * rename the loadout itself.
+* Anyone assigned “is admin” permissions can
+  * share the loadout with others,
+  * assign or remove permissions to others,
+  * and delete the loadout.
+  * Admin cannot remove admin permissions from themselves, but can assign admin permissions to another user who can them remove the admin permission from the original user.
+  * Admin cannot remove themselves from the loadout unless they give ownership of the loadout to someone else via the method indicated above. (There must always be at least one admin for a loadout.)

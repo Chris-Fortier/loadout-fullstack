@@ -260,7 +260,7 @@ class ItemList2 extends React.Component {
 
       // update the client side with an equivalent new item
       this.props.childItems.push({
-         name: "New Item",
+         name: "Untitled Item",
          id: newItemId,
          status: 0,
          parentId: this.props.currentItem.id,
@@ -657,7 +657,7 @@ class ItemList2 extends React.Component {
                               {this.state.isEditMode && (
                                  <>
                                     <div
-                                       className="button primary-action-button"
+                                       className="button secondary-action-button narrow-button"
                                        onClick={(e) => {
                                           this.addItemAndFocus();
                                        }}

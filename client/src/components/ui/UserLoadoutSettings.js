@@ -1,12 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-   // IconArrowThinRightCircle,
-   IconTrash,
-} from "../../icons/icons.js";
 import { UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
 import axios from "axios";
+import {
+   PackedIcon,
+   ReadyToPackIcon,
+   DeleteItemIcon,
+} from "../../icons/loadout-icons.js";
 
 class UserLoadoutSettings extends React.Component {
    constructor() {
@@ -36,68 +37,123 @@ class UserLoadoutSettings extends React.Component {
    }
 
    render() {
+      // some consts to simplify code below
+      const thisUserIsAdmin = this.props.currentUserLoadout.isAdmin;
+      const userLoadoutUserId = this.props.loadoutUser.userId;
+      const thisUserId = this.props.currentUser.id;
+
+      // REMOVE is available if
+      // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
+      // currentUser is not an admin of this loadout and this userLoadout is the currentUser
+      const canRemoveUserLoadout =
+         (thisUserIsAdmin === 1 && userLoadoutUserId !== thisUserId) ||
+         (thisUserIsAdmin === 0 && userLoadoutUserId === thisUserId);
+
       return (
-         <tr>
+         <tr className="sharedUserRow">
             {!this.state.isDeleted && (
                <>
                   <th scope="row">{this.props.loadoutUser.username}</th>
                   <td>
-                     <div className="custom-control custom-checkbox">
-                        <input
-                           type="checkbox"
-                           className="custom-control-input"
-                           id={"can-pack-switch-" + this.props.loadoutUser.id}
-                           checked={this.props.loadoutUser.canPack === 1}
-                        />
-                        <label
-                           className="custom-control-label"
-                           htmlFor={
-                              "can-pack-switch-" + this.props.loadoutUser.id
-                           }
-                        ></label>
+                     <div className="d-flex">
+                        <span
+                           className={classnames(
+                              "item-card-icon",
+                              (UI_APPEARANCE === "light" ||
+                                 UI_APPEARANCE === "dark") &&
+                                 "item-icon-colors-1",
+                              UI_APPEARANCE === "colors" && "item-icon-colors",
+                              {
+                                 clickable: thisUserIsAdmin === 1,
+                                 disabled: thisUserIsAdmin === 0,
+                              }
+                           )}
+                        >
+                           {this.props.loadoutUser.canPack === 1 && (
+                              <PackedIcon />
+                           )}
+                           {this.props.loadoutUser.canPack === 0 && (
+                              <ReadyToPackIcon />
+                           )}
+                        </span>
                      </div>
                   </td>
                   <td>
-                     <div className="custom-control custom-checkbox">
-                        <input
-                           type="checkbox"
-                           className="custom-control-input"
-                           id={"can-edit-switch-" + this.props.loadoutUser.id}
-                           checked={this.props.loadoutUser.canEdit === 1}
-                        />
-                        <label
-                           className="custom-control-label"
-                           htmlFor={
-                              "can-edit-switch-" + this.props.loadoutUser.id
-                           }
-                        ></label>
+                     <div className="d-flex">
+                        <span
+                           className={classnames(
+                              "item-card-icon",
+                              (UI_APPEARANCE === "light" ||
+                                 UI_APPEARANCE === "dark") &&
+                                 "item-icon-colors-1",
+                              UI_APPEARANCE === "colors" && "item-icon-colors",
+                              {
+                                 clickable: thisUserIsAdmin === 1,
+                                 disabled: thisUserIsAdmin === 0,
+                              }
+                           )}
+                        >
+                           {this.props.loadoutUser.canEdit === 1 && (
+                              <PackedIcon />
+                           )}
+                           {this.props.loadoutUser.canEdit === 0 && (
+                              <ReadyToPackIcon />
+                           )}
+                        </span>
                      </div>
                   </td>
                   <td>
-                     <div className="custom-control custom-checkbox">
-                        <input
-                           type="checkbox"
-                           className="custom-control-input"
-                           id={"admin-switch-" + this.props.loadoutUser.id}
-                           checked={this.props.loadoutUser.isAdmin === 1}
-                        />
-                        <label
-                           className="custom-control-label"
-                           htmlFor={"admin-switch-" + this.props.loadoutUser.id}
-                        ></label>
+                     <div className="d-flex">
+                        <span
+                           className={classnames(
+                              "item-card-icon",
+                              (UI_APPEARANCE === "light" ||
+                                 UI_APPEARANCE === "dark") &&
+                                 "item-icon-colors-1",
+                              UI_APPEARANCE === "colors" && "item-icon-colors",
+                              {
+                                 clickable:
+                                    thisUserIsAdmin === 1 &&
+                                    userLoadoutUserId !== thisUserId,
+                                 disabled:
+                                    thisUserIsAdmin !== 1 ||
+                                    userLoadoutUserId === thisUserId,
+                              }
+                           )}
+                        >
+                           {this.props.loadoutUser.isAdmin === 1 && (
+                              <PackedIcon />
+                           )}
+                           {this.props.loadoutUser.isAdmin === 0 && (
+                              <ReadyToPackIcon />
+                           )}
+                        </span>
                      </div>
                   </td>
-                  <td
-                     className={classnames(
-                        "clickable",
-                        UI_APPEARANCE === "dark" && "icon-light",
-                        UI_APPEARANCE !== "dark" && "icon-dark"
-                     )}
-                     onClick={() =>
-                        this.deleteUserLoadout(this.props.loadoutUser.id)
-                     }
-                  >
-                     <IconTrash />
+                  <td>
+                     <div className="d-flex">
+                        <span
+                           className={
+                              // delete is available if
+                              // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
+                              // currentUser is not an admin of this loadout and this userLoadout is the currentUser
+                              classnames(
+                                 "item-card-icon",
+                                 (UI_APPEARANCE === "light" ||
+                                    UI_APPEARANCE === "dark") &&
+                                    "item-icon-colors-1",
+                                 UI_APPEARANCE === "colors" &&
+                                    "item-icon-colors",
+                                 {
+                                    clickable: canRemoveUserLoadout,
+                                    disabled: !canRemoveUserLoadout,
+                                 }
+                              )
+                           }
+                        >
+                           <DeleteItemIcon />
+                        </span>
+                     </div>
                   </td>
                </>
             )}
@@ -119,6 +175,8 @@ class UserLoadoutSettings extends React.Component {
 function mapStateToProps(state) {
    return {
       // currentLoadout: state.currentLoadout,
+      currentUserLoadout: state.currentUserLoadout,
+      currentUser: state.currentUser,
    };
 }
 

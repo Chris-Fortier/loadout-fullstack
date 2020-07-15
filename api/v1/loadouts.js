@@ -286,7 +286,7 @@ router.put("/insert-loadout", validateJwt, async (req, res) => {
 
    const loadout = {
       id: loadoutId, // use the uuid generated
-      name: "New Loadout", // use given value for parent
+      name: "Untitled Loadout", // use given value for parent
       parent_id: null, // loadouts have a parent of null
       status: 0, // default status to zero (unpacked)
       created_at: Date.now(), // set this date to now
