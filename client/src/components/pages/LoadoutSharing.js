@@ -7,7 +7,7 @@ import { Link } from "react-router-dom"; // a React element for linking
 import axios from "axios";
 import { UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
-// import { AddIcon, DisabledIcon, CheckedIcon } from "../../icons/loadout-icons";
+import { AddIcon } from "../../icons/loadout-icons";
 import {
    IconPackage,
    IconEdit,
@@ -78,28 +78,29 @@ class LoadoutSharing extends React.Component {
    // delete the userLoadout from the database
 
    // creates a new user loadout if possible given a user username and a loadout id
-   async validateAndAddUserLoadout(
-      username,
-      loadoutId,
-      canEdit = 0,
-      canPack = 0,
-      isAdmin = 0
-   ) {
-      // convert booleans to numbers
-      if (canEdit === false) canEdit = 0;
-      if (canEdit === true) canEdit = 1;
-      if (canPack === false) canPack = 0;
-      if (canPack === true) canPack = 1;
-      if (isAdmin === false) isAdmin = 0;
-      if (isAdmin === true) isAdmin = 1;
+   async validateAndAddUserLoadout() {
+      // // convert booleans to numbers
+      // if (canEdit === false) canEdit = 0;
+      // if (canEdit === true) canEdit = 1;
+      // if (canPack === false) canPack = 0;
+      // if (canPack === true) canPack = 1;
+      // if (isAdmin === false) isAdmin = 0;
+      // if (isAdmin === true) isAdmin = 1;
 
-      console.log("validateAndAddUserLoadout()...", {
-         username,
-         loadoutId,
-         canEdit,
-         canPack,
-         isAdmin,
-      });
+      // console.log("validateAndAddUserLoadout()...", {
+      //    username,
+      //    loadoutId,
+      //    canEdit,
+      //    canPack,
+      //    isAdmin,
+      // });
+
+      // new hard-coded defaults
+      const username = document.getElementById("add-user-username-input").value;
+      const loadoutId = this.props.currentItem.id;
+      const canEdit = 1;
+      const canPack = 1;
+      const isAdmin = 0;
 
       // post to API
       axios
@@ -295,91 +296,29 @@ class LoadoutSharing extends React.Component {
                                                          </div>
                                                       )}
                                                    </th>
+                                                   <td></td>
+                                                   <td></td>
+                                                   <td></td>
                                                    <td>
-                                                      <div className="custom-control custom-checkbox">
-                                                         <input
-                                                            type="checkbox"
-                                                            className="custom-control-input"
-                                                            id={
-                                                               "new-can-pack-switch"
+                                                      <div className="d-flex">
+                                                         <span
+                                                            className={classnames(
+                                                               "item-card-icon clickable",
+                                                               (UI_APPEARANCE ===
+                                                                  "light" ||
+                                                                  UI_APPEARANCE ===
+                                                                     "dark") &&
+                                                                  "item-icon-colors-1",
+                                                               UI_APPEARANCE ===
+                                                                  "colors" &&
+                                                                  "item-icon-colors"
+                                                            )}
+                                                            onClick={() =>
+                                                               this.validateAndAddUserLoadout()
                                                             }
-                                                         />
-                                                         <label
-                                                            className="custom-control-label"
-                                                            htmlFor={
-                                                               "new-can-pack-switch"
-                                                            }
-                                                         ></label>
-                                                      </div>
-                                                   </td>
-                                                   <td>
-                                                      <div className="custom-control custom-checkbox">
-                                                         <input
-                                                            type="checkbox"
-                                                            className="custom-control-input"
-                                                            id={
-                                                               "new-can-edit-switch"
-                                                            }
-                                                         />
-                                                         <label
-                                                            className="custom-control-label"
-                                                            htmlFor={
-                                                               "new-can-edit-switch"
-                                                            }
-                                                         ></label>
-                                                      </div>
-                                                   </td>
-                                                   <td>
-                                                      <div className="custom-control custom-checkbox">
-                                                         <input
-                                                            type="checkbox"
-                                                            className="custom-control-input"
-                                                            id={
-                                                               "new-is-admin-switch"
-                                                            }
-                                                         />
-                                                         <label
-                                                            className="custom-control-label"
-                                                            htmlFor={
-                                                               "new-is-admin-switch"
-                                                            }
-                                                         ></label>
-                                                      </div>
-                                                   </td>
-                                                   <td
-                                                      className={classnames(
-                                                         "clickable",
-                                                         UI_APPEARANCE ===
-                                                            "dark" &&
-                                                            "icon-light",
-                                                         UI_APPEARANCE !==
-                                                            "dark" &&
-                                                            "icon-dark"
-                                                      )}
-                                                   >
-                                                      <div
-                                                         className="button primary-action-button"
-                                                         onClick={() =>
-                                                            this.validateAndAddUserLoadout(
-                                                               document.getElementById(
-                                                                  "add-user-username-input"
-                                                               ).value,
-                                                               this.props
-                                                                  .currentItem
-                                                                  .id,
-                                                               document.getElementById(
-                                                                  "new-can-edit-switch"
-                                                               ).checked,
-                                                               document.getElementById(
-                                                                  "new-can-pack-switch"
-                                                               ).checked,
-                                                               document.getElementById(
-                                                                  "new-is-admin-switch"
-                                                               ).checked
-                                                            )
-                                                         }
-                                                      >
-                                                         Add
+                                                         >
+                                                            <AddIcon />
+                                                         </span>
                                                       </div>
                                                    </td>
                                                 </tr>
