@@ -182,7 +182,7 @@ class LoadoutSharing extends React.Component {
       return (
          <div>
             <Header />
-            <div className="item-list parent-color-1">
+            <div className="item-list parent-color-2">
                <div className="container-fluid item-cards-container scroll-fix">
                   <div className="row">
                      <div className="col">
@@ -426,7 +426,7 @@ class LoadoutSharing extends React.Component {
                                                                   "light" ||
                                                                   UI_APPEARANCE ===
                                                                      "dark") &&
-                                                                  "item-icon-colors-1",
+                                                                  "item-icon-colors-2",
                                                                UI_APPEARANCE ===
                                                                   "colors" &&
                                                                   "item-icon-colors"

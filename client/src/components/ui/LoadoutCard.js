@@ -3,7 +3,6 @@ import { Link } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
 import { LEVEL_COLORS, UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
-import axios from "axios";
 import SharingStrip from "../ui/SharingStrip";
 
 import {
