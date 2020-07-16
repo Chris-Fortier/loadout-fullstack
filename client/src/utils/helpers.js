@@ -69,6 +69,7 @@ export function getContentSummary(numChildren, numPackedChildren, status) {
 }
 
 // log out of the current user
+// TODO can I just assign initial state to this?
 export function logOutCurrentUser(props) {
    console.log("logOutCurrentUser()...");
    props.dispatch({
@@ -93,6 +94,10 @@ export function logOutCurrentUser(props) {
    });
    props.dispatch({
       type: actions.STORE_USER_LOADOUTS,
+      payload: [],
+   });
+   props.dispatch({
+      type: actions.STORE_CURRENT_LOADOUT_USER_LOADOUTS,
       payload: [],
    });
 }

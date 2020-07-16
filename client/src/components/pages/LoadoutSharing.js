@@ -9,7 +9,10 @@ import { UI_APPEARANCE, MAX_ITEM_NAME_LENGTH } from "../../utils/helpers";
 import classnames from "classnames";
 import { AddIcon } from "../../icons/loadout-icons";
 import { IconPackage, IconEdit, IconKey } from "../../icons/icons.js";
-import { removeUserLoadout, getUserLoadouts } from "../../utils/userLoadouts";
+import {
+   removeUserLoadout,
+   getUserLoadoutsForALoadout,
+} from "../../utils/userLoadouts";
 import { renameItem } from "../../utils/items";
 import actions from "../../store/actions";
 
@@ -22,15 +25,13 @@ class LoadoutSharing extends React.Component {
       // set default state values
 
       this.state = {
-         thisLoadoutUser: [],
-         otherLoadoutUsers: [], // stores loadoutUsers besides the current user
          addUserError: "", // stores the error message when trying to add a user to this loadout
          hasAddUserError: false, // stores whether there is an error when trying to add a user to this loadout
          deleteRolloutIsOpen: false,
          removeRolloutIsOpen: false,
       };
 
-      this.refreshPage();
+      getUserLoadoutsForALoadout(this.props.currentItem.id);
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
       // TODO, this is duplicated code
@@ -38,31 +39,6 @@ class LoadoutSharing extends React.Component {
          console.log("There is no user object, kicking to landing page.");
          this.props.history.push("/");
       }
-   }
-
-   refreshPage() {
-      console.log("refreshing page...");
-      axios
-         .get("/api/v1/loadout-users?loadoutId=" + this.props.currentItem.id)
-         .then((res) => {
-            console.log("axios res", res);
-            const loadoutUsers = res.data;
-            const thisLoadoutUser = loadoutUsers.filter((loadoutUser) => {
-               return loadoutUser.userId === this.props.currentUser.id;
-            });
-            thisLoadoutUser[0].username =
-               thisLoadoutUser[0].username + " (YOU)";
-            this.setState({
-               thisLoadoutUser: thisLoadoutUser,
-               otherLoadoutUsers: loadoutUsers.filter((loadoutUser) => {
-                  return loadoutUser.userId !== this.props.currentUser.id;
-               }),
-            });
-         })
-         .catch((error) => {
-            // handle error
-            console.log("axios error", error);
-         });
    }
 
    // give an existing user access to this loadout
@@ -125,11 +101,27 @@ class LoadoutSharing extends React.Component {
             // clear the add user username field
             document.getElementById("add-user-username-input").value = "";
 
-            this.refreshPage(); // refresh page to see the change
+            // update the redux store with the new user loadout
+            const updatedCurrentLoadoutUserLoadouts = [
+               ...this.props.currentLoadoutUserLoadouts,
+            ];
+            updatedCurrentLoadoutUserLoadouts.push({
+               username,
+               loadoutId,
+               canEdit,
+               canPack,
+               isAdmin,
+            });
+            this.props.dispatch({
+               type: actions.STORE_CURRENT_LOADOUT_USER_LOADOUTS,
+               payload: updatedCurrentLoadoutUserLoadouts,
+            });
+
+            // getUserLoadoutsForALoadout(this.props.currentItem.id); // refresh page to see the change
          })
          .catch((err) => {
+            console.log("err", err);
             const data = err.response.data;
-            console.log("err", data);
             const { addUserError } = data;
 
             // push username error to state
@@ -203,6 +195,18 @@ class LoadoutSharing extends React.Component {
 
    render() {
       console.log("Rendering page...", this.props.currentUser.id);
+
+      // sort and prepare display userLoadouts
+      const loadoutUsers = this.props.currentLoadoutUserLoadouts;
+      const thisLoadoutUser = loadoutUsers.filter((loadoutUser) => {
+         return loadoutUser.userId === this.props.currentUser.id;
+      });
+      // if (thisLoadoutUser.length > 0) {
+      //    thisLoadoutUser[0].username = thisLoadoutUser[0].username + " (YOU)";
+      // }
+      const otherLoadoutUsers = loadoutUsers.filter(
+         (loadoutUser) => loadoutUser.userId !== this.props.currentUser.id
+      );
 
       return (
          <div>
@@ -317,7 +321,8 @@ class LoadoutSharing extends React.Component {
                                                                .currentUserLoadout
                                                                .loadoutId
                                                          );
-                                                         getUserLoadouts(); // get the updated list of user loadouts after deleting one
+
+                                                         // move to the my loadouts page
                                                          this.props.history.push(
                                                             "/loadout-list"
                                                          );
@@ -420,22 +425,31 @@ class LoadoutSharing extends React.Component {
                                              </tr>
                                           </thead>
                                           <tbody>
-                                             {this.state.thisLoadoutUser.map(
-                                                (loadoutUser) => (
+                                             {thisLoadoutUser.map(
+                                                (userLoadout) => (
                                                    <UserLoadoutSettings
-                                                      loadoutUser={loadoutUser}
-                                                      key={loadoutUser.id}
+                                                      userLoadout={userLoadout}
+                                                      key={userLoadout.id}
                                                    />
                                                 )
                                              )}
-                                             {this.state.otherLoadoutUsers.map(
-                                                (loadoutUser) => (
+                                             {otherLoadoutUsers.map(
+                                                (userLoadout) => (
                                                    <UserLoadoutSettings
-                                                      loadoutUser={loadoutUser}
-                                                      key={loadoutUser.id}
+                                                      userLoadout={userLoadout}
+                                                      key={userLoadout.id}
                                                    />
                                                 )
                                              )}
+
+                                             {/* {this.props.currentLoadoutUserLoadouts.map(
+                                                (userLoadout) => (
+                                                   <UserLoadoutSettings
+                                                      userLoadout={userLoadout}
+                                                      key={userLoadout.id}
+                                                   />
+                                                )
+                                             )} */}
 
                                              {this.props.currentUserLoadout
                                                 .isAdmin === 1 && (
@@ -514,6 +528,7 @@ function mapStateToProps(state) {
       currentItem: state.currentItem,
       currentUser: state.currentUser,
       currentUserLoadout: state.currentUserLoadout,
+      currentLoadoutUserLoadouts: state.currentLoadoutUserLoadouts,
    };
 }
 

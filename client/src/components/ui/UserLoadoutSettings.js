@@ -9,6 +9,7 @@ import {
    CheckedIcon,
 } from "../../icons/loadout-icons";
 import { removeUserLoadout } from "../../utils/userLoadouts";
+import actions from "../../store/actions";
 
 class UserLoadoutSettings extends React.Component {
    constructor(props) {
@@ -16,24 +17,20 @@ class UserLoadoutSettings extends React.Component {
 
       this.state = {
          isDeleted: false,
-         canPack: this.props.loadoutUser.canPack,
-         canEdit: this.props.loadoutUser.canEdit,
-         isAdmin: this.props.loadoutUser.isAdmin,
+         // canPack: this.props.userLoadout.canPack,
+         // canEdit: this.props.userLoadout.canEdit,
+         // isAdmin: this.props.userLoadout.isAdmin,
       };
    }
 
-   updatePermissionsOnServer(
-      canPack = this.state.canPack,
-      canEdit = this.state.canEdit,
-      isAdmin = this.state.isAdmin
-   ) {
+   updatePermissionsOnServerAndRedux(canPack, canEdit, isAdmin) {
       console.log({ canPack, canEdit, isAdmin });
       axios
          .put(
             "http://localhost:3060/api/v1/user-loadouts/set-permissions?userId=" +
-               this.props.loadoutUser.userId +
+               this.props.userLoadout.userId +
                "&loadoutId=" +
-               this.props.loadoutUser.loadoutId +
+               this.props.userLoadout.loadoutId +
                "&canPack=" +
                canPack +
                "&canEdit=" +
@@ -43,6 +40,32 @@ class UserLoadoutSettings extends React.Component {
          )
          .then((res) => {
             console.log("res.data", res.data);
+
+            // update Redux store:
+
+            // const updatedCurrentLoadoutUserLoadouts = [];
+
+            // update the correct object
+            for (let i in this.props.currentLoadoutUserLoadouts) {
+               console.log(i);
+               // updatedCurrentLoadoutUserLoadouts.push({
+               //    ...this.props.currentLoadoutUserLoadouts[i],
+               // });
+               if (
+                  this.props.currentLoadoutUserLoadouts[i].userId ===
+                  this.props.userLoadout.userId
+               ) {
+                  console.log("updated!");
+                  this.props.currentLoadoutUserLoadouts[i].canPack = canPack;
+                  this.props.currentLoadoutUserLoadouts[i].canEdit = canEdit;
+                  this.props.currentLoadoutUserLoadouts[i].isAdmin = isAdmin;
+               }
+            }
+            console.log(this.props.currentLoadoutUserLoadouts);
+            this.props.dispatch({
+               type: actions.STORE_CURRENT_LOADOUT_USER_LOADOUTS,
+               payload: this.props.currentLoadoutUserLoadouts,
+            });
          })
          .catch((err) => {
             console.log("err", err);
@@ -51,56 +74,56 @@ class UserLoadoutSettings extends React.Component {
 
    toggleCanPack() {
       // toggle on client
-      if (this.state.canPack === 0) {
-         this.setState({ canPack: 1 });
-         this.updatePermissionsOnServer(
+      if (this.props.userLoadout.canPack === 0) {
+         // this.setState({ canPack: 1 });
+         this.updatePermissionsOnServerAndRedux(
             1,
-            this.state.canEdit,
-            this.state.isAdmin
+            this.props.userLoadout.canEdit,
+            this.props.userLoadout.isAdmin
          );
-      } else if (this.state.canPack === 1) {
-         this.setState({ canPack: 0 });
-         this.updatePermissionsOnServer(
+      } else if (this.props.userLoadout.canPack === 1) {
+         // this.setState({ canPack: 0 });
+         this.updatePermissionsOnServerAndRedux(
             0,
-            this.state.canEdit,
-            this.state.isAdmin
+            this.props.userLoadout.canEdit,
+            this.props.userLoadout.isAdmin
          );
       }
    }
 
    toggleCanEdit() {
       // toggle on client
-      if (this.state.canEdit === 0) {
-         this.setState({ canEdit: 1 });
-         this.updatePermissionsOnServer(
-            this.state.canPack,
+      if (this.props.userLoadout.canEdit === 0) {
+         // this.setState({ canEdit: 1 });
+         this.updatePermissionsOnServerAndRedux(
+            this.props.userLoadout.canPack,
             1,
-            this.state.isAdmin
+            this.props.userLoadout.isAdmin
          );
-      } else if (this.state.canEdit === 1) {
-         this.setState({ canEdit: 0 });
-         this.updatePermissionsOnServer(
-            this.state.canPack,
+      } else if (this.props.userLoadout.canEdit === 1) {
+         // this.setState({ canEdit: 0 });
+         this.updatePermissionsOnServerAndRedux(
+            this.props.userLoadout.canPack,
             0,
-            this.state.isAdmin
+            this.props.userLoadout.isAdmin
          );
       }
    }
 
    toggleIsAdmin() {
       // toggle on client
-      if (this.state.isAdmin === 0) {
-         this.setState({ isAdmin: 1 });
-         this.updatePermissionsOnServer(
-            this.state.canPack,
-            this.state.canEdit,
+      if (this.props.userLoadout.isAdmin === 0) {
+         // this.setState({ isAdmin: 1 });
+         this.updatePermissionsOnServerAndRedux(
+            this.props.userLoadout.canPack,
+            this.props.userLoadout.canEdit,
             1
          );
-      } else if (this.state.isAdmin === 1) {
-         this.setState({ isAdmin: 0 });
-         this.updatePermissionsOnServer(
-            this.state.canPack,
-            this.state.canEdit,
+      } else if (this.props.userLoadout.isAdmin === 1) {
+         // this.setState({ isAdmin: 0 });
+         this.updatePermissionsOnServerAndRedux(
+            this.props.userLoadout.canPack,
+            this.props.userLoadout.canEdit,
             0
          );
       }
@@ -109,7 +132,7 @@ class UserLoadoutSettings extends React.Component {
    render() {
       // some consts to simplify code below
       const thisUserIsAdmin = this.props.currentUserLoadout.isAdmin;
-      const userLoadoutUserId = this.props.loadoutUser.userId;
+      const userLoadoutUserId = this.props.userLoadout.userId;
       const thisUserId = this.props.currentUser.id;
 
       // REMOVE is available if
@@ -123,7 +146,11 @@ class UserLoadoutSettings extends React.Component {
          <tr className="sharedUserRow">
             {!this.state.isDeleted && (
                <>
-                  <th scope="row">{this.props.loadoutUser.username}</th>
+                  <th scope="row">
+                     {this.props.userLoadout.username}
+                     {this.props.userLoadout.userId ===
+                        this.props.currentUser.id && <>&nbsp;(YOU)</>}
+                  </th>
                   <td>
                      <div className="d-flex">
                         <span
@@ -144,8 +171,12 @@ class UserLoadoutSettings extends React.Component {
                               }
                            }}
                         >
-                           {this.state.canPack === 1 && <CheckedIcon />}
-                           {this.state.canPack === 0 && <DisabledIcon />}
+                           {this.props.userLoadout.canPack === 1 && (
+                              <CheckedIcon />
+                           )}
+                           {this.props.userLoadout.canPack === 0 && (
+                              <DisabledIcon />
+                           )}
                         </span>
                      </div>
                   </td>
@@ -169,8 +200,12 @@ class UserLoadoutSettings extends React.Component {
                               }
                            }}
                         >
-                           {this.state.canEdit === 1 && <CheckedIcon />}
-                           {this.state.canEdit === 0 && <DisabledIcon />}
+                           {this.props.userLoadout.canEdit === 1 && (
+                              <CheckedIcon />
+                           )}
+                           {this.props.userLoadout.canEdit === 0 && (
+                              <DisabledIcon />
+                           )}
                         </span>
                      </div>
                   </td>
@@ -201,8 +236,12 @@ class UserLoadoutSettings extends React.Component {
                               }
                            }}
                         >
-                           {this.state.isAdmin === 1 && <CheckedIcon />}
-                           {this.state.isAdmin === 0 && <DisabledIcon />}
+                           {this.props.userLoadout.isAdmin === 1 && (
+                              <CheckedIcon />
+                           )}
+                           {this.props.userLoadout.isAdmin === 0 && (
+                              <DisabledIcon />
+                           )}
                         </span>
                      </div>
                   </td>
@@ -229,8 +268,8 @@ class UserLoadoutSettings extends React.Component {
                            onClick={() => {
                               if (canRemoveUserLoadout) {
                                  removeUserLoadout(
-                                    this.props.loadoutUser.userId,
-                                    this.props.loadoutUser.loadoutId
+                                    this.props.userLoadout.userId,
+                                    this.props.userLoadout.loadoutId
                                  );
                                  this.setState({ isDeleted: true });
                               }
@@ -244,7 +283,7 @@ class UserLoadoutSettings extends React.Component {
             )}
             {this.state.isDeleted && (
                <>
-                  <th scope="row">{this.props.loadoutUser.username} Removed</th>
+                  <th scope="row">{this.props.userLoadout.username} Removed</th>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -262,6 +301,7 @@ function mapStateToProps(state) {
       // currentLoadout: state.currentLoadout,
       currentUserLoadout: state.currentUserLoadout,
       currentUser: state.currentUser,
+      currentLoadoutUserLoadouts: state.currentLoadoutUserLoadouts,
    };
 }
 
