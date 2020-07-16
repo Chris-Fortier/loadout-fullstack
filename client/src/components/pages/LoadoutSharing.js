@@ -5,16 +5,13 @@ import UserLoadoutSettings from "../ui/UserLoadoutSettings";
 import { IconArrowThinLeftCircle } from "../../icons/icons.js";
 import { Link } from "react-router-dom"; // a React element for linking
 import axios from "axios";
-import { UI_APPEARANCE } from "../../utils/helpers";
+import { UI_APPEARANCE, MAX_ITEM_NAME_LENGTH } from "../../utils/helpers";
 import classnames from "classnames";
 import { AddIcon } from "../../icons/loadout-icons";
-import {
-   IconPackage,
-   IconEdit,
-   IconKey,
-   // IconUserCouple,
-} from "../../icons/icons.js";
+import { IconPackage, IconEdit, IconKey } from "../../icons/icons.js";
 import { removeUserLoadout, getUserLoadouts } from "../../utils/userLoadouts";
+import { renameItem } from "../../utils/items";
+import actions from "../../store/actions";
 
 class LoadoutSharing extends React.Component {
    constructor(props) {
@@ -176,6 +173,34 @@ class LoadoutSharing extends React.Component {
       this.setState({ removeRolloutIsOpen: !this.state.removeRolloutIsOpen });
    }
 
+   // renames item on server and also in redux store
+   // TODO this is duplicated
+   renameThisItem(e) {
+      console.log("the focus left this item");
+      if (e.target.value !== this.props.currentItem.name) {
+         console.log("the name was changed");
+         console.log(
+            "will rename ",
+            this.props.currentItem.name,
+            "to",
+            e.target.value
+         );
+         renameItem(this.props.currentItem.id, e.target.value); // send the change of the name to the server
+
+         // make local changes so we can see them immediately
+         // its that all I have to do is this, direclty edit the name in props, no need to dispatch it
+         this.props.currentItem.name = e.target.value; // rename the child to the new name
+
+         // send the updated item to the store, even without this I see the changes with the code above
+         this.props.dispatch({
+            type: actions.STORE_CURRENT_ITEM,
+            payload: this.props.currentItem,
+         });
+      } else {
+         console.log("the name was not changed");
+      }
+   }
+
    render() {
       console.log("Rendering page...", this.props.currentUser.id);
 
@@ -200,11 +225,37 @@ class LoadoutSharing extends React.Component {
                               <div className="row">
                                  <>
                                     <div className="col">
-                                       <h4 className="dark-text-color">
-                                          {this.props.currentItem.name}
-                                          <br />
-                                          Sharing Settings
-                                       </h4>
+                                       {this.props.currentUserLoadout
+                                          .isAdmin === 0 && (
+                                          <h4 className="dark-text-color">
+                                             {this.props.currentItem.name}
+                                             <br />
+                                             Sharing Settings
+                                          </h4>
+                                       )}
+                                       {this.props.currentUserLoadout
+                                          .isAdmin === 1 && (
+                                          <span className="flex-fill">
+                                             <h4 className="dark-text-color">
+                                                <input
+                                                   className="edit-name"
+                                                   defaultValue={
+                                                      this.props.currentItem
+                                                         .name
+                                                   }
+                                                   onBlur={(e) =>
+                                                      this.renameThisItem(e)
+                                                   }
+                                                   maxLength={
+                                                      MAX_ITEM_NAME_LENGTH
+                                                   }
+                                                   id="page-item-name-input"
+                                                />
+                                                <br />
+                                                Sharing Settings
+                                             </h4>
+                                          </span>
+                                       )}
                                        {this.props.currentUserLoadout
                                           .isAdmin === 1 && (
                                           <div className="card-section">

@@ -1,48 +1,20 @@
 import React from "react";
 import Header from "../ui/Header";
-// import orderBy from "lodash/orderBy";
+import { IconEdit, IconUpLevel, IconUserCouple } from "../../icons/icons.js";
 import {
-   IconEdit,
-   // IconCog,
-   // IconAddCircle,
-   // IconArrowThickUpCircle,
-   // IconArrowThickDownCircle,
-   // IconArchive,
-   // IconArrowThinLeftCircle,
-   // IconArrowThinRightCircle,
-   // IconTrash,
-   // IconChevronDown,
-   // IconChevronUp,
-   IconUpLevel,
-   IconUserCouple,
-} from "../../icons/icons.js";
-import {
-   // MOVE_UPDOWN,
    MAX_ITEM_NAME_LENGTH,
    LEVEL_COLORS,
-   // SUBITEM_DISPLAY_MODE,
    UI_APPEARANCE,
 } from "../../utils/helpers";
 import classnames from "classnames";
-// import axios from "axios";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import ItemCard from "../ui/ItemCard";
 import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
-import {
-   movePageToDifferentItem,
-   // refreshPage,
-} from "../../utils/movePageToDifferentItem";
-import {
-   // getItemFromPath,
-   // getParentItemFromPath,
-   renameItem,
-   addItemTo,
-   // addContainerTo,
-   setDescendantsStatus,
-} from "../../utils/items";
+import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
+import { renameItem, addItemTo, setDescendantsStatus } from "../../utils/items";
 import { v4 as getUuid } from "uuid";
 import isEmpty from "lodash/isEmpty";
 import SharingStrip from "../ui/SharingStrip";
