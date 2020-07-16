@@ -10,6 +10,7 @@ import {
 } from "../../icons/loadout-icons";
 import { removeUserLoadout } from "../../utils/userLoadouts";
 import actions from "../../store/actions";
+import { IconPackage, IconEdit, IconKey } from "../../icons/icons.js";
 
 class UserLoadoutSettings extends React.Component {
    constructor(props) {
@@ -143,16 +144,219 @@ class UserLoadoutSettings extends React.Component {
          (thisUserIsAdmin === 0 && userLoadoutUserId === thisUserId);
 
       return (
-         <tr className="sharedUserRow">
+         <>
+            {/* large size card */}
+            <tr className="sharedUserRow  d-none d-sm-table-row">
+               {!this.state.isDeleted && (
+                  <>
+                     <th scope="row">
+                        {this.props.userLoadout.username}
+                        {this.props.userLoadout.userId ===
+                           this.props.currentUser.id && <>&nbsp;(YOU)</>}
+                     </th>
+                     <td>
+                        <div className="d-flex">
+                           <span
+                              className={classnames(
+                                 "item-card-icon",
+                                 (UI_APPEARANCE === "light" ||
+                                    UI_APPEARANCE === "dark") &&
+                                    "item-icon-colors-1",
+                                 UI_APPEARANCE === "colors" &&
+                                    "item-icon-colors",
+                                 {
+                                    clickable: thisUserIsAdmin === 1,
+                                    disabled: thisUserIsAdmin === 0,
+                                 }
+                              )}
+                              onClick={() => {
+                                 if (thisUserIsAdmin === 1) {
+                                    this.toggleCanPack();
+                                 }
+                              }}
+                           >
+                              {this.props.userLoadout.canPack === 1 && (
+                                 <CheckedIcon />
+                              )}
+                              {this.props.userLoadout.canPack === 0 && (
+                                 <DisabledIcon />
+                              )}
+                           </span>
+                        </div>
+                     </td>
+                     <td>
+                        <div className="d-flex">
+                           <span
+                              className={classnames(
+                                 "item-card-icon",
+                                 (UI_APPEARANCE === "light" ||
+                                    UI_APPEARANCE === "dark") &&
+                                    "item-icon-colors-1",
+                                 UI_APPEARANCE === "colors" &&
+                                    "item-icon-colors",
+                                 {
+                                    clickable: thisUserIsAdmin === 1,
+                                    disabled: thisUserIsAdmin === 0,
+                                 }
+                              )}
+                              onClick={() => {
+                                 if (thisUserIsAdmin === 1) {
+                                    this.toggleCanEdit();
+                                 }
+                              }}
+                           >
+                              {this.props.userLoadout.canEdit === 1 && (
+                                 <CheckedIcon />
+                              )}
+                              {this.props.userLoadout.canEdit === 0 && (
+                                 <DisabledIcon />
+                              )}
+                           </span>
+                        </div>
+                     </td>
+                     <td>
+                        <div className="d-flex">
+                           <span
+                              className={classnames(
+                                 "item-card-icon",
+                                 (UI_APPEARANCE === "light" ||
+                                    UI_APPEARANCE === "dark") &&
+                                    "item-icon-colors-1",
+                                 UI_APPEARANCE === "colors" &&
+                                    "item-icon-colors",
+                                 {
+                                    clickable:
+                                       thisUserIsAdmin === 1 &&
+                                       userLoadoutUserId !== thisUserId,
+                                    disabled:
+                                       thisUserIsAdmin !== 1 ||
+                                       userLoadoutUserId === thisUserId,
+                                 }
+                              )}
+                              onClick={() => {
+                                 if (
+                                    thisUserIsAdmin === 1 &&
+                                    userLoadoutUserId !== thisUserId
+                                 ) {
+                                    this.toggleIsAdmin();
+                                 }
+                              }}
+                           >
+                              {this.props.userLoadout.isAdmin === 1 && (
+                                 <CheckedIcon />
+                              )}
+                              {this.props.userLoadout.isAdmin === 0 && (
+                                 <DisabledIcon />
+                              )}
+                           </span>
+                        </div>
+                     </td>
+                     <td>
+                        <div className="d-flex">
+                           <span
+                              className={
+                                 // delete is available if
+                                 // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
+                                 // currentUser is not an admin of this loadout and this userLoadout is the currentUser
+                                 classnames(
+                                    "item-card-icon",
+                                    (UI_APPEARANCE === "light" ||
+                                       UI_APPEARANCE === "dark") &&
+                                       "item-icon-colors-1",
+                                    UI_APPEARANCE === "colors" &&
+                                       "item-icon-colors",
+                                    {
+                                       clickable: canRemoveUserLoadout,
+                                       disabled: !canRemoveUserLoadout,
+                                    }
+                                 )
+                              }
+                              onClick={() => {
+                                 if (canRemoveUserLoadout) {
+                                    removeUserLoadout(
+                                       this.props.userLoadout.userId,
+                                       this.props.userLoadout.loadoutId
+                                    );
+                                    this.setState({ isDeleted: true });
+                                 }
+                              }}
+                           >
+                              <DeleteIcon />
+                           </span>
+                        </div>
+                     </td>
+                  </>
+               )}
+               {this.state.isDeleted && (
+                  <>
+                     <th scope="row">
+                        {this.props.userLoadout.username} Removed
+                     </th>
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                  </>
+               )}
+            </tr>
+            {/* small size card */}
+            <tr className="sharedUserRow d-table-row d-sm-none">
+               {!this.state.isDeleted && (
+                  <>
+                     <th scope="row">
+                        {this.props.userLoadout.username}
+                        {this.props.userLoadout.userId ===
+                           this.props.currentUser.id && <>&nbsp;(YOU)</>}
+                     </th>
+                     <td>
+                        <div className="d-flex">
+                           <span
+                              className={
+                                 // delete is available if
+                                 // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
+                                 // currentUser is not an admin of this loadout and this userLoadout is the currentUser
+                                 classnames(
+                                    "item-card-icon",
+                                    (UI_APPEARANCE === "light" ||
+                                       UI_APPEARANCE === "dark") &&
+                                       "item-icon-colors-1",
+                                    UI_APPEARANCE === "colors" &&
+                                       "item-icon-colors",
+                                    {
+                                       clickable: canRemoveUserLoadout,
+                                       disabled: !canRemoveUserLoadout,
+                                    }
+                                 )
+                              }
+                              onClick={() => {
+                                 if (canRemoveUserLoadout) {
+                                    removeUserLoadout(
+                                       this.props.userLoadout.userId,
+                                       this.props.userLoadout.loadoutId
+                                    );
+                                    this.setState({ isDeleted: true });
+                                 }
+                              }}
+                           >
+                              <DeleteIcon />
+                           </span>
+                        </div>
+                     </td>
+                  </>
+               )}
+               {this.state.isDeleted && (
+                  <>
+                     <th scope="row">
+                        {this.props.userLoadout.username} Removed
+                     </th>
+                     <td></td>
+                  </>
+               )}
+            </tr>
             {!this.state.isDeleted && (
                <>
-                  <th scope="row">
-                     {this.props.userLoadout.username}
-                     {this.props.userLoadout.userId ===
-                        this.props.currentUser.id && <>&nbsp;(YOU)</>}
-                  </th>
-                  <td>
-                     <div className="d-flex">
+                  <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
+                     <td className="no-border d-flex ">
                         <span
                            className={classnames(
                               "item-card-icon",
@@ -178,10 +382,21 @@ class UserLoadoutSettings extends React.Component {
                               <DisabledIcon />
                            )}
                         </span>
-                     </div>
-                  </td>
-                  <td>
-                     <div className="d-flex">
+                        <span>&nbsp;</span>
+                        <span
+                           className={classnames(
+                              "loadout-card-icon",
+                              UI_APPEARANCE === "dark" && "icon-light",
+                              UI_APPEARANCE !== "dark" && "icon-dark"
+                           )}
+                        >
+                           <IconPackage />
+                        </span>
+                        &nbsp;Can Pack
+                     </td>
+                  </tr>
+                  <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
+                     <td className="no-border d-flex ">
                         <span
                            className={classnames(
                               "item-card-icon",
@@ -207,10 +422,21 @@ class UserLoadoutSettings extends React.Component {
                               <DisabledIcon />
                            )}
                         </span>
-                     </div>
-                  </td>
-                  <td>
-                     <div className="d-flex">
+                        <span>&nbsp;</span>
+                        <span
+                           className={classnames(
+                              "loadout-card-icon",
+                              UI_APPEARANCE === "dark" && "icon-light",
+                              UI_APPEARANCE !== "dark" && "icon-dark"
+                           )}
+                        >
+                           <IconEdit />
+                        </span>
+                        &nbsp;Can Edit
+                     </td>
+                  </tr>
+                  <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
+                     <td className="no-border d-flex ">
                         <span
                            className={classnames(
                               "item-card-icon",
@@ -243,54 +469,22 @@ class UserLoadoutSettings extends React.Component {
                               <DisabledIcon />
                            )}
                         </span>
-                     </div>
-                  </td>
-                  <td>
-                     <div className="d-flex">
+                        <span>&nbsp;</span>
                         <span
-                           className={
-                              // delete is available if
-                              // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
-                              // currentUser is not an admin of this loadout and this userLoadout is the currentUser
-                              classnames(
-                                 "item-card-icon",
-                                 (UI_APPEARANCE === "light" ||
-                                    UI_APPEARANCE === "dark") &&
-                                    "item-icon-colors-1",
-                                 UI_APPEARANCE === "colors" &&
-                                    "item-icon-colors",
-                                 {
-                                    clickable: canRemoveUserLoadout,
-                                    disabled: !canRemoveUserLoadout,
-                                 }
-                              )
-                           }
-                           onClick={() => {
-                              if (canRemoveUserLoadout) {
-                                 removeUserLoadout(
-                                    this.props.userLoadout.userId,
-                                    this.props.userLoadout.loadoutId
-                                 );
-                                 this.setState({ isDeleted: true });
-                              }
-                           }}
+                           className={classnames(
+                              "loadout-card-icon",
+                              UI_APPEARANCE === "dark" && "icon-light",
+                              UI_APPEARANCE !== "dark" && "icon-dark"
+                           )}
                         >
-                           <DeleteIcon />
+                           <IconKey />
                         </span>
-                     </div>
-                  </td>
+                        &nbsp;Is Admin
+                     </td>
+                  </tr>
                </>
             )}
-            {this.state.isDeleted && (
-               <>
-                  <th scope="row">{this.props.userLoadout.username} Removed</th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-               </>
-            )}
-         </tr>
+         </>
       );
    }
 }

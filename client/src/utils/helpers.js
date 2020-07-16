@@ -108,3 +108,4 @@ export const MAX_ITEM_NAME_LENGTH = 30; // the maximum length of characters for 
 export const MOVE_UPDOWN = false; // whether or not to have up and down buttons in edit mode
 export const SUBITEM_DISPLAY_MODE = "numUnpackedChildren"; // subItemDisplayMode can be "packedChildrenOutOfTotalChildren" or "numUnpackedDescendants" or "numUnpackedChildren"
 export const UI_APPEARANCE = "colors"; // ui appearance mode, "light", "dark", "colors"
+export const MAX_USERNAME_LENGTH = 24;

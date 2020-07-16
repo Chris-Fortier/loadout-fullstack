@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import LoadoutLogo from "../../logo/loadout.svg";
 // import { NUM_BACKGROUNDS } from "../../utils/helpers";
 import jwtDecode from "jwt-decode";
+import { MAX_USERNAME_LENGTH } from "../../utils/helpers.js";
 
 // export default function Landing() {
 class Landing extends React.Component {
@@ -222,6 +223,7 @@ class Landing extends React.Component {
                      "my-input": true,
                      "input-invalid": this.state.hasLoginPasswordError,
                   })}
+                  maxLength={MAX_USERNAME_LENGTH}
                />
                {this.state.hasLoginUsernameError && (
                   <div className="text-danger">
@@ -304,6 +306,7 @@ class Landing extends React.Component {
                      "my-input": true,
                      "input-invalid": this.state.hasSignupUsernameError,
                   })}
+                  maxLength={MAX_USERNAME_LENGTH}
                />
                {this.state.hasSignupUsernameError && (
                   <div className="text-danger" id="signup-username-error">

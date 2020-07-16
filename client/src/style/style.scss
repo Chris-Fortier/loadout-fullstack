@@ -959,6 +959,11 @@ $iconWidth: 30px;
    }
 }
 
+// prevents border on multiple table rows of same row
+.no-border {
+   border-top: none !important;
+}
+
 // used for labels on forms and headers on tables
 .form-label {
    text-transform: uppercase;
