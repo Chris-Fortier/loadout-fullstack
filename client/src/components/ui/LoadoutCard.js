@@ -11,6 +11,7 @@ import {
 } from "../../icons/loadout-icons.js";
 import actions from "../../store/actions";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
+import { getUserLoadoutsForALoadout } from "../../utils/userLoadouts";
 
 class LoadoutCard extends React.Component {
    moveToLoadout(loadoutId) {
@@ -67,6 +68,13 @@ class LoadoutCard extends React.Component {
          +1,
          this.props.loadout
       );
+
+      // get the user loadouts for the loadout
+      console.log(
+         "getUserLoadoutsForALoadout from LoadoutCard for",
+         this.props.loadout.loadoutId
+      );
+      getUserLoadoutsForALoadout(this.props.loadout.loadoutId);
 
       // move the parent page to sharing settings
       this.props.parentProps.history.push("/loadout-sharing");
@@ -191,11 +199,10 @@ class LoadoutCard extends React.Component {
                </div>
             </div>
             <div
-               className="d-flex"
-               // "button clickable"
-               // onClick={() => {
-               //    this.gotoSharing();
-               // }}
+               className="d-flex button clickable"
+               onClick={() => {
+                  this.gotoSharing();
+               }}
             >
                <SharingStrip loadout={this.props.loadout} />
             </div>

@@ -31,7 +31,15 @@ class LoadoutSharing extends React.Component {
          removeRolloutIsOpen: false,
       };
 
-      getUserLoadoutsForALoadout(this.props.currentItem.id);
+      console.log(
+         "getUserLoadoutsForALoadout on LoadoutSharing for",
+         this.props.currentItem.id
+      );
+
+      // only do this if its not undefined so that if I quickly assign a user loadouts and then push here it won't destroy them
+      if (this.props.currentItem.id !== undefined) {
+         getUserLoadoutsForALoadout(this.props.currentItem.id);
+      }
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
       // TODO, this is duplicated code
