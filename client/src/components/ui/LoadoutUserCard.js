@@ -12,7 +12,7 @@ import { removeUserLoadout } from "../../utils/userLoadouts";
 import actions from "../../store/actions";
 import { IconPackage, IconEdit, IconKey } from "../../icons/icons.js";
 
-class UserLoadoutSettings extends React.Component {
+class LoadoutUserCard extends React.Component {
    constructor(props) {
       super(props); // boilerplate
 
@@ -499,4 +499,4 @@ function mapStateToProps(state) {
    };
 }
 
-export default connect(mapStateToProps)(UserLoadoutSettings); // this is "currying"
+export default connect(mapStateToProps)(LoadoutUserCard); // this is "currying"

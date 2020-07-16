@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../ui/Header";
 import { connect } from "react-redux";
-import UserLoadoutSettings from "../ui/UserLoadoutSettings";
+import LoadoutUserCard from "../ui/LoadoutUserCard";
 import { IconArrowThinLeftCircle } from "../../icons/icons.js";
 import { Link } from "react-router-dom"; // a React element for linking
 import axios from "axios";
@@ -512,7 +512,7 @@ class LoadoutSharing extends React.Component {
                                           <tbody>
                                              {thisLoadoutUser.map(
                                                 (userLoadout) => (
-                                                   <UserLoadoutSettings
+                                                   <LoadoutUserCard
                                                       userLoadout={userLoadout}
                                                       key={userLoadout.id}
                                                    />
@@ -520,7 +520,7 @@ class LoadoutSharing extends React.Component {
                                              )}
                                              {otherLoadoutUsers.map(
                                                 (userLoadout) => (
-                                                   <UserLoadoutSettings
+                                                   <LoadoutUserCard
                                                       userLoadout={userLoadout}
                                                       key={userLoadout.id}
                                                    />
