@@ -137,6 +137,7 @@ class AccountSettings extends React.Component {
                                           this.toggleUsernameRollout()
                                        }
                                     >
+                                       <br />
                                        Cancel
                                     </div>
                                  </>
@@ -182,6 +183,7 @@ class AccountSettings extends React.Component {
                                           this.togglePasswordRollout()
                                        }
                                     >
+                                       <br />
                                        Cancel
                                     </div>
                                  </>
@@ -219,6 +221,7 @@ class AccountSettings extends React.Component {
                                           this.toggleDeleteRollout()
                                        }
                                     >
+                                       <br />
                                        Cancel
                                     </div>
                                  </>

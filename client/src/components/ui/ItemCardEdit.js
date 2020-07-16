@@ -112,6 +112,7 @@ class ItemCardEdit extends React.Component {
                className="button navigation-link"
                onClick={() => this.toggleDeleteRollout()}
             >
+               <br />
                Cancel
             </div>
          </>

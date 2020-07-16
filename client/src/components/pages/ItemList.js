@@ -124,6 +124,7 @@ class ItemList2 extends React.Component {
                )}
                onClick={() => this.toggleUnpackRollout()}
             >
+               <br />
                Cancel
             </div>
          </div>

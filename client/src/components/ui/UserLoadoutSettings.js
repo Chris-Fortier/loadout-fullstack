@@ -8,6 +8,7 @@ import {
    DisabledIcon,
    CheckedIcon,
 } from "../../icons/loadout-icons";
+import { removeUserLoadout } from "../../utils/userLoadouts";
 
 class UserLoadoutSettings extends React.Component {
    constructor(props) {
@@ -19,27 +20,6 @@ class UserLoadoutSettings extends React.Component {
          canEdit: this.props.loadoutUser.canEdit,
          isAdmin: this.props.loadoutUser.isAdmin,
       };
-   }
-
-   removeUserLoadout() {
-      // server update
-      axios
-         .put(
-            "/api/v1/user-loadouts/delete?userId=" +
-               this.props.loadoutUser.userId +
-               "&loadoutId=" +
-               this.props.loadoutUser.loadoutId
-         )
-         .then((res) => {
-            console.log("axios res", res);
-            this.setState({ isDeleted: true });
-         })
-         .catch((error) => {
-            // handle error
-            console.log("axios error", error);
-         });
-
-      // refreshPage();
    }
 
    updatePermissionsOnServer(
@@ -248,7 +228,11 @@ class UserLoadoutSettings extends React.Component {
                            }
                            onClick={() => {
                               if (canRemoveUserLoadout) {
-                                 this.removeUserLoadout();
+                                 removeUserLoadout(
+                                    this.props.loadoutUser.userId,
+                                    this.props.loadoutUser.loadoutId
+                                 );
+                                 this.setState({ isDeleted: true });
                               }
                            }}
                         >

@@ -14,6 +14,7 @@ import {
    IconKey,
    // IconUserCouple,
 } from "../../icons/icons.js";
+import { removeUserLoadout, getUserLoadouts } from "../../utils/userLoadouts";
 
 class LoadoutSharing extends React.Component {
    constructor(props) {
@@ -28,6 +29,8 @@ class LoadoutSharing extends React.Component {
          otherLoadoutUsers: [], // stores loadoutUsers besides the current user
          addUserError: "", // stores the error message when trying to add a user to this loadout
          hasAddUserError: false, // stores whether there is an error when trying to add a user to this loadout
+         deleteRolloutIsOpen: false,
+         removeRolloutIsOpen: false,
       };
 
       this.refreshPage();
@@ -141,6 +144,38 @@ class LoadoutSharing extends React.Component {
          });
    }
 
+   // delete a loadout
+   deleteLoadout() {
+      console.log("clicked delete loadout");
+
+      // server update
+      axios
+         .put(
+            "/api/v1/loadouts/delete-loadout?loadoutId=" +
+               this.props.currentUserLoadout.loadoutId
+         )
+         .then((res) => {
+            console.log("axios res.data", res.data);
+
+            // go back to my loadouts
+            this.props.history.push("/loadout-list");
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
+   }
+
+   toggleDeleteRollout() {
+      console.log("toggleDeleteRollout()...");
+      this.setState({ deleteRolloutIsOpen: !this.state.deleteRolloutIsOpen });
+   }
+
+   toggleRemoveRollout() {
+      console.log("toggleRemoveRollout()...");
+      this.setState({ removeRolloutIsOpen: !this.state.removeRolloutIsOpen });
+   }
+
    render() {
       console.log("Rendering page...", this.props.currentUser.id);
 
@@ -170,6 +205,89 @@ class LoadoutSharing extends React.Component {
                                           <br />
                                           Sharing Settings
                                        </h4>
+                                       {this.props.currentUserLoadout
+                                          .isAdmin === 1 && (
+                                          <div className="card-section">
+                                             <span
+                                                className="button navigation-link w-100"
+                                                onClick={() =>
+                                                   this.toggleDeleteRollout()
+                                                }
+                                             >
+                                                Delete this loadout...
+                                             </span>
+                                             {this.state
+                                                .deleteRolloutIsOpen && (
+                                                <>
+                                                   <div
+                                                      className="button danger-action-button"
+                                                      onClick={() =>
+                                                         this.deleteLoadout()
+                                                      }
+                                                   >
+                                                      Delete this loadout for
+                                                      all users
+                                                   </div>
+                                                   <div
+                                                      className="button navigation-link"
+                                                      onClick={() =>
+                                                         this.toggleDeleteRollout()
+                                                      }
+                                                   >
+                                                      <br />
+                                                      Cancel
+                                                   </div>
+                                                </>
+                                             )}
+                                          </div>
+                                       )}
+                                       {this.props.currentUserLoadout
+                                          .isAdmin === 0 && (
+                                          <div className="card-section">
+                                             <span
+                                                className="button navigation-link w-100"
+                                                onClick={() =>
+                                                   this.toggleRemoveRollout()
+                                                }
+                                             >
+                                                Remove yourself from this
+                                                loadout...
+                                             </span>
+                                             {this.state
+                                                .removeRolloutIsOpen && (
+                                                <>
+                                                   <div
+                                                      className="button primary-action-button"
+                                                      onClick={() => {
+                                                         removeUserLoadout(
+                                                            this.props
+                                                               .currentUser.id,
+                                                            this.props
+                                                               .currentUserLoadout
+                                                               .loadoutId
+                                                         );
+                                                         getUserLoadouts(); // get the updated list of user loadouts after deleting one
+                                                         this.props.history.push(
+                                                            "/loadout-list"
+                                                         );
+                                                      }}
+                                                   >
+                                                      Remove your access to this
+                                                      shared loadout
+                                                   </div>
+                                                   <div
+                                                      className="button navigation-link"
+                                                      onClick={() =>
+                                                         this.toggleRemoveRollout()
+                                                      }
+                                                   >
+                                                      <br />
+                                                      Cancel
+                                                   </div>
+                                                </>
+                                             )}
+                                          </div>
+                                       )}{" "}
                                        <table className="table">
                                           <thead>
                                              <tr>

@@ -16,7 +16,7 @@ export default class Header extends React.Component {
             {this.props.loadout.numUsers > 1 && (
                <>
                   <span
-                     style={{ "font-size": "1rem", opacity: 0.5 }}
+                     style={{ fontSize: "1rem", opacity: 0.5 }}
                      className={classnames(
                         (UI_APPEARANCE === "light" ||
                            UI_APPEARANCE === "dark") &&

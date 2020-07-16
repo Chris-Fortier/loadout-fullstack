@@ -27,38 +27,38 @@ class LoadoutCard extends React.Component {
    }
 
    // delete a loadout
-   deleteLoadout() {
-      console.log("clicked delete loadout");
+   // deleteLoadout() {
+   //    console.log("clicked delete loadout");
 
-      // server update
-      axios
-         .put(
-            "/api/v1/loadouts/delete-loadout?loadoutId=" +
-               this.props.loadout.loadoutId
-         )
-         .then((res) => {
-            console.log("axios res.data", res.data);
+   //    // server update
+   //    axios
+   //       .put(
+   //          "/api/v1/loadouts/delete-loadout?loadoutId=" +
+   //             this.props.loadout.loadoutId
+   //       )
+   //       .then((res) => {
+   //          console.log("axios res.data", res.data);
 
-            // update the client side list of user loadouts
+   //          // update the client side list of user loadouts
 
-            // make local changes so we can see them immediately
-            const foundUserLoadoutIndex = this.props.userLoadouts.findIndex(
-               (userLoadout) => userLoadout.id === this.props.loadout.loadoutId
-            ); // find the specific loadout to delete
-            console.log("foundUserLoadoutIndex", foundUserLoadoutIndex);
-            this.props.userLoadouts.splice(foundUserLoadoutIndex, 1); // make a new array of loadouts with the deleted loadout removed
+   //          // make local changes so we can see them immediately
+   //          const foundUserLoadoutIndex = this.props.userLoadouts.findIndex(
+   //             (userLoadout) => userLoadout.id === this.props.loadout.loadoutId
+   //          ); // find the specific loadout to delete
+   //          console.log("foundUserLoadoutIndex", foundUserLoadoutIndex);
+   //          this.props.userLoadouts.splice(foundUserLoadoutIndex, 1); // make a new array of loadouts with the deleted loadout removed
 
-            // push to the store
-            this.props.dispatch({
-               type: actions.STORE_USER_LOADOUTS,
-               payload: this.props.userLoadouts,
-            });
-         })
-         .catch((error) => {
-            // handle error
-            console.log("axios error", error);
-         });
-   }
+   //          // push to the store
+   //          this.props.dispatch({
+   //             type: actions.STORE_USER_LOADOUTS,
+   //             payload: this.props.userLoadouts,
+   //          });
+   //       })
+   //       .catch((error) => {
+   //          // handle error
+   //          console.log("axios error", error);
+   //       });
+   // }
 
    // open the loadout sharing settings
    gotoSharing() {
@@ -119,7 +119,7 @@ class LoadoutCard extends React.Component {
                   >
                      {item.name}&nbsp;
                   </Link>
-                  {this.props.loadout.isAdmin === 1 && (
+                  {/* {this.props.loadout.isAdmin === 1 && (
                      <div
                         className="button danger-action-button narrow-button"
                         onClick={() => {
@@ -128,7 +128,7 @@ class LoadoutCard extends React.Component {
                      >
                         Delete Loadout
                      </div>
-                  )}
+                  )} */}
 
                   <span className="flex-fill"></span>
 

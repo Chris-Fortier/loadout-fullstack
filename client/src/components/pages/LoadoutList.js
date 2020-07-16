@@ -17,6 +17,7 @@ import {
 } from "../../utils/helpers";
 import classnames from "classnames";
 import axios from "axios";
+import { getUserLoadouts } from "../../utils/userLoadouts";
 
 class LoadoutList extends React.Component {
    constructor(props) {
@@ -44,32 +45,9 @@ class LoadoutList extends React.Component {
 
    // methods happen here, such as what happens when you click on a button
 
-   loadLoadouts() {
-      axios
-         // .get(
-         //    "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/loadouts.json"
-         // )
-         .get("/api/v1/user-loadouts/")
-         .then((res) => {
-            console.log("axios res", res);
-            // processAllItems(res.data); // initial processing of items that creates derived properties
-            const loadouts = res.data;
-            this.props.dispatch({
-               type: actions.STORE_USER_LOADOUTS,
-               payload: loadouts,
-            });
-         })
-         .catch((error) => {
-            // handle error
-            console.log("axios error", error);
-         });
-
-      console.log("this.props.currentUser", this.props.currentUser);
-   }
-
    // this is a "lifecycle" method like render(), we don't need to call it manually
    componentDidMount() {
-      this.loadLoadouts();
+      getUserLoadouts();
    }
 
    // add a loadout
@@ -163,7 +141,7 @@ class LoadoutList extends React.Component {
                                        // <div
                                        //    className="navigation-link"
                                        //    onClick={() => {
-                                       //       this.loadLoadouts();
+                                       //       getUserLoadouts();
                                        //    }}
                                        // >
                                        //    Click here to refresh the user's
