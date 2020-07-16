@@ -413,6 +413,15 @@ $item-card-spacing: 12px; // space between the item cards
 //    xl: 1200px
 // );
 
+$grid-breakpoints: (
+   xs: 0,
+   sm: 568px,
+   // changed sm from 576px because iPhone 5/SE landscape is 568 px and I want it to go to sm
+      md: 768px,
+   lg: 992px,
+   xl: 1200px,
+);
+
 // common rules
 
 // shadows
