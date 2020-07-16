@@ -15,7 +15,7 @@ const {
 } = require("../../utils/helpers");
 const getAddUserError = require("../../validation/getAddUserError");
 const uuid = require("uuid");
-const validateJwt = require("../../utils/validateJWT");
+const validateJwt = require("../../utils/validateJwt");
 
 // @route      GET api/v1/user-loadouts (http://localhost:3045/api/v1/user-loadouts)  // change this
 // @desc       Get all user loadouts for a user

@@ -13,7 +13,7 @@ const getSignUpPasswordError = require("../../validation/getSignUpPasswordError"
 const getLoginUsernameError = require("../../validation/getLoginUsernameError");
 const getLoginPasswordError = require("../../validation/getLoginPasswordError");
 const jwt = require("jsonwebtoken");
-const validateJwt = require("../../utils/validateJWT");
+const validateJwt = require("../../utils/validateJwt");
 
 // @route      POST api/v1/users (going to post one thing to this list of things)
 // @desc       Create a new user
