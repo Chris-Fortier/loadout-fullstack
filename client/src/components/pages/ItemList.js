@@ -326,6 +326,11 @@ class ItemList2 extends React.Component {
       // let level = currentItem.level;
       const level = this.props.currentLevel;
 
+      // stores whether the current user can edit the name of the current item (if the level is 1 they must be an admin, otherwise they must have editing rights)
+      const thisUserCanEdit =
+         (level === 1 && this.props.currentUserLoadout.isAdmin === 1) ||
+         (level !== 1 && this.props.currentUserLoadout.canEdit === 1);
+
       return (
          <div>
             <Header />
@@ -435,7 +440,8 @@ class ItemList2 extends React.Component {
                               className={classnames(level > 1 && "card-header")}
                            >
                               <div className="row">
-                                 {!this.state.isEditMode && (
+                                 {(!this.state.isEditMode ||
+                                    !thisUserCanEdit) && (
                                     <>
                                        <div className="col">
                                           <h4
@@ -479,7 +485,7 @@ class ItemList2 extends React.Component {
                                        )}
                                     </>
                                  )}
-                                 {this.state.isEditMode && (
+                                 {this.state.isEditMode && thisUserCanEdit && (
                                     <div className="col">
                                        <span className="flex-fill">
                                           <h4>
