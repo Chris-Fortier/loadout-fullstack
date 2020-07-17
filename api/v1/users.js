@@ -48,11 +48,13 @@ router.post("/", async (req, res) => {
                   // TODO: duplicated code
                   // what the user is
                   // the user is the first user in the array of 1 item (users[0])
+                  thisLoginAt = Date.now();
                   const user = {
                      id: users[0].id,
                      username: users[0].username,
                      createdAt: users[0].created_at,
                      lastLoginAt: users[0].last_login_at,
+                     thisLoginAt: thisLoginAt,
                   };
 
                   // this contains the user, a secret and the timeframe
@@ -66,7 +68,7 @@ router.post("/", async (req, res) => {
                   );
 
                   // enter new last login
-                  db.query(setUserLastLoginAt, [Date.now(), users[0].id])
+                  db.query(setUserLastLoginAt, [thisLoginAt, users[0].id])
                      .then(() => {
                         res.status(200).json({ accessToken }); // instead of passing the user as the response, pass the access token
                      })
@@ -111,14 +113,16 @@ router.post("/auth", async (req, res) => {
       // return the user to the client
       db.query(selectUserByUsername, username)
          .then((users) => {
-            // TODO: repeat when creating a user
+            // TODO: duplicated code
             // what the user is
             // the user is the first user in the array of 1 item (users[0])
+            thisLoginAt = Date.now();
             const user = {
                id: users[0].id,
                username: users[0].username,
                createdAt: users[0].created_at,
                lastLoginAt: users[0].last_login_at,
+               thisLoginAt: thisLoginAt,
             };
 
             // this contains the user, a secret and the timeframe
@@ -128,7 +132,7 @@ router.post("/auth", async (req, res) => {
             });
 
             // enter new last login
-            db.query(setUserLastLoginAt, [Date.now(), users[0].id])
+            db.query(setUserLastLoginAt, [thisLoginAt, users[0].id])
                .then(() => {
                   res.status(200).json({ accessToken }); // instead of passing the user as the response, pass the access token
                })

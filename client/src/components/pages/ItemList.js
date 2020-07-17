@@ -389,9 +389,15 @@ class ItemList2 extends React.Component {
                                              -1
                                           );
                                           // change the text in the page item editable input
-                                          document.getElementById(
-                                             "page-item-name-input"
-                                          ).value = this.props.currentItem.parentName;
+                                          if (
+                                             document.getElementById(
+                                                "page-item-name-input"
+                                             ) !== null
+                                          ) {
+                                             document.getElementById(
+                                                "page-item-name-input"
+                                             ).value = this.props.currentItem.parentName;
+                                          }
                                        }}
                                     >
                                        <div

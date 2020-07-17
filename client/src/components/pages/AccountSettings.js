@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
 import { logOutCurrentUser } from "../../utils/helpers";
 import axios from "axios";
+import toDisplayDate from "date-fns/format";
 
 class AccountSettings extends React.Component {
    constructor(props) {
@@ -97,6 +98,42 @@ class AccountSettings extends React.Component {
                               Account Settings for&nbsp;
                               {this.props.currentUser.username}
                            </h5>
+                           <p
+                              className="my-input-label form-label"
+                              htmlFor="new-username"
+                           >
+                              Account Created
+                           </p>
+                           <p>
+                              {toDisplayDate(
+                                 this.props.currentUser.createdAt,
+                                 "MMM d, yyyy HH:mm"
+                              )}
+                           </p>
+                           <p
+                              className="my-input-label form-label"
+                              htmlFor="new-username"
+                           >
+                              Currently logged in since
+                           </p>
+                           <p>
+                              {toDisplayDate(
+                                 this.props.currentUser.thisLoginAt,
+                                 "MMM d, yyyy HH:mm"
+                              )}
+                           </p>
+                           <p
+                              className="my-input-label form-label"
+                              htmlFor="new-username"
+                           >
+                              Previous Log in
+                           </p>
+                           <p>
+                              {toDisplayDate(
+                                 this.props.currentUser.lastLoginAt,
+                                 "MMM d, yyyy HH:mm"
+                              )}
+                           </p>
                            <div className="card-section">
                               <span
                                  className="button navigation-link w-100 disabled"
