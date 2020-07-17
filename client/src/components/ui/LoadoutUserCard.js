@@ -28,7 +28,7 @@ class LoadoutUserCard extends React.Component {
       console.log({ canPack, canEdit, isAdmin });
       axios
          .put(
-            "http://localhost:3060/api/v1/user-loadouts/set-permissions?userId=" +
+            "/api/v1/user-loadouts/set-permissions?userId=" +
                this.props.userLoadout.userId +
                "&loadoutId=" +
                this.props.userLoadout.loadoutId +
