@@ -18,16 +18,8 @@ import { DeleteItemIcon, ChildrenAddIcon } from "../../icons/loadout-icons.js";
 
 // import { processAllItems } from "../../utils/processItems";
 import classnames from "classnames";
-import {
-   // getItemFromPath,
-   // getParentItemFromPath,
-   renameItem,
-   deleteItem,
-   addItemTo,
-} from "../../utils/items";
+import { renameItem, deleteItem } from "../../utils/items";
 import actions from "../../store/actions";
-import { v4 as getUuid } from "uuid";
-import { setItemStatus } from "../../utils/items";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 
 class ItemCardEdit extends React.Component {
@@ -139,48 +131,6 @@ class ItemCardEdit extends React.Component {
       });
    }
 
-   // adds a new sub item on the server, then moves to the see the subitems of this item while still in edit mode
-   async addSubItemAndMoveTo() {
-      setItemStatus(this.props.item, 0); // unpack this item in order to add a new (default unpacked) subitem
-      const newItemId = getUuid(); // get the uuid client side that way it is easier to reference the id of the input element
-      const otherId = await addItemTo(this.props.item.id, newItemId); // add an item as a child of the current item
-      console.log({ otherId });
-      // refreshPage(this.props.currentItem.parentId); // refresh the page AFTER we generate the new item and before we set the focus on the new element
-      const inputElementId = "edit-name-input-" + newItemId;
-      console.log({ inputElementId });
-
-      // move to the item's page to view the new subitem
-      movePageToDifferentItem(this.props.item.id, +1);
-
-      document.getElementById(
-         "page-item-name-input"
-      ).value = this.props.item.name; // set the text inside of the page item name
-
-      // // add a new card for the new item without refreshing page
-      // const newChildItems = [
-      //    ...this.props.childItems,
-      //    {
-      //       name: "newestest item",
-      //       id: newItemId,
-      //       status: 0,
-      //       parentId: this.props.currentItem.id,
-      //       numChildren: 0,
-      //       numPackedChildren: 0,
-      //       numUnpackedChildren: 0,
-      //       contentSummary: "ready",
-      //    },
-      // ];
-      // this.props.dispatch({
-      //    type: actions.STORE_CHILD_ITEMS,
-      //    payload: newChildItems,
-      // });
-
-      // sets focus to the new item card and selects it's text
-      // const input = document.getElementById(inputElementId);
-      // input.focus();
-      // input.select();
-   }
-
    render() {
       const item = this.props.item; // this is to simplify code below
       const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 ebecause it is one level below the page's level
@@ -230,25 +180,27 @@ class ItemCardEdit extends React.Component {
                      />
                   </span>
 
-                  {this.props.item.numChildren === 0 && (
-                     <>
-                        <span style={{ width: "8px" }}></span>
+                  <span style={{ width: "8px" }}></span>
 
-                        <span
-                           className={classnames(
-                              "icon-dark item-card-icon clickable",
-                              (UI_APPEARANCE === "light" ||
-                                 UI_APPEARANCE === "dark") &&
-                                 "item-icon-colors-" +
-                                    String(level % LEVEL_COLORS),
-                              UI_APPEARANCE === "colors" && "item-icon-colors"
-                           )}
-                           onClick={() => this.addSubItemAndMoveTo()}
-                        >
-                           <ChildrenAddIcon />
-                        </span>
-                     </>
-                  )}
+                  <span
+                     className={classnames(
+                        "icon-dark item-card-icon clickable",
+                        (UI_APPEARANCE === "light" ||
+                           UI_APPEARANCE === "dark") &&
+                           "item-icon-colors-" + String(level % LEVEL_COLORS),
+                        UI_APPEARANCE === "colors" && "item-icon-colors"
+                     )}
+                     onClick={(e) => {
+                        // TODO: I think we need to unpack the item if its possible to add a subitem to a packed item
+                        movePageToDifferentItem(this.props.item.id, +1);
+                        // change the text in the page item editable input
+                        document.getElementById(
+                           "page-item-name-input"
+                        ).value = this.props.item.name;
+                     }}
+                  >
+                     <ChildrenAddIcon />
+                  </span>
 
                   {MOVE_UPDOWN && (
                      <>

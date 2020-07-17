@@ -377,10 +377,7 @@ class ItemList2 extends React.Component {
                                                 LEVEL_COLORS
                                           ),
                                     UI_APPEARANCE === "colors" &&
-                                       "light-text-color",
-                                    {
-                                       hidden: this.props.isEditMode,
-                                    }
+                                       "light-text-color"
                                  )}
                               >
                                  {this.props.currentItem.parentId !== null && (
@@ -391,6 +388,10 @@ class ItemList2 extends React.Component {
                                              this.props.currentItem.parentId,
                                              -1
                                           );
+                                          // change the text in the page item editable input
+                                          document.getElementById(
+                                             "page-item-name-input"
+                                          ).value = this.props.currentItem.parentName;
                                        }}
                                     >
                                        <div

@@ -82,7 +82,6 @@ class ItemCard2 extends React.Component {
    render() {
       const item = this.props.item; // this is to simplify code below
       const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 ebecause it is one level below the page's level
-      const thisItemPath = ""; // TODO, this will be obsolete
 
       return (
          <div
@@ -159,7 +158,7 @@ class ItemCard2 extends React.Component {
                            }
                         )}
                         onClick={(e) => {
-                           this.toggleIsPacked(thisItemPath);
+                           this.toggleIsPacked();
                         }}
                      >
                         {item.status === 1 && <PackedIcon />}
@@ -191,7 +190,7 @@ class ItemCard2 extends React.Component {
                               //    item.numPackedChildren < item.numChildren,
                            })}
                            onClick={(e) => {
-                              this.toggleIsPacked(thisItemPath);
+                              this.toggleIsPacked();
                            }}
                         >
                            &nbsp;&nbsp;{item.name}
