@@ -14,10 +14,10 @@ import store from "./store/store";
 import actions from "./store/actions";
 import axios from "axios";
 
-const authToken = localStorage.authToken; // get the auth token from local storage
-if (authToken) {
+const authTokenLoadout = localStorage.authTokenLoadout; // get the auth token from local storage
+if (authTokenLoadout) {
    const currentTimeInSec = Date.now() / 1000;
-   const user = jwtDecode(authToken);
+   const user = jwtDecode(authTokenLoadout);
    if (currentTimeInSec > user.exp) {
       console.log("expired token");
 
@@ -41,7 +41,7 @@ if (authToken) {
       });
 
       // set authorization headers for every request
-      axios.defaults.headers.common["x-auth-token"] = authToken;
+      axios.defaults.headers.common["x-auth-token"] = authTokenLoadout;
 
       // redirect to create-answer, this is in an if statement so it won't keep refereshing forever
       if (window.location.pathname === "/") {

@@ -11,7 +11,7 @@ export default function currentUser(currentUser = {}, action) {
       case actions.UPDATE_CURRENT_USER:
          // remove the auth token when they log out
          if (isEmpty(action.payload)) {
-            localStorage.removeItem("authToken");
+            localStorage.removeItem("authTokenLoadout");
 
             // remove the default headers
             delete axios.defaults.headers.common["x-auth-token"];

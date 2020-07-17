@@ -74,11 +74,11 @@ class Landing extends React.Component {
          .post("/api/v1/users/auth", user)
          .then((res) => {
             // set token in localStorage
-            const authToken = res.data.accessToken;
-            localStorage.setItem("authToken", authToken);
-            console.log("authToken", authToken);
+            const authTokenLoadout = res.data.accessToken;
+            localStorage.setItem("authTokenLoadout", authTokenLoadout);
+            console.log("authTokenLoadout", authTokenLoadout);
 
-            const user = jwtDecode(authToken); // decode the user from the access token
+            const user = jwtDecode(authTokenLoadout); // decode the user from the access token
 
             // send the user to Redux
             this.props.dispatch({
@@ -87,7 +87,7 @@ class Landing extends React.Component {
             });
 
             // set authorization headers for every request at the moment of log in
-            axios.defaults.headers.common["x-auth-token"] = authToken;
+            axios.defaults.headers.common["x-auth-token"] = authTokenLoadout;
 
             // go to next page
             this.props.history.push("/loadout-list");
@@ -157,16 +157,23 @@ class Landing extends React.Component {
       axios
          .post("/api/v1/users", user) // post to this endpoint the user object we just made
          .then((res) => {
-            console.log("res.data", res.data);
-            // update currentUser in global state with API response
+            // TODO this is duplicated code, maybe make a function
+
+            // set token in localStorage
+            const authTokenLoadout = res.data.accessToken;
+            localStorage.setItem("authTokenLoadout", authTokenLoadout);
+            console.log("authTokenLoadout", authTokenLoadout);
+
+            const user = jwtDecode(authTokenLoadout); // decode the user from the access token
+
+            // send the user to Redux
             this.props.dispatch({
                type: actions.UPDATE_CURRENT_USER,
-               payload: res.data,
+               payload: user,
             });
 
             // set authorization headers for every request at the moment of log in
-            // TODO: add this in once we pass the authToken in our response
-            // axios.defaults.headers.common["x-auth-token"] = authToken;
+            axios.defaults.headers.common["x-auth-token"] = authTokenLoadout;
 
             // go to next page
             this.props.history.push("/loadout-list");
