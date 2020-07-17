@@ -10,6 +10,12 @@ This runs the server locally.
 
 This runs the client locally.
 
+## Delpoyment
+
+### Push latest git commit to Heroku
+
+`git push heroku master`
+
 ## Sharing A Loadout
 
 * The creator of a loadout is given full permissions to the loadouts they create.

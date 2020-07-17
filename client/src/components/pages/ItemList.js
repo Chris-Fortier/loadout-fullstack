@@ -30,9 +30,19 @@ class ItemList2 extends React.Component {
       this.state = {
          isShowingPacked: true,
          isPackedOnBottom: false,
-         isEditMode: false,
+         // isEditMode: false,
          isShowingUnpackConfirmation: false,
       };
+
+      // initialize Redux stuff that should be empty if on this page:
+      props.dispatch({
+         type: actions.STORE_USER_LOADOUTS,
+         payload: [],
+      });
+      props.dispatch({
+         type: actions.STORE_CURRENT_LOADOUT_USER_LOADOUTS,
+         payload: [],
+      });
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
       // TODO, this is duplicated code
@@ -204,7 +214,11 @@ class ItemList2 extends React.Component {
 
    // toggle mode from pack to edit
    toggleEditMode() {
-      this.setState({ isEditMode: !this.state.isEditMode });
+      // this.setState({ isEditMode: !this.state.isEditMode });
+      this.props.dispatch({
+         type: actions.SET_EDIT_MODE,
+         payload: !this.props.isEditMode,
+      });
       this.hideUnpackConfirmation();
    }
 
@@ -365,7 +379,7 @@ class ItemList2 extends React.Component {
                                     UI_APPEARANCE === "colors" &&
                                        "light-text-color",
                                     {
-                                       hidden: this.state.isEditMode,
+                                       hidden: this.props.isEditMode,
                                     }
                                  )}
                               >
@@ -415,7 +429,7 @@ class ItemList2 extends React.Component {
                         </div>
 
                         {/* the following adds empty space above the super card in edit mode so it doesn't shift */}
-                        {/* {level !== 0 && this.state.isEditMode && (
+                        {/* {level !== 0 && this.props.isEditMode && (
                            <div className="up-level">
                               <br />
                            </div>
@@ -440,7 +454,7 @@ class ItemList2 extends React.Component {
                               className={classnames(level > 1 && "card-header")}
                            >
                               <div className="row">
-                                 {(!this.state.isEditMode ||
+                                 {(!this.props.isEditMode ||
                                     !thisUserCanEdit) && (
                                     <>
                                        <div className="col">
@@ -485,7 +499,7 @@ class ItemList2 extends React.Component {
                                        )}
                                     </>
                                  )}
-                                 {this.state.isEditMode && thisUserCanEdit && (
+                                 {this.props.isEditMode && thisUserCanEdit && (
                                     <div className="col">
                                        <span className="flex-fill">
                                           <h4>
@@ -570,10 +584,10 @@ class ItemList2 extends React.Component {
                                           >
                                              <IconEdit />
                                           </div>
-                                          {this.state.isEditMode && (
+                                          {this.props.isEditMode && (
                                              <>Done Editing</>
                                           )}
-                                          {!this.state.isEditMode && (
+                                          {!this.props.isEditMode && (
                                              <>Edit Loadout</>
                                           )}
                                        </div>
@@ -587,7 +601,7 @@ class ItemList2 extends React.Component {
                               <div className="row">
                                  <div className="col">
                                     {/* {this.renderContainingItems(currentItem)} */}
-                                    {!this.state.isEditMode &&
+                                    {!this.props.isEditMode &&
                                        this.props.childItems.map((item) => (
                                           <ItemCard
                                              item={item}
@@ -597,7 +611,7 @@ class ItemList2 extends React.Component {
                                              }
                                           />
                                        ))}
-                                    {this.state.isEditMode &&
+                                    {this.props.isEditMode &&
                                        this.props.childItems.map((item) => (
                                           <ItemCardEdit
                                              item={item}
@@ -606,7 +620,7 @@ class ItemList2 extends React.Component {
                                        ))}
                                  </div>
                               </div>
-                              {!this.state.isEditMode && level !== 0 && (
+                              {!this.props.isEditMode && level !== 0 && (
                                  <>
                                     <div className={classnames("card-section")}>
                                        <span
@@ -639,7 +653,7 @@ class ItemList2 extends React.Component {
                                     </div>
                                  </>
                               )}
-                              {this.state.isEditMode && (
+                              {this.props.isEditMode && (
                                  <>
                                     <div
                                        className="button secondary-action-button narrow-button"
@@ -647,7 +661,8 @@ class ItemList2 extends React.Component {
                                           this.addItemAndFocus();
                                        }}
                                     >
-                                       Add Item
+                                       Add item inside&nbsp;
+                                       {this.props.currentItem.name}
                                     </div>
                                     {/* <div
                                        className="button primary-action-button"
@@ -683,6 +698,7 @@ function mapStateToProps(state) {
       currentLevel: state.currentLevel,
       currentUser: state.currentUser,
       currentUserLoadout: state.currentUserLoadout,
+      isEditMode: state.isEditMode,
    };
 }
 

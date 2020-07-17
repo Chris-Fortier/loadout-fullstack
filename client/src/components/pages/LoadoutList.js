@@ -18,22 +18,36 @@ import {
 import classnames from "classnames";
 import axios from "axios";
 import { getUserLoadouts } from "../../utils/userLoadouts";
+import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 
 class LoadoutList extends React.Component {
    constructor(props) {
       super(props); // boilerplate
 
-      // set default state values
-
-      this.state = {
-         // loadouts: [],
-         isEditMode: false,
-      };
-
-      // set the level to zero
-      this.props.dispatch({
+      // initialize Redux stuff that should be empty if on this page:
+      props.dispatch({
+         type: actions.STORE_CURRENT_ITEM,
+         payload: {},
+      });
+      props.dispatch({
+         type: actions.STORE_CHILD_ITEMS,
+         payload: [],
+      });
+      props.dispatch({
          type: actions.RESET_CURRENT_LEVEL,
-      }); // dispatching an action
+      });
+      props.dispatch({
+         type: actions.STORE_CURRENT_USER_LOADOUT,
+         payload: {},
+      });
+      props.dispatch({
+         type: actions.STORE_CURRENT_LOADOUT_USER_LOADOUTS,
+         payload: [],
+      });
+      props.dispatch({
+         type: actions.SET_EDIT_MODE,
+         payload: false,
+      });
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
       // TODO, this is duplicated code
@@ -60,24 +74,43 @@ class LoadoutList extends React.Component {
          .then((res) => {
             console.log("axios res.data", res.data);
 
-            // update the client side with an equivalent new loadout
-            this.props.userLoadouts.push({
-               canEdit: 1,
-               canPack: 1,
-               contentSummary: "ready",
-               isAdmin: 1,
+            // update the client side with an equivalent new user loadout
+
+            const newUserLoadout = {
+               canEdit: 1, //
+               canPack: 1, //
+               contentSummary: "ready", //
+               isAdmin: 1, //
                loadoutId: res.data, // use the loadout id generated on the server
-               loadoutName: "Untitled Loadout",
-               name: "Untitled Loadout",
-               numChildren: 0,
-               numPackedChildren: 0,
-               status: 0,
-            });
+               loadoutName: "Untitled Loadout", //
+               name: "Untitled Loadout", //
+               numChildren: 0, //
+               numPackedChildren: 0, //
+               status: 0, //
+               numUsers: 1,
+            };
+            this.props.userLoadouts.push({ ...newUserLoadout });
 
             // push to the store
             this.props.dispatch({
                type: actions.STORE_USER_LOADOUTS,
                payload: this.props.userLoadouts,
+            });
+
+            movePageToDifferentItem(
+               res.data, // the id from the new loadout
+               +1,
+               { ...newUserLoadout }
+            );
+
+            // move to the new loadout item list
+            this.props.history.push("/item-list");
+
+            // turn on edit mode so they can immediately name the loadout and add items
+            // we know they have full permissions to do this upon making a new loadout
+            this.props.dispatch({
+               type: actions.SET_EDIT_MODE,
+               payload: true,
             });
          })
          .catch((error) => {

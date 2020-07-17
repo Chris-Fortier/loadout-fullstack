@@ -17,6 +17,7 @@ const initialState = {
    currentUserLoadout: {},
    userLoadouts: [],
    currentLoadoutUserLoadouts: [], // stores the userLoadouts of the current loadout
+   isEditMode: false,
 };
 const store = createStore(combineReducers, initialState, composeWithDevTools());
 export default store;
