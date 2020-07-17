@@ -99,10 +99,10 @@ class AccountSettings extends React.Component {
                            </h5>
                            <div className="card-section">
                               <span
-                                 className="button navigation-link w-100"
-                                 onClick={() => this.toggleUsernameRollout()}
+                                 className="button navigation-link w-100 disabled"
+                                 // onClick={() => this.toggleUsernameRollout()}
                               >
-                                 Change Your Username...
+                                 Change Your Username (WIP)...
                               </span>
                               {this.state.hasUsernameRollout && (
                                  <>
@@ -145,10 +145,10 @@ class AccountSettings extends React.Component {
                            </div>
                            <div className="card-section">
                               <span
-                                 className="button navigation-link w-100"
-                                 onClick={() => this.togglePasswordRollout()}
+                                 className="button navigation-link w-100 disabled"
+                                 // onClick={() => this.togglePasswordRollout()}
                               >
-                                 Change Your Password...
+                                 Change Your Password (WIP)...
                               </span>
                               {this.state.hasPasswordRollout && (
                                  <>

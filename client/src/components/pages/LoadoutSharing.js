@@ -375,9 +375,8 @@ class LoadoutSharing extends React.Component {
                                                    className="display-switch-label"
                                                 >
                                                    <div
-                                                      className="d-flex"
                                                       className={classnames(
-                                                         "loadout-card-icon",
+                                                         "d-flex loadout-card-icon",
                                                          UI_APPEARANCE ===
                                                             "dark" &&
                                                             "icon-light",
@@ -400,9 +399,8 @@ class LoadoutSharing extends React.Component {
                                                    className="display-switch-label"
                                                 >
                                                    <div
-                                                      className="d-flex"
                                                       className={classnames(
-                                                         "loadout-card-icon",
+                                                         "d-flex loadout-card-icon",
                                                          UI_APPEARANCE ===
                                                             "dark" &&
                                                             "icon-light",
@@ -425,9 +423,8 @@ class LoadoutSharing extends React.Component {
                                                    className="display-switch-label"
                                                 >
                                                    <div
-                                                      className="d-flex"
                                                       className={classnames(
-                                                         "loadout-card-icon",
+                                                         "d-flex loadout-card-icon",
                                                          UI_APPEARANCE ===
                                                             "dark" &&
                                                             "icon-light",
@@ -450,9 +447,8 @@ class LoadoutSharing extends React.Component {
                                                    className="display-switch-label"
                                                 >
                                                    <div
-                                                      className="d-flex"
                                                       className={classnames(
-                                                         "loadout-card-icon",
+                                                         "d-flex loadout-card-icon",
                                                          UI_APPEARANCE ===
                                                             "dark" &&
                                                             "icon-light",
@@ -487,9 +483,8 @@ class LoadoutSharing extends React.Component {
                                                    className="display-switch-label"
                                                 >
                                                    <div
-                                                      className="d-flex"
                                                       className={classnames(
-                                                         "loadout-card-icon",
+                                                         "d-flex loadout-card-icon",
                                                          UI_APPEARANCE ===
                                                             "dark" &&
                                                             "icon-light",
