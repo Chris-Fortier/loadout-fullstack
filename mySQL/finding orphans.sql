@@ -23,5 +23,22 @@ RIGHT JOIN xref_user_loadouts ON xref_user_loadouts.user_id = users.id;
 
 -- orphaned xref_user_loadouts (xref_user_loadouts with no loadouts)
 SELECT * FROM loadouts
-RIGHT JOIN xref_user_loadouts ON xref_user_loadouts.loadout_id = loadouts.id
+RIGHT JOIN xref_user_loadouts ON xref_user_loadouts.loadout_id = loadouts.id;
 
+
+-- this query gets all "subitems" (not not level loadouts)
+SELECT * FROM loadouts WHERE parent_id IS NOT NULL;
+
+-- find orphaned items (items with a parent that does not exist)
+-- works!
+SELECT
+	parent_name,
+    subitems.name,
+    subitems.created_at
+FROM
+	(SELECT
+		loadouts.name AS parent_name, id
+	FROM loadouts) AS parents
+RIGHT JOIN (SELECT * FROM loadouts WHERE parent_id IS NOT NULL) AS subitems
+	ON subitems.parent_id = parents.id
+WHERE parent_name IS NULL

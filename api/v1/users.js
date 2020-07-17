@@ -14,6 +14,10 @@ const getLoginUsernameError = require("../../validation/getLoginUsernameError");
 const getLoginPasswordError = require("../../validation/getLoginPasswordError");
 const jwt = require("jsonwebtoken");
 const validateJwt = require("../../utils/validateJwt");
+const setUserLastLoginAt = require("../../queries/setUserLastLoginAt");
+
+// TODO: generate uuid on server instead of client
+// TODO: generate dates on server instrea of client
 
 // @route      POST api/v1/users (going to post one thing to this list of things)
 // @desc       Create a new user
@@ -48,6 +52,7 @@ router.post("/", async (req, res) => {
                      id: users[0].id,
                      username: users[0].username,
                      createdAt: users[0].created_at,
+                     lastLoginAt: users[0].last_login_at,
                   };
 
                   // this contains the user, a secret and the timeframe
@@ -60,7 +65,14 @@ router.post("/", async (req, res) => {
                      }
                   );
 
-                  res.status(200).json({ accessToken }); // instead of passing the user as the response, pass the access token
+                  // enter new last login
+                  db.query(setUserLastLoginAt, [Date.now(), users[0].id])
+                     .then(() => {
+                        res.status(200).json({ accessToken }); // instead of passing the user as the response, pass the access token
+                     })
+                     .catch((err) => {
+                        res.status(400).json("error updating last login time");
+                     });
                })
                .catch((err) => {
                   console.log("err", err);
@@ -106,6 +118,7 @@ router.post("/auth", async (req, res) => {
                id: users[0].id,
                username: users[0].username,
                createdAt: users[0].created_at,
+               lastLoginAt: users[0].last_login_at,
             };
 
             // this contains the user, a secret and the timeframe
@@ -114,7 +127,14 @@ router.post("/auth", async (req, res) => {
                expiresIn: "60m",
             });
 
-            res.status(200).json({ accessToken }); // instead of passing the user as the response, pass the access token
+            // enter new last login
+            db.query(setUserLastLoginAt, [Date.now(), users[0].id])
+               .then(() => {
+                  res.status(200).json({ accessToken }); // instead of passing the user as the response, pass the access token
+               })
+               .catch((err) => {
+                  res.status(400).json("error updating last login time");
+               });
          })
          .catch((err) => {
             console.log("err", err);
