@@ -13,10 +13,7 @@ import {
 import classnames from "classnames";
 import { AddIcon } from "../../icons/loadout-icons";
 import { IconPackage, IconEdit, IconKey } from "../../icons/icons.js";
-import {
-   removeUserLoadout,
-   getUserLoadoutsForALoadout,
-} from "../../utils/userLoadouts";
+import { getUserLoadoutsForALoadout } from "../../utils/userLoadouts";
 import { renameItem } from "../../utils/items";
 import actions from "../../store/actions";
 
@@ -53,36 +50,8 @@ class LoadoutSharing extends React.Component {
       }
    }
 
-   // give an existing user access to this loadout
-   // if the user doesn't already have access
-   // insert a new userLoadout into the database with the permissions indicated
-   // else
-   // display a message saying "This loadout is already shared with _"
-
-   // update permissions for a user
-   // (this happens whenever a checkbox is clicked)
-
-   // delete a user's access
-   // delete the userLoadout from the database
-
    // creates a new user loadout if possible given a user username and a loadout id
    async validateAndAddUserLoadout(inputId) {
-      // // convert booleans to numbers
-      // if (canEdit === false) canEdit = 0;
-      // if (canEdit === true) canEdit = 1;
-      // if (canPack === false) canPack = 0;
-      // if (canPack === true) canPack = 1;
-      // if (isAdmin === false) isAdmin = 0;
-      // if (isAdmin === true) isAdmin = 1;
-
-      // console.log("validateAndAddUserLoadout()...", {
-      //    username,
-      //    loadoutId,
-      //    canEdit,
-      //    canPack,
-      //    isAdmin,
-      // });
-
       // new hard-coded defaults
       console.log(inputId);
       const username = document.getElementById(inputId).value;
@@ -143,6 +112,27 @@ class LoadoutSharing extends React.Component {
             } else {
                this.setState({ hasAddUserError: false, addUserError });
             }
+         });
+   }
+
+   async removeUserLoadoutThenMove() {
+      axios
+         .put(
+            "/api/v1/user-loadouts/delete?userId=" +
+               this.props.currentUser.id +
+               "&loadoutId=" +
+               this.props.currentUserLoadout.loadoutId
+         )
+         .then((res) => {
+            console.log("axios res", res);
+
+            // this way it will wait until this is complete before moving
+            // and it will get up to data data from db on next page
+            this.props.history.push("/loadout-list");
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
          });
    }
 
@@ -327,18 +317,7 @@ class LoadoutSharing extends React.Component {
                                                    <div
                                                       className="button primary-action-button"
                                                       onClick={() => {
-                                                         removeUserLoadout(
-                                                            this.props
-                                                               .currentUser.id,
-                                                            this.props
-                                                               .currentUserLoadout
-                                                               .loadoutId
-                                                         );
-
-                                                         // move to the my loadouts page
-                                                         this.props.history.push(
-                                                            "/loadout-list"
-                                                         );
+                                                         this.removeUserLoadoutThenMove();
                                                       }}
                                                    >
                                                       Remove your access to this

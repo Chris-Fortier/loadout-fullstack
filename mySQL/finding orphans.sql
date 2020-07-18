@@ -1,4 +1,7 @@
+USE loadout_app;
 SELECT * FROM loadouts;
+SELECT * FROM users;
+SELECT * FROM loadouts WHERE loadouts.parent_id IS NULL;
 
 -- find orphaned items (items with a parent that does not exist)
 -- not working yet
@@ -39,6 +42,21 @@ FROM
 	(SELECT
 		loadouts.name AS parent_name, id
 	FROM loadouts) AS parents
+RIGHT JOIN (SELECT * FROM loadouts WHERE parent_id IS NOT NULL) AS subitems
+	ON subitems.parent_id = parents.id
+WHERE parent_name IS NULL;
+
+-- find orphaned loadouts (top level loadouts that can be shared)
+-- loadout with no user loadouts
+-- WIP
+SELECT
+	parent_name,
+    subitems.name,
+    subitems.created_at
+FROM
+	(SELECT
+		loadouts.name AS parent_name, id
+	FROM xref_user_loadouts)
 RIGHT JOIN (SELECT * FROM loadouts WHERE parent_id IS NOT NULL) AS subitems
 	ON subitems.parent_id = parents.id
 WHERE parent_name IS NULL
