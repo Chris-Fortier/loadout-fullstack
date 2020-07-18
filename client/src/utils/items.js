@@ -55,7 +55,7 @@ export function addItemTo(parentId, newItemId) {
       .post(
          "/api/v1/loadouts/insert?parentId=" +
             parentId +
-            "&name=new%20item&newItemId=" +
+            "&newItemId=" +
             newItemId
       )
       .then((res) => {

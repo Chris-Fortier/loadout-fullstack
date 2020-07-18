@@ -22,15 +22,15 @@ const deleteUserLoadoutsByLoadout = require("../../queries/deleteUserLoadoutsByL
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/insert?parentId=e109827f-4bfa-4384-9ac9-979776d2512b&name=newTestItem
 router.post("/insert", async (req, res) => {
-   const { parentId, name, newItemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
-   console.log({ parentId, name, newItemId });
+   const { parentId, newItemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+   console.log({ parentId, newItemId });
    // console.log("uuid", uuid.v4());
 
    // newItemId = uuid.v4();
 
    const newItem = {
       id: newItemId, // use the uuid generated client side
-      name: name, // use given value for parent
+      name: "Untitled Item",
       parent_id: parentId, // use given value for parent
       status: 0, // default status to zero (unpacked)
       created_at: Date.now(), // set this date to now

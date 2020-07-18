@@ -417,7 +417,7 @@ body {
 
    line-height: 0.9; // this works well with this font if multiple lines are needed
    font-size: 24px;
-   text-transform: capitalize; // makes first letter of each word uppercase
+   // text-transform: capitalize; // makes first letter of each word uppercase
 
    // height: 42px; // this is a good fixed size, but if the title spills over multiple lines, it runs off the card
 
@@ -453,7 +453,7 @@ body {
 
    line-height: 0.9; // this works well with this font if multiple lines are needed
    font-size: 24px;
-   text-transform: capitalize; // makes first letter of each word uppercase
+   // text-transform: capitalize; // makes first letter of each word uppercase
 
    // remove margin when a button is inside of an item card
    .button {
@@ -473,7 +473,7 @@ body {
 
    line-height: 0.9; // this works well with this font if multiple lines are needed
    font-size: 24px;
-   text-transform: capitalize; // makes first letter of each word uppercase
+   // text-transform: capitalize; // makes first letter of each word uppercase
 
    box-shadow: $item-card-shadow;
 
@@ -616,7 +616,7 @@ h1 {
 // this is for the name of the item on that item's page we are looking at
 h4 {
    font-size: 32px;
-   text-transform: capitalize; // makes first letter of each word uppercase
+   // text-transform: capitalize; // makes first letter of each word uppercase
    color: rgba(255, 255, 255, 0.8);
    line-height: 0.9; // makes the title tighter if it used multiple lines
    margin-top: 0.5em;
@@ -625,7 +625,7 @@ h4 {
 // this is for the titles of the landing page cards
 h5 {
    font-size: 32px;
-   text-transform: capitalize; // makes first letter of each word uppercase
+   // text-transform: capitalize; // makes first letter of each word uppercase
    color: $darker-stuff;
    line-height: 0.9; // makes the title tighter if it used multiple lines
 }
@@ -864,7 +864,7 @@ $iconWidth: 30px;
    border: 0px solid transparent;
    padding-left: 0;
    // color: rgba(0, 0, 0, 0.7);
-   text-transform: capitalize;
+   // text-transform: capitalize;
 }
 
 .navigation-link:hover:not(.disabled) {
