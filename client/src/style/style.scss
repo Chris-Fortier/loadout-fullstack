@@ -166,8 +166,7 @@ a:hover {
 
 // when using "color" ui appearance, this is for the packed icons
 .item-icon-colors {
-   width: 1em; //$iconWidth;
-
+   width: 1em;
    align-self: center;
 
    .parent-item {
@@ -182,6 +181,8 @@ a:hover {
 }
 
 .item-icon-colors-0 {
+   width: 1em;
+   align-self: center;
    // colors for the packing icons
    .parent-item {
       fill: map-get($level-text-colors, 6);
@@ -194,6 +195,8 @@ a:hover {
    }
 }
 .item-icon-colors-1 {
+   width: 1em;
+   align-self: center;
    // colors for the packing icons
    .parent-item {
       fill: map-get($level-text-colors, 0);
@@ -206,6 +209,8 @@ a:hover {
    }
 }
 .item-icon-colors-2 {
+   width: 1em;
+   align-self: center;
    // colors for the packing icons
    .parent-item {
       fill: map-get($level-text-colors, 1);
@@ -218,6 +223,8 @@ a:hover {
    }
 }
 .item-icon-colors-3 {
+   width: 1em;
+   align-self: center;
    // colors for the packing icons
    .parent-item {
       fill: map-get($level-text-colors, 2);
@@ -230,6 +237,8 @@ a:hover {
    }
 }
 .item-icon-colors-4 {
+   width: 1em;
+   align-self: center;
    // colors for the packing icons
    .parent-item {
       fill: map-get($level-text-colors, 3);
@@ -242,6 +251,8 @@ a:hover {
    }
 }
 .item-icon-colors-5 {
+   width: 1em;
+   align-self: center;
    // colors for the packing icons
    .parent-item {
       fill: map-get($level-text-colors, 4);
@@ -254,6 +265,8 @@ a:hover {
    }
 }
 .item-icon-colors-6 {
+   width: 1em;
+   align-self: center;
    // colors for the packing icons
    .parent-item {
       fill: map-get($level-text-colors, 5);

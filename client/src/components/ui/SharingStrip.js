@@ -19,9 +19,9 @@ export default class Header extends React.Component {
                      style={{ fontSize: "1rem", opacity: 0.5 }}
                      className={classnames(
                         (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "dark") &&
-                           "level-text-color-0",
-                        UI_APPEARANCE === "colors" && "dark-text-color"
+                           UI_APPEARANCE === "colors") &&
+                           "dark-text-color",
+                        UI_APPEARANCE === "dark" && "light-text-color"
                      )}
                   >
                      {this.props.loadout.numUsers}
