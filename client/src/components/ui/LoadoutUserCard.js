@@ -17,10 +17,11 @@ class LoadoutUserCard extends React.Component {
       super(props); // boilerplate
 
       this.state = {
-         isDeleted: false,
-         // canPack: this.props.userLoadout.canPack,
-         // canEdit: this.props.userLoadout.canEdit,
-         // isAdmin: this.props.userLoadout.isAdmin,
+         isRemoved: false,
+         canPack: this.props.userLoadout.canPack,
+         canEdit: this.props.userLoadout.canEdit,
+         isAdmin: this.props.userLoadout.isAdmin,
+         isShowingRemoveButton: false,
       };
    }
 
@@ -75,59 +76,40 @@ class LoadoutUserCard extends React.Component {
 
    toggleCanPack() {
       // toggle on client
-      if (this.props.userLoadout.canPack === 0) {
-         // this.setState({ canPack: 1 });
-         this.updatePermissionsOnServerAndRedux(
-            1,
-            this.props.userLoadout.canEdit,
-            this.props.userLoadout.isAdmin
-         );
-      } else if (this.props.userLoadout.canPack === 1) {
-         // this.setState({ canPack: 0 });
-         this.updatePermissionsOnServerAndRedux(
-            0,
-            this.props.userLoadout.canEdit,
-            this.props.userLoadout.isAdmin
-         );
+      if (this.state.canPack === 0) {
+         this.setState({ canPack: !this.state.canPack });
+      } else if (this.state.canPack === 1) {
+         this.setState({ canPack: 0 });
       }
    }
 
    toggleCanEdit() {
       // toggle on client
-      if (this.props.userLoadout.canEdit === 0) {
-         // this.setState({ canEdit: 1 });
-         this.updatePermissionsOnServerAndRedux(
-            this.props.userLoadout.canPack,
-            1,
-            this.props.userLoadout.isAdmin
-         );
-      } else if (this.props.userLoadout.canEdit === 1) {
-         // this.setState({ canEdit: 0 });
-         this.updatePermissionsOnServerAndRedux(
-            this.props.userLoadout.canPack,
-            0,
-            this.props.userLoadout.isAdmin
-         );
+      if (this.state.canEdit === 0) {
+         this.setState({ canEdit: 1 });
+      } else if (this.state.canEdit === 1) {
+         this.setState({ canEdit: 0 });
       }
    }
 
    toggleIsAdmin() {
       // toggle on client
-      if (this.props.userLoadout.isAdmin === 0) {
-         // this.setState({ isAdmin: 1 });
-         this.updatePermissionsOnServerAndRedux(
-            this.props.userLoadout.canPack,
-            this.props.userLoadout.canEdit,
-            1
-         );
-      } else if (this.props.userLoadout.isAdmin === 1) {
-         // this.setState({ isAdmin: 0 });
-         this.updatePermissionsOnServerAndRedux(
-            this.props.userLoadout.canPack,
-            this.props.userLoadout.canEdit,
-            0
-         );
+      if (this.state.isAdmin === 0) {
+         this.setState({ isAdmin: 1 });
+      } else if (this.state.isAdmin === 1) {
+         this.setState({ isAdmin: 0 });
       }
+   }
+
+   // resets the state of the checkboxes to match what is in Redux
+   // this will make it hide the save changes rollout
+   cancelChanges() {
+      this.setState({
+         canPack: this.props.userLoadout.canPack,
+         canEdit: this.props.userLoadout.canEdit,
+         isAdmin: this.props.userLoadout.isAdmin,
+         isShowingRemoveButton: false,
+      });
    }
 
    render() {
@@ -138,16 +120,30 @@ class LoadoutUserCard extends React.Component {
 
       // REMOVE is available if
       // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
-      // currentUser is not an admin of this loadout and this userLoadout is the currentUser
+      // currentUser is not an admin of this loadout and this userLoadout is the currentUser (now it never uses this case because you can remove yourself from the top of page)
       const canRemoveUserLoadout =
-         (thisUserIsAdmin === 1 && userLoadoutUserId !== thisUserId) ||
-         (thisUserIsAdmin === 0 && userLoadoutUserId === thisUserId);
+         thisUserIsAdmin === 1 && userLoadoutUserId !== thisUserId;
+
+      // decide whether or not to show save, cancel and remove buttons
+      let showSaveChangesButton = false;
+      if (
+         this.props.userLoadout.canPack !== this.state.canPack ||
+         this.props.userLoadout.canEdit !== this.state.canEdit ||
+         this.props.userLoadout.isAdmin !== this.state.isAdmin
+      ) {
+         showSaveChangesButton = true;
+      }
+
+      let showChangeRollout = false;
+      if (showSaveChangesButton || this.state.isShowingRemoveButton) {
+         showChangeRollout = true;
+      }
 
       return (
          <>
             {/* large size card */}
             <tr className="sharedUserRow  d-none d-sm-table-row">
-               {!this.state.isDeleted && (
+               {!this.state.isRemoved && (
                   <>
                      <th scope="row">
                         {this.props.userLoadout.username}
@@ -175,12 +171,8 @@ class LoadoutUserCard extends React.Component {
                                  }
                               }}
                            >
-                              {this.props.userLoadout.canPack === 1 && (
-                                 <CheckedIcon />
-                              )}
-                              {this.props.userLoadout.canPack === 0 && (
-                                 <DisabledIcon />
-                              )}
+                              {this.state.canPack === 1 && <CheckedIcon />}
+                              {this.state.canPack === 0 && <DisabledIcon />}
                            </span>
                         </div>
                      </td>
@@ -205,12 +197,8 @@ class LoadoutUserCard extends React.Component {
                                  }
                               }}
                            >
-                              {this.props.userLoadout.canEdit === 1 && (
-                                 <CheckedIcon />
-                              )}
-                              {this.props.userLoadout.canEdit === 0 && (
-                                 <DisabledIcon />
-                              )}
+                              {this.state.canEdit === 1 && <CheckedIcon />}
+                              {this.state.canEdit === 0 && <DisabledIcon />}
                            </span>
                         </div>
                      </td>
@@ -242,12 +230,8 @@ class LoadoutUserCard extends React.Component {
                                  }
                               }}
                            >
-                              {this.props.userLoadout.isAdmin === 1 && (
-                                 <CheckedIcon />
-                              )}
-                              {this.props.userLoadout.isAdmin === 0 && (
-                                 <DisabledIcon />
-                              )}
+                              {this.state.isAdmin === 1 && <CheckedIcon />}
+                              {this.state.isAdmin === 0 && <DisabledIcon />}
                            </span>
                         </div>
                      </td>
@@ -255,7 +239,7 @@ class LoadoutUserCard extends React.Component {
                         <div className="d-flex">
                            <span
                               className={
-                                 // delete is available if
+                                 // remove is available if
                                  // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
                                  // currentUser is not an admin of this loadout and this userLoadout is the currentUser
                                  classnames(
@@ -273,11 +257,10 @@ class LoadoutUserCard extends React.Component {
                               }
                               onClick={() => {
                                  if (canRemoveUserLoadout) {
-                                    removeUserLoadout(
-                                       this.props.userLoadout.userId,
-                                       this.props.userLoadout.loadoutId
-                                    );
-                                    this.setState({ isDeleted: true });
+                                    this.setState({
+                                       isShowingRemoveButton: !this.state
+                                          .isShowingRemoveButton,
+                                    });
                                  }
                               }}
                            >
@@ -287,7 +270,7 @@ class LoadoutUserCard extends React.Component {
                      </td>
                   </>
                )}
-               {this.state.isDeleted && (
+               {this.state.isRemoved && (
                   <>
                      <th scope="row">
                         {this.props.userLoadout.username} Removed
@@ -301,7 +284,7 @@ class LoadoutUserCard extends React.Component {
             </tr>
             {/* small size card */}
             <tr className="sharedUserRow d-table-row d-sm-none">
-               {!this.state.isDeleted && (
+               {!this.state.isRemoved && (
                   <>
                      <th scope="row">
                         {this.props.userLoadout.username}
@@ -312,7 +295,7 @@ class LoadoutUserCard extends React.Component {
                         <div className="d-flex">
                            <span
                               className={
-                                 // delete is available if
+                                 // remove is available if
                                  // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
                                  // currentUser is not an admin of this loadout and this userLoadout is the currentUser
                                  classnames(
@@ -330,11 +313,10 @@ class LoadoutUserCard extends React.Component {
                               }
                               onClick={() => {
                                  if (canRemoveUserLoadout) {
-                                    removeUserLoadout(
-                                       this.props.userLoadout.userId,
-                                       this.props.userLoadout.loadoutId
-                                    );
-                                    this.setState({ isDeleted: true });
+                                    this.setState({
+                                       isShowingRemoveButton: !this.state
+                                          .isShowingRemoveButton,
+                                    });
                                  }
                               }}
                            >
@@ -344,7 +326,7 @@ class LoadoutUserCard extends React.Component {
                      </td>
                   </>
                )}
-               {this.state.isDeleted && (
+               {this.state.isRemoved && (
                   <>
                      <th scope="row">
                         {this.props.userLoadout.username} Removed
@@ -353,7 +335,7 @@ class LoadoutUserCard extends React.Component {
                   </>
                )}
             </tr>
-            {!this.state.isDeleted && (
+            {!this.state.isRemoved && (
                <>
                   <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
                      <td className="no-border d-flex ">
@@ -375,12 +357,8 @@ class LoadoutUserCard extends React.Component {
                               }
                            }}
                         >
-                           {this.props.userLoadout.canPack === 1 && (
-                              <CheckedIcon />
-                           )}
-                           {this.props.userLoadout.canPack === 0 && (
-                              <DisabledIcon />
-                           )}
+                           {this.state.canPack === 1 && <CheckedIcon />}
+                           {this.state.canPack === 0 && <DisabledIcon />}
                         </span>
                         <span>&nbsp;</span>
                         <span
@@ -415,12 +393,8 @@ class LoadoutUserCard extends React.Component {
                               }
                            }}
                         >
-                           {this.props.userLoadout.canEdit === 1 && (
-                              <CheckedIcon />
-                           )}
-                           {this.props.userLoadout.canEdit === 0 && (
-                              <DisabledIcon />
-                           )}
+                           {this.state.canEdit === 1 && <CheckedIcon />}
+                           {this.state.canEdit === 0 && <DisabledIcon />}
                         </span>
                         <span>&nbsp;</span>
                         <span
@@ -462,12 +436,8 @@ class LoadoutUserCard extends React.Component {
                               }
                            }}
                         >
-                           {this.props.userLoadout.isAdmin === 1 && (
-                              <CheckedIcon />
-                           )}
-                           {this.props.userLoadout.isAdmin === 0 && (
-                              <DisabledIcon />
-                           )}
+                           {this.state.isAdmin === 1 && <CheckedIcon />}
+                           {this.state.isAdmin === 0 && <DisabledIcon />}
                         </span>
                         <span>&nbsp;</span>
                         <span
@@ -483,6 +453,48 @@ class LoadoutUserCard extends React.Component {
                      </td>
                   </tr>
                </>
+            )}
+            {showChangeRollout && (
+               <tr>
+                  {/* <td className="no-border"></td> */}
+                  <td colspan="5" className="no-border">
+                     {showSaveChangesButton && (
+                        <div
+                           className="button primary-action-button"
+                           onClick={() => {
+                              this.updatePermissionsOnServerAndRedux(
+                                 this.state.canPack,
+                                 this.state.canEdit,
+                                 this.state.isAdmin
+                              );
+                           }}
+                        >
+                           Save Permission Changes
+                        </div>
+                     )}
+                     {this.state.isShowingRemoveButton && (
+                        <div
+                           className="button danger-action-button"
+                           onClick={() => {
+                              removeUserLoadout(
+                                 this.props.userLoadout.userId,
+                                 this.props.userLoadout.loadoutId
+                              );
+                              this.setState({ isRemoved: true });
+                           }}
+                        >
+                           Remove This User From This Loadout
+                        </div>
+                     )}
+                     <div
+                        className="button navigation-link"
+                        onClick={() => this.cancelChanges()}
+                     >
+                        <br />
+                        Cancel
+                     </div>
+                  </td>
+               </tr>
             )}
          </>
       );
