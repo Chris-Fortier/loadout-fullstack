@@ -245,7 +245,7 @@ class LoadoutSharing extends React.Component {
                                           <span className="flex-fill">
                                              <h4 className="dark-text-color">
                                                 <input
-                                                   className="edit-name"
+                                                   className="edit-name mb-2"
                                                    defaultValue={
                                                       this.props.currentItem
                                                          .name
@@ -258,7 +258,6 @@ class LoadoutSharing extends React.Component {
                                                    }
                                                    id="page-item-name-input"
                                                 />
-                                                <br />
                                                 Sharing Settings
                                              </h4>
                                           </span>
