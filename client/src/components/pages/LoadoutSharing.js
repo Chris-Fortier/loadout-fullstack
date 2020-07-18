@@ -215,7 +215,7 @@ class LoadoutSharing extends React.Component {
          <div>
             <Header />
             <div className="item-list parent-color-2">
-               <div className="container-fluid scroll-fix">
+               <div className="container-fluid single-wide-container scroll-fix">
                   <div className="row">
                      <div className="col">
                         <Link

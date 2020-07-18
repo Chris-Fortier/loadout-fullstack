@@ -1,17 +1,21 @@
 # Loadout
 
-## Local Installation
+## Local Installation After Cloning
 
--  Run these commands after cloning the project:
-   -  In the project folder:
-      -  `npm i cors`
-      -  `npm install jsonwebtoken`
-      -  ...
-   -  In \client:
-      -  `npm i date-fns` (or can this be installed in root?)
-      -  `npm i jwt-decode`
-      -  ...
+Do this stuff once per machine after cloning the project.
+
 -  Install .env file
+-  Install Heroku CLI on the computer if you haven't already.
+-  In the project folder:
+   -  `heroku login`, then log in with browser
+   -  `heroku git:remote -a loadoutapp`
+   -  `npm i cors`
+   -  `npm install jsonwebtoken`
+   -  ...
+-  In \client:
+   -  `npm i date-fns` (or can this be installed in root?)
+   -  `npm i jwt-decode`
+   -  ...
 
 ## Running the App Locally
 

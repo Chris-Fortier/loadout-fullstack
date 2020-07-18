@@ -142,7 +142,7 @@ class LoadoutList extends React.Component {
                      "parent-color-" + String((level - 1) % LEVEL_COLORS)
                )}
             >
-               <div className="container-fluid scroll-fix">
+               <div className="container-fluid single-wide-container scroll-fix">
                   <div className="row">
                      <div className="col">
                         <div className="">

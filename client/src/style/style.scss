@@ -1019,7 +1019,7 @@ label,
 }
 
 // use this as the max size of all container-fluids so that the ones on the My Loadouts and Loadout Sharing pages aren't too large
-.container-fluid {
+.container-fluid.single-wide-container {
    // set the maximum width of the container to be two maximum widthed cards plus the 15px margins and space between them
    max-width: $item-card-max-width * 2 + $item-card-spacing + 15 * 2;
 }
