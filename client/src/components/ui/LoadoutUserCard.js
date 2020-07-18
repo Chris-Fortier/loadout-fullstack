@@ -153,18 +153,10 @@ class LoadoutUserCard extends React.Component {
                      <td>
                         <div className="d-flex">
                            <span
-                              className={classnames(
-                                 "item-card-icon",
-                                 (UI_APPEARANCE === "light" ||
-                                    UI_APPEARANCE === "dark") &&
-                                    "item-icon-colors-1",
-                                 UI_APPEARANCE === "colors" &&
-                                    "item-icon-colors",
-                                 {
-                                    clickable: thisUserIsAdmin === 1,
-                                    disabled: thisUserIsAdmin === 0,
-                                 }
-                              )}
+                              className={classnames("item-card-icon", {
+                                 clickable: thisUserIsAdmin === 1,
+                                 disabled: thisUserIsAdmin === 0,
+                              })}
                               onClick={() => {
                                  if (thisUserIsAdmin === 1) {
                                     this.toggleCanPack();
@@ -179,18 +171,10 @@ class LoadoutUserCard extends React.Component {
                      <td>
                         <div className="d-flex">
                            <span
-                              className={classnames(
-                                 "item-card-icon",
-                                 (UI_APPEARANCE === "light" ||
-                                    UI_APPEARANCE === "dark") &&
-                                    "item-icon-colors-1",
-                                 UI_APPEARANCE === "colors" &&
-                                    "item-icon-colors",
-                                 {
-                                    clickable: thisUserIsAdmin === 1,
-                                    disabled: thisUserIsAdmin === 0,
-                                 }
-                              )}
+                              className={classnames("item-card-icon", {
+                                 clickable: thisUserIsAdmin === 1,
+                                 disabled: thisUserIsAdmin === 0,
+                              })}
                               onClick={() => {
                                  if (thisUserIsAdmin === 1) {
                                     this.toggleCanEdit();
@@ -205,22 +189,14 @@ class LoadoutUserCard extends React.Component {
                      <td>
                         <div className="d-flex">
                            <span
-                              className={classnames(
-                                 "item-card-icon",
-                                 (UI_APPEARANCE === "light" ||
-                                    UI_APPEARANCE === "dark") &&
-                                    "item-icon-colors-1",
-                                 UI_APPEARANCE === "colors" &&
-                                    "item-icon-colors",
-                                 {
-                                    clickable:
-                                       thisUserIsAdmin === 1 &&
-                                       userLoadoutUserId !== thisUserId,
-                                    disabled:
-                                       thisUserIsAdmin !== 1 ||
-                                       userLoadoutUserId === thisUserId,
-                                 }
-                              )}
+                              className={classnames("item-card-icon", {
+                                 clickable:
+                                    thisUserIsAdmin === 1 &&
+                                    userLoadoutUserId !== thisUserId,
+                                 disabled:
+                                    thisUserIsAdmin !== 1 ||
+                                    userLoadoutUserId === thisUserId,
+                              })}
                               onClick={() => {
                                  if (
                                     thisUserIsAdmin === 1 &&
@@ -242,18 +218,10 @@ class LoadoutUserCard extends React.Component {
                                  // remove is available if
                                  // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
                                  // currentUser is not an admin of this loadout and this userLoadout is the currentUser
-                                 classnames(
-                                    "item-card-icon",
-                                    (UI_APPEARANCE === "light" ||
-                                       UI_APPEARANCE === "dark") &&
-                                       "item-icon-colors-1",
-                                    UI_APPEARANCE === "colors" &&
-                                       "item-icon-colors",
-                                    {
-                                       clickable: canRemoveUserLoadout,
-                                       disabled: !canRemoveUserLoadout,
-                                    }
-                                 )
+                                 classnames("item-card-icon", {
+                                    clickable: canRemoveUserLoadout,
+                                    disabled: !canRemoveUserLoadout,
+                                 })
                               }
                               onClick={() => {
                                  if (canRemoveUserLoadout) {
@@ -298,18 +266,10 @@ class LoadoutUserCard extends React.Component {
                                  // remove is available if
                                  // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
                                  // currentUser is not an admin of this loadout and this userLoadout is the currentUser
-                                 classnames(
-                                    "item-card-icon",
-                                    (UI_APPEARANCE === "light" ||
-                                       UI_APPEARANCE === "dark") &&
-                                       "item-icon-colors-1",
-                                    UI_APPEARANCE === "colors" &&
-                                       "item-icon-colors",
-                                    {
-                                       clickable: canRemoveUserLoadout,
-                                       disabled: !canRemoveUserLoadout,
-                                    }
-                                 )
+                                 classnames("item-card-icon", {
+                                    clickable: canRemoveUserLoadout,
+                                    disabled: !canRemoveUserLoadout,
+                                 })
                               }
                               onClick={() => {
                                  if (canRemoveUserLoadout) {
@@ -340,17 +300,10 @@ class LoadoutUserCard extends React.Component {
                   <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
                      <td className="no-border d-flex ">
                         <span
-                           className={classnames(
-                              "item-card-icon",
-                              (UI_APPEARANCE === "light" ||
-                                 UI_APPEARANCE === "dark") &&
-                                 "item-icon-colors-1",
-                              UI_APPEARANCE === "colors" && "item-icon-colors",
-                              {
-                                 clickable: thisUserIsAdmin === 1,
-                                 disabled: thisUserIsAdmin === 0,
-                              }
-                           )}
+                           className={classnames("item-card-icon", {
+                              clickable: thisUserIsAdmin === 1,
+                              disabled: thisUserIsAdmin === 0,
+                           })}
                            onClick={() => {
                               if (thisUserIsAdmin === 1) {
                                  this.toggleCanPack();
@@ -376,17 +329,10 @@ class LoadoutUserCard extends React.Component {
                   <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
                      <td className="no-border d-flex ">
                         <span
-                           className={classnames(
-                              "item-card-icon",
-                              (UI_APPEARANCE === "light" ||
-                                 UI_APPEARANCE === "dark") &&
-                                 "item-icon-colors-1",
-                              UI_APPEARANCE === "colors" && "item-icon-colors",
-                              {
-                                 clickable: thisUserIsAdmin === 1,
-                                 disabled: thisUserIsAdmin === 0,
-                              }
-                           )}
+                           className={classnames("item-card-icon", {
+                              clickable: thisUserIsAdmin === 1,
+                              disabled: thisUserIsAdmin === 0,
+                           })}
                            onClick={() => {
                               if (thisUserIsAdmin === 1) {
                                  this.toggleCanEdit();
@@ -412,21 +358,14 @@ class LoadoutUserCard extends React.Component {
                   <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
                      <td className="no-border d-flex ">
                         <span
-                           className={classnames(
-                              "item-card-icon",
-                              (UI_APPEARANCE === "light" ||
-                                 UI_APPEARANCE === "dark") &&
-                                 "item-icon-colors-1",
-                              UI_APPEARANCE === "colors" && "item-icon-colors",
-                              {
-                                 clickable:
-                                    thisUserIsAdmin === 1 &&
-                                    userLoadoutUserId !== thisUserId,
-                                 disabled:
-                                    thisUserIsAdmin !== 1 ||
-                                    userLoadoutUserId === thisUserId,
-                              }
-                           )}
+                           className={classnames("item-card-icon", {
+                              clickable:
+                                 thisUserIsAdmin === 1 &&
+                                 userLoadoutUserId !== thisUserId,
+                              disabled:
+                                 thisUserIsAdmin !== 1 ||
+                                 userLoadoutUserId === thisUserId,
+                           })}
                            onClick={() => {
                               if (
                                  thisUserIsAdmin === 1 &&

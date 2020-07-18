@@ -546,15 +546,7 @@ class LoadoutSharing extends React.Component {
                                                          <div className="d-flex">
                                                             <span
                                                                className={classnames(
-                                                                  "item-card-icon clickable",
-                                                                  (UI_APPEARANCE ===
-                                                                     "light" ||
-                                                                     UI_APPEARANCE ===
-                                                                        "dark") &&
-                                                                     "item-icon-colors-2",
-                                                                  UI_APPEARANCE ===
-                                                                     "colors" &&
-                                                                     "item-icon-colors"
+                                                                  "item-card-icon clickable"
                                                                )}
                                                                onClick={() =>
                                                                   this.validateAndAddUserLoadout(
@@ -607,15 +599,7 @@ class LoadoutSharing extends React.Component {
                                                          <div className="d-flex">
                                                             <span
                                                                className={classnames(
-                                                                  "item-card-icon clickable",
-                                                                  (UI_APPEARANCE ===
-                                                                     "light" ||
-                                                                     UI_APPEARANCE ===
-                                                                        "dark") &&
-                                                                     "item-icon-colors-2",
-                                                                  UI_APPEARANCE ===
-                                                                     "colors" &&
-                                                                     "item-icon-colors"
+                                                                  "item-card-icon clickable"
                                                                )}
                                                                onClick={() =>
                                                                   this.validateAndAddUserLoadout(
