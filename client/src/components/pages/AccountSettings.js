@@ -77,6 +77,14 @@ class AccountSettings extends React.Component {
       this.props.history.push("/"); // send to landing page
    }
 
+   toDisplayDateIfNotNull(jsDate) {
+      if (jsDate !== null) {
+         return toDisplayDate(jsDate, "MMM d, yyyy HH:mm");
+      } else {
+         return "Unknown";
+      }
+   }
+
    render() {
       return (
          <div className="landing-bg-2">
@@ -105,9 +113,8 @@ class AccountSettings extends React.Component {
                               Account Created
                            </p>
                            <p>
-                              {toDisplayDate(
-                                 this.props.currentUser.createdAt,
-                                 "MMM d, yyyy HH:mm"
+                              {this.toDisplayDateIfNotNull(
+                                 this.props.currentUser.createdAt
                               )}
                            </p>
                            <p
@@ -117,9 +124,8 @@ class AccountSettings extends React.Component {
                               Currently logged in since
                            </p>
                            <p>
-                              {toDisplayDate(
-                                 this.props.currentUser.thisLoginAt,
-                                 "MMM d, yyyy HH:mm"
+                              {this.toDisplayDateIfNotNull(
+                                 this.props.currentUser.thisLoginAt
                               )}
                            </p>
                            <p
@@ -129,9 +135,8 @@ class AccountSettings extends React.Component {
                               Previous Log in
                            </p>
                            <p>
-                              {toDisplayDate(
-                                 this.props.currentUser.lastLoginAt,
-                                 "MMM d, yyyy HH:mm"
+                              {this.toDisplayDateIfNotNull(
+                                 this.props.currentUser.lastLoginAt
                               )}
                            </p>
                            <div className="card-section">
