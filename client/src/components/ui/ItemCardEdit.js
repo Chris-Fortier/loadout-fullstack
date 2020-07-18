@@ -14,7 +14,7 @@ import {
    IconChevronDown,
    IconChevronUp,
 } from "../../icons/icons.js";
-import { DeleteItemIcon, ChildrenAddIcon } from "../../icons/loadout-icons.js";
+import { DeleteIcon, ChildrenAddIcon } from "../../icons/loadout-icons.js";
 
 // import { processAllItems } from "../../utils/processItems";
 import classnames from "classnames";
@@ -157,7 +157,7 @@ class ItemCardEdit extends React.Component {
                <div className="d-flex">
                   <span
                      className={classnames(
-                        "icon-dark item-card-icon clickable",
+                        "item-card-icon clickable",
                         (UI_APPEARANCE === "light" ||
                            UI_APPEARANCE === "dark") &&
                            "item-icon-colors-" + String(level % LEVEL_COLORS),
@@ -165,7 +165,7 @@ class ItemCardEdit extends React.Component {
                      )}
                      onClick={() => this.toggleDeleteRollout()}
                   >
-                     <DeleteItemIcon />
+                     <DeleteIcon />
                   </span>
 
                   <span style={{ width: "8px" }}></span>
@@ -184,7 +184,7 @@ class ItemCardEdit extends React.Component {
 
                   <span
                      className={classnames(
-                        "icon-dark item-card-icon clickable",
+                        "item-card-icon clickable",
                         (UI_APPEARANCE === "light" ||
                            UI_APPEARANCE === "dark") &&
                            "item-icon-colors-" + String(level % LEVEL_COLORS),

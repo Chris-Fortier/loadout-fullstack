@@ -166,6 +166,10 @@ a:hover {
 
 // when using "color" ui appearance, this is for the packed icons
 .item-icon-colors {
+   width: 1em; //$iconWidth;
+
+   align-self: center;
+
    .parent-item {
       fill: $dark-text-color;
    }
@@ -474,9 +478,9 @@ body {
    box-shadow: $item-card-shadow;
 
    // remove margin when a button is inside of an item card
-   .button {
-      margin: 0;
-   }
+   // .button {
+   //    margin: 0;
+   // }
 
    margin-top: $item-card-spacing/2; // for space between card sections and buttons
    margin-bottom: $item-card-spacing/2; // for space between card sections and buttons
@@ -530,6 +534,8 @@ body {
    // this is to center the text vertically within the card
    padding-top: 1px;
    padding-bottom: 0px;
+   padding-left: 0.25em;
+   padding-right: 0.25em;
 
    // line-height: 0.9; // this works well with this font if multiple lines are needed
    // font-size: 1.2rem;
@@ -675,11 +681,11 @@ $iconWidth: 30px;
    // margin-top: -4px;
 
    .primary {
-      fill: rgba(0, 0, 0, 0.25);
+      fill: rgba(0, 0, 0, 0.75);
    }
 
    .secondary {
-      fill: rgba(0, 0, 0, 0.75);
+      fill: rgba(0, 0, 0, 0.25);
    }
 }
 
@@ -705,7 +711,6 @@ $iconWidth: 30px;
    // filter: drop-shadow($pack-icon-shadow);
 }
 
-// use to enlarge item card icons (1rem is no change)
 .loadout-card-icon {
    width: 1rem;
    opacity: 0.5;
