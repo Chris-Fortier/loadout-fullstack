@@ -66,7 +66,8 @@ class LoadoutCard extends React.Component {
       movePageToDifferentItem(
          this.props.loadout.loadoutId,
          +1,
-         this.props.loadout
+         this.props.loadout,
+         "/loadout-list"
       );
 
       // get the user loadouts for the loadout

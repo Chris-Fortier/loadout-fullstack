@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../ui/Header";
 import { connect } from "react-redux";
 import LoadoutUserCard from "../ui/LoadoutUserCard";
-import { IconArrowThinLeftCircle } from "../../icons/icons.js";
+import { IconUpLevel } from "../../icons/icons.js";
 import { Link } from "react-router-dom"; // a React element for linking
 import axios from "axios";
 import {
@@ -16,6 +16,7 @@ import { IconPackage, IconEdit, IconKey } from "../../icons/icons.js";
 import { getUserLoadoutsForALoadout } from "../../utils/userLoadouts";
 import { renameItem } from "../../utils/items";
 import actions from "../../store/actions";
+import isEmpty from "lodash/isEmpty";
 
 class LoadoutSharing extends React.Component {
    constructor(props) {
@@ -44,9 +45,14 @@ class LoadoutSharing extends React.Component {
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
       // TODO, this is duplicated code
-      if (JSON.stringify(this.props.currentUser) === JSON.stringify({})) {
+      if (isEmpty(this.props.currentUser)) {
          console.log("There is no user object, kicking to landing page.");
          this.props.history.push("/");
+      } else if (isEmpty(this.props.currentUserLoadout)) {
+         console.log(
+            "There is no current item but there is a user, kicking to loadouts page."
+         );
+         this.props.history.push("/loadout-list");
       }
    }
 
@@ -220,12 +226,15 @@ class LoadoutSharing extends React.Component {
                      <div className="col">
                         <Link
                            className="up-level navigation-link"
-                           to="/item-list"
+                           to={this.props.currentItem.backRoute}
                         >
                            <div className="icon-dark left">
-                              <IconArrowThinLeftCircle />
+                              <IconUpLevel />
                            </div>
-                           Back to Loadout
+                           {this.props.currentItem.backRoute ===
+                              "/item-list" && <>Back to Loadout</>}
+                           {this.props.currentItem.backRoute ===
+                              "/loadout-list" && <>Back to My Loadouts</>}
                         </Link>
                         <div className="">
                            <div className="">

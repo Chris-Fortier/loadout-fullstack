@@ -8,7 +8,8 @@ import axios from "axios";
 export function movePageToDifferentItem(
    itemId,
    levelChange = 0,
-   newCurrentLoadout = null
+   newCurrentLoadout = null,
+   backRoute = "/item-list" // where the user would go when clicking on the back link
 ) {
    console.log("movePageToDifferentItem()...itemId:", itemId);
 
@@ -39,9 +40,12 @@ export function movePageToDifferentItem(
             // handle success
             console.log("setCurrentItem res.data[0]", res.data[0]);
 
+            const currentItem = res.data[0];
+            currentItem.backRoute = backRoute;
+
             store.dispatch({
                type: actions.STORE_CURRENT_ITEM,
-               payload: res.data[0],
+               payload: currentItem,
             }); // dispatching an action
          })
          .catch((error) => {

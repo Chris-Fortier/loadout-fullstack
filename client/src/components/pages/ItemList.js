@@ -411,7 +411,7 @@ class ItemList2 extends React.Component {
                                        >
                                           <IconUpLevel />
                                        </div>
-                                       Back to{" "}
+                                       Back to&nbsp;
                                        {this.props.currentItem.parentName}
                                     </span>
                                  )}
@@ -428,7 +428,7 @@ class ItemList2 extends React.Component {
                                        >
                                           <IconUpLevel />
                                        </div>
-                                       Back to Loadouts
+                                       Back to My Loadouts
                                     </Link>
                                  )}
                               </span>
