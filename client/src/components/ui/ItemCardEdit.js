@@ -194,9 +194,14 @@ class ItemCardEdit extends React.Component {
                         // TODO: I think we need to unpack the item if its possible to add a subitem to a packed item
                         movePageToDifferentItem(this.props.item.id, +1);
                         // change the text in the page item editable input
-                        document.getElementById(
-                           "page-item-name-input"
-                        ).value = this.props.item.name;
+                        if (
+                           document.getElementById("page-item-name-input") !==
+                           null
+                        ) {
+                           document.getElementById(
+                              "page-item-name-input"
+                           ).value = item.name;
+                        }
                      }}
                   >
                      <ChildrenAddIcon />
