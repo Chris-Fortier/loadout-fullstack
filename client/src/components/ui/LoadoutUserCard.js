@@ -77,7 +77,7 @@ class LoadoutUserCard extends React.Component {
    toggleCanPack() {
       // toggle on client
       if (this.state.canPack === 0) {
-         this.setState({ canPack: !this.state.canPack });
+         this.setState({ canPack: 1 });
       } else if (this.state.canPack === 1) {
          this.setState({ canPack: 0 });
       }
@@ -145,7 +145,7 @@ class LoadoutUserCard extends React.Component {
             <tr className="sharedUserRow  d-none d-sm-table-row">
                {!this.state.isRemoved && (
                   <>
-                     <th scope="row">
+                     <th scope="row" className="loadout-user">
                         {this.props.userLoadout.username}
                         {this.props.userLoadout.userId ===
                            this.props.currentUser.id && <>&nbsp;(YOU)</>}
@@ -286,7 +286,7 @@ class LoadoutUserCard extends React.Component {
             <tr className="sharedUserRow d-table-row d-sm-none">
                {!this.state.isRemoved && (
                   <>
-                     <th scope="row">
+                     <th scope="row" className="loadout-user">
                         {this.props.userLoadout.username}
                         {this.props.userLoadout.userId ===
                            this.props.currentUser.id && <>&nbsp;(YOU)</>}

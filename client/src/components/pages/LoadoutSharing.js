@@ -506,7 +506,10 @@ class LoadoutSharing extends React.Component {
                                                 <>
                                                    {/* large footer */}
                                                    <tr className="sharedUserRow d-none d-sm-table-row">
-                                                      <th scope="row">
+                                                      <th
+                                                         scope="row"
+                                                         colspan="4"
+                                                      >
                                                          <input
                                                             className={classnames(
                                                                {
@@ -527,6 +530,10 @@ class LoadoutSharing extends React.Component {
                                                             .hasAddUserError && (
                                                             <div
                                                                className="text-danger"
+                                                               style={{
+                                                                  "font-weight":
+                                                                     "400",
+                                                               }}
                                                                id="add-user-error"
                                                             >
                                                                {
@@ -536,9 +543,6 @@ class LoadoutSharing extends React.Component {
                                                             </div>
                                                          )}
                                                       </th>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
                                                       <td>
                                                          <div className="d-flex">
                                                             <span
@@ -587,6 +591,10 @@ class LoadoutSharing extends React.Component {
                                                             .hasAddUserError && (
                                                             <div
                                                                className="text-danger"
+                                                               style={{
+                                                                  "font-weight":
+                                                                     "400",
+                                                               }}
                                                                id="add-user-error"
                                                             >
                                                                {
