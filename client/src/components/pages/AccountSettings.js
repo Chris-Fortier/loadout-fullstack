@@ -215,15 +215,15 @@ class AccountSettings extends React.Component {
                               </span>
                               {this.state.hasChangeUsernameRollout && (
                                  <>
-                                    <label
+                                    {/* <label
                                        className="my-input-label form-label"
                                        htmlFor="username-for-username-change"
                                     >
                                        Enter your new username
-                                    </label>
+                                    </label> */}
                                     <input
                                        className="my-input"
-                                       defaultValue={
+                                       placeholder={
                                           this.props.currentUser.username
                                        }
                                        id="username-for-username-change"
@@ -240,16 +240,17 @@ class AccountSettings extends React.Component {
                                           }
                                        </div>
                                     )}
-                                    <label
+                                    {/* <label
                                        className="my-input-label form-label"
                                        htmlFor="password-for-username-change"
                                     >
                                        Enter your password
-                                    </label>
+                                    </label> */}
                                     <input
                                        type="password"
                                        className="my-input"
                                        id="password-for-username-change"
+                                       placeholder="Enter your password"
                                     />
                                     {this.state.changeUsernamePasswordError !==
                                        "" && (
@@ -297,27 +298,29 @@ class AccountSettings extends React.Component {
                               </span>
                               {this.state.hasPasswordRollout && (
                                  <>
-                                    <label
+                                    {/* <label
                                        htmlFor="old-password"
                                        className="my-input-label form-label"
                                     >
                                        Enter your old password
-                                    </label>
+                                    </label> */}
                                     <input
                                        type="password"
                                        className="my-input"
                                        id="old-password"
+                                       placeholder="Enter your old password"
                                     />
-                                    <label
+                                    {/* <label
                                        htmlFor="new-password"
                                        className="my-input-label form-label"
                                     >
                                        Enter your new password
-                                    </label>
+                                    </label> */}
                                     <input
                                        type="password"
                                        className="my-input"
                                        id="new-password"
+                                       placeholder="Enter your new password"
                                     />
                                     <div className="button primary-action-button">
                                        Confirm Password Change
