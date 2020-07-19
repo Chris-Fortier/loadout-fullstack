@@ -28,7 +28,7 @@ class AccountSettings extends React.Component {
          changePasswordResult: "",
 
          // delete account
-         hasDeleteRollout: false,
+         hasDeleteAccountRollout: false,
          deleteAccountPasswordError: "",
       };
 
@@ -40,6 +40,18 @@ class AccountSettings extends React.Component {
       }
    }
 
+   clearAllStateMessages() {
+      this.setState({
+         changeUsernameUsernameError: "",
+         changeUsernamePasswordError: "",
+         changeUsernameResult: "",
+         changePasswordOldPasswordError: "",
+         changePasswordNewPasswordError: "",
+         changePasswordResult: "",
+         deleteAccountPasswordError: "",
+      });
+   }
+
    backToMyLoadouts() {
       this.props.history.push("/loadout-list");
       window.scrollTo(0, 0); // sets focus to the top of the page
@@ -49,19 +61,30 @@ class AccountSettings extends React.Component {
       console.log("toggleUsernameRollout()...");
       this.setState({
          hasChangeUsernameRollout: !this.state.hasChangeUsernameRollout,
+         hasChangePasswordRollout: false,
+         hasDeleteAccountRollout: false,
       });
+      this.clearAllStateMessages();
    }
 
    togglePasswordRollout() {
       console.log("togglePasswordRollout()...");
       this.setState({
+         hasChangeUsernameRollout: false,
          hasChangePasswordRollout: !this.state.hasChangePasswordRollout,
+         hasDeleteAccountRollout: false,
       });
+      this.clearAllStateMessages();
    }
 
    toggleDeleteRollout() {
       console.log("toggleDeleteRollout()...");
-      this.setState({ hasDeleteRollout: !this.state.hasDeleteRollout });
+      this.setState({
+         hasChangeUsernameRollout: false,
+         hasChangePasswordRollout: false,
+         hasDeleteAccountRollout: !this.state.hasDeleteAccountRollout,
+      });
+      this.clearAllStateMessages();
    }
 
    // tests if the new username and password are valid and if so changes username
@@ -221,7 +244,6 @@ class AccountSettings extends React.Component {
                         marginBottom: "50px",
                      }}
                   >
-                     {/* <h1 className="mt-5 text-white">Account Settings</h1> */}
                      <div className="card mt-8 mb-3">
                         <div className="card-body">
                            <h5>
@@ -261,12 +283,6 @@ class AccountSettings extends React.Component {
                               </span>
                               {this.state.hasChangeUsernameRollout && (
                                  <>
-                                    {/* <label
-                                       className="my-input-label form-label"
-                                       htmlFor="username-for-username-change"
-                                    >
-                                       Enter your new username
-                                    </label> */}
                                     <input
                                        className="my-input"
                                        placeholder={
@@ -276,22 +292,13 @@ class AccountSettings extends React.Component {
                                     />
                                     {this.state.changeUsernameUsernameError !==
                                        "" && (
-                                       <div
-                                          className="text-danger"
-                                          id="change-username-username-error"
-                                       >
+                                       <div className="text-danger">
                                           {
                                              this.state
                                                 .changeUsernameUsernameError
                                           }
                                        </div>
                                     )}
-                                    {/* <label
-                                       className="my-input-label form-label"
-                                       htmlFor="password-for-username-change"
-                                    >
-                                       Enter your password
-                                    </label> */}
                                     <input
                                        type="password"
                                        className="my-input"
@@ -300,10 +307,7 @@ class AccountSettings extends React.Component {
                                     />
                                     {this.state.changeUsernamePasswordError !==
                                        "" && (
-                                       <div
-                                          className="text-danger"
-                                          id="change-username-password-error"
-                                       >
+                                       <div className="text-danger">
                                           {
                                              this.state
                                                 .changeUsernamePasswordError
@@ -344,12 +348,6 @@ class AccountSettings extends React.Component {
                               </span>
                               {this.state.hasChangePasswordRollout && (
                                  <>
-                                    {/* <label
-                                       htmlFor="old-password"
-                                       className="my-input-label form-label"
-                                    >
-                                       Enter your old password
-                                    </label> */}
                                     <input
                                        type="password"
                                        className="my-input"
@@ -366,12 +364,6 @@ class AccountSettings extends React.Component {
                                           }
                                        </div>
                                     )}
-                                    {/* <label
-                                       htmlFor="new-password"
-                                       className="my-input-label form-label"
-                                    >
-                                       Enter your new password
-                                    </label> */}
                                     <input
                                        type="password"
                                        className="my-input"
@@ -420,19 +412,13 @@ class AccountSettings extends React.Component {
                               >
                                  Delete Your Account...
                               </span>
-                              {this.state.hasDeleteRollout && (
+                              {this.state.hasDeleteAccountRollout && (
                                  <>
                                     <p>
                                        Deleting this account will also delete
                                        all the loadouts that are not shared with
                                        anyone else.
                                     </p>
-                                    {/* <label
-                                       className="my-input-label form-label"
-                                       htmlFor="password-for-delete-account"
-                                    >
-                                       Enter your password
-                                    </label> */}
                                     <input
                                        type="password"
                                        className="my-input"
@@ -441,10 +427,7 @@ class AccountSettings extends React.Component {
                                     />
                                     {this.state.deleteAccountPasswordError !==
                                        "" && (
-                                       <div
-                                          className="text-danger"
-                                          id="change-username-password-error"
-                                       >
+                                       <div className="text-danger">
                                           {
                                              this.state
                                                 .deleteAccountPasswordError
@@ -475,15 +458,12 @@ class AccountSettings extends React.Component {
                                  </>
                               )}
                            </div>
-                           {/* <div className="button"> */}
                            <button
                               className="button navigation-link"
-                              // to="/loadout-list"
                               onClick={() => this.backToMyLoadouts()}
                            >
                               Back to My Loadouts
                            </button>
-                           {/* </div> */}
                            <Link
                               to="/"
                               className="button primary-action-button"
