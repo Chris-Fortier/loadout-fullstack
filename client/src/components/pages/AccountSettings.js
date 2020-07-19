@@ -22,8 +22,6 @@ class AccountSettings extends React.Component {
          hasChangeUsernameRollout: false,
          changeUsernameUsernameError: "",
          changeUsernamePasswordError: "",
-         hasChangeUsernameUsernameError: false,
-         hasChangeUsernamePasswordError: false,
          changeUsernameResult: "",
       };
 
@@ -100,8 +98,6 @@ class AccountSettings extends React.Component {
 
             // post a message saying name was changed
             this.setState({
-               hasChangeUsernameUsernameError: false,
-               hasChangeUsernamePasswordError: false,
                changeUsernameUsernameError: "",
                changeUsernamePasswordError: "",
                changeUsernameResult: "Username changed",
@@ -115,36 +111,11 @@ class AccountSettings extends React.Component {
                changeUsernamePasswordError,
             } = data;
 
-            // push username error to state
-            if (changeUsernameUsernameError !== "") {
-               this.setState({
-                  hasChangeUsernameUsernameError: true,
-                  changeUsernameUsernameError,
-               });
-            } else {
-               this.setState({
-                  hasChangeUsernameUsernameError: false,
-                  changeUsernameUsernameError,
-               });
-            }
-
-            // push password error to state
-            if (changeUsernamePasswordError !== "") {
-               console.log("setting the password error");
-               this.setState({
-                  hasChangeUsernamePasswordError: true,
-                  changeUsernamePasswordError,
-               });
-               console.log(
-                  this.state.hasChangeUsernamePasswordError,
-                  this.state.changeUsernamePasswordError
-               );
-            } else {
-               this.setState({
-                  hasChangeUsernamePasswordError: false,
-                  changeUsernamePasswordError,
-               });
-            }
+            this.setState({
+               changeUsernameUsernameError,
+               changeUsernamePasswordError,
+               changeUsernameResult: "",
+            });
          });
    }
 
@@ -255,8 +226,8 @@ class AccountSettings extends React.Component {
                                        }
                                        id="username-for-username-change"
                                     />
-                                    {this.state
-                                       .hasChangeUsernameUsernameError && (
+                                    {this.state.changeUsernameUsernameError !==
+                                       "" && (
                                        <div
                                           className="text-danger"
                                           id="change-username-username-error"
@@ -278,8 +249,8 @@ class AccountSettings extends React.Component {
                                        className="my-input"
                                        id="password-for-username-change"
                                     />
-                                    {this.state
-                                       .hasChangeUsernamePasswordError && (
+                                    {this.state.changeUsernamePasswordError !==
+                                       "" && (
                                        <div
                                           className="text-danger"
                                           id="change-username-password-error"
