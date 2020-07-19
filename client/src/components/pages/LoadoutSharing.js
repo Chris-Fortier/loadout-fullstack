@@ -81,7 +81,7 @@ class LoadoutSharing extends React.Component {
                isAdmin
          )
          .then((res) => {
-            console.log("res.data", res.data);
+            console.log("res.data from making new user loadout", res.data);
 
             // remove error if there is one
             this.setState({ hasAddUserError: false, addUserError: "" });
@@ -90,22 +90,24 @@ class LoadoutSharing extends React.Component {
             document.getElementById(inputId).value = "";
 
             // update the redux store with the new user loadout
-            const updatedCurrentLoadoutUserLoadouts = [
-               ...this.props.currentLoadoutUserLoadouts,
-            ];
-            updatedCurrentLoadoutUserLoadouts.push({
-               username,
-               loadoutId,
-               canEdit,
-               canPack,
-               isAdmin,
-            });
-            this.props.dispatch({
-               type: actions.STORE_CURRENT_LOADOUT_USER_LOADOUTS,
-               payload: updatedCurrentLoadoutUserLoadouts,
-            });
+            // const updatedCurrentLoadoutUserLoadouts = [
+            //    ...this.props.currentLoadoutUserLoadouts,
+            // ];
+            // updatedCurrentLoadoutUserLoadouts.push({
+            //    username,
+            //    loadoutId,
+            //    canEdit,
+            //    canPack,
+            //    isAdmin,
+            //    // userId: // need to get the userId for this to work
+            // });
+            // this.props.dispatch({
+            //    type: actions.STORE_CURRENT_LOADOUT_USER_LOADOUTS,
+            //    payload: updatedCurrentLoadoutUserLoadouts,
+            // });
 
-            // getUserLoadoutsForALoadout(this.props.currentItem.id); // refresh page to see the change
+            // this seems to be more realiable as the above method didn't populate needed properties such as userId
+            getUserLoadoutsForALoadout(this.props.currentItem.id); // refresh page to see the change
          })
          .catch((err) => {
             console.log("err", err);
