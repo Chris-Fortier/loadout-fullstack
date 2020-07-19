@@ -43,7 +43,7 @@ module.exports = {
 
    // returns true if a user has this username in the db, false if not
    checkIfUsernameExists(username) {
-      console.log("checkIfUsernameExists()...");
+      console.log("checkIfUsernameExists()...", username);
       return db
          .query(selectUserByUsername, username)
          .then((users) => {

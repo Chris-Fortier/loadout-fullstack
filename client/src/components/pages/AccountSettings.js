@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { logOutCurrentUser } from "../../utils/helpers";
 import axios from "axios";
 import toDisplayDate from "date-fns/format";
+import actions from "../../store/actions";
 
 class AccountSettings extends React.Component {
    constructor(props) {
@@ -14,9 +15,16 @@ class AccountSettings extends React.Component {
       // set default state values for each component
       // define a component's initial state
       this.state = {
-         hasUsernameRollout: false,
          hasPasswordRollout: false,
          hasDeleteRollout: false,
+
+         // change username
+         hasChangeUsernameRollout: false,
+         changeUsernameUsernameError: "",
+         changeUsernamePasswordError: "",
+         hasChangeUsernameUsernameError: false,
+         hasChangeUsernamePasswordError: false,
+         changeUsernameResult: "",
       };
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
@@ -34,7 +42,9 @@ class AccountSettings extends React.Component {
 
    toggleUsernameRollout() {
       console.log("toggleUsernameRollout()...");
-      this.setState({ hasUsernameRollout: !this.state.hasUsernameRollout });
+      this.setState({
+         hasChangeUsernameRollout: !this.state.hasChangeUsernameRollout,
+      });
    }
 
    togglePasswordRollout() {
@@ -47,8 +57,101 @@ class AccountSettings extends React.Component {
       this.setState({ hasDeleteRollout: !this.state.hasDeleteRollout });
    }
 
+   // tests if the new username and password are valid and if so changes username
+   async validateAndChangeUsername() {
+      const usernameInput = document.getElementById(
+         "username-for-username-change"
+      ).value;
+      const passwordInput = document.getElementById(
+         "password-for-username-change"
+      ).value;
+
+      // TODO hash password on client before sending and do not hash on server
+
+      // create the object that will be the body that is sent
+      const user = {
+         newUsername: usernameInput,
+         password: passwordInput, // send the plain text password over secure connection, the server will hash it
+      };
+      // console.log("client", user);
+
+      // post to API
+      axios
+         .put("api/v1/users/set-username", user)
+         .then((res) => {
+            // // set token in localStorage
+            // const authTokenLoadout = res.data.accessToken;
+            // localStorage.setItem("authTokenLoadout", authTokenLoadout);
+            // console.log("authTokenLoadout", authTokenLoadout);
+
+            // const user = jwtDecode(authTokenLoadout); // decode the user from the access token
+
+            // send the user with new name to Redux
+            this.props.currentUser.username = usernameInput;
+            this.props.dispatch({
+               type: actions.UPDATE_CURRENT_USER,
+               payload: this.props.currentUser,
+            });
+
+            // TODO: local token is not updated with the new username, but I don't think I am using that username for anything
+
+            // set authorization headers for every request at the moment of log in
+            // axios.defaults.headers.common["x-auth-token"] = authTokenLoadout;
+
+            // post a message saying name was changed
+            this.setState({
+               hasChangeUsernameUsernameError: false,
+               hasChangeUsernamePasswordError: false,
+               changeUsernameUsernameError: "",
+               changeUsernamePasswordError: "",
+               changeUsernameResult: "Username changed",
+            });
+         })
+         .catch((err) => {
+            const data = err.response.data;
+            console.log("err", data);
+            const {
+               changeUsernameUsernameError,
+               changeUsernamePasswordError,
+            } = data;
+
+            // push username error to state
+            if (changeUsernameUsernameError !== "") {
+               this.setState({
+                  hasChangeUsernameUsernameError: true,
+                  changeUsernameUsernameError,
+               });
+            } else {
+               this.setState({
+                  hasChangeUsernameUsernameError: false,
+                  changeUsernameUsernameError,
+               });
+            }
+
+            // push password error to state
+            if (changeUsernamePasswordError !== "") {
+               console.log("setting the password error");
+               this.setState({
+                  hasChangeUsernamePasswordError: true,
+                  changeUsernamePasswordError,
+               });
+               console.log(
+                  this.state.hasChangeUsernamePasswordError,
+                  this.state.changeUsernamePasswordError
+               );
+            } else {
+               this.setState({
+                  hasChangeUsernamePasswordError: false,
+                  changeUsernamePasswordError,
+               });
+            }
+         });
+   }
+
    deleteUser(userId) {
       console.log("deleting user", { userId });
+
+      // TODO more of this should be hangled on the server side
 
       // first we need to delte all of this user's user loadouts
       axios
@@ -106,10 +209,7 @@ class AccountSettings extends React.Component {
                               Account Settings for&nbsp;
                               {this.props.currentUser.username}
                            </h5>
-                           <p
-                              className="my-input-label form-label"
-                              htmlFor="new-username"
-                           >
+                           <p className="my-input-label form-label">
                               Account Created
                            </p>
                            <p>
@@ -117,10 +217,7 @@ class AccountSettings extends React.Component {
                                  this.props.currentUser.createdAt
                               )}
                            </p>
-                           <p
-                              className="my-input-label form-label"
-                              htmlFor="new-username"
-                           >
+                           <p className="my-input-label form-label">
                               Currently logged in since
                            </p>
                            <p>
@@ -128,10 +225,7 @@ class AccountSettings extends React.Component {
                                  this.props.currentUser.thisLoginAt
                               )}
                            </p>
-                           <p
-                              className="my-input-label form-label"
-                              htmlFor="new-username"
-                           >
+                           <p className="my-input-label form-label">
                               Previous Log in
                            </p>
                            <p>
@@ -141,24 +235,38 @@ class AccountSettings extends React.Component {
                            </p>
                            <div className="card-section">
                               <span
-                                 className="button navigation-link w-100 disabled"
-                                 // onClick={() => this.toggleUsernameRollout()}
+                                 className="button navigation-link w-100"
+                                 onClick={() => this.toggleUsernameRollout()}
                               >
-                                 Change Your Username (WIP)...
+                                 Change Your Username...
                               </span>
-                              {this.state.hasUsernameRollout && (
+                              {this.state.hasChangeUsernameRollout && (
                                  <>
                                     <label
                                        className="my-input-label form-label"
-                                       htmlFor="new-username"
+                                       htmlFor="username-for-username-change"
                                     >
                                        Enter your new username
                                     </label>
                                     <input
                                        className="my-input"
-                                       value={this.props.currentUser.username}
-                                       id="new-username"
+                                       defaultValue={
+                                          this.props.currentUser.username
+                                       }
+                                       id="username-for-username-change"
                                     />
+                                    {this.state
+                                       .hasChangeUsernameUsernameError && (
+                                       <div
+                                          className="text-danger"
+                                          id="change-username-username-error"
+                                       >
+                                          {
+                                             this.state
+                                                .changeUsernameUsernameError
+                                          }
+                                       </div>
+                                    )}
                                     <label
                                        className="my-input-label form-label"
                                        htmlFor="password-for-username-change"
@@ -170,9 +278,31 @@ class AccountSettings extends React.Component {
                                        className="my-input"
                                        id="password-for-username-change"
                                     />
-                                    <div className="button primary-action-button">
+                                    {this.state
+                                       .hasChangeUsernamePasswordError && (
+                                       <div
+                                          className="text-danger"
+                                          id="change-username-password-error"
+                                       >
+                                          {
+                                             this.state
+                                                .changeUsernamePasswordError
+                                          }
+                                       </div>
+                                    )}
+                                    <div
+                                       className="button primary-action-button"
+                                       onClick={() =>
+                                          this.validateAndChangeUsername()
+                                       }
+                                    >
                                        Confirm Username Change
                                     </div>
+
+                                    <div className="text-success">
+                                       {this.state.changeUsernameResult}
+                                    </div>
+
                                     <div
                                        className="button navigation-link"
                                        onClick={() =>

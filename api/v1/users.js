@@ -7,6 +7,7 @@ const insertUser = require("../../queries/insertUser");
 const selectUserById = require("../../queries/selectUserById");
 const selectUserByUsername = require("../../queries/selectUserByUsername");
 const deleteUser = require("../../queries/deleteUser");
+const setUserUsername = require("../../queries/setUserUsername");
 const { toHash } = require("../../utils/helpers");
 const getSignUpUsernameError = require("../../validation/getSignUpUsernameError");
 const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
@@ -15,6 +16,7 @@ const getLoginPasswordError = require("../../validation/getLoginPasswordError");
 const jwt = require("jsonwebtoken");
 const validateJwt = require("../../utils/validateJwt");
 const setUserLastLoginAt = require("../../queries/setUserLastLoginAt");
+const checkPasswordAgainstUserId = require("../../validation/checkPasswordAgainstUserId");
 
 // TODO: generate uuid on server instead of client
 // TODO: generate dates on server instrea of client
@@ -169,6 +171,54 @@ router.post("/delete", validateJwt, async (req, res) => {
          console.log("err", err);
          res.status(400).json(err);
       });
+});
+
+// @route      PUT api/v1/users/set-username
+// @desc       change a username
+// @access     Private
+// test:
+router.put("/set-username", validateJwt, async (req, res) => {
+   const { newUsername, password } = req.body; // grabbing variables from req.body
+   const userId = req.user.id; // get the user id from the JWT
+   console.log({ userId });
+   const changeUsernameUsernameError = await getSignUpUsernameError(
+      newUsername
+   ); // check to see if the new username is valid
+   console.log({ changeUsernameUsernameError });
+   const changeUsernamePasswordError = await checkPasswordAgainstUserId(
+      password,
+      userId
+   ); // check to see if the password submitted is correct
+   console.log({
+      userId,
+      changeUsernameUsernameError,
+      changeUsernamePasswordError,
+   });
+
+   // if it gets this far, username can be changed
+   if (
+      changeUsernameUsernameError === "" &&
+      changeUsernamePasswordError === ""
+   ) {
+      console.log("username can be changed");
+      // res.status(200).json("Username can be changed");
+
+      db.query(setUserUsername, [newUsername, userId])
+         .then((dbRes) => {
+            console.log("dbRes", dbRes);
+            res.status(200).json("username changed to " + newUsername);
+         })
+         .catch((err) => {
+            console.log("err", err);
+            res.status(400).json(err);
+         });
+   } else {
+      // return a 400 error to user
+      res.status(400).json({
+         changeUsernameUsernameError,
+         changeUsernamePasswordError,
+      });
+   }
 });
 
 module.exports = router;
