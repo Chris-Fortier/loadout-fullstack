@@ -445,6 +445,7 @@ class ItemList2 extends React.Component {
                         {/* <img src={iconEdit} className="icon-dark" /> */}
                         <div
                            className={classnames(
+                              "mb-8",
                               level > 1 && "card super-item-card",
                               level > 1 &&
                                  UI_APPEARANCE === "light" &&

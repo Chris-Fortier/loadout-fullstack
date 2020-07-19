@@ -329,13 +329,13 @@ a:hover {
 // }
 
 // seems to fix the horizontal extra space issue
-html,
+// html,
 body {
-   margin: 0;
-   // height: 100%;
-   min-height: 100vh; // changed this
+   // margin: 0;
+   // min-height: 100vh; // changed this
    overflow-x: hidden;
    line-height: 1.25rem;
+   overflow-y: scroll;
 }
 
 .card {

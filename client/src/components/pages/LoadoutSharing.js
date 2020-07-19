@@ -346,7 +346,7 @@ class LoadoutSharing extends React.Component {
                                        )}
 
                                        {/* table */}
-                                       <table className="table">
+                                       <table className="table mb-8">
                                           <thead>
                                              {/* large header */}
                                              <tr className="d-none d-sm-table-row">

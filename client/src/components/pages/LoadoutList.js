@@ -148,26 +148,24 @@ class LoadoutList extends React.Component {
                         <div className="">
                            <div className="">
                               <div className="row">
-                                 <>
-                                    <div className="col">
-                                       <h4
-                                          className={classnames(
-                                             (UI_APPEARANCE === "light" ||
-                                                UI_APPEARANCE === "dark") &&
-                                                "level-text-color-" +
-                                                   String(level % LEVEL_COLORS),
-                                             UI_APPEARANCE === "colors" &&
-                                                "dark-text-color"
-                                          )}
-                                       >
-                                          My Loadouts
-                                       </h4>
-                                    </div>
-                                 </>
+                                 <div className="col">
+                                    <h4
+                                       className={classnames(
+                                          (UI_APPEARANCE === "light" ||
+                                             UI_APPEARANCE === "dark") &&
+                                             "level-text-color-" +
+                                                String(level % LEVEL_COLORS),
+                                          UI_APPEARANCE === "colors" &&
+                                             "dark-text-color"
+                                       )}
+                                    >
+                                       My Loadouts
+                                    </h4>
+                                 </div>
                               </div>
                            </div>
                            <div className="">
-                              <div className="row">
+                              <div className="row mb-8">
                                  <div className="col">
                                     {/* One-Night Camping Trip */}
                                     {this.props.userLoadouts.length === 0 && (
