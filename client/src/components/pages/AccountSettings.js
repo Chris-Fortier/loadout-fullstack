@@ -15,13 +15,17 @@ class AccountSettings extends React.Component {
       // set default state values for each component
       // define a component's initial state
       this.state = {
-         hasPasswordRollout: false,
-
          // change username
          hasChangeUsernameRollout: false,
          changeUsernameUsernameError: "",
          changeUsernamePasswordError: "",
          changeUsernameResult: "",
+
+         // change password
+         hasChangePasswordRollout: false,
+         changePasswordOldPasswordError: "",
+         changePasswordNewPasswordError: "",
+         changePasswordResult: "",
 
          // delete account
          hasDeleteRollout: false,
@@ -50,7 +54,9 @@ class AccountSettings extends React.Component {
 
    togglePasswordRollout() {
       console.log("togglePasswordRollout()...");
-      this.setState({ hasPasswordRollout: !this.state.hasPasswordRollout });
+      this.setState({
+         hasChangePasswordRollout: !this.state.hasChangePasswordRollout,
+      });
    }
 
    toggleDeleteRollout() {
@@ -103,6 +109,10 @@ class AccountSettings extends React.Component {
                changeUsernamePasswordError: "",
                changeUsernameResult: "Username changed",
             });
+
+            // clear the fields so they don't accidentally change it again with valid password still populated
+            document.getElementById("username-for-username-change").value = "";
+            document.getElementById("password-for-username-change").value = "";
          })
          .catch((err) => {
             const data = err.response.data;
@@ -117,6 +127,42 @@ class AccountSettings extends React.Component {
                changeUsernamePasswordError,
                changeUsernameResult: "",
             });
+         });
+   }
+
+   // tests if the old password is valid and if so changes password to new one
+   async validateAndChangePassword() {
+      const oldPasswordInput = document.getElementById(
+         "old-password-for-password-change"
+      ).value;
+      const newPasswordInput = document.getElementById(
+         "new-password-for-password-change"
+      ).value;
+
+      // create the object that will be the body that is sent
+      const user = {
+         oldPassword: oldPasswordInput, // send the plain text password over secure connection, the server will hash it
+         newPassword: newPasswordInput, // send the plain text password over secure connection, the server will hash it
+      };
+
+      // post to API
+      axios
+         .put("api/v1/users/set-password", user)
+         .then((res) => {
+            const data = res.data;
+
+            this.setState(data); // the data received from server has the same keywords as state variables
+
+            // clear the password fields so they don't accidentally change it again with valid password still populated
+            document.getElementById("old-password-for-password-change").value =
+               "";
+            document.getElementById("new-password-for-password-change").value =
+               "";
+         })
+         .catch((err) => {
+            const data = err.response.data;
+
+            this.setState(data); // the data received from server has the same keywords as state variables
          });
    }
 
@@ -291,12 +337,12 @@ class AccountSettings extends React.Component {
                            </div>
                            <div className="card-section">
                               <span
-                                 className="button navigation-link w-100 disabled"
-                                 // onClick={() => this.togglePasswordRollout()}
+                                 className="button navigation-link w-100"
+                                 onClick={() => this.togglePasswordRollout()}
                               >
-                                 Change Your Password (WIP)...
+                                 Change Your Password...
                               </span>
-                              {this.state.hasPasswordRollout && (
+                              {this.state.hasChangePasswordRollout && (
                                  <>
                                     {/* <label
                                        htmlFor="old-password"
@@ -307,9 +353,19 @@ class AccountSettings extends React.Component {
                                     <input
                                        type="password"
                                        className="my-input"
-                                       id="old-password"
+                                       id="old-password-for-password-change"
                                        placeholder="Enter your old password"
                                     />
+                                    {this.state
+                                       .changePasswordOldPasswordError !==
+                                       "" && (
+                                       <div className="text-danger">
+                                          {
+                                             this.state
+                                                .changePasswordOldPasswordError
+                                          }
+                                       </div>
+                                    )}
                                     {/* <label
                                        htmlFor="new-password"
                                        className="my-input-label form-label"
@@ -319,12 +375,32 @@ class AccountSettings extends React.Component {
                                     <input
                                        type="password"
                                        className="my-input"
-                                       id="new-password"
+                                       id="new-password-for-password-change"
                                        placeholder="Enter your new password"
                                     />
-                                    <div className="button primary-action-button">
+                                    {this.state
+                                       .changePasswordNewPasswordError !==
+                                       "" && (
+                                       <div className="text-danger">
+                                          {
+                                             this.state
+                                                .changePasswordNewPasswordError
+                                          }
+                                       </div>
+                                    )}
+                                    <div
+                                       className="button primary-action-button"
+                                       onClick={() =>
+                                          this.validateAndChangePassword()
+                                       }
+                                    >
                                        Confirm Password Change
                                     </div>
+
+                                    <div className="text-success">
+                                       {this.state.changePasswordResult}
+                                    </div>
+
                                     <div
                                        className="button navigation-link"
                                        onClick={() =>
@@ -351,16 +427,17 @@ class AccountSettings extends React.Component {
                                        all the loadouts that are not shared with
                                        anyone else.
                                     </p>
-                                    <label
+                                    {/* <label
                                        className="my-input-label form-label"
                                        htmlFor="password-for-delete-account"
                                     >
                                        Enter your password
-                                    </label>
+                                    </label> */}
                                     <input
                                        type="password"
                                        className="my-input"
                                        id="password-for-delete-account"
+                                       placeholder="Enter your password"
                                     />
                                     {this.state.deleteAccountPasswordError !==
                                        "" && (

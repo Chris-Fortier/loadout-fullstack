@@ -9,6 +9,7 @@ const selectUserByUsername = require("../../queries/selectUserByUsername");
 const deleteUser = require("../../queries/deleteUser");
 const setUserUsername = require("../../queries/setUserUsername");
 const deleteUserLoadoutsByUser = require("../../queries/deleteUserLoadoutsByUser");
+const setUserPassword = require("../../queries/setUserPassword");
 const { toHash } = require("../../utils/helpers");
 const getSignUpUsernameError = require("../../validation/getSignUpUsernameError");
 const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
@@ -28,7 +29,7 @@ const checkPasswordAgainstUserId = require("../../validation/checkPasswordAgains
 router.post("/", async (req, res) => {
    const { id, username, password, createdAt } = req.body; // destructuring to simplify code below, grabbing variables from req.body
    const signupUsernameError = await getSignUpUsernameError(username);
-   const signupPasswordError = getSignUpPasswordError(password, username);
+   const signupPasswordError = getSignUpPasswordError(password);
    let dbError = ""; // this will store some text describing an error from the database
 
    console.log({ signupUsernameError, signupPasswordError });
@@ -252,4 +253,60 @@ router.put("/set-username", validateJwt, async (req, res) => {
    }
 });
 
+// @route      PUT api/v1/users/set-password
+// @desc       change a password
+// @access     Private
+// test:
+router.put("/set-password", validateJwt, async (req, res) => {
+   const { oldPassword, newPassword } = req.body; // grabbing variables from req.body
+   const userId = req.user.id; // get the user id from the JWT
+   const changePasswordOldPasswordError = await checkPasswordAgainstUserId(
+      oldPassword,
+      userId
+   ); // check to see if the oldPassword submitted is correct
+   const changePasswordNewPasswordError = await getSignUpPasswordError(
+      newPassword
+   ); // check to see if the newPassword submitted is gtg
+   let changePasswordResult = "";
+   let resStatus = 200;
+
+   // if there are no errors, change the password
+   if (
+      changePasswordOldPasswordError === "" &&
+      changePasswordNewPasswordError === ""
+   ) {
+      // if it gets this far, password can be changed
+
+      db.query(setUserPassword, [await toHash(newPassword), userId])
+         .then((dbRes) => {
+            resStatus = 200;
+            changePasswordResult = "Your password was changed.";
+            sendResponse();
+         })
+         .catch((err) => {
+            resStatus = 400;
+            changePasswordResult = "There was an error on the server.";
+            sendResponse();
+         });
+   } else {
+      // return error to user
+      resStatus = 400;
+      sendResponse();
+   }
+
+   // finally send the response which is a list of errors or a success message
+   // made this a function to ensure it happens last when I call it inside thens and catches
+   function sendResponse() {
+      console.log(resStatus, {
+         changePasswordOldPasswordError,
+         changePasswordNewPasswordError,
+         changePasswordResult,
+      });
+      res.status(resStatus).json({
+         changePasswordOldPasswordError,
+         changePasswordNewPasswordError,
+         changePasswordResult,
+      });
+   }
+});
 module.exports = router;
