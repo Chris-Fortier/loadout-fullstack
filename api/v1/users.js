@@ -8,6 +8,7 @@ const selectUserById = require("../../queries/selectUserById");
 const selectUserByUsername = require("../../queries/selectUserByUsername");
 const deleteUser = require("../../queries/deleteUser");
 const setUserUsername = require("../../queries/setUserUsername");
+const deleteUserLoadoutsByUser = require("../../queries/deleteUserLoadoutsByUser");
 const { toHash } = require("../../utils/helpers");
 const getSignUpUsernameError = require("../../validation/getSignUpUsernameError");
 const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
@@ -159,18 +160,48 @@ router.post("/auth", async (req, res) => {
 // @access     Private
 // test:
 router.post("/delete", validateJwt, async (req, res) => {
-   const userId = req.user.id; // get the user id from the validateJwt
-   console.log({ userId });
+   const { password } = req.body; // grabbing variable from req.body
+   const userId = req.user.id; // get the user id from the JWT
 
-   db.query(deleteUser, [userId])
-      .then((dbRes) => {
-         console.log("dbRes", dbRes);
-         res.status(200).json("User deleted");
-      })
-      .catch((err) => {
-         console.log("err", err);
-         res.status(400).json(err);
+   const deleteAccountPasswordError = await checkPasswordAgainstUserId(
+      password,
+      userId
+   ); // check to see if the password submitted is correct
+
+   if (deleteAccountPasswordError === "") {
+      // if it gets this far, username can be changed
+
+      // TODO: can probably do the first part by doing something with foreign keys and cascading
+
+      // first delete all the user's user loadouts
+      db.query(deleteUserLoadoutsByUser, [userId])
+         .then((dbRes) => {
+            console.log("dbRes", dbRes);
+            console.log("all user-loadouts of a user deleted");
+            // then delete the user
+            db.query(deleteUser, [userId])
+               .then((dbRes) => {
+                  console.log("dbRes", dbRes);
+                  res.status(200).json(
+                     "all user-loadouts of a user deleted and user deleted"
+                  );
+               })
+               .catch((err) => {
+                  console.log("err", err);
+                  res.status(400).json(err);
+               });
+         })
+         .catch((err) => {
+            console.log("err", err);
+            res.status(400).json(err);
+         });
+   } else {
+      // return a 400 error to user
+      console.log({ deleteAccountPasswordError });
+      res.status(400).json({
+         deleteAccountPasswordError,
       });
+   }
 });
 
 // @route      PUT api/v1/users/set-username
@@ -195,11 +226,11 @@ router.put("/set-username", validateJwt, async (req, res) => {
       changeUsernamePasswordError,
    });
 
-   // if it gets this far, username can be changed
    if (
       changeUsernameUsernameError === "" &&
       changeUsernamePasswordError === ""
    ) {
+      // if it gets this far, username can be changed
       console.log("username can be changed");
       // res.status(200).json("Username can be changed");
 

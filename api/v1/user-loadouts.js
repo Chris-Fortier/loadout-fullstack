@@ -182,25 +182,6 @@ router.put("/delete", validateJwt, async (req, res) => {
       });
 });
 
-// @route      POST api/v1/user-loadouts/delete-all-by-user
-// @desc       Delete all the user loadouts of a user (needed before deleting a user)
-// @access     Private
-// test: http://localhost:3060/api/v1/user-loadouts/delete-all-by-user
-router.post("/delete-all-by-user", validateJwt, async (req, res) => {
-   const userId = req.user.id;
-   console.log({ userId });
-
-   db.query(deleteUserLoadoutsByUser, [userId])
-      .then((dbRes) => {
-         console.log("dbRes", dbRes);
-         res.status(200).json("all user-loadouts of a user deleted");
-      })
-      .catch((err) => {
-         console.log("err", err);
-         res.status(400).json(err);
-      });
-});
-
 // @route      PUT api/v1/user-loadouts/set-permissions
 // @desc       sets permissions on a user loadout
 //                only if the provided user token has admin privledges

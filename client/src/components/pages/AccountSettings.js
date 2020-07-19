@@ -16,13 +16,16 @@ class AccountSettings extends React.Component {
       // define a component's initial state
       this.state = {
          hasPasswordRollout: false,
-         hasDeleteRollout: false,
 
          // change username
          hasChangeUsernameRollout: false,
          changeUsernameUsernameError: "",
          changeUsernamePasswordError: "",
          changeUsernameResult: "",
+
+         // delete account
+         hasDeleteRollout: false,
+         deleteAccountPasswordError: "",
       };
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
@@ -63,8 +66,6 @@ class AccountSettings extends React.Component {
       const passwordInput = document.getElementById(
          "password-for-username-change"
       ).value;
-
-      // TODO hash password on client before sending and do not hash on server
 
       // create the object that will be the body that is sent
       const user = {
@@ -119,40 +120,41 @@ class AccountSettings extends React.Component {
          });
    }
 
-   deleteUser(userId) {
-      console.log("deleting user", { userId });
+   validateAndDeleteUser() {
+      const passwordInput = document.getElementById(
+         "password-for-delete-account"
+      ).value;
 
-      // TODO more of this should be hangled on the server side
+      // create the object that will be the body that is sent
+      const user = {
+         password: passwordInput, // send the plain text password over secure connection, the server will hash it
+      };
+      // console.log("client", user);
 
-      // first we need to delte all of this user's user loadouts
       axios
-         .post("/api/v1/user-loadouts/delete-all-by-user?userId=" + userId)
+         .post("/api/v1/users/delete", user)
          .then((res) => {
             console.log("axios res", res);
+            this.setState({
+               deleteAccountPasswordError: "",
+            });
+            logOutCurrentUser(this.props);
+
+            this.props.history.push("/"); // send to landing page
          })
-         .catch((error) => {
-            // handle error
-            console.log("axios error", error);
+         .catch((err) => {
+            const data = err.response.data;
+            console.log("err", data);
+            const { deleteAccountPasswordError } = data;
+
+            this.setState({
+               deleteAccountPasswordError,
+            });
          });
-
-      // then we can delete the user
-      axios
-         .post("/api/v1/users/delete?userId=" + userId)
-         .then((res) => {
-            console.log("axios res", res);
-         })
-         .catch((error) => {
-            // handle error
-            console.log("axios error", error);
-         });
-
-      logOutCurrentUser(this.props);
-
-      this.props.history.push("/"); // send to landing page
    }
 
    toDisplayDateIfNotNull(jsDate) {
-      if (jsDate !== null) {
+      if (jsDate !== null && jsDate !== undefined) {
          return toDisplayDate(jsDate, "MMM d, yyyy HH:mm");
       } else {
          return "Unknown";
@@ -346,10 +348,33 @@ class AccountSettings extends React.Component {
                                        all the loadouts that are not shared with
                                        anyone else.
                                     </p>
+                                    <label
+                                       className="my-input-label form-label"
+                                       htmlFor="password-for-delete-account"
+                                    >
+                                       Enter your password
+                                    </label>
+                                    <input
+                                       type="password"
+                                       className="my-input"
+                                       id="password-for-delete-account"
+                                    />
+                                    {this.state.deleteAccountPasswordError !==
+                                       "" && (
+                                       <div
+                                          className="text-danger"
+                                          id="change-username-password-error"
+                                       >
+                                          {
+                                             this.state
+                                                .deleteAccountPasswordError
+                                          }
+                                       </div>
+                                    )}{" "}
                                     <div
                                        className="button danger-action-button"
                                        onClick={() =>
-                                          this.deleteUser(
+                                          this.validateAndDeleteUser(
                                              this.props.currentUser.id
                                           )
                                        }
