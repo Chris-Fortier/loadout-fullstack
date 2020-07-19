@@ -590,6 +590,8 @@ body {
 
 // style for the header on the top of the page
 .page-header {
+   margin-left: -15px;
+   margin-right: -15px;
    background-color: $header-bg-color;
 
    // padding for the entire header
@@ -1035,6 +1037,11 @@ label,
 .container-fluid.single-wide-container {
    // set the maximum width of the container to be two maximum widthed cards plus the 15px margins and space between them
    max-width: $item-card-max-width * 2 + $item-card-spacing + 15 * 2;
+}
+
+// use this as the max size of all the header container
+.container-fluid.header-container {
+   max-width: $item-card-max-width * 2 + $item-card-spacing + 15 * 2 + 30;
 }
 
 // smallest size is single column edge to edge fluid cards

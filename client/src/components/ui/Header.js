@@ -80,32 +80,34 @@ class Header extends React.Component {
    render() {
       return (
          <div className="page-header">
-            <div className="row">
-               <div className="col">
-                  <button
-                     onClick={() => this.toggleLoadoutRollout()}
-                     className="btn btn-link"
-                  >
-                     {/* Loadout */}
-                     <img
-                        src={LoadoutLogoSmall}
-                        alt="Loadout"
-                        height="18px"
-                        style={{
-                           marginTop: "-5px",
-                        }}
-                     />
-                  </button>
-                  <button
-                     onClick={() => this.toggleAccountRollout()}
-                     className="btn btn-link float-right"
-                  >
-                     {this.props.currentUser.username}
-                  </button>
+            <div className="container-fluid header-container">
+               <div className="row">
+                  <div className="col">
+                     <button
+                        onClick={() => this.toggleLoadoutRollout()}
+                        className="btn btn-link"
+                     >
+                        {/* Loadout */}
+                        <img
+                           src={LoadoutLogoSmall}
+                           alt="Loadout"
+                           height="18px"
+                           style={{
+                              marginTop: "-5px",
+                           }}
+                        />
+                     </button>
+                     <button
+                        onClick={() => this.toggleAccountRollout()}
+                        className="btn btn-link float-right"
+                     >
+                        {this.props.currentUser.username}
+                     </button>
+                  </div>
                </div>
+               {this.state.rollout === "Loadout" && this.renderLoadoutRollout()}
+               {this.state.rollout === "Account" && this.renderAccountRollout()}
             </div>
-            {this.state.rollout === "Loadout" && this.renderLoadoutRollout()}
-            {this.state.rollout === "Account" && this.renderAccountRollout()}
          </div>
       );
    }
