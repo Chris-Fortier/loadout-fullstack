@@ -10,7 +10,7 @@ const deleteUser = require("../../queries/deleteUser");
 const setUserUsername = require("../../queries/setUserUsername");
 const deleteUserLoadoutsByUser = require("../../queries/deleteUserLoadoutsByUser");
 const setUserPassword = require("../../queries/setUserPassword");
-const { toHash } = require("../../utils/helpers");
+const { toHash, TOKEN_EXPIRE_TIME } = require("../../utils/helpers");
 const getSignUpUsernameError = require("../../validation/getSignUpUsernameError");
 const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
 const getLoginUsernameError = require("../../validation/getLoginUsernameError");
@@ -67,7 +67,7 @@ router.post("/", async (req, res) => {
                      user,
                      process.env.JWT_ACCESS_SECRET,
                      {
-                        expiresIn: "60m",
+                        expiresIn: "TOKEN_EXPIRE_TIME",
                      }
                   );
 
@@ -132,7 +132,7 @@ router.post("/auth", async (req, res) => {
             // this contains the user, a secret and the timeframe
             // 1m for testing, could be longer like 3h, 7d etc
             const accessToken = jwt.sign(user, process.env.JWT_ACCESS_SECRET, {
-               expiresIn: "60m",
+               expiresIn: TOKEN_EXPIRE_TIME,
             });
 
             // enter new last login

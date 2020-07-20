@@ -147,12 +147,16 @@ export function refreshPeriodically(interval) {
          } else {
             // we need to refresh the contents of the page
             // if they are looking at a loadout
-            const currentItemId = store.getState().currentItem.id;
-            if (currentItemId !== undefined) {
-               getCurrentItemAndChildren(currentItemId); // refresh the item and child items on the page from DB
-            } else {
+            if (window.location.href.endsWith("item-list")) {
+               getCurrentItemAndChildren(store.getState().currentItem.id); // refresh the item and child items on the page from DB
+               //  TODO: refresh the user loadout in case the permissions externally changed
+            } else if (window.location.href.endsWith("loadout-list")) {
                // if they are looking at the My Loadouts page
                getUserLoadouts(); // refresh the user loadouts from DB
+            } else if (window.location.href.endsWith("loadout-sharing")) {
+               // if they are looking at a Sharing Settings page
+               // getUserLoadoutsForALoadout(store.getState().currentItem.id);
+               // TODO: external changes messes with my checks for whether or not rollouts should appear, perhaps the rollouts should only show on the click of something, not just if the states don't match
             }
          }
       }
