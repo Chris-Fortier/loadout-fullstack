@@ -25,9 +25,8 @@ Do this stuff once per machine after cloning the project.
 
 ## Delpoyment
 
-### Push latest git commit to Heroku
-
-`git push heroku master`
+-  `git push heroku master` Push latest git commit to Heroku
+-  `heroku open` Open the heroku page in a browser
 
 ## Sharing A Loadout
 

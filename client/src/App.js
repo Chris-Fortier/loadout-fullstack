@@ -13,6 +13,7 @@ import jwtDecode from "jwt-decode";
 import store from "./store/store";
 import actions from "./store/actions";
 import axios from "axios";
+import { refreshPeriodically } from "./utils/movePageToDifferentItem";
 
 const authTokenLoadout = localStorage.authTokenLoadout; // get the auth token from local storage
 if (authTokenLoadout) {
@@ -54,6 +55,9 @@ if (authTokenLoadout) {
    // remove the default headers in the off chance they exist for some reason
    delete axios.defaults.headers.common["x-auth-token"];
 }
+
+// start the refresh function
+refreshPeriodically(5000);
 
 function App() {
    // I think these declare different urls as differnt React components under the hood

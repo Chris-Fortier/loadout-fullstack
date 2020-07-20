@@ -1,6 +1,8 @@
 import actions from "../store/actions";
 import store from "../store/store";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
+import { getUserLoadouts } from "./userLoadouts";
 
 // this version uses changes the current item id in the store
 
@@ -88,8 +90,8 @@ export function movePageToDifferentItem(
 
 // refresh the current page from the database
 // simpler version that does not clear out data first and does not scroll the page
-export function refreshPage(itemId) {
-   console.log("refreshPage()...itemId:", itemId);
+export function getCurrentItemAndChildren(itemId) {
+   console.log("getCurrentItemAndChildren()...itemId:", itemId);
 
    // this part gets data from the database
    axios
@@ -124,4 +126,35 @@ export function refreshPage(itemId) {
          // handle error
          console.log(error);
       });
+}
+
+// refreshes the page every interval
+// interval is in ms
+export function refreshPeriodically(interval) {
+   setInterval(() => {
+      console.log("interval hit", store.getState().currentItem.id);
+      // if the auth token exists
+      if (localStorage.authTokenLoadout !== undefined) {
+         // if the auth token has expired
+         console.log(
+            "time left",
+            Date.now() - jwtDecode(localStorage.authTokenLoadout).exp * 1000
+         );
+         if (Date.now() > jwtDecode(localStorage.authTokenLoadout).exp * 1000) {
+            // send to landing page
+            console.log("auth token has expired, sending to landing page");
+            window.location.replace("/");
+         } else {
+            // we need to refresh the contents of the page
+            // if they are looking at a loadout
+            const currentItemId = store.getState().currentItem.id;
+            if (currentItemId !== undefined) {
+               getCurrentItemAndChildren(currentItemId); // refresh the item and child items on the page from DB
+            } else {
+               // if they are looking at the My Loadouts page
+               getUserLoadouts(); // refresh the user loadouts from DB
+            }
+         }
+      }
+   }, interval);
 }
