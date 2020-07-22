@@ -98,9 +98,12 @@ export function getCurrentItemAndChildren(itemId) {
       .get("/api/v1/loadouts/info?itemId=" + itemId)
       .then((res) => {
          // handle success
+         const currentItem = res.data[0];
+         currentItem.backRoute = "/item-list"; // add this here so if we are refreshing a current item, backRoute should be /item-list
+
          store.dispatch({
             type: actions.STORE_CURRENT_ITEM,
-            payload: res.data[0],
+            payload: currentItem,
          }); // dispatching an action
       })
       .catch((error) => {
