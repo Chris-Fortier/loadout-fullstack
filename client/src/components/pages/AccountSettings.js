@@ -304,6 +304,7 @@ class AccountSettings extends React.Component {
                                        className="my-input"
                                        id="password-for-username-change"
                                        placeholder="Enter your password"
+                                       autocomplete="new-password"
                                     />
                                     {this.state.changeUsernamePasswordError !==
                                        "" && (
@@ -353,6 +354,7 @@ class AccountSettings extends React.Component {
                                        className="my-input"
                                        id="old-password-for-password-change"
                                        placeholder="Enter your old password"
+                                       autocomplete="new-password"
                                     />
                                     {this.state
                                        .changePasswordOldPasswordError !==
@@ -369,6 +371,7 @@ class AccountSettings extends React.Component {
                                        className="my-input"
                                        id="new-password-for-password-change"
                                        placeholder="Enter your new password"
+                                       autocomplete="new-password"
                                     />
                                     {this.state
                                        .changePasswordNewPasswordError !==
@@ -424,6 +427,7 @@ class AccountSettings extends React.Component {
                                        className="my-input"
                                        id="password-for-delete-account"
                                        placeholder="Enter your password"
+                                       autocomplete="new-password"
                                     />
                                     {this.state.deleteAccountPasswordError !==
                                        "" && (
