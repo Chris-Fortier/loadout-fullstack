@@ -51,6 +51,6 @@ FROM
         loadouts
     GROUP BY loadouts.parent_id) AS children_counts
         RIGHT JOIN
-    loadouts ON children_counts.parent_id = loadouts.id
-WHERE
-    loadouts.parent_id = '41b9bde9-4731-44d2-b471-d46d21aca680';
+    loadouts ON children_counts.parent_id = loadouts.id;
+-- WHERE
+--    loadouts.parent_id = '41b9bde9-4731-44d2-b471-d46d21aca680';
