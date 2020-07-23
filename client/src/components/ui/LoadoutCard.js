@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
 import { LEVEL_COLORS, UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
-import SharingStrip from "../ui/SharingStrip";
+// import SharingStrip from "../ui/SharingStrip";
 
 import {
    ChildrenUnpackedIcon,
@@ -12,6 +12,13 @@ import {
 import actions from "../../store/actions";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import { getUserLoadoutsForALoadout } from "../../utils/userLoadouts";
+
+import {
+   IconPackage,
+   IconEdit,
+   IconUserCouple,
+   IconKey,
+} from "../../icons/icons.js";
 
 class LoadoutCard extends React.Component {
    moveToLoadout(loadoutId) {
@@ -199,13 +206,95 @@ class LoadoutCard extends React.Component {
                   )}
                </div>
             </div>
-            <div
-               className="d-flex button clickable"
-               onClick={() => {
-                  this.gotoSharing();
-               }}
-            >
-               <SharingStrip loadout={this.props.loadout} />
+            <div className="d-flex">
+               {/* this used to be a component but I can't find a way to wrap a span around the entire thing to assign single classes and onClick without screwing up the entire layout of it, so I duplicate these several times */}
+               {this.props.loadout.numUsers > 1 && (
+                  <>
+                     <span
+                        style={{ fontSize: "1rem", opacity: 0.5 }}
+                        className={classnames(
+                           "button clickable",
+                           (UI_APPEARANCE === "light" ||
+                              UI_APPEARANCE === "colors") &&
+                              "dark-text-color",
+                           UI_APPEARANCE === "dark" && "light-text-color"
+                        )}
+                        onClick={() => {
+                           this.gotoSharing();
+                        }}
+                     >
+                        {this.props.loadout.numUsers}
+                     </span>
+                     <span
+                        className={classnames(
+                           "button clickable",
+                           "loadout-card-icon",
+                           UI_APPEARANCE === "dark" && "icon-light",
+                           UI_APPEARANCE !== "dark" && "icon-dark"
+                        )}
+                        onClick={() => {
+                           this.gotoSharing();
+                        }}
+                     >
+                        <IconUserCouple />
+                     </span>
+                     <span
+                        className="button clickable"
+                        onClick={() => {
+                           this.gotoSharing();
+                        }}
+                     >
+                        &nbsp;&nbsp;
+                     </span>
+                  </>
+               )}
+               {this.props.loadout.canPack === 1 && (
+                  <span
+                     className={classnames(
+                        "button clickable",
+                        "loadout-card-icon",
+                        UI_APPEARANCE === "dark" && "icon-light",
+                        UI_APPEARANCE !== "dark" && "icon-dark"
+                     )}
+                     onClick={() => {
+                        this.gotoSharing();
+                     }}
+                  >
+                     <IconPackage />
+                  </span>
+               )}
+               {this.props.loadout.canEdit === 1 && (
+                  <span
+                     className={classnames(
+                        "button clickable",
+                        "loadout-card-icon",
+                        UI_APPEARANCE === "dark" && "icon-light",
+                        UI_APPEARANCE !== "dark" && "icon-dark"
+                     )}
+                     onClick={() => {
+                        this.gotoSharing();
+                     }}
+                  >
+                     <IconEdit />
+                  </span>
+               )}
+               {this.props.loadout.isAdmin === 1 && (
+                  <span
+                     className={classnames(
+                        "button clickable",
+                        "loadout-card-icon",
+                        UI_APPEARANCE === "dark" && "icon-light",
+                        UI_APPEARANCE !== "dark" && "icon-dark"
+                     )}
+                     onClick={() => {
+                        this.gotoSharing();
+                     }}
+                  >
+                     <IconKey />
+                  </span>
+               )}
+               {/* this is for the rest of the line which is not clicable */}
+               <div className="flex-fill"></div>
             </div>
          </div>
       );
