@@ -45,7 +45,7 @@ a:hover {
    /* https://css-tricks.com/perfect-full-page-background-image/ */
    background: url("../img/calico-hills.jpg") no-repeat center center fixed;
    background-size: cover;
-   min-height: 100vh;
+   min-height: 101vh; // made it 101 so the scroll bar is always there
 }
 
 .this-bg-light {

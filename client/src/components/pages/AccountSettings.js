@@ -417,11 +417,11 @@ class AccountSettings extends React.Component {
                               </span>
                               {this.state.hasDeleteAccountRollout && (
                                  <>
-                                    <p>
+                                    {/* <p>
                                        Deleting this account will also delete
                                        all the loadouts that are not shared with
                                        anyone else.
-                                    </p>
+                                    </p> */}
                                     <input
                                        type="password"
                                        className="my-input"
