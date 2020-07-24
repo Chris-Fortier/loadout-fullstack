@@ -16,5 +16,6 @@ UPDATE `loadout_app`.`loadouts` SET `status` = '0' WHERE (
    `id` = '05b683c1-bfb0-427e-921c-7e6595e33729' OR 
    `id` = '663848bf-78c7-41bb-8ef6-ddc3cb7269f3' OR 
    `id` = '5155398c-7974-498a-a098-70bd63f8b207' OR 
+   `id` = 'e109827f-4bfa-4384-9ac9-979776d2512b' OR 
+   `id` = 'fb0cc10d-82de-40d9-86f8-34e182d8247d' OR 
    `id` = '6a8f82f7-8a52-497a-9f93-c92d0fc72b86');
-   
