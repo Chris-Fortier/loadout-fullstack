@@ -1045,9 +1045,9 @@ li {
    line-height: 1.25em;
 }
 
-li:nth-child(even) {
-   background-color: hsl(180, 25, 90);
-}
+// li:nth-child(even) {
+//    background-color: hsl(180, 25, 90);
+// }
 
 .presentation-action {
    color: hsl(300, 50, 50);

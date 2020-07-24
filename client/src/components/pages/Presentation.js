@@ -31,6 +31,11 @@ export default function StyleTester() {
                </ul>
                <h2>Presentation Notes</h2>
                <ul>
+                  <li>
+                     <span className="presentation-action">
+                        Share camera and audio.
+                     </span>
+                  </li>
                   <li>I’m Chris Fortier.</li>
                   <li>
                      My background includes working on video games as an artist
@@ -45,11 +50,13 @@ export default function StyleTester() {
                      libraries required to make a fullstack application are
                      totally free.
                   </li>
-                  <li>My capstone project is an app called Loadout.</li>
                   <li>
-                     <span className="presentation-action">Landing page</span>
+                     <span className="presentation-action">
+                        Share desktop with the Landing Page visible.
+                     </span>
                   </li>
                   <ul>
+                     <li>My capstone project is an app called Loadout</li>
                      <li>
                         One thing that I always find frustrating is packing for
                         a trip. I have never found a good solution for using a
@@ -60,12 +67,12 @@ export default function StyleTester() {
                         inside of lists.
                      </li>
                      <li>
-                        So here is my app: Loadout, where you can create, share
-                        and reuse packing lists.
+                        So here is Loadout, where you can create, share and
+                        reuse packing lists.
                      </li>
                      <li>
-                        From the landing page, you can log in or sign up to make
-                        a new account{" "}
+                        From here, you can log in or sign up to make a new
+                        account{" "}
                         <span className="presentation-action">
                            show the sign up page, then go back to log in
                         </span>
@@ -100,7 +107,7 @@ export default function StyleTester() {
                      </li>
                      <li>
                         This app is responsive. When you turn your phone
-                        sideways, you will see two columns of items
+                        sideways, you will see two columns of items&nbsp;
                         <span className="presentation-action">demonstrate</span>
                         .
                      </li>
@@ -248,7 +255,7 @@ export default function StyleTester() {
                         you can assign them different permissions, depending on
                         what you want them to be able to do, such as being able
                         to pack and unpack; edit the loadout; or have admin
-                        privileges.
+                        privileges.&nbsp;
                         <span className="presentation-action">
                            Uncheck the first two, save changes, then click the
                            remove button to remove the new user.
@@ -269,11 +276,7 @@ export default function StyleTester() {
                         </span>
                      </li>
                   </ul>
-                  <li>
-                     <span className="presentation-action">
-                        Click to log out
-                     </span>
-                  </li>
+                  <li className="presentation-action">Click to log out</li>
                   <ul>
                      <li>And that is Loadout</li>
                      <li>
@@ -290,11 +293,18 @@ export default function StyleTester() {
                         repeating that process in different ways and start to
                         see all the functionality of my app come together.
                      </li>
+                     <li className="presentation-action">
+                        Stop sharing screen
+                     </li>
                      <li>
                         I’m going to continue working on Loadout and other
                         projects, and am also seeking full-stack developer
                         opportunities. My information will be posted in the Zoom
                         chat.
+                     </li>
+                     {/* <li>Thank you for your time.</li> */}
+                     <li className="presentation-action">
+                        Stop sharing video and audio
                      </li>
                   </ul>
                </ul>
