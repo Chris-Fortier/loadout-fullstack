@@ -9,6 +9,7 @@ import LoadoutSharing from "./components/pages/LoadoutSharing";
 import StyleTester from "./components/pages/StyleTester";
 import AccountSettings from "./components/pages/AccountSettings";
 import ItemList from "./components/pages/ItemList";
+import Presentation from "./components/pages/Presentation";
 import jwtDecode from "jwt-decode";
 import store from "./store/store";
 import actions from "./store/actions";
@@ -70,6 +71,7 @@ function App() {
             <Route exact path="/style-tester" component={StyleTester} />
             <Route exact path="/account-settings" component={AccountSettings} />
             <Route exact path="/item-list" component={ItemList} />
+            <Route exact path="/presentation" component={Presentation} />
             <Route component={NotFound} />
          </Switch>
       </Router>
