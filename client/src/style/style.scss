@@ -1033,6 +1033,7 @@ label,
    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
+// presentation stuff
 ul {
    font-family: $font-family-body;
 }
@@ -1047,7 +1048,6 @@ li:nth-child(even) {
 
 .presentation-action {
    color: hsl(300, 50, 50);
-   font-weight: bold;
    background-color: hsl(300, 50, 85);
 }
 

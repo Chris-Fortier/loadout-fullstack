@@ -3,9 +3,9 @@ import React from "react";
 
 export default function StyleTester() {
    return (
-      <div className="container">
+      <div className="container-fluid">
          <div className="row my-8">
-            <div className="col">
+            <div className="col-12  offset-sm-1 col-sm-10 offset-md-2 col-md-8">
                <h2>Setup</h2>
                <ul>
                   <li>Do this before the presentation</li>
@@ -13,10 +13,8 @@ export default function StyleTester() {
                   <li>https://loadoutapp.herokuapp.com/</li>
                   <li>
                      View the account settings page so the background image is
-                     loaded View the console{" "}
-                     <span className="presentation-action">
-                        so that we don’t have blue overlays randomly appearing
-                     </span>
+                     loaded View the console so that we don’t have blue overlays
+                     randomly appearing
                   </li>
                   <li>
                      Inpsect, change to console, undock it and move it to second
