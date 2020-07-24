@@ -1041,6 +1041,16 @@ li {
    padding-top: 10px;
 }
 
+li:nth-child(even) {
+   background-color: hsl(180, 25, 90);
+}
+
+.presentation-action {
+   color: hsl(300, 50, 50);
+   font-weight: bold;
+   background-color: hsl(300, 50, 85);
+}
+
 // use this as the max size of all container-fluids so that the ones on the My Loadouts and Loadout Sharing pages aren't too large
 .container-fluid.single-wide-container {
    // set the maximum width of the container to be two maximum widthed cards plus the 15px margins and space between them
