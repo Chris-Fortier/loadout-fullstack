@@ -5,7 +5,7 @@ export default function StyleTester() {
    return (
       <div className="container-fluid">
          <div className="row my-8">
-            <div className="col-12  offset-sm-1 col-sm-10 offset-md-2 col-md-8">
+            <div className="col-12  offset-md-1 col-md-10">
                <h2>Setup</h2>
                <ul>
                   <li>Do this before the presentation</li>
