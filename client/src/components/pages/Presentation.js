@@ -56,9 +56,9 @@ export default function StyleTester() {
                         development at PunchCode and on my own time.
                      </li>
                      <li>
-                        The thing I found most interesting was that most of the
-                        tools, software and libraries required to make a
-                        fullstack application are totally free.
+                        What I found interesting was that most of the tools,
+                        software and libraries required to make a fullstack
+                        application are totally free.
                      </li>
                   </div>
                   <li>
