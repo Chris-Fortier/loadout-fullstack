@@ -18,6 +18,7 @@ export default class Header extends React.Component {
                   <span
                      style={{ fontSize: "1rem", opacity: 0.5 }}
                      className={classnames(
+                        "button",
                         (UI_APPEARANCE === "light" ||
                            UI_APPEARANCE === "colors") &&
                            "dark-text-color",
@@ -28,6 +29,7 @@ export default class Header extends React.Component {
                   </span>
                   <span
                      className={classnames(
+                        "button",
                         "loadout-card-icon",
                         UI_APPEARANCE === "dark" && "icon-light",
                         UI_APPEARANCE !== "dark" && "icon-dark"
@@ -41,6 +43,7 @@ export default class Header extends React.Component {
             {this.props.loadout.canPack === 1 && (
                <span
                   className={classnames(
+                     "button",
                      "loadout-card-icon",
                      UI_APPEARANCE === "dark" && "icon-light",
                      UI_APPEARANCE !== "dark" && "icon-dark"
@@ -52,6 +55,7 @@ export default class Header extends React.Component {
             {this.props.loadout.canEdit === 1 && (
                <span
                   className={classnames(
+                     "button",
                      "loadout-card-icon",
                      UI_APPEARANCE === "dark" && "icon-light",
                      UI_APPEARANCE !== "dark" && "icon-dark"
@@ -63,6 +67,7 @@ export default class Header extends React.Component {
             {this.props.loadout.isAdmin === 1 && (
                <span
                   className={classnames(
+                     "button",
                      "loadout-card-icon",
                      UI_APPEARANCE === "dark" && "icon-light",
                      UI_APPEARANCE !== "dark" && "icon-dark"

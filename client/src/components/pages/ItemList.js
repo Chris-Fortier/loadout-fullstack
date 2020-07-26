@@ -531,73 +531,67 @@ class ItemList2 extends React.Component {
                               <div className="row">
                                  <div className="col">
                                     {level === 1 && (
-                                       <div
-                                          className={classnames(
-                                             "d-flex button navigation-link d-block",
-                                             UI_APPEARANCE === "dark" &&
-                                                "light-text-color",
-                                             UI_APPEARANCE !== "dark" &&
-                                                "dark-text-color"
-                                          )}
-                                          // to="/loadout-sharing"
-                                          onClick={(e) => {
-                                             this.gotoSharing(e);
-                                          }}
-                                       >
-                                          <div
-                                             className={classnames(
-                                                "left",
-                                                UI_APPEARANCE === "dark" &&
-                                                   "icon-light",
-                                                UI_APPEARANCE !== "dark" &&
-                                                   "icon-dark"
-                                             )}
+                                       <div>
+                                          <span
+                                             className="clickable"
+                                             onClick={(e) => {
+                                                this.gotoSharing(e);
+                                             }}
                                           >
-                                             <IconUserCouple />
-                                          </div>
-                                          Loadout Settings&nbsp;&nbsp;
-                                          <SharingStrip
-                                             loadout={
-                                                this.props.currentUserLoadout
-                                             }
-                                          />
+                                             <span
+                                                className={classnames(
+                                                   "button",
+                                                   UI_APPEARANCE === "dark" &&
+                                                      "icon-light light-text-color",
+                                                   UI_APPEARANCE !== "dark" &&
+                                                      "icon-dark dark-text-color"
+                                                )}
+                                             >
+                                                <IconUserCouple />
+                                             </span>
+                                             &nbsp;
+                                             <span className="button navigation-link">
+                                                Loadout Settings
+                                             </span>
+                                             &nbsp;&nbsp;
+                                             <SharingStrip
+                                                loadout={
+                                                   this.props.currentUserLoadout
+                                                }
+                                             />
+                                          </span>
                                        </div>
                                     )}
 
                                     {level > 0 && (
-                                       <div
-                                          className={classnames(
-                                             "button navigation-link d-block",
-                                             UI_APPEARANCE === "dark" &&
-                                                "light-text-color",
-                                             UI_APPEARANCE !== "dark" &&
-                                                "dark-text-color",
-                                             this.props.currentUserLoadout
-                                                .canEdit === 0 && "disabled"
-                                          )}
-                                          onClick={(e) => {
-                                             this.props.currentUserLoadout
-                                                .canEdit === 1 &&
-                                                this.toggleEditMode(e);
-                                          }}
-                                       >
-                                          <div
-                                             className={classnames(
-                                                "left",
-                                                UI_APPEARANCE === "dark" &&
-                                                   "icon-light",
-                                                UI_APPEARANCE !== "dark" &&
-                                                   "icon-dark"
-                                             )}
+                                       <div>
+                                          <span
+                                             className="clickable"
+                                             onClick={(e) => {
+                                                this.props.currentUserLoadout
+                                                   .canEdit === 1 &&
+                                                   this.toggleEditMode(e);
+                                             }}
                                           >
-                                             <IconEdit />
-                                          </div>
-                                          {this.props.isEditMode && (
-                                             <>Done Editing</>
-                                          )}
-                                          {!this.props.isEditMode && (
-                                             <>Edit Loadout</>
-                                          )}
+                                             <span
+                                                className={classnames(
+                                                   "button",
+                                                   UI_APPEARANCE === "dark" &&
+                                                      "icon-light light-text-color",
+                                                   UI_APPEARANCE !== "dark" &&
+                                                      "icon-dark dark-text-color"
+                                                )}
+                                             >
+                                                <IconEdit />
+                                             </span>
+                                             &nbsp;
+                                             {this.props.isEditMode && (
+                                                <>Done Editing</>
+                                             )}
+                                             {!this.props.isEditMode && (
+                                                <>Edit Loadout</>
+                                             )}
+                                          </span>
                                        </div>
                                     )}
                                  </div>
