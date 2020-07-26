@@ -5,24 +5,27 @@ export default function StyleTester() {
    return (
       <div className="container-fluid">
          <div className="row my-8">
-            <div className="col-12  offset-md-1 col-md-10">
+            <div className="col-12 offset-md-2 col-md-8">
                <h2>Setup</h2>
                <ul>
                   <li>Do this before the presentation</li>
+                  <li>Run the MySQL query to reset to the demo state.</li>
                   <li>Open a full screen browser on main monitor.</li>
-                  <li>https://loadoutapp.herokuapp.com/</li>
+                  {/* <li>https://loadoutapp.herokuapp.com/</li> */}
+                  <li>Run the server and client locally from VSCode.</li>
                   <li>
-                     View the account settings page so the background image is
-                     loaded View the console so that we don’t have blue overlays
-                     randomly appearing
+                     On the landing page, Toggle the sign up page so that
+                     background image is loaded.
                   </li>
+                  <li>
+                     Log in and view the account settings page so the background
+                     image is loaded View the console so that we don’t have blue
+                     overlays randomly appearing
+                  </li>
+                  <li>Log out to the landing page.</li>
                   <li>
                      Inpsect, change to console, undock it and move it to second
-                     monitor.
-                  </li>
-                  <li>
-                     Log out to the landing page Toggle the sign up page so that
-                     background image is loaded.
+                     monitor. Make sure this window is visible.
                   </li>
                   <li>
                      Set the view mode to iPhone 6/7/8 layout and make it
@@ -33,30 +36,39 @@ export default function StyleTester() {
                <ul>
                   <li>
                      <span className="presentation-action">
-                        Share camera and audio.
+                        Share camera and audio. Then talk to the camera.
                      </span>
                   </li>
-                  <li>I’m Chris Fortier.</li>
-                  <li>
-                     My background includes working on video games as an artist
-                     making character models and textures. I have also done ad
-                     layouts, photography and video editing. In my spare time I
-                     enjoy writing programs to do specific tasks.
-                  </li>
-                  <li>
-                     I have spent the last four months learning fullstack web
-                     development at PunchCode and on my own time. One thing I
-                     found interesting was how most of the tools, software and
-                     libraries required to make a fullstack application are
-                     totally free.
-                  </li>
+                  <div className="offset-2 col-8">
+                     <li>I’m Chris Fortier.</li>
+                     <li>
+                        My background includes working on video games as an
+                        artist making character models and textures.
+                        <br />I have also done ad layouts, photography and video
+                        editing.
+                     </li>
+                     <li>
+                        In my spare time I enjoy writing programs to do specific
+                        tasks.
+                     </li>
+                     <li>
+                        I have spent the last four months learning fullstack web
+                        development at PunchCode and on my own time.
+                     </li>
+                     <li>
+                        The thing I found most interesting was that most of the
+                        tools, software and libraries required to make a
+                        fullstack application are totally free.
+                     </li>
+                  </div>
                   <li>
                      <span className="presentation-action">
-                        Share desktop with the Landing Page visible.
+                        Stop looking at camera. Share desktop with the Landing
+                        Page visible.
                      </span>
                   </li>
                   <ul>
-                     <li>My capstone project is an app called Loadout</li>
+                     <li>My capstone project is an app called Loadout.</li>
                      <li>
                         One thing that I always find frustrating is packing for
                         a trip. I have never found a good solution for using a
@@ -85,12 +97,12 @@ export default function StyleTester() {
                   </li>
                   <ul>
                      <li>
-                        <span className="presentation-action">
-                           Scroll the list on My Loadouts.
-                        </span>{" "}
                         When you log in you will a see a list of all your
                         loadouts, as well as loadouts that other users have
-                        shared with you.
+                        shared with you.{" "}
+                        <span className="presentation-action">
+                           Scroll the list on My Loadouts.
+                        </span>
                      </li>
                   </ul>
                   <li>
@@ -133,9 +145,9 @@ export default function StyleTester() {
                      <li>
                         This is a full stack application. Any changes you make
                         will send API calls to Express routes on the server,
-                        which will then send data to a Sequel database hosted by
-                        Amazon RDS. If my friend was looking at this loadout, he
-                        would see me packing these items.
+                        which then send data to a Sequel database hosted by
+                        Amazon RDS. If my friend was looking at this loadout,
+                        they would see me packing these items.
                      </li>
                      <li>
                         You will notice that some items cannot be packed{" "}
@@ -158,7 +170,7 @@ export default function StyleTester() {
                   </li>
                   <ul>
                      <li>
-                        When you open the day pack you can see the four items
+                        When you open the Day Pack you can see the four items
                         that need to be packed.{" "}
                         <span className="presentation-action">
                            Pack the three that you can, then hover over the
@@ -196,8 +208,16 @@ export default function StyleTester() {
                   </li>
                   <ul>
                      <li>
-                        Now you can finally pack the Day pack{" "}
+                        Now you can finally pack the Day Pack{" "}
                         <span className="presentation-action">pack it</span>.
+                     </li>
+                     <li>
+                        Lets say you want to go on another camping trip. You can
+                        reset the loadout, unpacking every item and subitem, by
+                        clicking here.{" "}
+                        <span className="presentation-action">
+                           Reveal the unpack all button but do not click it.
+                        </span>
                      </li>
                   </ul>
                   <li>
@@ -227,7 +247,7 @@ export default function StyleTester() {
                         .
                      </li>
                      <li>
-                        If you try to delete something that contains subitems
+                        If you try to delete something that contains subitems{" "}
                         <span className="presentation-action">
                            click the X next to Cooler
                         </span>
@@ -250,12 +270,12 @@ export default function StyleTester() {
                         users.
                      </li>
                      <li>
-                        Once you enter a valid username{" "}
-                        <span className="presentation-action">add a user</span>,
+                        Once you enter an existing username{" "}
+                        <span className="presentation-action">add "sean"</span>,
                         you can assign them different permissions, depending on
                         what you want them to be able to do, such as being able
                         to pack and unpack; edit the loadout; or have admin
-                        privileges.&nbsp;
+                        permissions. You can also remove a user.&nbsp;
                         <span className="presentation-action">
                            Uncheck the first two, save changes, then click the
                            remove button to remove the new user.
@@ -276,35 +296,44 @@ export default function StyleTester() {
                         </span>
                      </li>
                   </ul>
-                  <li className="presentation-action">Click to log out</li>
+                  <li>
+                     <span className="presentation-action">
+                        Click to log out
+                     </span>
+                  </li>
                   <ul>
-                     <li>And that is Loadout</li>
-                     <li>
-                        Some of the features I plan to add are the ability to
-                        rearrange and move items via drag and drop, copy parts
-                        of a loadout to another loadout, and add a dark mode.
-                     </li>
-                     <li>
-                        I think what I enjoyed most with this project was
-                        learning how to send data through the server to the
-                        database. It was very difficult to do a simple query at
-                        first as it requires many parts that have to work
-                        together. But once I got that figured out it was fun
-                        repeating that process in different ways and start to
-                        see all the functionality of my app come together.
-                     </li>
-                     <li className="presentation-action">
-                        Stop sharing screen
-                     </li>
-                     <li>
-                        I’m going to continue working on Loadout and other
-                        projects, and am also seeking full-stack developer
-                        opportunities. My information will be posted in the Zoom
-                        chat.
-                     </li>
+                     <div className="offset-2 col-8">
+                        <li>And that is Loadout</li>
+                        <li>
+                           Some of the features I plan to add are the ability to
+                           rearrange and move items via drag and drop, copy
+                           parts of a loadout to another loadout, and add a dark
+                           mode.
+                        </li>
+                        <li>
+                           I think what I enjoyed most with this project was
+                           learning how to send data through the server to the
+                           database. It was very difficult to do a simple query
+                           at first as it requires many parts that have to work
+                           together. But once I got that figured out it was fun
+                           repeating that process in different ways and start to
+                           see all the functionality of my app come together.
+                        </li>
+                        <li>
+                           <span className="presentation-action">
+                              Optional: Stop sharing screen
+                           </span>
+                        </li>
+                        <li>
+                           I’m going to continue working on Loadout and other
+                           projects, and am also seeking full-stack developer
+                           opportunities. My information will be posted in the
+                           Zoom chat.
+                        </li>
+                     </div>
                      {/* <li>Thank you for your time.</li> */}
                      <li className="presentation-action">
-                        Stop sharing video and audio
+                        Stop sharing VIDEO and AUDIO.
                      </li>
                   </ul>
                </ul>
