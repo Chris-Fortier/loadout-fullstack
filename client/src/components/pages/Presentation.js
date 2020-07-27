@@ -303,12 +303,12 @@ export default function StyleTester() {
                   </li>
                   <ul>
                      <div className="offset-2 col-8">
-                        <li>And that is Loadout</li>
+                        {/* <li>And that is Loadout</li> */}
                         <li>
-                           Some of the features I plan to add are the ability to
-                           rearrange and move items via drag and drop, copy
-                           parts of a loadout to another loadout, and add a dark
-                           mode.
+                           Some of the features I plan to add to Loadout are the
+                           ability to rearrange and move items via drag and
+                           drop, copy parts of a loadout to another loadout, and
+                           add a dark mode.
                         </li>
                         <li>
                            I think what I enjoyed most with this project was
