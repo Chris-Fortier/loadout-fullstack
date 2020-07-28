@@ -1,6 +1,6 @@
 // sets teh status of all the descendants of an entire loadout or item to something and sets the last pack date
 // used for unpack all feature
-const selectLoadoutDescendants = `
+const setLoadoutDescendantsStatus = `
 UPDATE loadout_app.loadouts SET status = ?, last_pack_at = ? WHERE id IN (
 	with recursive cte (id, parent_id,
 				 status,
@@ -23,4 +23,4 @@ UPDATE loadout_app.loadouts SET status = ?, last_pack_at = ? WHERE id IN (
 select id from cte);
 `;
 
-module.exports = selectLoadoutDescendants;
+module.exports = setLoadoutDescendantsStatus;

@@ -150,3 +150,77 @@ export function deleteItem(itemId) {
    // client side part (this is too keep what we see consistent with the database until it refreshes from the database)
    // refreshPage(item.parentId);
 }
+
+// processes all the items in a loadout, counting items and subitems, given a list of items (loadout)
+// this is a pure function
+export function processLoadout(loadout) {
+   // initialize values in each item
+   for (let i in loadout) {
+      loadout[i].numChildren = 0;
+      loadout[i].numResolvedChildren = 0;
+      loadout[i].numUnresolvedChildren = 0;
+      loadout[i].numDescendants = 0;
+      loadout[i].numResolvedDescendants = 0;
+      loadout[i].numUnresolvedDescendants = 0;
+      loadout[i].contentSummary = "WIP";
+   }
+
+   // increment an ancestor's counter by 1 and then do it again to its ancestor unless its null
+   function incrementAncestorCounter(index) {
+      if (loadout[index].parent_id !== null) {
+         // find its parent and add to its numDescendants counter
+         for (let a in loadout) {
+            // check if that is its grandparent
+            if (loadout[index].parent_id === loadout[a].id) {
+               loadout[a].numDescendants++;
+               if (loadout[index].status === 1) {
+                  // count if it has a resolved status
+                  loadout[a].numResolvedDescendants++;
+               } else {
+                  // count if it has an unresolved status
+                  loadout[a].numUnresolvedDescendants++;
+               }
+
+               // continue incrementing counters on all ancestors
+               incrementAncestorCounter(a);
+            }
+         }
+      }
+   }
+
+   // add each item to its parent and ancestor counters
+   for (let i in loadout) {
+      // find its parent and add to its numChildren counter
+      for (let p in loadout) {
+         // check if that is its parent
+         if (loadout[i].parent_id === loadout[p].id) {
+            loadout[p].numChildren++;
+            loadout[p].numDescendants++;
+            if (loadout[i].status === 1) {
+               // count if it has a resolved status
+               loadout[p].numResolvedChildren++;
+               loadout[p].numResolvedDescendants++;
+            } else {
+               // count if it has an unresolved status
+               loadout[p].numUnresolvedChildren++;
+               loadout[p].numUnresolvedDescendants++;
+            }
+            // increment counters on all ancestors starting with the parent
+            incrementAncestorCounter(p);
+         }
+      }
+   }
+
+   // // count the number of children in each item
+   // // for every item as a parent item
+   // for (let p in loadout) {
+   //    // for every item as a child item
+   //    for (let c in loadout) {
+   //       // check if it is a child of the parent
+   //       if (loadout[c].parent_id === loadout[p].id) {
+   //          loadout[p].numChildren++;
+   //       }
+   //    }
+   // }
+   return loadout;
+}

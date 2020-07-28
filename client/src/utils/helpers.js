@@ -104,6 +104,10 @@ export function logOutCurrentUser(props) {
       type: actions.SET_EDIT_MODE,
       payload: false,
    });
+   props.dispatch({
+      type: actions.STORE_CURRENT_LOADOUT,
+      payload: [],
+   });
 }
 
 // app master preferences

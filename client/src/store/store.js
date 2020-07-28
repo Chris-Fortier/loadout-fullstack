@@ -10,7 +10,7 @@ const initialState = {
    //    id: "", // the uuid of the current loadout
    // },
    currentItem: {
-      id: "", // the uuid of the curren item
+      id: "", // the uuid of the current item
    },
    childItems: [],
    currentLevel: 0,
@@ -18,6 +18,7 @@ const initialState = {
    userLoadouts: [],
    currentLoadoutUserLoadouts: [], // stores the userLoadouts of the current loadout
    isEditMode: false,
+   currentLoadout: [], // stores the entire current loadout and all its descendants
 };
 const store = createStore(combineReducers, initialState, composeWithDevTools());
 export default store;

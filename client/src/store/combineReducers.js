@@ -8,6 +8,7 @@ import currentUserLoadout from "./reducers/currentUserLoadout";
 import userLoadouts from "./reducers/userLoadouts";
 import currentLoadoutUserLoadouts from "./reducers/currentLoadoutUserLoadouts";
 import isEditMode from "./reducers/isEditMode";
+import currentLoadout from "./reducers/currentLoadout";
 
 export default combineReducers({
    currentUser,
@@ -18,4 +19,5 @@ export default combineReducers({
    userLoadouts, // stores all the curent user's userLoadouts
    currentLoadoutUserLoadouts, // stores all the user loadouts for the current loadout
    isEditMode,
+   currentLoadout, // stores the entire current loadout and all its descendants
 });

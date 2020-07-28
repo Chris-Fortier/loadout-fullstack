@@ -38,6 +38,12 @@ export function getUserLoadouts() {
             type: actions.STORE_CURRENT_ITEM,
             payload: {},
          });
+
+         // TODO: is this redundant?
+         store.dispatch({
+            type: actions.STORE_CURRENT_LOADOUT,
+            payload: [],
+         });
       })
       .catch((error) => {
          // handle error

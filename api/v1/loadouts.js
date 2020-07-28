@@ -235,14 +235,17 @@ router.get("/children", validateJwt, (req, res) => {
 });
 
 // @route      GET api/v1/loadouts/select-descendants
-// @desc       set the status of all an item's or loadout's descendants something
+// @desc       selects all the items descendants of an entire loadout or item
 // @access     Public
-// test: http://localhost:3060/api/v1/loadouts/select-descendants?newStatus=1&itemId=41b9bde9-4731-44d2-b471-d46d21aca680
+// test: http://localhost:3060/api/v1/loadouts/select-descendants?itemId=41b9bde9-4731-44d2-b471-d46d21aca680
+// test: http://localhost:3060/api/v1/loadouts/select-descendants?itemId=42655170-7e10-4431-8d98-c2774f6414a4 -- one-night camping trip loadout
 router.get("/select-descendants", (req, res) => {
+   // TODO: need to verify that they have permission to view this loadout
+
    db.query(selectLoadoutDescendants, [req.query.itemId])
       // db.query(setItemStatus, [req.query.itemId])
       .then((dbRes) => {
-         console.log("dbRes", dbRes);
+         console.log("items received", dbRes.length);
          res.status(200).json(dbRes);
       })
       .catch((err) => {
@@ -264,7 +267,7 @@ router.post("/set-descendants-status", (req, res) => {
       // db.query(setItemStatus, [req.query.itemId])
       .then((dbRes) => {
          console.log("dbRes", dbRes);
-         res.status(200).json("loadout descandants status changed");
+         res.status(200).json("loadout descendants status changed");
       })
       .catch((err) => {
          console.log("err", err);

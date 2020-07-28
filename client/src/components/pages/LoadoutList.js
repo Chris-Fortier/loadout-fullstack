@@ -48,6 +48,10 @@ class LoadoutList extends React.Component {
          type: actions.SET_EDIT_MODE,
          payload: false,
       });
+      props.dispatch({
+         type: actions.STORE_CURRENT_LOADOUT,
+         payload: [],
+      });
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
       // TODO, this is duplicated code

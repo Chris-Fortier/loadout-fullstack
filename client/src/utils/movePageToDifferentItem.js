@@ -3,6 +3,7 @@ import store from "../store/store";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { getUserLoadouts } from "./userLoadouts";
+import { processLoadout } from "./items";
 
 // this version uses changes the current item id in the store
 
@@ -33,6 +34,25 @@ export function movePageToDifferentItem(
             type: actions.STORE_CURRENT_USER_LOADOUT,
             payload: newCurrentLoadout,
          });
+
+         // get all the items in the new current loadout
+         axios
+            .get("/api/v1/loadouts/select-descendants?itemId=" + itemId)
+            .then((res) => {
+               // handle success
+
+               const currentLoadout = res.data;
+
+               // store them
+               store.dispatch({
+                  type: actions.STORE_CURRENT_LOADOUT,
+                  payload: processLoadout(currentLoadout),
+               });
+            })
+            .catch((error) => {
+               // handle error
+               console.log(error);
+            });
       }
 
       // this part gets data from the database
