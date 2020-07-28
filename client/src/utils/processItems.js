@@ -15,7 +15,7 @@ function processItemAndDescendants(item, level = null) {
 
       item.numChildren = item.items.length;
       item.numDescendants = item.numChildren;
-      item.numPackedChildren = 0; // intialize this and count below
+      item.numResolvedChildren = 0; // intialize this and count below
       item.numPackedDescendants = 0; // intialize this and count below
 
       for (let i in item.items) {
@@ -23,7 +23,7 @@ function processItemAndDescendants(item, level = null) {
          item.items[i].index = parseInt(i);
          // item.items[i].fixed = true;
          if (item.items[i].isPacked) {
-            item.numPackedChildren++; // count a packed child
+            item.numResolvedChildren++; // count a packed child
             item.numPackedDescendants++; // also count as a packed descendant
          }
          const descendantInfo = processItemAndDescendants(
@@ -45,18 +45,18 @@ function processItemAndDescendants(item, level = null) {
    } else {
       item.numChildren = 0;
       item.numDescendants = 0;
-      item.numPackedChildren = 0;
+      item.numResolvedChildren = 0;
       item.numPackedDescendants = 0;
    }
 
    // get the number of unpacked descedants, could be useful in sorting by which items need the most "work"
    item.numUnpackedDescendants =
       item.numDescendants - item.numPackedDescendants;
-   item.numUnpackedChildren = item.numChildren - item.numPackedChildren;
+   item.numUnresolvedChildren = item.numChildren - item.numResolvedChildren;
 
    // generate the text that would be displayed to summarize the packed status of the contents of this item
    if (SUBITEM_DISPLAY_MODE === "packedChildrenOutOfTotalChildren") {
-      item.contentSummary = item.numPackedChildren + " / " + item.numChildren;
+      item.contentSummary = item.numResolvedChildren + " / " + item.numChildren;
    } else if (SUBITEM_DISPLAY_MODE === "numUnpackedDescendants") {
       if (item.numUnpackedDescendants > 0) {
          item.contentSummary = item.numUnpackedDescendants + " left";
@@ -65,9 +65,9 @@ function processItemAndDescendants(item, level = null) {
       } else {
          item.contentSummary = "";
       }
-   } else if (SUBITEM_DISPLAY_MODE === "numUnpackedChildren") {
-      if (item.numUnpackedChildren > 0) {
-         item.contentSummary = item.numUnpackedChildren + " left";
+   } else if (SUBITEM_DISPLAY_MODE === "numUnresolvedChildren") {
+      if (item.numUnresolvedChildren > 0) {
+         item.contentSummary = item.numUnresolvedChildren + " left";
       } else if (!item.isPacked) {
          item.contentSummary = "ready";
       } else {

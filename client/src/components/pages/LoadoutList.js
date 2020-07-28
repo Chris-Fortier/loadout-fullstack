@@ -30,10 +30,6 @@ class LoadoutList extends React.Component {
          payload: {},
       });
       props.dispatch({
-         type: actions.STORE_CHILD_ITEMS,
-         payload: [],
-      });
-      props.dispatch({
          type: actions.RESET_CURRENT_LEVEL,
       });
       props.dispatch({
@@ -89,7 +85,7 @@ class LoadoutList extends React.Component {
                loadoutName: "Untitled Loadout", //
                name: "Untitled Loadout", //
                numChildren: 0, //
-               numPackedChildren: 0, //
+               numResolvedChildren: 0, //
                status: 0, //
                numUsers: 1,
             };

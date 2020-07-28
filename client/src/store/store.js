@@ -12,7 +12,6 @@ const initialState = {
    currentItem: {
       id: "", // the uuid of the current item
    },
-   childItems: [],
    currentLevel: 0,
    currentUserLoadout: {},
    userLoadouts: [],

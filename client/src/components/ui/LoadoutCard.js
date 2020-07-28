@@ -21,52 +21,6 @@ import {
 } from "../../icons/icons.js";
 
 class LoadoutCard extends React.Component {
-   moveToLoadout(loadoutId) {
-      this.props.dispatch({
-         type: actions.STORE_CURRENT_ITEM,
-         payload: loadoutId,
-      });
-
-      // doesn't work, for now after clicking this, change the end of the url from loadout-list to loadout
-      // redirect the user
-      // this.props.history.push("/loadout");
-      // window.scrollTo(0, 0); // sets focus to the top of the page
-   }
-
-   // delete a loadout
-   // deleteLoadout() {
-   //    console.log("clicked delete loadout");
-
-   //    // server update
-   //    axios
-   //       .put(
-   //          "/api/v1/loadouts/delete-loadout?loadoutId=" +
-   //             this.props.loadout.loadoutId
-   //       )
-   //       .then((res) => {
-   //          console.log("axios res.data", res.data);
-
-   //          // update the client side list of user loadouts
-
-   //          // make local changes so we can see them immediately
-   //          const foundUserLoadoutIndex = this.props.userLoadouts.findIndex(
-   //             (userLoadout) => userLoadout.id === this.props.loadout.loadoutId
-   //          ); // find the specific loadout to delete
-   //          console.log("foundUserLoadoutIndex", foundUserLoadoutIndex);
-   //          this.props.userLoadouts.splice(foundUserLoadoutIndex, 1); // make a new array of loadouts with the deleted loadout removed
-
-   //          // push to the store
-   //          this.props.dispatch({
-   //             type: actions.STORE_USER_LOADOUTS,
-   //             payload: this.props.userLoadouts,
-   //          });
-   //       })
-   //       .catch((error) => {
-   //          // handle error
-   //          console.log("axios error", error);
-   //       });
-   // }
-
    // open the loadout sharing settings
    gotoSharing() {
       // set the loadout
@@ -194,11 +148,11 @@ class LoadoutCard extends React.Component {
                         >
                            {item.status === 1 && <ChildrenPackedIcon2 />}
                            {item.status === 0 &&
-                              item.numPackedChildren >= item.numChildren && (
+                              item.numResolvedChildren >= item.numChildren && (
                                  <ChildrenPackedIcon2 />
                               )}
                            {item.status === 0 &&
-                              item.numPackedChildren < item.numChildren && (
+                              item.numResolvedChildren < item.numChildren && (
                                  <ChildrenUnpackedIcon />
                               )}
                         </Link>

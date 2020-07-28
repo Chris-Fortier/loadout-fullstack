@@ -9,6 +9,7 @@ const setItemName = require("../../queries/setItemName");
 const setItemStatus = require("../../queries/setItemStatus");
 const selectItemInfo = require("../../queries/selectItemInfo");
 const setLoadoutDescendantsStatus = require("../../queries/setLoadoutDescendantsStatus");
+const selectLoadout = require("../../queries/selectLoadout");
 const { getContentSummary } = require("../../utils/helpers");
 const selectChildItems = require("../../queries/selectChildItems");
 const selectLoadoutDescendants = require("../../queries/selectLoadoutDescendants");
@@ -160,8 +161,8 @@ router.get("/info", (req, res) => {
                parentName: item.parent_name,
                parentId: item.parent_id,
                numChildren: num_children,
-               numPackedChildren: num_packed_children,
-               numUnpackedChildren: num_children - num_packed_children,
+               numResolvedChildren: num_packed_children,
+               numUnresolvedChildren: num_children - num_packed_children,
                contentSummary: getContentSummary(
                   num_children,
                   num_packed_children,
@@ -215,8 +216,8 @@ router.get("/children", validateJwt, (req, res) => {
                id: item.id,
                parentId: item.parent_id,
                numChildren: num_children,
-               numPackedChildren: num_packed_children,
-               numUnpackedChildren: num_children - num_packed_children,
+               numResolvedChildren: num_packed_children,
+               numUnresolvedChildren: num_children - num_packed_children,
                contentSummary: getContentSummary(
                   num_children,
                   num_packed_children,
@@ -244,12 +245,36 @@ router.get("/select-descendants", (req, res) => {
 
    db.query(selectLoadoutDescendants, [req.query.itemId])
       // db.query(setItemStatus, [req.query.itemId])
-      .then((dbRes) => {
-         console.log("items received", dbRes.length);
-         res.status(200).json(dbRes);
+      .then((loadout) => {
+         // add the top-level loadout item to the list too
+         db.query(selectLoadout, [req.query.itemId])
+            // db.query(setItemStatus, [req.query.itemId])
+            .then((dbRes) => {
+               loadout.push(dbRes[0]); // add the top-level loadout item
+
+               // convert to camelCase
+               const camelCaseLoadout = loadout.map((item) => {
+                  return {
+                     id: item.id,
+                     name: item.name,
+                     parentId: item.parent_id,
+                     status: item.status,
+                     createdAt: item.created_at,
+                     lastEditAt: item.last_edit_at,
+                     lastPackAt: item.last_pack_at,
+                  };
+               });
+
+               console.log("items received", loadout.length);
+               res.status(200).json(camelCaseLoadout);
+            })
+            .catch((err) => {
+               console.log("err", err);
+               res.status(400).json(err);
+            });
       })
       .catch((err) => {
-         console.log("esrr", err);
+         console.log("err", err);
          res.status(400).json(err);
       });
 });

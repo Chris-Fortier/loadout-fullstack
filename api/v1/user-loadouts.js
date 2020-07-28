@@ -37,8 +37,8 @@ router.get("/", validateJwt, (req, res) => {
             // convert null counts to zeros
             let numChildren = userLoadout.num_children;
             if (numChildren === null) numChildren = 0;
-            let numPackedChildren = userLoadout.num_packed;
-            if (numPackedChildren === null) numPackedChildren = 0;
+            let numResolvedChildren = userLoadout.num_packed;
+            if (numResolvedChildren === null) numResolvedChildren = 0;
 
             return {
                loadoutName: userLoadout.name,
@@ -47,11 +47,11 @@ router.get("/", validateJwt, (req, res) => {
                isAdmin: userLoadout.is_admin,
                loadoutId: userLoadout.loadout_id,
                numChildren: numChildren,
-               numPackedChildren: numPackedChildren,
+               numResolvedChildren: numResolvedChildren,
                numUsers: userLoadout.num_users, // the number of users who have access to the loadout
                contentSummary: getContentSummary(
                   numChildren,
-                  numPackedChildren,
+                  numResolvedChildren,
                   0 // sending status of 0 for a top level loadout
                ),
                // contentSummary: "Hello",

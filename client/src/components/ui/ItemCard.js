@@ -43,7 +43,7 @@ class ItemCard2 extends React.Component {
 
       // only toggle packed if all its descendants are packed and if the user has permission to pack
       if (
-         this.props.item.numUnpackedChildren === 0 &&
+         this.props.item.numUnresolvedChildren === 0 &&
          this.props.currentUserLoadout.canPack === 1
       ) {
          if (this.props.item.status === 0) {
@@ -59,18 +59,7 @@ class ItemCard2 extends React.Component {
          setItemStatus(this.props.item.id, newStatus); // update the database
          this.props.item.status = newStatus; // set the status locally
 
-         // trying to update the counter on the client side
-         this.props.currentItem.numPackedChildren += -parentUnpackedCounterChange;
-         this.props.currentItem.numUnpackedChildren += parentUnpackedCounterChange;
-         this.props.currentItem.contentSummary = getContentSummary(
-            this.props.currentItem.numChildren,
-            this.props.currentItem.numPackedChildren,
-            this.props.currentItem.status
-         );
-         this.props.dispatch({
-            type: actions.STORE_CURRENT_ITEM,
-            payload: this.props.currentItem,
-         });
+         // TODO: update the counter on the client side
 
          // this.recountPageItems();
 
@@ -150,10 +139,11 @@ class ItemCard2 extends React.Component {
                            UI_APPEARANCE === "colors" && "item-icon-colors",
                            {
                               clickable:
-                                 item.numPackedChildren === item.numChildren &&
+                                 item.numResolvedChildren ===
+                                    item.numChildren &&
                                  this.props.currentUserLoadout.canPack === 1,
                               disabled:
-                                 item.numPackedChildren < item.numChildren ||
+                                 item.numResolvedChildren < item.numChildren ||
                                  this.props.currentUserLoadout.canPack === 0,
                            }
                         )}
@@ -163,11 +153,11 @@ class ItemCard2 extends React.Component {
                      >
                         {item.status === 1 && <PackedIcon />}
                         {item.status === 0 &&
-                           item.numPackedChildren >= item.numChildren && (
+                           item.numResolvedChildren >= item.numChildren && (
                               <ReadyToPackIcon />
                            )}
                         {item.status === 0 &&
-                           item.numPackedChildren < item.numChildren && (
+                           item.numResolvedChildren < item.numChildren && (
                               <NotReadyToPackIcon />
                            )}
                      </span>
@@ -184,10 +174,11 @@ class ItemCard2 extends React.Component {
                         <span
                            className={classnames({
                               clickable:
-                                 item.numPackedChildren === item.numChildren &&
+                                 item.numResolvedChildren ===
+                                    item.numChildren &&
                                  this.props.currentUserLoadout.canPack === 1,
                               // disabled:
-                              //    item.numPackedChildren < item.numChildren,
+                              //    item.numResolvedChildren < item.numChildren,
                            })}
                            onClick={(e) => {
                               this.toggleIsPacked();
@@ -243,11 +234,11 @@ class ItemCard2 extends React.Component {
                      >
                         {item.status === 1 && <ChildrenPackedIcon2 />}
                         {item.status === 0 &&
-                           item.numPackedChildren >= item.numChildren && (
+                           item.numResolvedChildren >= item.numChildren && (
                               <ChildrenPackedIcon2 />
                            )}
                         {item.status === 0 &&
-                           item.numPackedChildren < item.numChildren && (
+                           item.numResolvedChildren < item.numChildren && (
                               <ChildrenUnpackedIcon />
                            )}
                      </span>
@@ -265,7 +256,6 @@ function mapStateToProps(state) {
       // currentLoadout: state.currentLoadout, // TODO, do I need this anymore?
       currentLevel: state.currentLevel,
       currentItem: state.currentItem,
-      // childItems: state.childItems,
       currentUserLoadout: state.currentUserLoadout,
    };
 }

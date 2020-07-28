@@ -57,10 +57,10 @@ export function checkIsOver(num, limit) {
 
 // returns a short human-readable sumamry of the packed content of an item given the number of children and packed childred it has
 // TODO this is duplicated on client and server
-export function getContentSummary(numChildren, numPackedChildren, status) {
-   const numUnpackedChildren = numChildren - numPackedChildren;
-   if (numUnpackedChildren > 0) {
-      return numUnpackedChildren + " left";
+export function getContentSummary(numChildren, numResolvedChildren, status) {
+   const numUnresolvedChildren = numChildren - numResolvedChildren;
+   if (numUnresolvedChildren > 0) {
+      return numUnresolvedChildren + " left";
    }
    if (status === 0) {
       return "ready";
@@ -80,10 +80,6 @@ export function logOutCurrentUser(props) {
    props.dispatch({
       type: actions.STORE_CURRENT_ITEM,
       payload: {},
-   });
-   props.dispatch({
-      type: actions.STORE_CHILD_ITEMS,
-      payload: [],
    });
    props.dispatch({
       type: actions.RESET_CURRENT_LEVEL,
@@ -114,6 +110,6 @@ export function logOutCurrentUser(props) {
 export const LEVEL_COLORS = 7; // the amount of level colors there are
 export const MAX_ITEM_NAME_LENGTH = 30; // the maximum length of characters for an item name
 export const MOVE_UPDOWN = false; // whether or not to have up and down buttons in edit mode
-export const SUBITEM_DISPLAY_MODE = "numUnpackedChildren"; // subItemDisplayMode can be "packedChildrenOutOfTotalChildren" or "numUnpackedDescendants" or "numUnpackedChildren"
+export const SUBITEM_DISPLAY_MODE = "numUnresolvedChildren"; // subItemDisplayMode can be "packedChildrenOutOfTotalChildren" or "numUnresolvedDescendants" or "numUnresolvedChildren"
 export const UI_APPEARANCE = "colors"; // ui appearance mode, "light", "dark", "colors"
 export const MAX_USERNAME_LENGTH = 24;

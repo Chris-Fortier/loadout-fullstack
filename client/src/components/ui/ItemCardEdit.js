@@ -56,11 +56,7 @@ class ItemCardEdit extends React.Component {
          console.log("foundChild.name", foundChild.name);
          foundChild.name = e.target.value; // rename the child to the new name
 
-         // send the updated child items to the store, even without this I see the changes with the code above
-         this.props.dispatch({
-            type: actions.STORE_CHILD_ITEMS,
-            payload: this.props.childItems,
-         });
+         // TODO: update current loadout
       } else {
          console.log("the name was not changed");
       }
@@ -124,11 +120,7 @@ class ItemCardEdit extends React.Component {
       // const newChildItems = [...this.props.childItems]; // make a new array of children with the deleted child removed
       this.props.childItems.splice(foundChildIndex, 1); // make a new array of children with the deleted child removed
 
-      // send the updated child items to the store
-      this.props.dispatch({
-         type: actions.STORE_CHILD_ITEMS,
-         payload: this.props.childItems,
-      });
+      // todo: update current loadout
    }
 
    render() {
@@ -229,8 +221,6 @@ class ItemCardEdit extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      // currentLoadout: state.currentLoadout,
-      childItems: state.childItems,
       currentLevel: state.currentLevel,
    };
 }

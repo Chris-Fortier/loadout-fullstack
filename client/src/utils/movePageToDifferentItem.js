@@ -22,10 +22,6 @@ export function movePageToDifferentItem(
          type: actions.STORE_CURRENT_ITEM,
          payload: {},
       });
-      store.dispatch({
-         type: actions.STORE_CHILD_ITEMS,
-         payload: [],
-      });
 
       // this stores the current user loadout, which has the user's permissions for this loadout
       // this only happens when entering a new loadout
@@ -55,44 +51,30 @@ export function movePageToDifferentItem(
             });
       }
 
-      // this part gets data from the database
-      axios
-         .get("/api/v1/loadouts/info?itemId=" + itemId)
-         .then((res) => {
-            // handle success
-            console.log("setCurrentItem res.data[0]", res.data[0]);
+      // // this part gets data from the database
+      // axios
+      //    .get("/api/v1/loadouts/info?itemId=" + itemId)
+      //    .then((res) => {
+      //       // handle success
+      //       console.log("setCurrentItem res.data[0]", res.data[0]);
 
-            const currentItem = res.data[0];
-            currentItem.backRoute = backRoute;
+      //       const currentItem = res.data[0];
+      //       currentItem.backRoute = backRoute;
 
-            store.dispatch({
-               type: actions.STORE_CURRENT_ITEM,
-               payload: currentItem,
-            }); // dispatching an action
-         })
-         .catch((error) => {
-            // handle error
-            console.log(error);
-         });
+      //       store.dispatch({
+      //          type: actions.STORE_CURRENT_ITEM,
+      //          payload: currentItem,
+      //       }); // dispatching an action
+      //    })
+      //    .catch((error) => {
+      //       // handle error
+      //       console.log(error);
+      //    });
 
-      // TODO how can I do this?
-      // this.setState({ isEditMode: false, isShowingUnpackConfirmation: false }); // get out of edit mode if the current item changes
-
-      axios
-         .get("/api/v1/loadouts/children?itemId=" + itemId)
-         .then((res) => {
-            // handle success
-            console.log("queryChildItems res.data", res.data);
-
-            store.dispatch({
-               type: actions.STORE_CHILD_ITEMS,
-               payload: res.data,
-            }); // dispatching an action
-         })
-         .catch((error) => {
-            // handle error
-            console.log(error);
-         });
+      store.dispatch({
+         type: actions.STORE_CURRENT_ITEM,
+         payload: { id: itemId },
+      }); // dispatching an action
 
       // change the current level
       if (levelChange !== 0) {
@@ -106,49 +88,6 @@ export function movePageToDifferentItem(
    }
 
    window.scrollTo(0, 0); // sets focus to the top of the page
-}
-
-// refresh the current page from the database
-// simpler version that does not clear out data first and does not scroll the page
-export function getCurrentItemAndChildren(itemId) {
-   console.log("getCurrentItemAndChildren()...itemId:", itemId);
-
-   // this part gets data from the database
-   axios
-      .get("/api/v1/loadouts/info?itemId=" + itemId)
-      .then((res) => {
-         // handle success
-         const currentItem = res.data[0];
-         currentItem.backRoute = "/item-list"; // add this here so if we are refreshing a current item, backRoute should be /item-list
-
-         store.dispatch({
-            type: actions.STORE_CURRENT_ITEM,
-            payload: currentItem,
-         }); // dispatching an action
-      })
-      .catch((error) => {
-         // handle error
-         console.log(error);
-      });
-
-   // TODO how can I do this?
-   // this.setState({ isEditMode: false, isShowingUnpackConfirmation: false }); // get out of edit mode if the current item changes
-
-   axios
-      .get("/api/v1/loadouts/children?itemId=" + itemId)
-      .then((res) => {
-         // handle success
-         console.log("queryChildItems res.data", res.data);
-
-         store.dispatch({
-            type: actions.STORE_CHILD_ITEMS,
-            payload: res.data,
-         }); // dispatching an action
-      })
-      .catch((error) => {
-         // handle error
-         console.log(error);
-      });
 }
 
 // refreshes the page every interval
@@ -171,7 +110,7 @@ export function refreshPeriodically(interval) {
             // we need to refresh the contents of the page
             // if they are looking at a loadout
             if (window.location.href.endsWith("item-list")) {
-               getCurrentItemAndChildren(store.getState().currentItem.id); // refresh the item and child items on the page from DB
+               //  TODO: refresh the current loadout
                //  TODO: refresh the user loadout in case the permissions externally changed
             } else if (window.location.href.endsWith("loadout-list")) {
                // if they are looking at the My Loadouts page

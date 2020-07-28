@@ -194,11 +194,7 @@ class LoadoutSharing extends React.Component {
          // its that all I have to do is this, direclty edit the name in props, no need to dispatch it
          this.props.currentItem.name = e.target.value; // rename the child to the new name
 
-         // send the updated item to the store, even without this I see the changes with the code above
-         this.props.dispatch({
-            type: actions.STORE_CURRENT_ITEM,
-            payload: this.props.currentItem,
-         });
+         // TODO: update current loadout in store
       } else {
          console.log("the name was not changed");
       }

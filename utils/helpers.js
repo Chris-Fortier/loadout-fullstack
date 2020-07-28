@@ -30,10 +30,10 @@ module.exports = {
    },
 
    // returns a short human-readable sumamry of the packed content of an item given the number of children and packed childred it has
-   getContentSummary(numChildren, numPackedChildren, status) {
-      const numUnpackedChildren = numChildren - numPackedChildren;
-      if (numUnpackedChildren > 0) {
-         return numUnpackedChildren + " left";
+   getContentSummary(numChildren, numResolvedChildren, status) {
+      const numUnresolvedChildren = numChildren - numResolvedChildren;
+      if (numUnresolvedChildren > 0) {
+         return numUnresolvedChildren + " left";
       }
       if (status === 0) {
          return "ready";

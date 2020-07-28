@@ -162,16 +162,16 @@ export function processLoadout(loadout) {
       loadout[i].numDescendants = 0;
       loadout[i].numResolvedDescendants = 0;
       loadout[i].numUnresolvedDescendants = 0;
-      loadout[i].contentSummary = "WIP";
+      loadout[i].contentSummary = "";
    }
 
    // increment an ancestor's counter by 1 and then do it again to its ancestor unless its null
    function incrementAncestorCounter(index) {
-      if (loadout[index].parent_id !== null) {
+      if (loadout[index].parentId !== null) {
          // find its parent and add to its numDescendants counter
          for (let a in loadout) {
             // check if that is its grandparent
-            if (loadout[index].parent_id === loadout[a].id) {
+            if (loadout[index].parentId === loadout[a].id) {
                loadout[a].numDescendants++;
                if (loadout[index].status === 1) {
                   // count if it has a resolved status
@@ -193,7 +193,8 @@ export function processLoadout(loadout) {
       // find its parent and add to its numChildren counter
       for (let p in loadout) {
          // check if that is its parent
-         if (loadout[i].parent_id === loadout[p].id) {
+         if (loadout[i].parentId === loadout[p].id) {
+            loadout[i].parentName = loadout[p].name;
             loadout[p].numChildren++;
             loadout[p].numDescendants++;
             if (loadout[i].status === 1) {
@@ -211,16 +212,15 @@ export function processLoadout(loadout) {
       }
    }
 
-   // // count the number of children in each item
-   // // for every item as a parent item
-   // for (let p in loadout) {
-   //    // for every item as a child item
-   //    for (let c in loadout) {
-   //       // check if it is a child of the parent
-   //       if (loadout[c].parent_id === loadout[p].id) {
-   //          loadout[p].numChildren++;
-   //       }
-   //    }
-   // }
+   // get content summaries
+   for (let i in loadout) {
+      if (loadout[i].numUnresolvedDescendants > 0) {
+         loadout[i].contentSummary =
+            loadout[i].numUnresolvedDescendants + " left";
+      } else if (loadout[i].status === 0) {
+         loadout[i].contentSummary = "ready";
+      }
+   }
+
    return loadout;
 }

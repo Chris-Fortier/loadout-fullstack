@@ -133,12 +133,6 @@ class ItemList2 extends React.Component {
          console.log(this.props.childItems[c].status);
       }
 
-      // now update the Redux store
-      this.props.dispatch({
-         type: actions.STORE_CHILD_ITEMS,
-         payload: this.props.childItems,
-      });
-
       this.hideUnpackConfirmation(); // close the message
 
       // refreshPage(this.props.currentItem.id); // still needed to update the sub counters (TODO do this on client side)
@@ -240,28 +234,13 @@ class ItemList2 extends React.Component {
       //       status: 0,
       //       parentId: this.props.currentItem.id,
       //       numChildren: 0,
-      //       numPackedChildren: 0,
-      //       numUnpackedChildren: 0,
+      //       numResolvedChildren: 0,
+      //       numUnresolvedChildren: 0,
       //       contentSummary: "ready",
       //    },
       // ];
 
-      // update the client side with an equivalent new item
-      this.props.childItems.push({
-         name: "Untitled Item",
-         id: newItemId,
-         status: 0,
-         parentId: this.props.currentItem.id,
-         numChildren: 0,
-         numPackedChildren: 0,
-         numUnpackedChildren: 0,
-         contentSummary: "ready",
-      });
-
-      this.props.dispatch({
-         type: actions.STORE_CHILD_ITEMS,
-         payload: this.props.childItems,
-      });
+      // TODO: need to update currentLoadout
 
       // sets focus to the new item card and selects it's text
       const input = document.getElementById(inputElementId);
@@ -286,11 +265,7 @@ class ItemList2 extends React.Component {
          // its that all I have to do is this, direclty edit the name in props, no need to dispatch it
          this.props.currentItem.name = e.target.value; // rename the child to the new name
 
-         // send the updated item to the store, even without this I see the changes with the code above
-         this.props.dispatch({
-            type: actions.STORE_CURRENT_ITEM,
-            payload: this.props.currentItem,
-         });
+         // TODO: update current loadout
       } else {
          console.log("the name was not changed");
       }
@@ -333,6 +308,24 @@ class ItemList2 extends React.Component {
 
    render() {
       console.log("Rendering page...");
+
+      // get this list of this item's children
+      const childItems = this.props.currentLoadout.filter((item) => {
+         return item.parentId === this.props.currentItem.id;
+      });
+      console.log("childItems", childItems);
+
+      // get the current item object from the current loadout
+      let currentItem = {};
+      // console.log("this.props.currentItem.id", this.props.currentItem.id);
+      // console.log("this.props.currentLoadout", this.props.currentLoadout);
+      if (this.props.currentLoadout.length > 0) {
+         currentItem = this.props.currentLoadout.filter((item) => {
+            // console.log(item.id, this.props.currentItem.id);
+            return item.id === this.props.currentItem.id;
+         })[0];
+      }
+      // console.log("currentItem", currentItem);
 
       // get the current item
       // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
@@ -380,12 +373,12 @@ class ItemList2 extends React.Component {
                                        "light-text-color"
                                  )}
                               >
-                                 {this.props.currentItem.parentId !== null && (
+                                 {currentItem.parentId !== null && (
                                     <span
                                        onClick={(e) => {
                                           // move to the parent item
                                           movePageToDifferentItem(
-                                             this.props.currentItem.parentId,
+                                             currentItem.parentId,
                                              -1
                                           );
                                           // change the text in the page item editable input
@@ -396,7 +389,7 @@ class ItemList2 extends React.Component {
                                           ) {
                                              document.getElementById(
                                                 "page-item-name-input"
-                                             ).value = this.props.currentItem.parentName;
+                                             ).value = currentItem.parentName;
                                           }
                                        }}
                                     >
@@ -412,10 +405,10 @@ class ItemList2 extends React.Component {
                                           <IconUpLevel />
                                        </div>
                                        Back to&nbsp;
-                                       {this.props.currentItem.parentName}
+                                       {currentItem.parentName}
                                     </span>
                                  )}
-                                 {this.props.currentItem.parentId === null && (
+                                 {currentItem.parentId === null && (
                                     <Link to="/loadout-list">
                                        <div
                                           className={classnames(
@@ -478,7 +471,7 @@ class ItemList2 extends React.Component {
                                                    "dark-text-color"
                                              )}
                                           >
-                                             {this.props.currentItem.name}
+                                             {currentItem.name}
                                           </h4>
                                        </div>
                                        {level > 0 && (
@@ -498,10 +491,7 @@ class ItemList2 extends React.Component {
                                                       "light-text-color"
                                                 )}
                                              >
-                                                {
-                                                   this.props.currentItem
-                                                      .contentSummary
-                                                }
+                                                {currentItem.contentSummary}
                                              </h4>
                                           </div>
                                        )}
@@ -513,9 +503,7 @@ class ItemList2 extends React.Component {
                                           <h4>
                                              <input
                                                 className="edit-name"
-                                                defaultValue={
-                                                   this.props.currentItem.name
-                                                }
+                                                defaultValue={currentItem.name}
                                                 onBlur={(e) =>
                                                    this.renameThisItem(e)
                                                 }
@@ -604,7 +592,7 @@ class ItemList2 extends React.Component {
                                  <div className="col">
                                     {/* {this.renderContainingItems(currentItem)} */}
                                     {!this.props.isEditMode &&
-                                       this.props.childItems.map((item) => (
+                                       childItems.map((item) => (
                                           <ItemCard
                                              item={item}
                                              key={item.id}
@@ -614,7 +602,7 @@ class ItemList2 extends React.Component {
                                           />
                                        ))}
                                     {this.props.isEditMode &&
-                                       this.props.childItems.map((item) => (
+                                       childItems.map((item) => (
                                           <ItemCardEdit
                                              item={item}
                                              key={item.id}
@@ -632,21 +620,21 @@ class ItemList2 extends React.Component {
                                                 "light-text-color",
                                              UI_APPEARANCE !== "dark" &&
                                                 "dark-text-color",
-                                             (this.props.currentItem
-                                                .numPackedChildren === 0 ||
+                                             (currentItem.numResolvedChildren ===
+                                                0 ||
                                                 this.props.currentUserLoadout
                                                    .canPack === 0) &&
                                                 "disabled"
                                           )}
                                           onClick={() =>
-                                             this.props.currentItem
-                                                .numPackedChildren !== 0 &&
+                                             currentItem.numResolvedChildren !==
+                                                0 &&
                                              this.props.currentUserLoadout
                                                 .canPack === 1 &&
                                              this.toggleUnpackRollout()
                                           }
                                        >
-                                          Unpack {this.props.currentItem.name}
+                                          Unpack {currentItem.name}
                                           ...
                                        </span>
                                        {this.state
@@ -664,7 +652,7 @@ class ItemList2 extends React.Component {
                                        }}
                                     >
                                        Add item inside&nbsp;
-                                       {this.props.currentItem.name}
+                                       {currentItem.name}
                                     </div>
                                     {/* <div
                                        className="button primary-action-button"
@@ -696,11 +684,11 @@ function mapStateToProps(state) {
    return {
       // currentLoadout: state.currentLoadout,
       currentItem: state.currentItem,
-      childItems: state.childItems,
       currentLevel: state.currentLevel,
       currentUser: state.currentUser,
       currentUserLoadout: state.currentUserLoadout,
       isEditMode: state.isEditMode,
+      currentLoadout: state.currentLoadout,
    };
 }
 
