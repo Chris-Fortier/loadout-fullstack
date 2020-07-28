@@ -58,7 +58,7 @@ if (authTokenLoadout) {
 }
 
 // start the refresh function
-refreshPeriodically(5000);
+// refreshPeriodically(5000);
 
 function App() {
    // I think these declare different urls as differnt React components under the hood
