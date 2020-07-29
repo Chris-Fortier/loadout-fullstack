@@ -14,10 +14,11 @@ import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
-import { renameItem, addItemTo, setDescendantsStatus } from "../../utils/items";
+import { renameItem, addItemTo, processLoadout } from "../../utils/items";
 import { v4 as getUuid } from "uuid";
 import isEmpty from "lodash/isEmpty";
 import SharingStrip from "../ui/SharingStrip";
+import axios from "axios";
 
 // ItemList2 is an alternate version that queries a single item's children to display from the database
 
@@ -67,13 +68,7 @@ class ItemList2 extends React.Component {
    }
 
    // roll out a dialog for unpacking an item's contents
-   rolloutUnpackConfirmation() {
-      // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
-      const currentItem = this.props.currentItem; // to simplify code below
-
-      const unpackDescendantsText =
-         "Unpack all items and subitems inside " + currentItem.name;
-
+   rolloutUnpackConfirmation(unpackDescendantsText) {
       return (
          <div>
             {/* {unpackChildrenText !== "" && (
@@ -115,27 +110,47 @@ class ItemList2 extends React.Component {
 
    // unpack all descendants of the current item
    confirmUnpackDescendants() {
-      // update the database
-      setDescendantsStatus(this.props.currentItem.id, 0); // 0 is unpacked status
+      const currentLoadout = this.props.currentLoadout;
 
-      // update the data in props (this is what makes the change appear in the ui)
-      // i needed to push completely new objects otherwise the redux state is unaware that the data changed
-      // const newChildItems = [];
-      // for (let c in this.props.childItems) {
-      //    newChildItems.push({ ...this.props.childItems[c] });
-      //    newChildItems[c].status = 0;
-      //    console.log(newChildItems[c].status);
-      // }
-      // console.log("newChildItems", newChildItems);
-
-      for (let c in this.props.childItems) {
-         this.props.childItems[c].status = 0; // set each child item's status to 0 in the client
-         console.log(this.props.childItems[c].status);
+      // unpack all descendants in the client
+      function unpackDescendants(parentIndex) {
+         for (let c in currentLoadout) {
+            if (currentLoadout[c].parentId === currentLoadout[parentIndex].id) {
+               console.log(currentLoadout[c].name, "unpacked");
+               currentLoadout[c].status = 0; // unpack it
+               unpackDescendants(c); // unpack any descendants
+            }
+         }
       }
+      unpackDescendants(
+         currentLoadout.findIndex((item) => {
+            return item.id === this.props.currentItem.id;
+         })
+      );
+
+      // do client side change immediately for the sake of responsiveness
+      this.props.dispatch({
+         type: actions.STORE_CURRENT_LOADOUT,
+         payload: processLoadout(currentLoadout),
+      }); // update Redux
+
+      // set the status in the database
+      axios
+         .post(
+            "/api/v1/loadouts/set-descendants-status?newStatus=" +
+               0 +
+               "&itemId=" +
+               this.props.currentItem.id
+         )
+         .then((res) => {
+            console.log("axios res", res);
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
 
       this.hideUnpackConfirmation(); // close the message
-
-      // refreshPage(this.props.currentItem.id); // still needed to update the sub counters (TODO do this on client side)
    }
 
    confirmUnpackChildren() {
@@ -620,14 +635,14 @@ class ItemList2 extends React.Component {
                                                 "light-text-color",
                                              UI_APPEARANCE !== "dark" &&
                                                 "dark-text-color",
-                                             (currentItem.numResolvedChildren ===
+                                             (currentItem.numResolvedDescendants ===
                                                 0 ||
                                                 this.props.currentUserLoadout
                                                    .canPack === 0) &&
                                                 "disabled"
                                           )}
                                           onClick={() =>
-                                             currentItem.numResolvedChildren !==
+                                             currentItem.numResolvedDescendants !==
                                                 0 &&
                                              this.props.currentUserLoadout
                                                 .canPack === 1 &&
@@ -639,7 +654,11 @@ class ItemList2 extends React.Component {
                                        </span>
                                        {this.state
                                           .isShowingUnpackConfirmation &&
-                                          this.rolloutUnpackConfirmation()}
+                                          currentItem.numResolvedDescendants !==
+                                             0 &&
+                                          this.rolloutUnpackConfirmation(
+                                             `Unpack all ${currentItem.numDescendants} items and subitems inside ${currentItem.name}`
+                                          )}
                                     </div>
                                  </>
                               )}

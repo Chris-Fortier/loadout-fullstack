@@ -5,7 +5,7 @@ import axios from "axios";
 //    // movePageToDifferentItem,
 //    refreshPage,
 // } from "./movePageToDifferentItem";
-// import store from "../store/store";
+import store from "../store/store";
 // import actions from "../store/actions";
 
 // this file will store functions relating to changing items in the loadouts
@@ -96,23 +96,30 @@ export function addItemTo(parentId, newItemId) {
 //    processAllItems(gear);
 // }
 
-export function setItemStatus(itemId, newStatus) {
-   // server update
-   axios
-      .post(
-         "/api/v1/loadouts/set-status?newStatus=" +
-            newStatus +
-            "&itemId=" +
-            itemId
-      )
-      .then((res) => {
-         console.log("axios res", res);
-      })
-      .catch((error) => {
-         // handle error
-         console.log("axios error", error);
-      });
-}
+// export function setItemStatus(itemId, newStatus) {
+//    // server update
+//    axios
+//       .post(
+//          "/api/v1/loadouts/set-status?newStatus=" +
+//             newStatus +
+//             "&itemId=" +
+//             itemId
+//       )
+//       .then((res) => {
+//          console.log("axios res", res);
+//       })
+//       .catch((error) => {
+//          // handle error
+//          console.log("axios error", error);
+//       });
+
+//    // client side
+//    store.dispatch({
+//       type: actions.STORE_CHILD_ITEMS,
+//       payload: [],
+//    });
+
+// }
 
 export function setDescendantsStatus(itemId, newStatus) {
    // server update
@@ -166,14 +173,14 @@ export function processLoadout(loadout) {
    }
 
    // increment an ancestor's counter by 1 and then do it again to its ancestor unless its null
-   function incrementAncestorCounter(index) {
+   function incrementAncestorCounter(index, status) {
       if (loadout[index].parentId !== null) {
          // find its parent and add to its numDescendants counter
          for (let a in loadout) {
             // check if that is its grandparent
             if (loadout[index].parentId === loadout[a].id) {
                loadout[a].numDescendants++;
-               if (loadout[index].status === 1) {
+               if (status === 1) {
                   // count if it has a resolved status
                   loadout[a].numResolvedDescendants++;
                } else {
@@ -207,7 +214,7 @@ export function processLoadout(loadout) {
                loadout[p].numUnresolvedDescendants++;
             }
             // increment counters on all ancestors starting with the parent
-            incrementAncestorCounter(p);
+            incrementAncestorCounter(p, loadout[i].status);
          }
       }
    }

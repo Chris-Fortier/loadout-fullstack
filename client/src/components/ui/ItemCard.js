@@ -22,8 +22,8 @@ import {
    movePageToDifferentItem,
    // refreshPage,
 } from "../../utils/movePageToDifferentItem";
-// import axios from "axios";
-import { setItemStatus } from "../../utils/items";
+import axios from "axios";
+import { processLoadout } from "../../utils/items";
 import actions from "../../store/actions";
 
 // new version of item card that deals with database data
@@ -38,6 +38,7 @@ class ItemCard2 extends React.Component {
    // toggle the packed status of this item
    toggleIsPacked() {
       console.log("toggleIsPacked()...");
+      const oldStatus = this.props.item.status;
       let newStatus = null;
       let parentUnpackedCounterChange = 0;
 
@@ -46,25 +47,47 @@ class ItemCard2 extends React.Component {
          this.props.item.numUnresolvedChildren === 0 &&
          this.props.currentUserLoadout.canPack === 1
       ) {
-         if (this.props.item.status === 0) {
+         if (oldStatus === 0) {
             console.log("set this item's status to packed");
             newStatus = 1;
             parentUnpackedCounterChange = -1;
-         } else if (this.props.item.status === 1) {
+         } else if (oldStatus === 1) {
             console.log("set this item's status to unpacked");
             newStatus = 0;
             parentUnpackedCounterChange = +1;
          }
 
-         setItemStatus(this.props.item.id, newStatus); // update the database
+         // do client side change immediately for the sake of responsiveness
          this.props.item.status = newStatus; // set the status locally
+         this.props.dispatch({
+            type: actions.STORE_CURRENT_LOADOUT,
+            payload: processLoadout(this.props.currentLoadout),
+         }); // update Redux
 
-         // TODO: update the counter on the client side
+         // set the status in the database
+         axios
+            .post(
+               "/api/v1/loadouts/set-status?newStatus=" +
+                  newStatus +
+                  "&itemId=" +
+                  this.props.item.id
+            )
+            .then((res) => {
+               console.log("axios res", res);
+            })
+            .catch((error) => {
+               // handle error
+               console.log("axios error", error);
 
-         // this.recountPageItems();
+               // if the server update fails, set it back the way it was
+               this.props.item.status = oldStatus; // set the status locally
+               this.props.dispatch({
+                  type: actions.STORE_CURRENT_LOADOUT,
+                  payload: processLoadout(this.props.currentLoadout),
+               }); // update Redux
 
-         this.forceUpdate(); // needed to show the packed indicator change on in this component
-         this.props.rerenderParentCallback(); // call back to re-render the parent page component
+               // TODO: client side error message
+            });
       }
    }
 
@@ -257,6 +280,7 @@ function mapStateToProps(state) {
       currentLevel: state.currentLevel,
       currentItem: state.currentItem,
       currentUserLoadout: state.currentUserLoadout,
+      currentLoadout: state.currentLoadout,
    };
 }
 
