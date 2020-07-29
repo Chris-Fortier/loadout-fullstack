@@ -23,14 +23,14 @@ const deleteUserLoadoutsByLoadout = require("../../queries/deleteUserLoadoutsByL
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/insert?parentId=e109827f-4bfa-4384-9ac9-979776d2512b&name=newTestItem
 router.post("/insert", async (req, res) => {
-   const { parentId, newItemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
-   console.log({ parentId, newItemId });
+   const { parentId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+   console.log({ parentId });
    // console.log("uuid", uuid.v4());
 
    // newItemId = uuid.v4();
 
    const newItem = {
-      id: newItemId, // use the uuid generated client side
+      id: uuid.v4(), // generate the uuid
       name: "Untitled Item",
       parent_id: parentId, // use given value for parent
       status: 0, // default status to zero (unpacked)
@@ -42,7 +42,15 @@ router.post("/insert", async (req, res) => {
    db.query(insertItem, newItem)
       .then((dbRes) => {
          console.log("dbRes", dbRes);
-         res.status(200).json(newItemId);
+         res.status(200).json({
+            id: newItem.id,
+            name: newItem.name,
+            parentId: newItem.parent_id,
+            status: newItem.status,
+            createdAt: newItem.created_at,
+            lastEditAt: newItem.last_edit_at,
+            lastPackAt: newItem.last_pack_at,
+         }); // return the entire new item in camcelCase form
       })
       .catch((err) => {
          console.log("err", err);

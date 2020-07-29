@@ -6,7 +6,7 @@ import {
    LEVEL_COLORS,
    // SUBITEM_DISPLAY_MODE,
    UI_APPEARANCE,
-   getContentSummary,
+   // getContentSummary,
 } from "../../utils/helpers";
 import classnames from "classnames";
 // import { IconArrowThinRightCircle } from "../../icons/icons.js";
@@ -40,7 +40,6 @@ class ItemCard2 extends React.Component {
       console.log("toggleIsPacked()...");
       const oldStatus = this.props.item.status;
       let newStatus = null;
-      let parentUnpackedCounterChange = 0;
 
       // only toggle packed if all its descendants are packed and if the user has permission to pack
       if (
@@ -50,11 +49,9 @@ class ItemCard2 extends React.Component {
          if (oldStatus === 0) {
             console.log("set this item's status to packed");
             newStatus = 1;
-            parentUnpackedCounterChange = -1;
          } else if (oldStatus === 1) {
             console.log("set this item's status to unpacked");
             newStatus = 0;
-            parentUnpackedCounterChange = +1;
          }
 
          // do client side change immediately for the sake of responsiveness

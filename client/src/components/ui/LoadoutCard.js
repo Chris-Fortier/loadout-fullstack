@@ -9,16 +9,8 @@ import {
    ChildrenUnpackedIcon,
    ChildrenPackedIcon2,
 } from "../../icons/loadout-icons.js";
-import actions from "../../store/actions";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import { getUserLoadoutsForALoadout } from "../../utils/userLoadouts";
-
-import {
-   IconPackage,
-   IconEdit,
-   IconUserCouple,
-   IconKey,
-} from "../../icons/icons.js";
 
 class LoadoutCard extends React.Component {
    // open the loadout sharing settings

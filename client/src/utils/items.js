@@ -49,34 +49,19 @@ export function renameItem(itemId, newName) {
 }
 
 // add an item
-export function addItemTo(parentId, newItemId) {
-   // server update
-   axios
-      .post(
-         "/api/v1/loadouts/insert?parentId=" +
-            parentId +
-            "&newItemId=" +
-            newItemId
-      )
-      .then((res) => {
-         console.log("axios res", res);
-         newItemId = res.data;
-      })
-      .catch((error) => {
-         // handle error
-         console.log("axios error", error);
-      });
-
-   // client side part (this is too keep what we see consistent with the database until it refreshes from the database)
-
-   return newItemId; // returns the uuid for the new item
-   // console.log("store", store);
-   // // const newChildItems = store.childItems;
-   // store.dispatch({
-   //    type: actions.STORE_CHILD_ITEMS,
-   //    payload: [],
-   // });
-}
+// export function addItemTo(parentId) {
+//    // server update
+//    axios
+//       .post("/api/v1/loadouts/insert?parentId=" + parentId)
+//       .then((res) => {
+//          console.log("axios res", res);
+//          return res.data; // returns the new item
+//       })
+//       .catch((error) => {
+//          // handle error
+//          console.log("axios error", error);
+//       });
+// }
 
 // // add an item that can contain other items
 // export function addContainerTo(gear, itemIndexPath) {

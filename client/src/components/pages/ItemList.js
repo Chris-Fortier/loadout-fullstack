@@ -14,8 +14,12 @@ import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
 import { processAllItems } from "../../utils/processItems";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
-import { renameItem, addItemTo, processLoadout } from "../../utils/items";
-import { v4 as getUuid } from "uuid";
+import {
+   renameItem,
+   //addItemTo,
+   processLoadout,
+} from "../../utils/items";
+// import { v4 as getUuid } from "uuid";
 import isEmpty from "lodash/isEmpty";
 import SharingStrip from "../ui/SharingStrip";
 import axios from "axios";
@@ -232,35 +236,34 @@ class ItemList2 extends React.Component {
    }
 
    // adds a new item on the server, updates the page and focuses on the text of the new item
-   async addItemAndFocus() {
-      const newItemId = getUuid(); // get the uuid client side that way it is easier to reference the id of the input element
-      const otherId = await addItemTo(this.props.currentItem.id, newItemId); // add an item as a child of the current item
-      console.log({ otherId });
-      // refreshPage(this.props.currentItem.parentId); // refresh the page AFTER we generate the new item and before we set the focus on the new element
-      const inputElementId = "edit-name-input-" + newItemId;
-      console.log({ inputElementId });
+   addItemAndFocus() {
+      // send request to server to add an item inside a parent
+      axios
+         .post("/api/v1/loadouts/insert?parentId=" + this.props.currentItem.id)
+         .then((res) => {
+            // an item was added, get the response new item
+            const newItem = res.data; // get the new item
 
-      // add a new card for the new item without refreshing page
-      // const newChildItems = [
-      //    ...this.props.childItems,
-      //    {
-      //       name: "New Item",
-      //       id: newItemId,
-      //       status: 0,
-      //       parentId: this.props.currentItem.id,
-      //       numChildren: 0,
-      //       numResolvedChildren: 0,
-      //       numUnresolvedChildren: 0,
-      //       contentSummary: "ready",
-      //    },
-      // ];
+            console.log({ newItem });
+            const inputElementId = "edit-name-input-" + newItem.id;
+            console.log({ inputElementId });
 
-      // TODO: need to update currentLoadout
+            // update currentLoadout in Redux
+            this.props.currentLoadout.push(newItem);
+            this.props.dispatch({
+               type: actions.STORE_CURRENT_LOADOUT,
+               payload: processLoadout(this.props.currentLoadout),
+            });
 
-      // sets focus to the new item card and selects it's text
-      const input = document.getElementById(inputElementId);
-      input.focus();
-      input.select();
+            // sets focus to the new item card and selects it's text
+            const input = document.getElementById(inputElementId);
+            input.focus();
+            input.select();
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
    }
 
    // renames item on server and also in redux store
@@ -277,7 +280,7 @@ class ItemList2 extends React.Component {
          renameItem(this.props.currentItem.id, e.target.value); // send the change of the name to the server
 
          // make local changes so we can see them immediately
-         // its that all I have to do is this, direclty edit the name in props, no need to dispatch it
+         // its that all I have to do is this, directly edit the name in props, no need to dispatch it
          this.props.currentItem.name = e.target.value; // rename the child to the new name
 
          // TODO: update current loadout

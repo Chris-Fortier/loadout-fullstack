@@ -14,7 +14,7 @@ import jwtDecode from "jwt-decode";
 import store from "./store/store";
 import actions from "./store/actions";
 import axios from "axios";
-import { refreshPeriodically } from "./utils/movePageToDifferentItem";
+// import { refreshPeriodically } from "./utils/movePageToDifferentItem";
 
 const authTokenLoadout = localStorage.authTokenLoadout; // get the auth token from local storage
 if (authTokenLoadout) {

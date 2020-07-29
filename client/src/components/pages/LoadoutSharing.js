@@ -15,7 +15,7 @@ import { AddIcon } from "../../icons/loadout-icons";
 import { IconPackage, IconEdit, IconKey } from "../../icons/icons.js";
 import { getUserLoadoutsForALoadout } from "../../utils/userLoadouts";
 import { renameItem } from "../../utils/items";
-import actions from "../../store/actions";
+// import actions from "../../store/actions";
 import isEmpty from "lodash/isEmpty";
 
 class LoadoutSharing extends React.Component {
