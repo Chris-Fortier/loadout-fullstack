@@ -51,26 +51,6 @@ export function movePageToDifferentItem(
             });
       }
 
-      // // this part gets data from the database
-      // axios
-      //    .get("/api/v1/loadouts/info?itemId=" + itemId)
-      //    .then((res) => {
-      //       // handle success
-      //       console.log("setCurrentItem res.data[0]", res.data[0]);
-
-      //       const currentItem = res.data[0];
-      //       currentItem.backRoute = backRoute;
-
-      //       store.dispatch({
-      //          type: actions.STORE_CURRENT_ITEM,
-      //          payload: currentItem,
-      //       }); // dispatching an action
-      //    })
-      //    .catch((error) => {
-      //       // handle error
-      //       console.log(error);
-      //    });
-
       store.dispatch({
          type: actions.STORE_CURRENT_ITEM,
          payload: { id: itemId, backRoute },

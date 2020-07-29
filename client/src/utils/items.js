@@ -1,12 +1,5 @@
-// import { processAllItems } from "./processItems";
-// import { v4 as getUuid } from "uuid";
 import axios from "axios";
-// import {
-//    // movePageToDifferentItem,
-//    refreshPage,
-// } from "./movePageToDifferentItem";
-import store from "../store/store";
-// import actions from "../store/actions";
+// import store from "../store/store";
 
 // this file will store functions relating to changing items in the loadouts
 
@@ -47,64 +40,6 @@ export function renameItem(itemId, newName) {
          console.log("axios error", error);
       });
 }
-
-// add an item
-// export function addItemTo(parentId) {
-//    // server update
-//    axios
-//       .post("/api/v1/loadouts/insert?parentId=" + parentId)
-//       .then((res) => {
-//          console.log("axios res", res);
-//          return res.data; // returns the new item
-//       })
-//       .catch((error) => {
-//          // handle error
-//          console.log("axios error", error);
-//       });
-// }
-
-// // add an item that can contain other items
-// export function addContainerTo(gear, itemIndexPath) {
-//    // get the actual item I want to add an item inside
-//    const currentItem = getItemFromPath(gear, itemIndexPath);
-
-//    // meat of what this funtion does
-//    currentItem.items.push({
-//       name: "New Container",
-//       id: getUuid(),
-//       parentId: currentItem.id,
-//       isPacked: false,
-//       items: [], // having this lets it contain other items
-//    }); // add a new item inside the current item
-
-//    // this must happen whenever something in the loadout changes
-//    processAllItems(gear);
-// }
-
-// export function setItemStatus(itemId, newStatus) {
-//    // server update
-//    axios
-//       .post(
-//          "/api/v1/loadouts/set-status?newStatus=" +
-//             newStatus +
-//             "&itemId=" +
-//             itemId
-//       )
-//       .then((res) => {
-//          console.log("axios res", res);
-//       })
-//       .catch((error) => {
-//          // handle error
-//          console.log("axios error", error);
-//       });
-
-//    // client side
-//    store.dispatch({
-//       type: actions.STORE_CHILD_ITEMS,
-//       payload: [],
-//    });
-
-// }
 
 export function setDescendantsStatus(itemId, newStatus) {
    // server update

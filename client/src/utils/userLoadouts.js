@@ -7,9 +7,6 @@ import store from "../store/store";
 // gets user loadouts for the current user via the user's token
 export function getUserLoadouts() {
    axios
-      // .get(
-      //    "https://raw.githubusercontent.com/Chris-Fortier/loadout/master/src/mock-data/loadouts.json"
-      // )
       .get("/api/v1/user-loadouts/")
       .then((res) => {
          console.log("axios res", res);
@@ -58,18 +55,7 @@ export function getUserLoadoutsForALoadout(loadoutId) {
       .get("/api/v1/loadout-users?loadoutId=" + loadoutId)
       .then((res) => {
          console.log("axios res", res);
-         // const loadoutUsers = res.data;
-         // const thisLoadoutUser = loadoutUsers.filter((loadoutUser) => {
-         //    return loadoutUser.userId === this.props.currentUser.id;
-         // });
-         // thisLoadoutUser[0].username =
-         //    thisLoadoutUser[0].username + " (YOU)";
-         // this.setState({
-         //    thisLoadoutUser: thisLoadoutUser,
-         //    otherLoadoutUsers: loadoutUsers.filter((loadoutUser) => {
-         //       return loadoutUser.userId !== this.props.currentUser.id;
-         //    }),
-         // });
+
          store.dispatch({
             type: actions.STORE_CURRENT_LOADOUT_USER_LOADOUTS,
             payload: res.data,
