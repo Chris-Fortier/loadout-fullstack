@@ -18,7 +18,7 @@ import { DeleteIcon, ChildrenAddIcon } from "../../icons/loadout-icons.js";
 
 // import { processAllItems } from "../../utils/processItems";
 import classnames from "classnames";
-import { renameItem, deleteItem } from "../../utils/items";
+import { renameItem, deleteItem, processLoadout } from "../../utils/items";
 import actions from "../../store/actions";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 
@@ -93,7 +93,7 @@ class ItemCardEdit extends React.Component {
                {this.props.item.numChildren > 0 && (
                   <>
                      <br />
-                     and {this.props.item.numChildren} subitems
+                     and {this.props.item.numDescendants} subitems
                   </>
                )}
             </div>
@@ -111,17 +111,19 @@ class ItemCardEdit extends React.Component {
    // renames item on server and also in redux store
    deleteThisItem() {
       console.log("will delete ", this.props.item.name);
-      deleteItem(this.props.item.id); // send the change of the name to the server
 
       // make local changes so we can see them immediately
-      const foundChildIndex = this.props.childItems.findIndex(
-         (childItem) => childItem.id === this.props.item.id
-      ); // find the specific child item to delete
-      console.log("foundChildIndex", foundChildIndex);
-      // const newChildItems = [...this.props.childItems]; // make a new array of children with the deleted child removed
-      this.props.childItems.splice(foundChildIndex, 1); // make a new array of children with the deleted child removed
+      const foundItemIndex = this.props.currentLoadout.findIndex(
+         (item) => item.id === this.props.item.id
+      ); // find the specific item to change the name of
+      this.props.currentLoadout.splice(foundItemIndex, 1); // make a new array of items with the deleted item removed
+      // send update to Redux
+      this.props.dispatch({
+         type: actions.STORE_CURRENT_LOADOUT,
+         payload: processLoadout(this.props.currentLoadout), // need to process in this case because I am changing the amount of items
+      });
 
-      // todo: update current loadout
+      deleteItem(this.props.item.id); // send the deletion request to the server
    }
 
    render() {
