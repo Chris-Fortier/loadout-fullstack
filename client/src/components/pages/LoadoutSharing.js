@@ -35,12 +35,12 @@ class LoadoutSharing extends React.Component {
 
       console.log(
          "getUserLoadoutsForALoadout on LoadoutSharing for",
-         this.props.currentItem.id
+         this.props.currentUserLoadout.loadoutId
       );
 
       // only do this if its not undefined so that if I quickly assign a user loadouts and then push here it won't destroy them
-      if (this.props.currentItem.id !== undefined) {
-         getUserLoadoutsForALoadout(this.props.currentItem.id);
+      if (this.props.currentUserLoadout.loadoutId !== undefined) {
+         getUserLoadoutsForALoadout(this.props.currentUserLoadout.loadoutId);
       }
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
@@ -61,7 +61,7 @@ class LoadoutSharing extends React.Component {
       // new hard-coded defaults
       console.log(inputId);
       const username = document.getElementById(inputId).value;
-      const loadoutId = this.props.currentItem.id;
+      const loadoutId = this.props.currentUserLoadout.loadoutId;
       const canEdit = 1;
       const canPack = 1;
       const isAdmin = 0;
@@ -107,7 +107,7 @@ class LoadoutSharing extends React.Component {
             // });
 
             // this seems to be more realiable as the above method didn't populate needed properties such as userId
-            getUserLoadoutsForALoadout(this.props.currentItem.id); // refresh page to see the change
+            getUserLoadoutsForALoadout(this.props.currentUserLoadout.loadoutId); // refresh page to see the change
          })
          .catch((err) => {
             console.log("err", err);
@@ -180,19 +180,19 @@ class LoadoutSharing extends React.Component {
    // TODO this is duplicated
    renameThisItem(e) {
       console.log("the focus left this item");
-      if (e.target.value !== this.props.currentItem.name) {
+      if (e.target.value !== this.props.currentUserLoadout.loadoutName) {
          console.log("the name was changed");
          console.log(
             "will rename ",
-            this.props.currentItem.name,
+            this.props.currentUserLoadout.loadoutName,
             "to",
             e.target.value
          );
-         renameItem(this.props.currentItem.id, e.target.value); // send the change of the name to the server
+         renameItem(this.props.currentUserLoadout.loadoutId, e.target.value); // send the change of the name to the server
 
          // make local changes so we can see them immediately
          // its that all I have to do is this, direclty edit the name in props, no need to dispatch it
-         this.props.currentItem.name = e.target.value; // rename the child to the new name
+         this.props.currentUserLoadout.loadoutName = e.target.value; // rename the child to the new name
 
          // TODO: update current loadout in store
       } else {
@@ -214,6 +214,14 @@ class LoadoutSharing extends React.Component {
       const otherLoadoutUsers = loadoutUsers.filter(
          (loadoutUser) => loadoutUser.userId !== this.props.currentUser.id
       );
+
+      let currentLoadoutFromStore = { name: "loading name..." };
+      if (this.props.currentLoadout.length > 0) {
+         currentLoadoutFromStore = this.props.currentLoadout.find((item) => {
+            return item.id === this.props.currentUserLoadout.loadoutId;
+         });
+      }
+      console.log("currentLoadoutFromStore", currentLoadoutFromStore);
 
       return (
          <div>
@@ -239,36 +247,37 @@ class LoadoutSharing extends React.Component {
                               <div className="row">
                                  <>
                                     <div className="col">
-                                       {this.props.currentUserLoadout
-                                          .isAdmin === 0 && (
+                                       {(this.props.currentUserLoadout
+                                          .isAdmin === 0 ||
+                                          true) && (
                                           <h4 className="dark-text-color">
-                                             {this.props.currentItem.name}
+                                             {currentLoadoutFromStore.name}
                                              <br />
                                              Sharing Settings
                                           </h4>
                                        )}
                                        {this.props.currentUserLoadout
-                                          .isAdmin === 1 && (
-                                          <span className="flex-fill">
-                                             <h4 className="dark-text-color">
-                                                <input
-                                                   className="edit-name mb-2"
-                                                   defaultValue={
-                                                      this.props.currentItem
-                                                         .name
-                                                   }
-                                                   onBlur={(e) =>
-                                                      this.renameThisItem(e)
-                                                   }
-                                                   maxLength={
-                                                      MAX_ITEM_NAME_LENGTH
-                                                   }
-                                                   id="page-item-name-input"
-                                                />
-                                                Sharing Settings
-                                             </h4>
-                                          </span>
-                                       )}
+                                          .isAdmin === 1 &&
+                                          false && (
+                                             <span className="flex-fill">
+                                                <h4 className="dark-text-color">
+                                                   <input
+                                                      className="edit-name mb-2"
+                                                      defaultValue={
+                                                         currentLoadoutFromStore.name
+                                                      }
+                                                      onBlur={(e) =>
+                                                         this.renameThisItem(e)
+                                                      }
+                                                      maxLength={
+                                                         MAX_ITEM_NAME_LENGTH
+                                                      }
+                                                      id="page-item-name-input"
+                                                   />
+                                                   Sharing Settings
+                                                </h4>
+                                             </span>
+                                          )}
                                        {this.props.currentUserLoadout
                                           .isAdmin === 1 && (
                                           <div className="card-section">
@@ -514,7 +523,7 @@ class LoadoutSharing extends React.Component {
                                                    <tr className="sharedUserRow d-none d-sm-table-row">
                                                       <th
                                                          scope="row"
-                                                         colspan="4"
+                                                         colSpan="4"
                                                       >
                                                          <input
                                                             className={classnames(
@@ -644,6 +653,7 @@ function mapStateToProps(state) {
       currentUser: state.currentUser,
       currentUserLoadout: state.currentUserLoadout,
       currentLoadoutUserLoadouts: state.currentLoadoutUserLoadouts,
+      currentLoadout: state.currentLoadout,
    };
 }
 

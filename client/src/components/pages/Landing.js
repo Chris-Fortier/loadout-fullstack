@@ -221,7 +221,7 @@ class Landing extends React.Component {
       return (
          <div className="card mb-3">
             <div className="card-body">
-               <h5>log in</h5>
+               <h5>Log In</h5>
                <input
                   id="login-username-input"
                   placeholder="Enter Your Username"

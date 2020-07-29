@@ -73,7 +73,7 @@ export function movePageToDifferentItem(
 
       store.dispatch({
          type: actions.STORE_CURRENT_ITEM,
-         payload: { id: itemId },
+         payload: { id: itemId, backRoute },
       }); // dispatching an action
 
       // change the current level

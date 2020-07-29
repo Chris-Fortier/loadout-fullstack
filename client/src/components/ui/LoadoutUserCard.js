@@ -393,7 +393,7 @@ class LoadoutUserCard extends React.Component {
             {showChangeRollout && (
                <tr>
                   {/* <td className="no-border"></td> */}
-                  <td colspan="5" className="no-border">
+                  <td colSpan="5" className="no-border">
                      {showSaveChangesButton && (
                         <div
                            className="button primary-action-button"

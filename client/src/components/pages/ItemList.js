@@ -24,9 +24,7 @@ import isEmpty from "lodash/isEmpty";
 import SharingStrip from "../ui/SharingStrip";
 import axios from "axios";
 
-// ItemList2 is an alternate version that queries a single item's children to display from the database
-
-class ItemList2 extends React.Component {
+class ItemList extends React.Component {
    constructor(props) {
       super(props); // boilerplate
 
@@ -269,7 +267,11 @@ class ItemList2 extends React.Component {
    // renames item on server and also in redux store
    renameThisItem(e) {
       console.log("the focus left this item");
-      if (e.target.value !== this.props.currentItem.name) {
+      const currentItemName = this.props.currentLoadout.find((item) => {
+         return item.id === this.props.currentItem.id;
+      }).name;
+      console.log("currentItemName", currentItemName);
+      if (e.target.value !== currentItemName) {
          console.log("the name was changed");
          console.log(
             "will rename ",
@@ -278,7 +280,7 @@ class ItemList2 extends React.Component {
             e.target.value
          );
 
-         // rename the item on client
+         // rename the item on client in currentLoadout
          // make local changes so we can see them immediately
          const foundItem = this.props.currentLoadout.find(
             (item) => item.id === this.props.currentItem.id
@@ -290,6 +292,8 @@ class ItemList2 extends React.Component {
             type: actions.STORE_CURRENT_LOADOUT,
             payload: this.props.currentLoadout,
          });
+
+         // if this is the currentUserLoadout, we need to change the name there too
 
          renameItem(this.props.currentItem.id, e.target.value); // send the change of the name to the server
       } else {
@@ -351,7 +355,6 @@ class ItemList2 extends React.Component {
             return item.id === this.props.currentItem.id;
          })[0];
       }
-      // console.log("currentItem", currentItem);
 
       // get the current item
       // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
@@ -722,4 +725,4 @@ function mapStateToProps(state) {
    };
 }
 
-export default connect(mapStateToProps)(ItemList2); // this is "currying"
+export default connect(mapStateToProps)(ItemList); // this is "currying"
