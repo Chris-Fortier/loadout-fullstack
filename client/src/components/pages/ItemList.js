@@ -188,7 +188,7 @@ class ItemList2 extends React.Component {
       const itemIndexPath = this.props.currentLoadout.itemIndexPath;
       console.log("getItemFromStore()...");
       console.log("itemIndexPath", itemIndexPath);
-      let currentItem = this.props.currentLoadout.gear; // start at the top of the heirarchy
+      let currentItem = this.props.currentLoadout.gear; // start at the top of the hierarchy
 
       // for each part of the itemIndexPath
       for (let levelIndex in itemIndexPath) {
@@ -210,7 +210,7 @@ class ItemList2 extends React.Component {
       });
    }
 
-   // open the loadout sharing settings (made this a function to avoid styling assosicated with Link)
+   // open the loadout sharing settings (made this a function to avoid styling associated with Link)
    gotoSharing() {
       this.props.history.push("/loadout-sharing");
    }
