@@ -277,13 +277,21 @@ class ItemList2 extends React.Component {
             "to",
             e.target.value
          );
-         renameItem(this.props.currentItem.id, e.target.value); // send the change of the name to the server
 
+         // rename the item on client
          // make local changes so we can see them immediately
-         // its that all I have to do is this, directly edit the name in props, no need to dispatch it
-         this.props.currentItem.name = e.target.value; // rename the child to the new name
+         const foundItem = this.props.currentLoadout.find(
+            (item) => item.id === this.props.currentItem.id
+         ); // find the specific item to change the name of
+         console.log("foundItem.name", foundItem.name);
+         foundItem.name = e.target.value; // rename the item to the new name
+         // send update to Redux
+         this.props.dispatch({
+            type: actions.STORE_CURRENT_LOADOUT,
+            payload: this.props.currentLoadout,
+         });
 
-         // TODO: update current loadout
+         renameItem(this.props.currentItem.id, e.target.value); // send the change of the name to the server
       } else {
          console.log("the name was not changed");
       }
