@@ -241,7 +241,7 @@ $spacers: map-merge(
 
 // Links
 
-$link-color: theme-color("primary");
+$link-color: red;
 $link-decoration: none;
 $link-hover-color: darken($link-color, 15%);
 $link-hover-decoration: underline;
@@ -267,12 +267,12 @@ $font-family-body: "Roboto Condensed", sans-serif;
 $font-family-base: $font-family-sans-serif; // Loadout
 
 // $font-weight-normal: 400;
-// $font-weight-bold: 700;
+$font-weight-bold: 700;
 
-// $line-height-base: 1.5;
+$line-height-base: 1.5;
 // $line-height-base: 1.5;
 
-// $font-size-base: 1rem; // Assumes the browser default, typically `16px`
+$font-size-base: 1rem; // Assumes the browser default, typically `16px`
 // $font-size-lg: $font-size-base * 1.25;
 // $font-size-sm: $font-size-base * 0.875;
 
@@ -298,11 +298,13 @@ $font-family-base: $font-family-sans-serif; // Loadout
 
 // $border-color: $primary;
 
-// $border-radius: map-get($spacers, 1);
+$border-radius: map-get($spacers, 1);
 // $border-radius-lg: $border-radius;
 // $border-radius-sm: $border-radius;
 
 // buttons and inputs
+
+$font-size-base: 1rem;
 
 $input-btn-padding-y: map-get($spacers, 2);
 $input-btn-padding-x: map-get($spacers, 4);
@@ -368,7 +370,7 @@ $btn-border-radius: $border-radius;
 // $border-radius-sm: 0.2rem;
 $input-border-radius: $border-radius;
 
-// $border-width: 2px;
+$border-width: 2px;
 // $border-color: $gray-600;
 $input-btn-border-width: $border-width;
 // changes the border color

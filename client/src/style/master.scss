@@ -1,13 +1,14 @@
-// Required
-@import "./bootstrap/functions";
-@import "./bootstrap/variables";
-@import "./bootstrap/mixins";
+// // Required
+// @import "./bootstrap/functions";
+// @import "./bootstrap/variables";
+// @import "./bootstrap/mixins";
 
 // Our Theme
 @import "./theme.scss";
 
-// Bootstrap
-@import "./bootstrap/bootstrap.scss";
+// // Bootstrap
+// @import "./bootstrap/bootstrap.scss";
+@import "./minimal-bootstrap.scss";
 
-// Out Overrides
+// // Our Overrides
 @import "./style.scss";
