@@ -30,9 +30,6 @@ class LoadoutList extends React.Component {
          payload: {},
       });
       props.dispatch({
-         type: actions.RESET_CURRENT_LEVEL,
-      });
-      props.dispatch({
          type: actions.STORE_CURRENT_USER_LOADOUT,
          payload: {},
       });

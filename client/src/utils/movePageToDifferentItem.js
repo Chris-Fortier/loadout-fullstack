@@ -56,13 +56,13 @@ export function movePageToDifferentItem(
          payload: { id: itemId, backRoute },
       }); // dispatching an action
 
-      // change the current level
-      if (levelChange !== 0) {
-         store.dispatch({
-            type: actions.CHANGE_CURRENT_LEVEL,
-            payload: levelChange,
-         }); // dispatching an action
-      }
+      // // change the current level
+      // if (levelChange !== 0) {
+      //    store.dispatch({
+      //       type: actions.CHANGE_CURRENT_LEVEL,
+      //       payload: levelChange,
+      //    }); // dispatching an action
+      // }
    } else {
       console.log("Going to loadouts page");
    }

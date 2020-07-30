@@ -12,7 +12,6 @@ import actions from "../../store/actions";
 import ItemCard from "../ui/ItemCard";
 import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
-import { processAllItems } from "../../utils/processItems";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import {
    renameItem,
@@ -181,22 +180,22 @@ class ItemList extends React.Component {
       }
    }
 
-   // return the current item from state based on an itemIndexPath
-   getItemFromStore() {
-      const itemIndexPath = this.props.currentLoadout.itemIndexPath;
-      console.log("getItemFromStore()...");
-      console.log("itemIndexPath", itemIndexPath);
-      let currentItem = this.props.currentLoadout.gear; // start at the top of the hierarchy
+   // // return the current item from state based on an itemIndexPath
+   // getItemFromStore() {
+   //    const itemIndexPath = this.props.currentLoadout.itemIndexPath;
+   //    console.log("getItemFromStore()...");
+   //    console.log("itemIndexPath", itemIndexPath);
+   //    let currentItem = this.props.currentLoadout.gear; // start at the top of the hierarchy
 
-      // for each part of the itemIndexPath
-      for (let levelIndex in itemIndexPath) {
-         currentItem = currentItem.items[parseInt(itemIndexPath[levelIndex])];
-      }
+   //    // for each part of the itemIndexPath
+   //    for (let levelIndex in itemIndexPath) {
+   //       currentItem = currentItem.items[parseInt(itemIndexPath[levelIndex])];
+   //    }
 
-      currentItem.level = itemIndexPath.length; // put the level of the current item in the current item
+   //    currentItem.level = itemIndexPath.length; // put the level of the current item in the current item
 
-      return currentItem;
-   }
+   //    return currentItem;
+   // }
 
    // goes back to the loadouts page
    exitLoadout() {
@@ -301,40 +300,40 @@ class ItemList extends React.Component {
       }
    }
 
-   // this unpacks all a given item's children
-   unpackChildren(itemIndexPath) {
-      console.log("unpackChildren()...");
-      console.log("itemIndexPath", itemIndexPath);
-      // console.log("Unpacking the children of " + item.name);
-      // the item parameter is the item that we are unpacking all the children of
-      // console.log("unpacking", item.name);
-      // for (let i in item.items) {
-      //    item.items[i].isPacked = false;
-      // }
-      // this.setState({ currentItem: item });
+   // // this unpacks all a given item's children
+   // unpackChildren(itemIndexPath) {
+   //    console.log("unpackChildren()...");
+   //    console.log("itemIndexPath", itemIndexPath);
+   //    // console.log("Unpacking the children of " + item.name);
+   //    // the item parameter is the item that we are unpacking all the children of
+   //    // console.log("unpacking", item.name);
+   //    // for (let i in item.items) {
+   //    //    item.items[i].isPacked = false;
+   //    // }
+   //    // this.setState({ currentItem: item });
 
-      // get the actual item I want to change based on the index path
-      let copyOfGear = this.props.currentLoadout.gear;
-      let currentItem = copyOfGear;
-      for (let i in itemIndexPath) {
-         currentItem = currentItem.items[itemIndexPath[i]]; // go one lever deeper for each index in itemIndexPath
-      }
-      console.log("name of target item:", currentItem.name);
+   //    // get the actual item I want to change based on the index path
+   //    let copyOfGear = this.props.currentLoadout.gear;
+   //    let currentItem = copyOfGear;
+   //    for (let i in itemIndexPath) {
+   //       currentItem = currentItem.items[itemIndexPath[i]]; // go one lever deeper for each index in itemIndexPath
+   //    }
+   //    console.log("name of target item:", currentItem.name);
 
-      // copyOfGear.items[0].items[1].isPacked = !copyOfGear.items[0].items[1]
-      //    .isPacked;
-      for (let childIndex in currentItem.items) {
-         currentItem.items[childIndex].isPacked = false;
-      }
+   //    // copyOfGear.items[0].items[1].isPacked = !copyOfGear.items[0].items[1]
+   //    //    .isPacked;
+   //    for (let childIndex in currentItem.items) {
+   //       currentItem.items[childIndex].isPacked = false;
+   //    }
 
-      // put the data back into the store
-      // this.props.dispatch({
-      //    type: actions.STORE_CURRENT_LOADOUT,
-      //    payload: copyOfGear,
-      // });
+   //    // put the data back into the store
+   //    // this.props.dispatch({
+   //    //    type: actions.STORE_CURRENT_LOADOUT,
+   //    //    payload: copyOfGear,
+   //    // });
 
-      processAllItems(this.props.currentLoadout.gear);
-   }
+   //    processAllItems(this.props.currentLoadout.gear);
+   // }
 
    render() {
       console.log("Rendering page...");
@@ -360,7 +359,9 @@ class ItemList extends React.Component {
       // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
       // console.log("currentItem.level", currentItem.level);
       // let level = currentItem.level;
-      const level = this.props.currentLevel;
+      // const level = this.props.currentLevel;
+
+      const level = currentItem.level; // set level to this to use the new level generated in processLoadout
 
       // stores whether the current user can edit the name of the current item (if the level is 1 they must be an admin, otherwise they must have editing rights)
       const thisUserCanEdit =
@@ -717,7 +718,6 @@ function mapStateToProps(state) {
    return {
       // currentLoadout: state.currentLoadout,
       currentItem: state.currentItem,
-      currentLevel: state.currentLevel,
       currentUser: state.currentUser,
       currentUserLoadout: state.currentUserLoadout,
       isEditMode: state.isEditMode,

@@ -128,7 +128,8 @@ class ItemCardEdit extends React.Component {
 
    render() {
       const item = this.props.item; // this is to simplify code below
-      const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 ebecause it is one level below the page's level
+      // const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 because it is one level below the page's level
+      const level = this.props.item.level; // now it uses the level of the item generated in processLoadout
 
       // let thisItemPath = this.props.currentLoadout.itemIndexPath.concat([
       //    item.index,
@@ -224,7 +225,6 @@ class ItemCardEdit extends React.Component {
 // maps the store to props
 function mapStateToProps(state) {
    return {
-      currentLevel: state.currentLevel,
       currentLoadout: state.currentLoadout,
    };
 }

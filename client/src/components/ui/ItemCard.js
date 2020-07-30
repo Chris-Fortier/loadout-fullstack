@@ -90,7 +90,8 @@ class ItemCard2 extends React.Component {
 
    render() {
       const item = this.props.item; // this is to simplify code below
-      const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 ebecause it is one level below the page's level
+      // const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 because it is one level below the page's level
+      const level = this.props.item.level; // now it uses the level of the item generated in processLoadout
 
       return (
          <div
@@ -274,7 +275,6 @@ class ItemCard2 extends React.Component {
 function mapStateToProps(state) {
    return {
       // currentLoadout: state.currentLoadout, // TODO, do I need this anymore?
-      currentLevel: state.currentLevel,
       currentItem: state.currentItem,
       currentUserLoadout: state.currentUserLoadout,
       currentLoadout: state.currentLoadout,

@@ -2,7 +2,6 @@
 import { combineReducers } from "redux";
 import currentUser from "./reducers/currentUser";
 import currentItem from "./reducers/currentItem";
-import currentLevel from "./reducers/currentLevel";
 import currentUserLoadout from "./reducers/currentUserLoadout";
 import userLoadouts from "./reducers/userLoadouts";
 import currentLoadoutUserLoadouts from "./reducers/currentLoadoutUserLoadouts";
@@ -12,7 +11,6 @@ import currentLoadout from "./reducers/currentLoadout";
 export default combineReducers({
    currentUser,
    currentItem,
-   currentLevel,
    currentUserLoadout,
    userLoadouts, // stores all the curent user's userLoadouts
    currentLoadoutUserLoadouts, // stores all the user loadouts for the current loadout

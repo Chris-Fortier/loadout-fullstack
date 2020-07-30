@@ -82,9 +82,6 @@ export function logOutCurrentUser(props) {
       payload: {},
    });
    props.dispatch({
-      type: actions.RESET_CURRENT_LEVEL,
-   });
-   props.dispatch({
       type: actions.STORE_CURRENT_USER_LOADOUT,
       payload: {},
    });

@@ -149,5 +149,19 @@ export function processLoadout(loadout) {
       }
    }
 
+   // assign all children of an item to a certain level, then continue with its grandchildren
+   function assignLevel(parentId, level) {
+      // find each child
+      for (let c in loadout) {
+         if (loadout[c].parentId === parentId) {
+            loadout[c].level = level;
+            assignLevel(loadout[c].id, level + 1); // assign this item's children levels and so on
+         }
+      }
+   }
+
+   // get each item's level starting with the root node
+   assignLevel(null, 1); // start with 1 instead of 0 because 0 is for the My Loadouts level, root node of a loadout is level 1
+
    return loadout;
 }
