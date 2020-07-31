@@ -348,7 +348,7 @@ class ItemList extends React.Component {
                                     }}
                                  >
                                     <div
-                                       className={`button item-icon-colors standard-sized-icon item-icon-colors-${thisLevelRotated}`}
+                                       className={`button item-icon-colors standard-sized-icon item-icon-colors-${parentLevelRotated}`}
                                     >
                                        <IconUpLevel />
                                     </div>
@@ -363,7 +363,7 @@ class ItemList extends React.Component {
                               {currentItem.parentId === null && (
                                  <Link to="/loadout-list">
                                     <div
-                                       className={`button item-icon-colors standard-sized-icon item-icon-colors-${thisLevelRotated}`}
+                                       className={`button item-icon-colors standard-sized-icon item-icon-colors-${parentLevelRotated}`}
                                     >
                                        <IconUpLevel />
                                     </div>
