@@ -224,24 +224,31 @@ class LoadoutSharing extends React.Component {
       console.log("currentLoadoutFromStore", currentLoadoutFromStore);
 
       return (
-         <div>
+         <div className={`${UI_APPEARANCE}`}>
             <Header />
-            <div className="item-list parent-color-2">
+            <div className="item-list parent-bg-level-2 parent-bg">
                <div className="container-fluid single-wide-container scroll-fix">
                   <div className="row">
                      <div className="col">
                         <Link
-                           className="up-level navigation-link"
+                           className={classnames(`up-level clickable`)}
                            to={this.props.currentItem.backRoute}
                         >
-                           <div className="icon-dark left">
+                           <div
+                              className={`button theme-icon-color standard-sized-icon theme-icon-color`}
+                           >
                               <IconUpLevel />
                            </div>
-                           {this.props.currentItem.backRoute ===
-                              "/item-list" && <>Back to Loadout</>}
-                           {this.props.currentItem.backRoute ===
-                              "/loadout-list" && <>Back to My Loadouts</>}
+                           <span
+                              className={`button navigation-link level-text-color-parent theme-text-color`}
+                           >
+                              {this.props.currentItem.backRoute ===
+                                 "/item-list" && <>Back to Loadout</>}
+                              {this.props.currentItem.backRoute ===
+                                 "/loadout-list" && <>Back to My Loadouts</>}
+                           </span>
                         </Link>
+
                         <div className="">
                            <div className="">
                               <div className="row">
@@ -250,7 +257,7 @@ class LoadoutSharing extends React.Component {
                                        {(this.props.currentUserLoadout
                                           .isAdmin === 0 ||
                                           true) && (
-                                          <h4 className="dark-text-color">
+                                          <h4 className="theme-text-color">
                                              {currentLoadoutFromStore.name}
                                              <br />
                                              Sharing Settings
@@ -260,7 +267,7 @@ class LoadoutSharing extends React.Component {
                                           .isAdmin === 1 &&
                                           false && (
                                              <span className="flex-fill">
-                                                <h4 className="dark-text-color">
+                                                <h4 className="theme-text-color">
                                                    <input
                                                       className="edit-name mb-2"
                                                       defaultValue={
@@ -280,7 +287,7 @@ class LoadoutSharing extends React.Component {
                                           )}
                                        {this.props.currentUserLoadout
                                           .isAdmin === 1 && (
-                                          <div className="card-section">
+                                          <div className="card-section theme-text-color">
                                              <span
                                                 className="button navigation-link w-100"
                                                 onClick={() =>
@@ -527,6 +534,7 @@ class LoadoutSharing extends React.Component {
                                                       >
                                                          <input
                                                             className={classnames(
+                                                               "edit-name",
                                                                {
                                                                   "my-input": true,
                                                                   "input-invalid": this

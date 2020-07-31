@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
 import axios from "axios";
 import {
@@ -166,7 +165,7 @@ class LoadoutUserCard extends React.Component {
             {/* large size card */}
             <tr className="sharedUserRow  d-none d-sm-table-row">
                <>
-                  <th scope="row" className="loadout-user">
+                  <th scope="row" className="loadout-user theme-text-color">
                      {this.props.userLoadout.username}
                      {this.props.userLoadout.userId ===
                         this.props.currentUser.id && <>&nbsp;(YOU)</>}
@@ -174,10 +173,13 @@ class LoadoutUserCard extends React.Component {
                   <td>
                      <div className="d-flex">
                         <span
-                           className={classnames("item-card-icon", {
-                              clickable: thisUserIsAdmin === 1,
-                              disabled: thisUserIsAdmin === 0,
-                           })}
+                           className={classnames(
+                              "item-card-icon theme-icon-color",
+                              {
+                                 clickable: thisUserIsAdmin === 1,
+                                 disabled: thisUserIsAdmin === 0,
+                              }
+                           )}
                            onClick={() => {
                               if (thisUserIsAdmin === 1) {
                                  this.toggleCanPack();
@@ -192,10 +194,13 @@ class LoadoutUserCard extends React.Component {
                   <td>
                      <div className="d-flex">
                         <span
-                           className={classnames("item-card-icon", {
-                              clickable: thisUserIsAdmin === 1,
-                              disabled: thisUserIsAdmin === 0,
-                           })}
+                           className={classnames(
+                              "item-card-icon theme-icon-color",
+                              {
+                                 clickable: thisUserIsAdmin === 1,
+                                 disabled: thisUserIsAdmin === 0,
+                              }
+                           )}
                            onClick={() => {
                               if (thisUserIsAdmin === 1) {
                                  this.toggleCanEdit();
@@ -210,14 +215,17 @@ class LoadoutUserCard extends React.Component {
                   <td>
                      <div className="d-flex">
                         <span
-                           className={classnames("item-card-icon", {
-                              clickable:
-                                 thisUserIsAdmin === 1 &&
-                                 userLoadoutUserId !== thisUserId,
-                              disabled:
-                                 thisUserIsAdmin !== 1 ||
-                                 userLoadoutUserId === thisUserId,
-                           })}
+                           className={classnames(
+                              "item-card-icon theme-icon-color",
+                              {
+                                 clickable:
+                                    thisUserIsAdmin === 1 &&
+                                    userLoadoutUserId !== thisUserId,
+                                 disabled:
+                                    thisUserIsAdmin !== 1 ||
+                                    userLoadoutUserId === thisUserId,
+                              }
+                           )}
                            onClick={() => {
                               if (
                                  thisUserIsAdmin === 1 &&
@@ -239,7 +247,7 @@ class LoadoutUserCard extends React.Component {
                               // remove is available if
                               // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
                               // currentUser is not an admin of this loadout and this userLoadout is the currentUser
-                              classnames("item-card-icon", {
+                              classnames("item-card-icon theme-icon-color", {
                                  clickable: canRemoveUserLoadout,
                                  disabled: !canRemoveUserLoadout,
                               })
@@ -274,7 +282,7 @@ class LoadoutUserCard extends React.Component {
                               // remove is available if
                               // currentUser is an admin of this loadout and this userLoadout is not the currentUser, or
                               // currentUser is not an admin of this loadout and this userLoadout is the currentUser
-                              classnames("item-card-icon", {
+                              classnames("item-card-icon theme-icon-color", {
                                  clickable: canRemoveUserLoadout,
                                  disabled: !canRemoveUserLoadout,
                               })
@@ -298,10 +306,13 @@ class LoadoutUserCard extends React.Component {
                <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
                   <td className="no-border d-flex ">
                      <span
-                        className={classnames("item-card-icon", {
-                           clickable: thisUserIsAdmin === 1,
-                           disabled: thisUserIsAdmin === 0,
-                        })}
+                        className={classnames(
+                           "item-card-icon theme-icon-color",
+                           {
+                              clickable: thisUserIsAdmin === 1,
+                              disabled: thisUserIsAdmin === 0,
+                           }
+                        )}
                         onClick={() => {
                            if (thisUserIsAdmin === 1) {
                               this.toggleCanPack();
@@ -314,9 +325,7 @@ class LoadoutUserCard extends React.Component {
                      <span>&nbsp;</span>
                      <span
                         className={classnames(
-                           "loadout-card-icon",
-                           UI_APPEARANCE === "dark" && "icon-light",
-                           UI_APPEARANCE !== "dark" && "icon-dark"
+                           "loadout-card-icon theme-icon-color standard-sized-icon"
                         )}
                      >
                         <IconPackage />
@@ -327,10 +336,13 @@ class LoadoutUserCard extends React.Component {
                <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
                   <td className="no-border d-flex ">
                      <span
-                        className={classnames("item-card-icon", {
-                           clickable: thisUserIsAdmin === 1,
-                           disabled: thisUserIsAdmin === 0,
-                        })}
+                        className={classnames(
+                           "item-card-icon theme-icon-color",
+                           {
+                              clickable: thisUserIsAdmin === 1,
+                              disabled: thisUserIsAdmin === 0,
+                           }
+                        )}
                         onClick={() => {
                            if (thisUserIsAdmin === 1) {
                               this.toggleCanEdit();
@@ -343,9 +355,7 @@ class LoadoutUserCard extends React.Component {
                      <span>&nbsp;</span>
                      <span
                         className={classnames(
-                           "loadout-card-icon",
-                           UI_APPEARANCE === "dark" && "icon-light",
-                           UI_APPEARANCE !== "dark" && "icon-dark"
+                           "loadout-card-icon theme-icon-color standard-sized-icon"
                         )}
                      >
                         <IconEdit />
@@ -356,14 +366,17 @@ class LoadoutUserCard extends React.Component {
                <tr className="sharedUserRow d-table display-switch-label d-table-row d-sm-none">
                   <td className="no-border d-flex ">
                      <span
-                        className={classnames("item-card-icon", {
-                           clickable:
-                              thisUserIsAdmin === 1 &&
-                              userLoadoutUserId !== thisUserId,
-                           disabled:
-                              thisUserIsAdmin !== 1 ||
-                              userLoadoutUserId === thisUserId,
-                        })}
+                        className={classnames(
+                           "item-card-icon theme-icon-color",
+                           {
+                              clickable:
+                                 thisUserIsAdmin === 1 &&
+                                 userLoadoutUserId !== thisUserId,
+                              disabled:
+                                 thisUserIsAdmin !== 1 ||
+                                 userLoadoutUserId === thisUserId,
+                           }
+                        )}
                         onClick={() => {
                            if (
                               thisUserIsAdmin === 1 &&
@@ -379,9 +392,7 @@ class LoadoutUserCard extends React.Component {
                      <span>&nbsp;</span>
                      <span
                         className={classnames(
-                           "loadout-card-icon",
-                           UI_APPEARANCE === "dark" && "icon-light",
-                           UI_APPEARANCE !== "dark" && "icon-dark"
+                           "loadout-card-icon theme-icon-color standard-sized-icon"
                         )}
                      >
                         <IconKey />

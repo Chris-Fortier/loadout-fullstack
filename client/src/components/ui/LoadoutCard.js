@@ -1,10 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
-import { LEVEL_COLORS, UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
 import SharingStrip from "../ui/SharingStrip";
-
 import {
    ChildrenUnpackedIcon,
    ChildrenPackedIcon2,
@@ -39,7 +37,6 @@ class LoadoutCard extends React.Component {
       const loadout = this.props.loadout; // this is to simplify code below
       const item = loadout; // this is to simplify code below
       item.name = item.loadoutName;
-      const level = 1;
       item.status = 0; // top level loadouts always have status of zero
 
       return (
@@ -63,11 +60,7 @@ class LoadoutCard extends React.Component {
                <div className="d-flex">
                   <Link
                      className={classnames(
-                        "item-card-text",
-                        (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "dark") &&
-                           "level-text-color-" + String(level % LEVEL_COLORS),
-                        UI_APPEARANCE === "colors" && "dark-text-color"
+                        `item-card-text level-text-color-1 level-text-color-this`
                      )}
                      onClick={() => {
                         movePageToDifferentItem(
@@ -97,12 +90,7 @@ class LoadoutCard extends React.Component {
                      <>
                         <Link
                            className={classnames(
-                              "button navigation-link item-card-text",
-                              (UI_APPEARANCE === "light" ||
-                                 UI_APPEARANCE === "dark") &&
-                                 "level-text-color-" +
-                                    String((level + 1) % LEVEL_COLORS),
-                              UI_APPEARANCE === "colors" && "dark-text-color",
+                              "button navigation-link item-card-text level-text-color-2 level-text-color-this",
                               { disabled: item.status === 1 }
                            )}
                            onClick={() => {
@@ -118,12 +106,12 @@ class LoadoutCard extends React.Component {
                         </Link>
                         <Link
                            className={classnames(
-                              "icon-dark item-card-icon",
-                              (UI_APPEARANCE === "light" ||
-                                 UI_APPEARANCE === "dark") &&
-                                 "item-icon-colors-" +
-                                    String(level % LEVEL_COLORS),
-                              UI_APPEARANCE === "colors" && "item-icon-colors",
+                              "icon-dark item-card-icon item-icon-colors item-icon-colors-1",
+                              // (UI_APPEARANCE === "light" ||
+                              //    UI_APPEARANCE === "dark") &&
+                              //    "item-icon-colors-" +
+                              //       String(level % LEVEL_COLORS),
+                              // UI_APPEARANCE === "colors" && "item-icon-colors",
                               {
                                  clickable: item.status === 0,
                                  disabled: item.status === 1,

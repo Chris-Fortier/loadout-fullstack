@@ -13,12 +13,7 @@ import ItemCard from "../ui/ItemCard";
 import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
-import {
-   renameItem,
-   //addItemTo,
-   processLoadout,
-} from "../../utils/items";
-// import { v4 as getUuid } from "uuid";
+import { renameItem, processLoadout } from "../../utils/items";
 import isEmpty from "lodash/isEmpty";
 import SharingStrip from "../ui/SharingStrip";
 import axios from "axios";
@@ -95,11 +90,7 @@ class ItemList extends React.Component {
             )}
 
             <div
-               className={classnames(
-                  "button navigation-link",
-                  UI_APPEARANCE === "dark" && "light-text-color",
-                  UI_APPEARANCE !== "dark" && "dark-text-color"
-               )}
+               className={classnames("button navigation-link theme-text-color")}
                onClick={() => this.toggleUnpackRollout()}
             >
                <br />
@@ -179,23 +170,6 @@ class ItemList extends React.Component {
          this.showUnpackConfirmation();
       }
    }
-
-   // // return the current item from state based on an itemIndexPath
-   // getItemFromStore() {
-   //    const itemIndexPath = this.props.currentLoadout.itemIndexPath;
-   //    console.log("getItemFromStore()...");
-   //    console.log("itemIndexPath", itemIndexPath);
-   //    let currentItem = this.props.currentLoadout.gear; // start at the top of the hierarchy
-
-   //    // for each part of the itemIndexPath
-   //    for (let levelIndex in itemIndexPath) {
-   //       currentItem = currentItem.items[parseInt(itemIndexPath[levelIndex])];
-   //    }
-
-   //    currentItem.level = itemIndexPath.length; // put the level of the current item in the current item
-
-   //    return currentItem;
-   // }
 
    // goes back to the loadouts page
    exitLoadout() {
@@ -300,41 +274,6 @@ class ItemList extends React.Component {
       }
    }
 
-   // // this unpacks all a given item's children
-   // unpackChildren(itemIndexPath) {
-   //    console.log("unpackChildren()...");
-   //    console.log("itemIndexPath", itemIndexPath);
-   //    // console.log("Unpacking the children of " + item.name);
-   //    // the item parameter is the item that we are unpacking all the children of
-   //    // console.log("unpacking", item.name);
-   //    // for (let i in item.items) {
-   //    //    item.items[i].isPacked = false;
-   //    // }
-   //    // this.setState({ currentItem: item });
-
-   //    // get the actual item I want to change based on the index path
-   //    let copyOfGear = this.props.currentLoadout.gear;
-   //    let currentItem = copyOfGear;
-   //    for (let i in itemIndexPath) {
-   //       currentItem = currentItem.items[itemIndexPath[i]]; // go one lever deeper for each index in itemIndexPath
-   //    }
-   //    console.log("name of target item:", currentItem.name);
-
-   //    // copyOfGear.items[0].items[1].isPacked = !copyOfGear.items[0].items[1]
-   //    //    .isPacked;
-   //    for (let childIndex in currentItem.items) {
-   //       currentItem.items[childIndex].isPacked = false;
-   //    }
-
-   //    // put the data back into the store
-   //    // this.props.dispatch({
-   //    //    type: actions.STORE_CURRENT_LOADOUT,
-   //    //    payload: copyOfGear,
-   //    // });
-
-   //    processAllItems(this.props.currentLoadout.gear);
-   // }
-
    render() {
       console.log("Rendering page...");
 
@@ -348,11 +287,22 @@ class ItemList extends React.Component {
       let currentItem = {};
       // console.log("this.props.currentItem.id", this.props.currentItem.id);
       // console.log("this.props.currentLoadout", this.props.currentLoadout);
+
+      // default level before data is loaded so we won't briefly see a white background
+      let level = 1;
+      let thisLevelRotated = 1;
+      let parentLevelRotated = 0;
+      let childLevelRotated = 2;
+
       if (this.props.currentLoadout.length > 0) {
          currentItem = this.props.currentLoadout.filter((item) => {
             // console.log(item.id, this.props.currentItem.id);
             return item.id === this.props.currentItem.id;
          })[0];
+         level = currentItem.level; // set level to this to use the new level generated in processLoadout
+         thisLevelRotated = (level + LEVEL_COLORS) % LEVEL_COLORS;
+         parentLevelRotated = (level + LEVEL_COLORS - 1) % LEVEL_COLORS;
+         childLevelRotated = (level + LEVEL_COLORS + 1) % LEVEL_COLORS;
       }
 
       // get the current item
@@ -361,101 +311,74 @@ class ItemList extends React.Component {
       // let level = currentItem.level;
       // const level = this.props.currentLevel;
 
-      const level = currentItem.level; // set level to this to use the new level generated in processLoadout
-
       // stores whether the current user can edit the name of the current item (if the level is 1 they must be an admin, otherwise they must have editing rights)
       const thisUserCanEdit =
          (level === 1 && this.props.currentUserLoadout.isAdmin === 1) ||
          (level !== 1 && this.props.currentUserLoadout.canEdit === 1);
 
       return (
-         <div>
+         <div className={`${UI_APPEARANCE}`}>
             <Header />
             <div
                className={classnames(
-                  "item-list",
-                  UI_APPEARANCE === "light" && "parent-bg-light",
-                  UI_APPEARANCE === "dark" && "parent-bg-dark",
-                  UI_APPEARANCE === "colors" &&
-                     level < 2 &&
-                     "parent-color-" + String(level % LEVEL_COLORS),
-                  UI_APPEARANCE === "colors" &&
-                     level >= 2 &&
-                     "parent-color-" + String((level - 1) % LEVEL_COLORS)
+                  "item-list parent-bg",
+                  level < 2 && `parent-bg-level-${thisLevelRotated}`,
+                  level >= 2 && ` parent-bg-level-${parentLevelRotated}`
                )}
             >
                <div className="container-fluid item-cards-container scroll-fix">
                   <div className="row">
                      <div className="col">
                         <div>
-                           {level !== 0 && (
-                              <span
-                                 className={classnames(
-                                    "up-level button navigation-link",
-                                    (UI_APPEARANCE === "light" ||
-                                       UI_APPEARANCE === "dark") &&
-                                       "level-text-color-" +
-                                          String(
-                                             (level + LEVEL_COLORS - 1) %
-                                                LEVEL_COLORS
-                                          ),
-                                    UI_APPEARANCE === "colors" &&
-                                       "light-text-color"
-                                 )}
-                              >
-                                 {currentItem.parentId !== null && (
-                                    <span
-                                       onClick={(e) => {
-                                          // move to the parent item
-                                          movePageToDifferentItem(
-                                             currentItem.parentId,
-                                             -1
-                                          );
-                                          // change the text in the page item editable input
-                                          if (
-                                             document.getElementById(
-                                                "page-item-name-input"
-                                             ) !== null
-                                          ) {
-                                             document.getElementById(
-                                                "page-item-name-input"
-                                             ).value = currentItem.parentName;
-                                          }
-                                       }}
+                           <span className={classnames(`up-level clickable`)}>
+                              {currentItem.parentId !== null && (
+                                 <span
+                                    onClick={(e) => {
+                                       // move to the parent item
+                                       movePageToDifferentItem(
+                                          currentItem.parentId,
+                                          -1
+                                       );
+                                       // change the text in the page item editable input
+                                       if (
+                                          document.getElementById(
+                                             "page-item-name-input"
+                                          ) !== null
+                                       ) {
+                                          document.getElementById(
+                                             "page-item-name-input"
+                                          ).value = currentItem.parentName;
+                                       }
+                                    }}
+                                 >
+                                    <div
+                                       className={`button item-icon-colors standard-sized-icon item-icon-colors-${thisLevelRotated}`}
                                     >
-                                       <div
-                                          className={classnames(
-                                             "left",
-                                             UI_APPEARANCE !== "light" &&
-                                                "icon-light",
-                                             UI_APPEARANCE === "light" &&
-                                                "icon-dark"
-                                          )}
-                                       >
-                                          <IconUpLevel />
-                                       </div>
+                                       <IconUpLevel />
+                                    </div>
+                                    <span
+                                       className={`button navigation-link level-text-color-parent level-text-color-${parentLevelRotated}`}
+                                    >
                                        Back to&nbsp;
                                        {currentItem.parentName}
                                     </span>
-                                 )}
-                                 {currentItem.parentId === null && (
-                                    <Link to="/loadout-list">
-                                       <div
-                                          className={classnames(
-                                             "left",
-                                             UI_APPEARANCE !== "light" &&
-                                                "icon-light",
-                                             UI_APPEARANCE === "light" &&
-                                                "icon-dark"
-                                          )}
-                                       >
-                                          <IconUpLevel />
-                                       </div>
+                                 </span>
+                              )}
+                              {currentItem.parentId === null && (
+                                 <Link to="/loadout-list">
+                                    <div
+                                       className={`button item-icon-colors standard-sized-icon item-icon-colors-${thisLevelRotated}`}
+                                    >
+                                       <IconUpLevel />
+                                    </div>
+                                    <span
+                                       className={`button navigation-link level-text-color-parent level-text-color-${parentLevelRotated}`}
+                                    >
                                        Back to My Loadouts
-                                    </Link>
-                                 )}
-                              </span>
-                           )}
+                                    </span>
+                                 </Link>
+                              )}
+                           </span>
                         </div>
 
                         {/* the following adds empty space above the super card in edit mode so it doesn't shift */}
@@ -469,16 +392,8 @@ class ItemList extends React.Component {
                         <div
                            className={classnames(
                               "mb-8",
-                              level > 1 && "card super-item-card",
                               level > 1 &&
-                                 UI_APPEARANCE === "light" &&
-                                 "this-bg-light",
-                              level > 1 &&
-                                 UI_APPEARANCE === "dark" &&
-                                 "this-bg-dark",
-                              level > 1 &&
-                                 UI_APPEARANCE === "colors" &&
-                                 "level-color-" + String(level % LEVEL_COLORS)
+                                 `card super-item-card this-bg this-bg-level-${thisLevelRotated}`
                            )}
                         >
                            <div
@@ -490,16 +405,7 @@ class ItemList extends React.Component {
                                     <>
                                        <div className="col">
                                           <h4
-                                             className={classnames(
-                                                (UI_APPEARANCE === "light" ||
-                                                   UI_APPEARANCE === "dark") &&
-                                                   "level-text-color-" +
-                                                      String(
-                                                         level % LEVEL_COLORS
-                                                      ),
-                                                UI_APPEARANCE === "colors" &&
-                                                   "dark-text-color"
-                                             )}
+                                             className={`level-text-color-this level-text-color-${thisLevelRotated}`}
                                           >
                                              {currentItem.name}
                                           </h4>
@@ -507,19 +413,7 @@ class ItemList extends React.Component {
                                        {level > 0 && (
                                           <div className="col">
                                              <h4
-                                                className={classnames(
-                                                   "float-right",
-                                                   (UI_APPEARANCE === "light" ||
-                                                      UI_APPEARANCE ===
-                                                         "dark") &&
-                                                      "level-text-color-" +
-                                                         String(
-                                                            (level + 1) %
-                                                               LEVEL_COLORS
-                                                         ),
-                                                   UI_APPEARANCE === "colors" &&
-                                                      "light-text-color"
-                                                )}
+                                                className={`float-right level-text-color-child level-text-color-${childLevelRotated}`}
                                              >
                                                 {currentItem.contentSummary}
                                              </h4>
@@ -532,7 +426,7 @@ class ItemList extends React.Component {
                                        <span className="flex-fill">
                                           <h4>
                                              <input
-                                                className="edit-name"
+                                                className={`edit-name level-text-color-this level-text-color-${thisLevelRotated}`}
                                                 defaultValue={currentItem.name}
                                                 onBlur={(e) =>
                                                    this.renameThisItem(e)
@@ -557,18 +451,12 @@ class ItemList extends React.Component {
                                              }}
                                           >
                                              <span
-                                                className={classnames(
-                                                   "button",
-                                                   UI_APPEARANCE === "dark" &&
-                                                      "icon-light light-text-color",
-                                                   UI_APPEARANCE !== "dark" &&
-                                                      "icon-dark dark-text-color"
-                                                )}
+                                                className={`button theme-icon-color standard-sized-icon`}
                                              >
                                                 <IconUserCouple />
                                              </span>
                                              &nbsp;
-                                             <span className="button navigation-link">
+                                             <span className="button navigation-link theme-text-color">
                                                 Loadout Settings
                                              </span>
                                              &nbsp;&nbsp;
@@ -584,7 +472,7 @@ class ItemList extends React.Component {
                                     {level > 0 && (
                                        <div>
                                           <span
-                                             className="clickable"
+                                             className="clickable theme-text-color"
                                              onClick={(e) => {
                                                 this.props.currentUserLoadout
                                                    .canEdit === 1 &&
@@ -592,23 +480,19 @@ class ItemList extends React.Component {
                                              }}
                                           >
                                              <span
-                                                className={classnames(
-                                                   "button",
-                                                   UI_APPEARANCE === "dark" &&
-                                                      "icon-light light-text-color",
-                                                   UI_APPEARANCE !== "dark" &&
-                                                      "icon-dark dark-text-color"
-                                                )}
+                                                className={`button theme-icon-color standard-sized-icon`}
                                              >
                                                 <IconEdit />
                                              </span>
                                              &nbsp;
-                                             {this.props.isEditMode && (
-                                                <>Done Editing</>
-                                             )}
-                                             {!this.props.isEditMode && (
-                                                <>Edit Loadout</>
-                                             )}
+                                             <span className="button navigation-link theme-text-color">
+                                                {this.props.isEditMode && (
+                                                   <>Done Editing</>
+                                                )}
+                                                {!this.props.isEditMode && (
+                                                   <>Edit Loadout</>
+                                                )}
+                                             </span>
                                           </span>
                                        </div>
                                     )}
@@ -646,10 +530,7 @@ class ItemList extends React.Component {
                                        <span
                                           className={classnames(
                                              "button navigation-link w-100",
-                                             UI_APPEARANCE === "dark" &&
-                                                "light-text-color",
-                                             UI_APPEARANCE !== "dark" &&
-                                                "dark-text-color",
+                                             "theme-text-color",
                                              (currentItem.numResolvedDescendants ===
                                                 0 ||
                                                 this.props.currentUserLoadout

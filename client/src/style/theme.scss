@@ -136,3 +136,340 @@ $outline-style: 1px solid rgba(0, 0, 0, 0.5);
 $light-text-color: rgba(255, 255, 255, 0.6);
 $light-text-color-dim: rgba(255, 255, 255, 0.25);
 $dark-text-color: rgba(0, 0, 0, 0.7);
+$dark-text-color-dim: rgba(0, 0, 0, 0.3);
+
+// UI THEMES
+
+.theme-colors {
+   .level-text-color-this {
+      color: $dark-text-color;
+   }
+   .level-text-color-parent {
+      color: $light-text-color;
+   }
+   .level-text-color-child {
+      color: $light-text-color;
+   }
+   .theme-text-color {
+      color: $dark-text-color;
+   }
+   .icon-parent {
+      width: 1em; //$iconWidth;
+      align-self: center;
+      .primary {
+         fill: $light-text-color;
+      }
+      .secondary {
+         fill: $light-text-color-dim;
+      }
+   }
+   .theme-icon-color {
+      // width: 1em; //$iconWidth;
+      align-self: center;
+      .primary {
+         fill: $dark-text-color;
+      }
+      .secondary {
+         fill: $dark-text-color-dim;
+      }
+   }
+
+   .edit-name {
+      background-color: rgba(255, 255, 255, 0.6);
+      color: black;
+   }
+
+   .this-bg-level-0 {
+      background-color: map-get($level-colors, 0);
+   }
+   .this-bg-level-1 {
+      background-color: map-get($level-colors, 1);
+   }
+   .this-bg-level-2 {
+      background-color: map-get($level-colors, 2);
+   }
+   .this-bg-level-3 {
+      background-color: map-get($level-colors, 3);
+   }
+   .this-bg-level-4 {
+      background-color: map-get($level-colors, 4);
+   }
+   .this-bg-level-5 {
+      background-color: map-get($level-colors, 5);
+   }
+   .this-bg-level-6 {
+      background-color: map-get($level-colors, 6);
+   }
+
+   .parent-bg-level-0 {
+      background-color: map-get($parent-colors, 0);
+   }
+   .parent-bg-level-1 {
+      background-color: map-get($parent-colors, 1);
+   }
+   .parent-bg-level-2 {
+      background-color: map-get($parent-colors, 2);
+   }
+   .parent-bg-level-3 {
+      background-color: map-get($parent-colors, 3);
+   }
+   .parent-bg-level-4 {
+      background-color: map-get($parent-colors, 4);
+   }
+   .parent-bg-level-5 {
+      background-color: map-get($parent-colors, 5);
+   }
+   .parent-bg-level-6 {
+      background-color: map-get($parent-colors, 6);
+   }
+
+   .child-bg-level-0 {
+      background-color: map-get($child-colors, 0);
+   }
+   .child-bg-level-1 {
+      background-color: map-get($child-colors, 1);
+   }
+   .child-bg-level-2 {
+      background-color: map-get($child-colors, 2);
+   }
+   .child-bg-level-3 {
+      background-color: map-get($child-colors, 3);
+   }
+   .child-bg-level-4 {
+      background-color: map-get($child-colors, 4);
+   }
+   .child-bg-level-5 {
+      background-color: map-get($child-colors, 5);
+   }
+   .child-bg-level-6 {
+      background-color: map-get($child-colors, 6);
+   }
+
+   .child-packed-bg-level-0 {
+      background-color: map-get($packed-colors, 0);
+   }
+   .child-packed-bg-level-1 {
+      background-color: map-get($packed-colors, 1);
+   }
+   .child-packed-bg-level-2 {
+      background-color: map-get($packed-colors, 2);
+   }
+   .child-packed-bg-level-3 {
+      background-color: map-get($packed-colors, 3);
+   }
+   .child-packed-bg-level-4 {
+      background-color: map-get($packed-colors, 4);
+   }
+   .child-packed-bg-level-5 {
+      background-color: map-get($packed-colors, 5);
+   }
+   .child-packed-bg-level-6 {
+      background-color: map-get($packed-colors, 6);
+   }
+
+   .item-icon-colors {
+      width: 1em;
+      align-self: center;
+
+      .parent-item {
+         fill: $dark-text-color;
+      }
+      .this-item {
+         fill: $light-text-color;
+      }
+      .child-item {
+         fill: $dark-text-color;
+      }
+   }
+}
+
+.theme-light {
+   .theme-text-color {
+      color: $dark-text-color;
+   }
+
+   .this-bg {
+      background-color: $this-bg-light;
+   }
+
+   .parent-bg {
+      background-color: $parent-bg-light;
+   }
+
+   .child-bg {
+      background-color: $child-bg-light;
+   }
+   .child-packed-bg {
+      background-color: $child-bg-light-packed;
+   }
+
+   .theme-icon-color {
+      // width: 1em; //$iconWidth;
+      align-self: center;
+      .primary {
+         fill: $dark-text-color;
+      }
+      .secondary {
+         fill: $dark-text-color-dim;
+      }
+   }
+
+   .edit-name {
+      background-color: rgba(255, 255, 255, 0.6);
+   }
+
+   .secondary-action-button {
+      color: $dark-text-color;
+   }
+}
+
+.theme-dark {
+   .theme-text-color {
+      color: $light-text-color;
+   }
+
+   .this-bg {
+      background-color: $this-bg-dark;
+   }
+
+   .parent-bg {
+      background-color: $parent-bg-dark;
+   }
+
+   .child-bg {
+      background-color: $child-bg-dark;
+   }
+   .child-packed-bg {
+      background-color: $child-bg-dark-packed;
+   }
+
+   .display-switch-label {
+      color: rgba(255, 255, 255, 0.5);
+   }
+
+   .theme-icon-color {
+      // width: 1em; //$iconWidth;
+      align-self: center;
+      .primary {
+         fill: $light-text-color;
+      }
+      .secondary {
+         fill: $light-text-color-dim;
+      }
+   }
+
+   .edit-name {
+      background-color: rgba(0, 0, 0, 0.6);
+   }
+}
+
+// shared with light and dark themes
+.theme-light,
+.theme-dark {
+   .item-icon-colors-0 {
+      width: 1em;
+      align-self: center;
+      // colors for the packing icons
+      .parent-item {
+         fill: map-get($level-text-colors, 6);
+      }
+      .this-item {
+         fill: map-get($level-text-colors, 0);
+      }
+      .child-item {
+         fill: map-get($level-text-colors, 1);
+      }
+   }
+   .item-icon-colors-1 {
+      width: 1em;
+      align-self: center;
+      // colors for the packing icons
+      .parent-item {
+         fill: map-get($level-text-colors, 0);
+      }
+      .this-item {
+         fill: map-get($level-text-colors, 1);
+      }
+      .child-item {
+         fill: map-get($level-text-colors, 2);
+      }
+   }
+   .item-icon-colors-2 {
+      width: 1em;
+      align-self: center;
+      // colors for the packing icons
+      .parent-item {
+         fill: map-get($level-text-colors, 1);
+      }
+      .this-item {
+         fill: map-get($level-text-colors, 2);
+      }
+      .child-item {
+         fill: map-get($level-text-colors, 3);
+      }
+   }
+   .item-icon-colors-3 {
+      width: 1em;
+      align-self: center;
+      // colors for the packing icons
+      .parent-item {
+         fill: map-get($level-text-colors, 2);
+      }
+      .this-item {
+         fill: map-get($level-text-colors, 3);
+      }
+      .child-item {
+         fill: map-get($level-text-colors, 4);
+      }
+   }
+   .item-icon-colors-4 {
+      width: 1em;
+      align-self: center;
+      // colors for the packing icons
+      .parent-item {
+         fill: map-get($level-text-colors, 3);
+      }
+      .this-item {
+         fill: map-get($level-text-colors, 4);
+      }
+      .child-item {
+         fill: map-get($level-text-colors, 5);
+      }
+   }
+   .item-icon-colors-5 {
+      width: 1em;
+      align-self: center;
+      // colors for the packing icons
+      .parent-item {
+         fill: map-get($level-text-colors, 4);
+      }
+      .this-item {
+         fill: map-get($level-text-colors, 5);
+      }
+      .child-item {
+         fill: map-get($level-text-colors, 6);
+      }
+   }
+   .item-icon-colors-6 {
+      width: 1em;
+      align-self: center;
+      // colors for the packing icons
+      .parent-item {
+         fill: map-get($level-text-colors, 5);
+      }
+      .this-item {
+         fill: map-get($level-text-colors, 6);
+      }
+      .child-item {
+         fill: map-get($level-text-colors, 0);
+      }
+   }
+}
+
+// shared between colors and light themes
+.theme-colors,
+.theme-light {
+   .display-switch-label {
+      color: rgba(0, 0, 0, 0.5);
+   }
+}

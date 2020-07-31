@@ -1,20 +1,9 @@
 import React from "react";
 import Header from "../ui/Header";
-// import orderBy from "lodash/orderBy";
-// import { IconArrowThinLeftCircle } from "../../icons/icons.js";
-// import { MAX_ITEM_NAME_LENGTH, LEVEL_COLORS } from "../../utils/helpers";
-// import axios from "axios";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import LoadoutCard from "../ui/LoadoutCard";
-// import ItemCardEdit from "../ui/ItemCardEdit";
-import {
-   // MOVE_UPDOWN,
-   // MAX_ITEM_NAME_LENGTH,
-   LEVEL_COLORS,
-   // SUBITEM_DISPLAY_MODE,
-   UI_APPEARANCE,
-} from "../../utils/helpers";
+import { UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
 import axios from "axios";
 import { getUserLoadouts } from "../../utils/userLoadouts";
@@ -121,23 +110,11 @@ class LoadoutList extends React.Component {
 
       console.log("this.props.currentUser", this.props.currentUser);
 
-      const level = 0; // loudouts list page is always level 0
-
       return (
-         <div>
+         <div className={`${UI_APPEARANCE}`}>
             <Header />
             <div
-               className={classnames(
-                  "item-list",
-                  UI_APPEARANCE === "light" && "parent-bg-light",
-                  UI_APPEARANCE === "dark" && "parent-bg-dark",
-                  UI_APPEARANCE === "colors" &&
-                     level < 2 &&
-                     "parent-color-" + String(level % LEVEL_COLORS),
-                  UI_APPEARANCE === "colors" &&
-                     level >= 2 &&
-                     "parent-color-" + String((level - 1) % LEVEL_COLORS)
-               )}
+               className={classnames(`item-list parent-bg parent-bg-level-0`)}
             >
                <div className="container-fluid single-wide-container scroll-fix">
                   <div className="row">
@@ -148,12 +125,7 @@ class LoadoutList extends React.Component {
                                  <div className="col">
                                     <h4
                                        className={classnames(
-                                          (UI_APPEARANCE === "light" ||
-                                             UI_APPEARANCE === "dark") &&
-                                             "level-text-color-" +
-                                                String(level % LEVEL_COLORS),
-                                          UI_APPEARANCE === "colors" &&
-                                             "dark-text-color"
+                                          `level-text-color-this level-text-color-0`
                                        )}
                                     >
                                        My Loadouts

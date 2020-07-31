@@ -1,5 +1,4 @@
 import React from "react";
-import { UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
 import {
    IconPackage,
@@ -17,13 +16,7 @@ export default class Header extends React.Component {
                <>
                   <span
                      style={{ fontSize: "1rem", opacity: 0.5 }}
-                     className={classnames(
-                        "button",
-                        (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "colors") &&
-                           "dark-text-color",
-                        UI_APPEARANCE === "dark" && "light-text-color"
-                     )}
+                     className={classnames("button", "theme-text-color")}
                   >
                      {this.props.loadout.numUsers}
                   </span>
@@ -31,8 +24,8 @@ export default class Header extends React.Component {
                      className={classnames(
                         "button",
                         "loadout-card-icon",
-                        UI_APPEARANCE === "dark" && "icon-light",
-                        UI_APPEARANCE !== "dark" && "icon-dark"
+                        "theme-icon-color",
+                        "standard-sized-icon"
                      )}
                   >
                      <IconUserCouple />
@@ -45,8 +38,8 @@ export default class Header extends React.Component {
                   className={classnames(
                      "button",
                      "loadout-card-icon",
-                     UI_APPEARANCE === "dark" && "icon-light",
-                     UI_APPEARANCE !== "dark" && "icon-dark"
+                     "theme-icon-color",
+                     "standard-sized-icon"
                   )}
                >
                   <IconPackage />
@@ -57,8 +50,8 @@ export default class Header extends React.Component {
                   className={classnames(
                      "button",
                      "loadout-card-icon",
-                     UI_APPEARANCE === "dark" && "icon-light",
-                     UI_APPEARANCE !== "dark" && "icon-dark"
+                     "theme-icon-color",
+                     "standard-sized-icon"
                   )}
                >
                   <IconEdit />
@@ -68,9 +61,9 @@ export default class Header extends React.Component {
                <span
                   className={classnames(
                      "button",
+                     "theme-icon-color",
                      "loadout-card-icon",
-                     UI_APPEARANCE === "dark" && "icon-light",
-                     UI_APPEARANCE !== "dark" && "icon-dark"
+                     "standard-sized-icon"
                   )}
                >
                   <IconKey />

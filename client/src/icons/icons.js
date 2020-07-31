@@ -363,7 +363,10 @@ export function IconTrash() {
 export function IconUpLevel() {
    return (
       <svg viewBox="0 0 24 24">
-         <path className="primary" d="M 20,20 H 4 V 4 l 8,8 H 8 v 4 h 12 z" />
+         <path
+            className="primary this-item"
+            d="M 20,20 H 4 V 4 l 8,8 H 8 v 4 h 12 z"
+         />
       </svg>
    );
 }

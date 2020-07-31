@@ -1,22 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-// import actions from "../../store/actions";
 import {
    MOVE_UPDOWN,
    MAX_ITEM_NAME_LENGTH,
    LEVEL_COLORS,
-   UI_APPEARANCE,
 } from "../../utils/helpers";
-// import classnames from "classnames";
-import {
-   // IconArrowThinRightCircle,
-   // IconTrash,
-   IconChevronDown,
-   IconChevronUp,
-} from "../../icons/icons.js";
+import { IconChevronDown, IconChevronUp } from "../../icons/icons.js";
 import { DeleteIcon, ChildrenAddIcon } from "../../icons/loadout-icons.js";
-
-// import { processAllItems } from "../../utils/processItems";
 import classnames from "classnames";
 import { renameItem, deleteItem, processLoadout } from "../../utils/items";
 import actions from "../../store/actions";
@@ -131,6 +121,8 @@ class ItemCardEdit extends React.Component {
       // const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 because it is one level below the page's level
       const level = this.props.item.level; // now it uses the level of the item generated in processLoadout
 
+      const thisLevelRotated = (level + LEVEL_COLORS) % LEVEL_COLORS;
+
       // let thisItemPath = this.props.currentLoadout.itemIndexPath.concat([
       //    item.index,
       // ]); // stores the complete index path to the item referred to on this item card
@@ -139,26 +131,16 @@ class ItemCardEdit extends React.Component {
          <>
             <div
                // className={
-               //    "item-card-edit child-color-" +
+               //    "item-card-edit child-bg-level-" +
                //    String(item.level % LEVEL_COLORS)
                // }
                className={classnames(
-                  "item-card-edit",
-                  UI_APPEARANCE === "light" && "child-bg-light",
-                  UI_APPEARANCE === "dark" && "child-bg-dark",
-                  UI_APPEARANCE === "colors" &&
-                     "child-color-" + String(level % LEVEL_COLORS)
+                  `item-card-edit child-bg child-bg-level-${thisLevelRotated}`
                )}
             >
                <div className="d-flex">
                   <span
-                     className={classnames(
-                        "item-card-icon clickable",
-                        (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "dark") &&
-                           "item-icon-colors-" + String(level % LEVEL_COLORS),
-                        UI_APPEARANCE === "colors" && "item-icon-colors"
-                     )}
+                     className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
                      onClick={() => this.toggleDeleteRollout()}
                   >
                      <DeleteIcon />
@@ -168,7 +150,7 @@ class ItemCardEdit extends React.Component {
 
                   <span className="flex-fill">
                      <input
-                        className="edit-name"
+                        className={`edit-name level-text-color-child level-text-color-${thisLevelRotated}`}
                         id={"edit-name-input-" + item.id}
                         defaultValue={item.name}
                         onBlur={(e) => this.renameThisItem(e)}
@@ -179,13 +161,7 @@ class ItemCardEdit extends React.Component {
                   <span style={{ width: "8px" }}></span>
 
                   <span
-                     className={classnames(
-                        "item-card-icon clickable",
-                        (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "dark") &&
-                           "item-icon-colors-" + String(level % LEVEL_COLORS),
-                        UI_APPEARANCE === "colors" && "item-icon-colors"
-                     )}
+                     className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
                      onClick={(e) => {
                         // TODO: I think we need to unpack the item if its possible to add a subitem to a packed item
                         movePageToDifferentItem(this.props.item.id, +1);

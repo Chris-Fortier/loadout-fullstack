@@ -1,15 +1,7 @@
 import React from "react";
-// import { Link } from "react-router-dom"; // a React element for linking
 import { connect } from "react-redux";
-// import actions from "../../store/actions";
-import {
-   LEVEL_COLORS,
-   // SUBITEM_DISPLAY_MODE,
-   UI_APPEARANCE,
-   // getContentSummary,
-} from "../../utils/helpers";
+import { LEVEL_COLORS } from "../../utils/helpers";
 import classnames from "classnames";
-// import { IconArrowThinRightCircle } from "../../icons/icons.js";
 import {
    PackedIcon,
    ReadyToPackIcon,
@@ -17,18 +9,14 @@ import {
    ChildrenUnpackedIcon,
    ChildrenPackedIcon2,
 } from "../../icons/loadout-icons.js";
-// import { processAllItems } from "../../utils/processItems";
-import {
-   movePageToDifferentItem,
-   // refreshPage,
-} from "../../utils/movePageToDifferentItem";
+import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import axios from "axios";
 import { processLoadout } from "../../utils/items";
 import actions from "../../store/actions";
 
 // new version of item card that deals with database data
 
-class ItemCard2 extends React.Component {
+class ItemCard extends React.Component {
    // recountPageItems() {
    //    console.log("recountPageItems()...");
    //    console.log(this.props.currentItem);
@@ -93,35 +81,21 @@ class ItemCard2 extends React.Component {
       // const level = this.props.currentLevel + 1; // now the level of the item card is the currentLevel + 1 because it is one level below the page's level
       const level = this.props.item.level; // now it uses the level of the item generated in processLoadout
 
+      const thisLevelRotated = (level + LEVEL_COLORS) % LEVEL_COLORS;
+      const childLevelRotated = (level + LEVEL_COLORS + 1) % LEVEL_COLORS;
+
       return (
          <div
             className={classnames(
-               level > 1 && "item-card",
                level <= 1 && "loadout-card",
-               UI_APPEARANCE === "light" &&
-                  level > 1 &&
+               level > 1 && "item-card",
+               level > 1 &&
                   item.status === 0 &&
-                  "child-bg-light",
-               UI_APPEARANCE === "light" &&
-                  level > 1 &&
+                  "child-bg child-bg-level-" + String(level % LEVEL_COLORS),
+               level > 1 &&
                   item.status === 1 &&
-                  "child-bg-light-packed",
-               UI_APPEARANCE === "dark" &&
-                  level > 1 &&
-                  item.status === 0 &&
-                  "child-bg-dark",
-               UI_APPEARANCE === "dark" &&
-                  level > 1 &&
-                  item.status === 1 &&
-                  "child-bg-dark-packed",
-               UI_APPEARANCE === "colors" &&
-                  level > 1 &&
-                  item.status === 0 &&
-                  "child-color-" + String(level % LEVEL_COLORS),
-               UI_APPEARANCE === "colors" &&
-                  level > 1 &&
-                  item.status === 1 &&
-                  "packed-color-" + String(level % LEVEL_COLORS)
+                  "child-packed-bg child-packed-bg-level-" +
+                     String(level % LEVEL_COLORS)
             )}
             id={"item-card-" + item.index}
          >
@@ -131,10 +105,7 @@ class ItemCard2 extends React.Component {
                   <span
                      className={classnames(
                         "flex-fill item-card-text",
-                        (UI_APPEARANCE === "light" ||
-                           UI_APPEARANCE === "dark") &&
-                           "level-text-color-" + String(level % LEVEL_COLORS),
-                        UI_APPEARANCE === "colors" && "dark-text-color"
+                        `level-text-color-${thisLevelRotated}`
                      )}
                   >
                      <span
@@ -153,11 +124,13 @@ class ItemCard2 extends React.Component {
                      <span
                         className={classnames(
                            "item-card-icon",
-                           (UI_APPEARANCE === "light" ||
-                              UI_APPEARANCE === "dark") &&
-                              "item-icon-colors-" +
-                                 String(level % LEVEL_COLORS),
-                           UI_APPEARANCE === "colors" && "item-icon-colors",
+                           `item-icon-colors-${thisLevelRotated}`,
+                           "item-icon-colors",
+                           // (UI_APPEARANCE === "light" ||
+                           //    UI_APPEARANCE === "dark") &&
+                           //    "item-icon-colors-" +
+                           //       String(level % LEVEL_COLORS),
+                           // UI_APPEARANCE === "colors" && "item-icon-colors",
                            {
                               clickable:
                                  item.numResolvedChildren ===
@@ -184,12 +157,12 @@ class ItemCard2 extends React.Component {
                      </span>
                      <span
                         className={classnames(
-                           "flex-fill item-card-text",
-                           (UI_APPEARANCE === "light" ||
-                              UI_APPEARANCE === "dark") &&
-                              "level-text-color-" +
-                                 String(level % LEVEL_COLORS),
-                           UI_APPEARANCE === "colors" && "light-text-color"
+                           `flex-fill item-card-text level-text-color-child level-text-color-${thisLevelRotated}`
+                           // (UI_APPEARANCE === "light" ||
+                           //    UI_APPEARANCE === "dark") &&
+                           //    "level-text-color-" +
+                           //       String(level % LEVEL_COLORS),
+                           // UI_APPEARANCE === "colors" && "light-text-color"
                         )}
                      >
                         <span
@@ -215,16 +188,12 @@ class ItemCard2 extends React.Component {
                   <>
                      <span
                         onClick={(e) => {
-                           item.status === 0 &&
+                           (item.status === 0 ||
+                              this.props.currentUserLoadout.canPack === 0) &&
                               movePageToDifferentItem(this.props.item.id, +1);
                         }}
                         className={classnames(
-                           "button navigation-link item-card-text",
-                           (UI_APPEARANCE === "light" ||
-                              UI_APPEARANCE === "dark") &&
-                              "level-text-color-" +
-                                 String((level + 1) % LEVEL_COLORS),
-                           UI_APPEARANCE === "colors" && "dark-text-color",
+                           `button navigation-link item-card-text level-text-color-this level-text-color-${childLevelRotated}`,
                            { disabled: item.status === 1 }
                         )}
                      >
@@ -232,12 +201,7 @@ class ItemCard2 extends React.Component {
                      </span>
                      <span
                         className={classnames(
-                           "icon-dark item-card-icon",
-                           (UI_APPEARANCE === "light" ||
-                              UI_APPEARANCE === "dark") &&
-                              "item-icon-colors-" +
-                                 String(level % LEVEL_COLORS),
-                           UI_APPEARANCE === "colors" && "item-icon-colors",
+                           `icon-dark item-card-icon item-icon-colors item-icon-colors-${thisLevelRotated}`,
                            {
                               clickable:
                                  item.status === 0 ||
@@ -281,4 +245,4 @@ function mapStateToProps(state) {
    };
 }
 
-export default connect(mapStateToProps)(ItemCard2); // this is "currying"
+export default connect(mapStateToProps)(ItemCard); // this is "currying"
