@@ -127,6 +127,7 @@ router.post("/auth", async (req, res) => {
                createdAt: users[0].created_at,
                lastLoginAt: users[0].last_login_at,
                thisLoginAt: thisLoginAt,
+               uiTheme: users[0].ui_theme,
             };
 
             // this contains the user, a secret and the timeframe

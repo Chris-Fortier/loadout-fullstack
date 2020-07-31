@@ -108,5 +108,4 @@ export const LEVEL_COLORS = 7; // the amount of level colors there are
 export const MAX_ITEM_NAME_LENGTH = 30; // the maximum length of characters for an item name
 export const MOVE_UPDOWN = false; // whether or not to have up and down buttons in edit mode
 export const SUBITEM_DISPLAY_MODE = "numUnresolvedChildren"; // subItemDisplayMode can be "packedChildrenOutOfTotalChildren" or "numUnresolvedDescendants" or "numUnresolvedChildren"
-export const UI_APPEARANCE = "theme-colors"; // ui appearance mode, "light", "dark", "colors"
 export const MAX_USERNAME_LENGTH = 24;

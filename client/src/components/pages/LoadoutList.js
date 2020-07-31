@@ -3,7 +3,6 @@ import Header from "../ui/Header";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import LoadoutCard from "../ui/LoadoutCard";
-import { UI_APPEARANCE } from "../../utils/helpers";
 import classnames from "classnames";
 import axios from "axios";
 import { getUserLoadouts } from "../../utils/userLoadouts";
@@ -111,7 +110,7 @@ class LoadoutList extends React.Component {
       console.log("this.props.currentUser", this.props.currentUser);
 
       return (
-         <div className={`${UI_APPEARANCE}`}>
+         <div className={`ui-theme-${this.props.currentUser.uiTheme}`}>
             <Header />
             <div
                className={classnames(`item-list parent-bg parent-bg-level-0`)}

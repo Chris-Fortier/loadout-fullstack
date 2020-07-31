@@ -1,11 +1,7 @@
 import React from "react";
 import Header from "../ui/Header";
 import { IconEdit, IconUpLevel, IconUserCouple } from "../../icons/icons.js";
-import {
-   MAX_ITEM_NAME_LENGTH,
-   LEVEL_COLORS,
-   UI_APPEARANCE,
-} from "../../utils/helpers";
+import { MAX_ITEM_NAME_LENGTH, LEVEL_COLORS } from "../../utils/helpers";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -317,7 +313,7 @@ class ItemList extends React.Component {
          (level !== 1 && this.props.currentUserLoadout.canEdit === 1);
 
       return (
-         <div className={`${UI_APPEARANCE}`}>
+         <div className={`ui-theme-${this.props.currentUser.uiTheme}`}>
             <Header />
             <div
                className={classnames(

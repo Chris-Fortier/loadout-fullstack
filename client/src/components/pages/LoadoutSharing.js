@@ -5,11 +5,7 @@ import LoadoutUserCard from "../ui/LoadoutUserCard";
 import { IconUpLevel } from "../../icons/icons.js";
 import { Link } from "react-router-dom"; // a React element for linking
 import axios from "axios";
-import {
-   UI_APPEARANCE,
-   MAX_ITEM_NAME_LENGTH,
-   MAX_USERNAME_LENGTH,
-} from "../../utils/helpers";
+import { MAX_ITEM_NAME_LENGTH, MAX_USERNAME_LENGTH } from "../../utils/helpers";
 import classnames from "classnames";
 import { AddIcon } from "../../icons/loadout-icons";
 import { IconPackage, IconEdit, IconKey } from "../../icons/icons.js";
@@ -224,7 +220,7 @@ class LoadoutSharing extends React.Component {
       console.log("currentLoadoutFromStore", currentLoadoutFromStore);
 
       return (
-         <div className={`${UI_APPEARANCE}`}>
+         <div className={`ui-theme-${this.props.currentUser.uiTheme}`}>
             <Header />
             <div className="item-list parent-bg-level-2 parent-bg">
                <div className="container-fluid single-wide-container scroll-fix">
@@ -377,13 +373,7 @@ class LoadoutSharing extends React.Component {
                                                 >
                                                    <div
                                                       className={classnames(
-                                                         "d-flex loadout-card-icon",
-                                                         UI_APPEARANCE ===
-                                                            "dark" &&
-                                                            "icon-light",
-                                                         UI_APPEARANCE !==
-                                                            "dark" &&
-                                                            "icon-dark"
+                                                         "d-flex loadout-card-icon theme-icon-color"
                                                       )}
                                                    >
                                                       <IconPackage />
@@ -401,13 +391,7 @@ class LoadoutSharing extends React.Component {
                                                 >
                                                    <div
                                                       className={classnames(
-                                                         "d-flex loadout-card-icon",
-                                                         UI_APPEARANCE ===
-                                                            "dark" &&
-                                                            "icon-light",
-                                                         UI_APPEARANCE !==
-                                                            "dark" &&
-                                                            "icon-dark"
+                                                         "d-flex loadout-card-icon theme-icon-color"
                                                       )}
                                                    >
                                                       <IconEdit />
@@ -425,13 +409,7 @@ class LoadoutSharing extends React.Component {
                                                 >
                                                    <div
                                                       className={classnames(
-                                                         "d-flex loadout-card-icon",
-                                                         UI_APPEARANCE ===
-                                                            "dark" &&
-                                                            "icon-light",
-                                                         UI_APPEARANCE !==
-                                                            "dark" &&
-                                                            "icon-dark"
+                                                         "d-flex loadout-card-icon theme-icon-color"
                                                       )}
                                                    >
                                                       <IconKey />
@@ -449,13 +427,7 @@ class LoadoutSharing extends React.Component {
                                                 >
                                                    <div
                                                       className={classnames(
-                                                         "d-flex loadout-card-icon",
-                                                         UI_APPEARANCE ===
-                                                            "dark" &&
-                                                            "icon-light",
-                                                         UI_APPEARANCE !==
-                                                            "dark" &&
-                                                            "icon-dark"
+                                                         "d-flex loadout-card-icon theme-icon-color"
                                                       )}
                                                    ></div>
                                                    <div>
@@ -485,13 +457,7 @@ class LoadoutSharing extends React.Component {
                                                 >
                                                    <div
                                                       className={classnames(
-                                                         "d-flex loadout-card-icon",
-                                                         UI_APPEARANCE ===
-                                                            "dark" &&
-                                                            "icon-light",
-                                                         UI_APPEARANCE !==
-                                                            "dark" &&
-                                                            "icon-dark"
+                                                         "d-flex loadout-card-icon theme-icon-color"
                                                       )}
                                                    ></div>
                                                    <div>

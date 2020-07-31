@@ -140,7 +140,8 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
 
 // UI THEMES
 
-.theme-colors {
+// colors mode
+.ui-theme-0 {
    .level-text-color-this {
       color: $dark-text-color;
    }
@@ -283,7 +284,8 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
    }
 }
 
-.theme-light {
+// light mode
+.ui-theme-2 {
    .theme-text-color {
       color: $dark-text-color;
    }
@@ -323,7 +325,8 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
    }
 }
 
-.theme-dark {
+// dark mode
+.ui-theme-1 {
    .theme-text-color {
       color: $light-text-color;
    }
@@ -364,8 +367,8 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
 }
 
 // shared with light and dark themes
-.theme-light,
-.theme-dark {
+.ui-theme-2,
+.ui-theme-1 {
    .item-icon-colors-0 {
       width: 1em;
       align-self: center;
@@ -467,8 +470,8 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
 }
 
 // shared between colors and light themes
-.theme-colors,
-.theme-light {
+.ui-theme-0,
+.ui-theme-2 {
    .display-switch-label {
       color: rgba(0, 0, 0, 0.5);
    }
