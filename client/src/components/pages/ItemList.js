@@ -270,6 +270,72 @@ class ItemList extends React.Component {
       }
    }
 
+   // moves all the items listed in moveableItemIds here
+   moveItemsHere() {
+      // TODO: prevent moving an item inside itself or own descendants, otherwise you will generate impossible loops
+      const badNewParents = []; // start a list of parents that the items cannot be moved to
+      console.log("badNewParents", badNewParents);
+
+      console.log("this.props.currentLoadout", this.props.currentLoadout);
+
+      const currentLoadout = this.props.currentLoadout; // required in order to access this.props.currentLoadout in the local function
+
+      // add all child ids of an item to badNewParents, then continue with its grandchildren
+      function addChildIdsToBadNewParents(parentId) {
+         // find each child
+         for (let c in currentLoadout) {
+            if (currentLoadout[c].parentId === parentId) {
+               badNewParents.push(currentLoadout[c].id);
+               console.log("badNewParents", badNewParents);
+               addChildIdsToBadNewParents(currentLoadout[c].id); // continue with its grandchildren
+            }
+         }
+      }
+
+      // add all child ids of an item to badNewParents, starting with all the items currently in the list
+      for (let i in this.props.moveableItemIds) {
+         badNewParents.push(this.props.moveableItemIds[i]); // add this item's id to the list
+         console.log("badNewParents", badNewParents);
+         addChildIdsToBadNewParents(
+            // this.props.currentLoadout.find((item) => {
+            //    return item.id === this.props.moveableItemIds[i].id;
+            // })
+            this.props.moveableItemIds[i]
+         ); // add its children and descendants
+      }
+
+      console.log("badNewParents", badNewParents);
+
+      // if the target new parent is in the list of bad parents, you cannot move the items here
+      if (badNewParents.includes(this.props.currentItem.id)) {
+         console.log(
+            "You cannot move an item inside itself or its own descendants."
+         );
+      } else {
+         // you can move them here
+
+         const newLoadout = this.props.currentLoadout.map((item) => {
+            const newItem = { ...item };
+            // if this item is in the list of moveable items
+            if (this.props.moveableItemIds.includes(item.id)) {
+               newItem.parentId = this.props.currentItem.id; // assign the new parent
+            }
+            return newItem;
+         });
+
+         // send the new loadout to Redux
+         this.props.dispatch({
+            type: actions.STORE_CURRENT_LOADOUT,
+            payload: processLoadout(newLoadout), // process the loadout because the levels and counters would have changed
+         });
+
+         // clear the moveable items
+         this.props.dispatch({
+            type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+         });
+      }
+   }
+
    render() {
       console.log("Rendering page...");
 
@@ -557,7 +623,7 @@ class ItemList extends React.Component {
                               {this.props.isEditMode && (
                                  <>
                                     <div
-                                       className="button secondary-action-button narrow-button"
+                                       className="button secondary-action-button"
                                        onClick={(e) => {
                                           this.addItemAndFocus();
                                        }}
@@ -565,18 +631,33 @@ class ItemList extends React.Component {
                                        Add item inside&nbsp;
                                        {currentItem.name}
                                     </div>
-                                    {/* <div
-                                       className="button primary-action-button"
-                                       onClick={(e) => {
-                                          addContainerTo(
-                                             this.props.currentLoadout.gear,
-                                             this.props.currentLoadout
-                                                .itemIndexPath
-                                          );
-                                       }}
-                                    >
-                                       Add Container
-                                    </div> */}
+
+                                    {this.props.moveableItemIds.length > 0 && (
+                                       <>
+                                          <div
+                                             className="button secondary-action-button"
+                                             onClick={(e) => {
+                                                this.moveItemsHere();
+                                             }}
+                                          >
+                                             Move&nbsp;
+                                             {this.props.moveableItemIds.length}
+                                             &nbsp;Picked Up Items To&nbsp;
+                                             {currentItem.name}
+                                          </div>
+                                          <div
+                                             className="button secondary-action-button"
+                                             onClick={() => {
+                                                this.props.dispatch({
+                                                   type:
+                                                      actions.CLEAR_MOVEABLE_ITEM_IDS,
+                                                });
+                                             }}
+                                          >
+                                             Cancel Move
+                                          </div>
+                                       </>
+                                    )}
                                  </>
                               )}
                            </div>
@@ -599,6 +680,7 @@ function mapStateToProps(state) {
       currentUserLoadout: state.currentUserLoadout,
       isEditMode: state.isEditMode,
       currentLoadout: state.currentLoadout,
+      moveableItemIds: state.moveableItemIds,
    };
 }
 

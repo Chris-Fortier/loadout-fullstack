@@ -235,3 +235,27 @@ export function CheckedIcon() {
       </svg>
    );
 }
+
+export function PickUpItem() {
+   return (
+      <svg viewBox="0 0 24 24">
+         <rect className="this-item" width="8" height="8" x="3" y="13" />
+         <path
+            className="primary"
+            d="m 13,3 v 2 c 1.5,0 3.057292,0 4.585938,0 L 13.292969,9.2929688 14.707031,10.707031 19,6.4140625 C 19,7.9427083 19,9.4713542 19,11 h 2 c 0,-2.6666667 0,-5.3333333 0,-8 -2.666667,0 -5.333333,0 -8,0 z"
+         />
+      </svg>
+   );
+}
+
+export function PutDownItem() {
+   return (
+      <svg viewBox="0 0 24 24">
+         <rect className="this-item" width="8" height="8" x="13" y="3" />
+         <path
+            className="primary"
+            d="M 11,21 V 19 C 9.471354,19 7.942708,19 6.414062,19 L 10.707031,14.707031 9.292969,13.292969 5,17.585937 C 5,16.057292 5,14.528646 5,13 H 3 c 0,2.666667 0,5.333333 0,8 2.666667,0 5.333333,0 8,0 z"
+         />
+      </svg>
+   );
+}

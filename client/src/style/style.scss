@@ -806,6 +806,10 @@ label,
    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
+.picked-up-item {
+   opacity: 0.4;
+}
+
 // presentation stuff
 ul {
    font-family: $font-family-body;

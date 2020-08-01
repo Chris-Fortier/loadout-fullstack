@@ -11,6 +11,7 @@ const initialState = {
    currentLoadoutUserLoadouts: [], // stores the userLoadouts of the current loadout
    isEditMode: false,
    currentLoadout: [], // stores the entire current loadout and all its descendants
+   moveableItems: [],
 };
 const store = createStore(combineReducers, initialState, composeWithDevTools());
 export default store;

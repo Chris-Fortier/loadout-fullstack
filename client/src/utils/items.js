@@ -163,5 +163,7 @@ export function processLoadout(loadout) {
    // get each item's level starting with the root node
    assignLevel(null, 1); // start with 1 instead of 0 because 0 is for the My Loadouts level, root node of a loadout is level 1
 
+   // TODO: make sure ancestors of unresolved items are also unresolved (might need to do api calls to unresolve them)
+
    return loadout;
 }

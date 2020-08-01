@@ -6,7 +6,14 @@ import {
    LEVEL_COLORS,
 } from "../../utils/helpers";
 import { IconChevronDown, IconChevronUp } from "../../icons/icons.js";
-import { DeleteIcon, ChildrenAddIcon } from "../../icons/loadout-icons.js";
+import {
+   DeleteIcon,
+   // ChildrenAddIcon,
+   ChildrenUnpackedIcon,
+   // ReadyToPackIcon,
+   PickUpItem,
+   PutDownItem,
+} from "../../icons/loadout-icons.js";
 import classnames from "classnames";
 import { renameItem, deleteItem, processLoadout } from "../../utils/items";
 import actions from "../../store/actions";
@@ -58,6 +65,14 @@ class ItemCardEdit extends React.Component {
       console.log("this.state", this.state);
       this.setState({
          isShowingDeleteConfirmation: !this.state.isShowingDeleteConfirmation,
+      });
+   }
+
+   // add or remove as a moveable item
+   toggleMoveableItemId() {
+      this.props.dispatch({
+         type: actions.TOGGLE_MOVEABLE_ITEM_ID,
+         payload: this.props.item.id,
       });
    }
 
@@ -130,12 +145,13 @@ class ItemCardEdit extends React.Component {
       return (
          <>
             <div
-               // className={
-               //    "item-card-edit child-bg-level-" +
-               //    String(item.level % LEVEL_COLORS)
-               // }
                className={classnames(
-                  `item-card-edit child-bg child-bg-level-${thisLevelRotated}`
+                  `item-card-edit child-bg child-bg-level-${thisLevelRotated}`,
+                  {
+                     "picked-up-item": this.props.moveableItemIds.includes(
+                        this.props.item.id
+                     ),
+                  }
                )}
             >
                <div className="d-flex">
@@ -145,9 +161,19 @@ class ItemCardEdit extends React.Component {
                   >
                      <DeleteIcon />
                   </span>
-
+                  &nbsp;&nbsp;&nbsp;
+                  <span
+                     className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                     onClick={() => this.toggleMoveableItemId()}
+                  >
+                     {!this.props.moveableItemIds.includes(
+                        this.props.item.id
+                     ) && <PickUpItem />}
+                     {this.props.moveableItemIds.includes(
+                        this.props.item.id
+                     ) && <PutDownItem />}
+                  </span>
                   <span style={{ width: "8px" }}></span>
-
                   <span className="flex-fill">
                      <input
                         className={`edit-name level-text-color-child level-text-color-${thisLevelRotated}`}
@@ -157,9 +183,7 @@ class ItemCardEdit extends React.Component {
                         maxLength={MAX_ITEM_NAME_LENGTH}
                      />
                   </span>
-
                   <span style={{ width: "8px" }}></span>
-
                   <span
                      className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
                      onClick={(e) => {
@@ -176,9 +200,8 @@ class ItemCardEdit extends React.Component {
                         }
                      }}
                   >
-                     <ChildrenAddIcon />
+                     <ChildrenUnpackedIcon />
                   </span>
-
                   {MOVE_UPDOWN && (
                      <>
                         <div className="icon-container">
@@ -202,6 +225,7 @@ class ItemCardEdit extends React.Component {
 function mapStateToProps(state) {
    return {
       currentLoadout: state.currentLoadout,
+      moveableItemIds: state.moveableItemIds,
    };
 }
 

@@ -101,6 +101,9 @@ export function logOutCurrentUser(props) {
       type: actions.STORE_CURRENT_LOADOUT,
       payload: [],
    });
+   props.dispatch({
+      type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+   });
 }
 
 // app master preferences
