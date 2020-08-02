@@ -359,7 +359,8 @@ class Landing extends React.Component {
          <div
             className={classnames(
                this.state.landingMode === "log-in" && "landing-bg-0",
-               this.state.landingMode === "new-account" && "landing-bg-1"
+               this.state.landingMode === "new-account" && "landing-bg-1",
+               "ui-theme-0"
             )}
          >
             <div className="container-fluid landing-page">

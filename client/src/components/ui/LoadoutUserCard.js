@@ -165,7 +165,7 @@ class LoadoutUserCard extends React.Component {
             {/* large size card */}
             <tr className="sharedUserRow  d-none d-sm-table-row">
                <>
-                  <th scope="row" className="loadout-user theme-text-color">
+                  <th scope="row" className="loadout-user">
                      {this.props.userLoadout.username}
                      {this.props.userLoadout.userId ===
                         this.props.currentUser.id && <>&nbsp;(YOU)</>}

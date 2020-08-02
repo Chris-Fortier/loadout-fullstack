@@ -16,7 +16,7 @@ export default class Header extends React.Component {
                <>
                   <span
                      style={{ fontSize: "1rem", opacity: 0.5 }}
-                     className={classnames("button", "theme-text-color")}
+                     className={classnames("button")}
                   >
                      {this.props.loadout.numUsers}
                   </span>

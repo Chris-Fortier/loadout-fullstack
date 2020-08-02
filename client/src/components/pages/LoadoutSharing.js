@@ -236,7 +236,7 @@ class LoadoutSharing extends React.Component {
                               <IconUpLevel />
                            </div>
                            <span
-                              className={`button navigation-link level-text-color-parent theme-text-color`}
+                              className={`button navigation-link level-text-color-parent`}
                            >
                               {this.props.currentItem.backRoute ===
                                  "/item-list" && <>Back to Loadout</>}
@@ -253,7 +253,7 @@ class LoadoutSharing extends React.Component {
                                        {(this.props.currentUserLoadout
                                           .isAdmin === 0 ||
                                           true) && (
-                                          <h4 className="theme-text-color">
+                                          <h4>
                                              {currentLoadoutFromStore.name}
                                              <br />
                                              Sharing Settings
@@ -263,7 +263,7 @@ class LoadoutSharing extends React.Component {
                                           .isAdmin === 1 &&
                                           false && (
                                              <span className="flex-fill">
-                                                <h4 className="theme-text-color">
+                                                <h4>
                                                    <input
                                                       className="edit-name mb-2"
                                                       defaultValue={
@@ -283,7 +283,7 @@ class LoadoutSharing extends React.Component {
                                           )}
                                        {this.props.currentUserLoadout
                                           .isAdmin === 1 && (
-                                          <div className="card-section theme-text-color">
+                                          <div className="card-section">
                                              <span
                                                 className="button navigation-link w-100"
                                                 onClick={() =>

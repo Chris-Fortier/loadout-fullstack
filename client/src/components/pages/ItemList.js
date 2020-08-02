@@ -86,7 +86,7 @@ class ItemList extends React.Component {
             )}
 
             <div
-               className={classnames("button navigation-link theme-text-color")}
+               className={classnames("button navigation-link")}
                onClick={() => this.toggleUnpackRollout()}
             >
                <br />
@@ -518,7 +518,7 @@ class ItemList extends React.Component {
                                                 <IconUserCouple />
                                              </span>
                                              &nbsp;
-                                             <span className="button navigation-link theme-text-color">
+                                             <span className="button navigation-link">
                                                 Loadout Settings
                                              </span>
                                              &nbsp;&nbsp;
@@ -534,7 +534,7 @@ class ItemList extends React.Component {
                                     {level > 0 && (
                                        <div>
                                           <span
-                                             className="clickable theme-text-color"
+                                             className="clickable"
                                              onClick={(e) => {
                                                 this.props.currentUserLoadout
                                                    .canEdit === 1 &&
@@ -547,7 +547,7 @@ class ItemList extends React.Component {
                                                 <IconEdit />
                                              </span>
                                              &nbsp;
-                                             <span className="button navigation-link theme-text-color">
+                                             <span className="button navigation-link">
                                                 {this.props.isEditMode && (
                                                    <>Done Editing</>
                                                 )}
@@ -592,7 +592,6 @@ class ItemList extends React.Component {
                                        <span
                                           className={classnames(
                                              "button navigation-link w-100",
-                                             "theme-text-color",
                                              (currentItem.numResolvedDescendants ===
                                                 0 ||
                                                 this.props.currentUserLoadout
