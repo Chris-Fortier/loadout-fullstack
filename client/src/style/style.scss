@@ -172,6 +172,11 @@ body {
    }
 }
 
+.space-above-faceplate {
+   min-height: 32px;
+   height: calc((100vh - 340px) * 0.25);
+}
+
 .big-checkbox {
    width: 20px;
    height: 20px;

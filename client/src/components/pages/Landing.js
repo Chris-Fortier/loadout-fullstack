@@ -364,6 +364,7 @@ class Landing extends React.Component {
             )}
          >
             <div className="container-fluid landing-page">
+               <div className="row space-above-faceplate"></div>
                <div className="row">
                   <div
                      style={{ width: "max(calc((100% - 320px)*.33),15px)" }}
@@ -379,7 +380,7 @@ class Landing extends React.Component {
                         src={LoadoutLogo}
                         alt="Loadout"
                         width="100%"
-                        className="mb-4 mt-8"
+                        className="mb-4"
                      />
                      {/* render either the log-in or new account cards depending on landingMode */}
                      {this.state.landingMode === "log-in" &&
