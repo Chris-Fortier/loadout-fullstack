@@ -233,8 +233,9 @@ class AccountSettings extends React.Component {
 
    render() {
       return (
-         <div className="landing-bg-2">
+         <div className="landing-bg-2 ui-theme-0">
             <div className="container-fluid landing-page">
+               <div className="row space-above-faceplate"></div>
                <div className="row">
                   <div
                      style={{ width: "max(calc((100% - 320px)*.33),15px)" }}
@@ -245,7 +246,7 @@ class AccountSettings extends React.Component {
                         marginBottom: "50px",
                      }}
                   >
-                     <div className="card mt-8 mb-3">
+                     <div className="card mb-3">
                         <div className="card-body">
                            <h5>
                               Account Settings for&nbsp;

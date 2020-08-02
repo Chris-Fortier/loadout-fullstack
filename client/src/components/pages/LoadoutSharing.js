@@ -231,12 +231,12 @@ class LoadoutSharing extends React.Component {
                            to={this.props.currentItem.backRoute}
                         >
                            <div
-                              className={`button theme-icon-color standard-sized-icon theme-icon-color`}
+                              className={`button standard-sized-icon theme-icon-color`}
                            >
                               <IconUpLevel />
                            </div>
                            <span
-                              className={`button navigation-link level-text-color-parent`}
+                              className={`button navigation-link level-text-color-this`}
                            >
                               {this.props.currentItem.backRoute ===
                                  "/item-list" && <>Back to Loadout</>}

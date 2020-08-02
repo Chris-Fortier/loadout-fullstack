@@ -5,7 +5,7 @@ SELECT * FROM users;
 -- get the permissions a given user has for a given item
 -- this will find the root node, then join it with the xref user loadout associated with the given user
 
-SELECT can_pack, can_edit, is_admin FROM (
+SELECT can_pack, can_edit, is_admin, loadout_id FROM (
 
 WITH RECURSIVE loadouts_path (id, `name`, parent_id) AS
 (

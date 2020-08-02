@@ -18,6 +18,7 @@ const insertUserLoadout = require("../../queries/insertUserLoadout");
 const selectUserLoadoutByIds = require("../../queries/selectUserLoadoutByIds");
 const deleteUserLoadoutsByLoadout = require("../../queries/deleteUserLoadoutsByLoadout");
 const selectUserPermissionsForItem = require("../../queries/selectUserPermissionsForItem");
+const moveItem = require("../../queries/moveItem");
 
 // @route      POST api/v1/loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new item
@@ -447,6 +448,124 @@ router.delete("/delete-loadout", validateJwt, async (req, res) => {
 
    // const { itemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
    // console.log({ itemId });
+});
+
+// @route      PUT api/v1/loadouts/move-item
+// @desc       move an item or multiple items to have another parent
+//                only if the provided user token has edit privileges
+// @access     Private
+
+// testing with postman
+// use a token for user "beavis"
+// http://localhost:3060/api/v1/loadouts/move-item?itemId=42d32eaa-d065-44d3-922c-037e0b469ee8&newParentId=42d32eaa-d065-44d3-922c-037e0b469ee8
+//    result: "You cannot move an item inside of itself."
+// http://localhost:3060/api/v1/loadouts/move-item?itemId=22a35a73-1b0c-4fd7-b4e3-bb5a35c927cc&newParentId=42d32eaa-d065-44d3-922c-037e0b469ee8
+//    result: "This user does not have access to the item's origin.
+// http://localhost:3060/api/v1/loadouts/move-item?itemId=0020068e-3e9b-45e7-a4a7-cdf584f50052&newParentId=6369a17f-616a-44c3-a762-7a99158c5b85
+//    result: "This user does not have can_edit permissions on the the item's origin."
+// http://localhost:3060/api/v1/loadouts/move-item?itemId=b01a1e9a-e2e6-4afa-915e-282d4ecf21a6&newParentId=b9cd2817-de96-4600-a382-2b3e35757276
+//    result: "You cannot move an item inside of one of it's descendants."
+// http://localhost:3060/api/v1/loadouts/move-item?itemId=42d32eaa-d065-44d3-922c-037e0b469ee8&newParentId=e0364b00-f7fc-469c-ab82-8de3487bcc0b
+//    result: "This user does not have access to the item's destination."
+// http://localhost:3060/api/v1/loadouts/move-item?itemId=42d32eaa-d065-44d3-922c-037e0b469ee8&newParentId=c0842522-0948-4b66-b6ae-fb1c3d689806
+//    result: "This user does not have can_edit permissions on the the item's destination."
+router.put("/move-item", validateJwt, async (req, res) => {
+   const userId = req.user.id; // get the user id from the validateJwt
+   const itemId = req.query.itemId; // get the item id of the item to be moved
+   const newParentId = req.query.newParentId; // get the new parent id of where the item will be moved to
+   console.log("api/v1/loadouts/move-item...", { userId, itemId, newParentId });
+
+   // first, make sure the item isn't trying to be moved inside itself
+   if (newParentId !== itemId) {
+      // next, get the permissions that the given user has for this item's origin
+      db.query(selectUserPermissionsForItem, [itemId, userId])
+         .then((dbRes) => {
+            // see if permissions info was received (user has the loadout shared with them)
+            if (dbRes.length > 0) {
+               // if they have can_edit permission on the origin
+               if (dbRes[0].can_edit === 1) {
+                  console.log(
+                     `User has permission to move item from it's origin loadout of ${dbRes[0].loadout_id}.`
+                  );
+
+                  // get the list of all the item's original descendants to make sure that you aren't moving it inside of itself
+                  db.query(selectLoadoutDescendants, [itemId])
+                     .then((dbRes) => {
+                        // get a list of all the descendants of the item you are trying to move
+                        const descendantIds = dbRes.map((item) => {
+                           return item.id;
+                        });
+
+                        // if the newParentId is not one of the existing descendants, we can move on
+                        if (!descendantIds.includes(newParentId)) {
+                           // next get the permissions that the given user has for this item's destination
+                           db.query(selectUserPermissionsForItem, [
+                              newParentId,
+                              userId,
+                           ])
+                              .then((dbRes) => {
+                                 // see if permissions info was received (user has the loadout shared with them)
+                                 if (dbRes.length > 0) {
+                                    // if they have can_edit permission on the destination
+                                    if (dbRes[0].can_edit === 1) {
+                                       console.log(
+                                          `User has permission to move item to it's destination loadout of ${dbRes[0].loadout_id}.`
+                                       );
+                                       // move the item
+                                       // TODO: also update the last edit date?
+                                       db.query(moveItem, [newParentId, itemId])
+                                          .then((dbRes) => {
+                                             res.status(200).json(
+                                                `Moved item ${itemId} to ${newParentId}.`
+                                             );
+                                          })
+                                          .catch((err) => {
+                                             console.log("err", err);
+                                             res.status(400).json(err);
+                                          });
+                                    } else {
+                                       res.status(400).json(
+                                          "This user does not have can_edit permissions on the the item's destination."
+                                       );
+                                    }
+                                 } else {
+                                    res.status(400).json(
+                                       "This user does not have access to the item's destination."
+                                    );
+                                 }
+                              })
+                              .catch((err) => {
+                                 console.log("err", err);
+                                 res.status(400).json(err);
+                              });
+                        } else {
+                           res.status(400).json(
+                              "You cannot move an item inside of one of it's own descendants."
+                           );
+                        }
+                     })
+                     .catch((err) => {
+                        console.log("err", err);
+                        res.status(400).json(err);
+                     });
+               } else {
+                  res.status(400).json(
+                     "This user does not have can_edit permissions on the the item's origin."
+                  );
+               }
+            } else {
+               res.status(400).json(
+                  "This user does not have access to the item's origin."
+               );
+            }
+         })
+         .catch((err) => {
+            console.log("err", err);
+            res.status(400).json(err);
+         });
+   } else {
+      res.status(400).json("You cannot move an item inside of itself.");
+   }
 });
 
 module.exports = router;

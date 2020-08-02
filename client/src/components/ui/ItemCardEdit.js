@@ -161,8 +161,8 @@ class ItemCardEdit extends React.Component {
                   >
                      <DeleteIcon />
                   </span>
-                  {/* &nbsp;&nbsp;&nbsp;
-                   <span
+                  &nbsp;&nbsp;&nbsp;
+                  <span
                      className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
                      onClick={() => this.toggleMoveableItemId()}
                   >
@@ -172,7 +172,7 @@ class ItemCardEdit extends React.Component {
                      {this.props.moveableItemIds.includes(
                         this.props.item.id
                      ) && <PutDownItem />}
-                  </span> */}
+                  </span>
                   <span style={{ width: "8px" }}></span>
                   <span className="flex-fill">
                      <input

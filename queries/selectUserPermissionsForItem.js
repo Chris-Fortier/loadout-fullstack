@@ -1,7 +1,7 @@
 // returns the permissions that a given user has for a given item
 // test:
 const selectUserPermissionsForItem = `
-SELECT can_pack, can_edit, is_admin FROM (
+SELECT can_pack, can_edit, is_admin, loadout_id FROM (
 
    WITH RECURSIVE loadouts_path (id, \`name\`, parent_id) AS
    (

@@ -192,7 +192,7 @@ export function AddIcon() {
    return (
       <svg viewBox="0 0 24 24">
          <path
-            className="primary"
+            className="primary this-item"
             d="M 10 1 L 10 10 L 1 10 L 1 14 L 10 14 L 10 23 L 14 23 L 14 14 L 23 14 L 23 10 L 14 10 L 14 1 L 10 1 z "
          />
       </svg>

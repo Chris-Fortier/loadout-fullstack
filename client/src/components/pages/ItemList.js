@@ -13,6 +13,7 @@ import { renameItem, processLoadout } from "../../utils/items";
 import isEmpty from "lodash/isEmpty";
 import SharingStrip from "../ui/SharingStrip";
 import axios from "axios";
+import { PutDownItem, AddIcon } from "../../icons/loadout-icons";
 
 class ItemList extends React.Component {
    constructor(props) {
@@ -271,7 +272,8 @@ class ItemList extends React.Component {
    }
 
    // moves all the items listed in moveableItemIds here
-   moveItemsHere() {
+   // this did all the testing on the client
+   moveItemsHereOld() {
       // TODO: prevent moving an item inside itself or own descendants, otherwise you will generate impossible loops
       const badNewParents = []; // start a list of parents that the items cannot be moved to
       console.log("badNewParents", badNewParents);
@@ -336,6 +338,46 @@ class ItemList extends React.Component {
       }
    }
 
+   // moves all the items listed in moveableItemIds here
+   // all the testing is done on the server
+   moveItemsHere() {
+      // for (let i in this.props.moveableItemIds) {
+      axios
+         .put(
+            "/api/v1/loadouts/move-item?itemId=" +
+               this.props.moveableItemIds[0] +
+               "&newParentId=" +
+               this.props.currentItem.id
+         )
+         .then((res) => {
+            console.log("axios res", res);
+
+            // update the parent on the client
+            this.props.currentLoadout.find((item) => {
+               return item.id === this.props.moveableItemIds[0];
+            }).parentId = this.props.currentItem.id;
+
+            // clear the moveable items
+            // TODO: just make it remove the first item
+            this.props.dispatch({
+               type: actions.TOGGLE_MOVEABLE_ITEM_ID,
+               payload: this.props.moveableItemIds[0],
+            });
+
+            // send the updated loadout to Redux
+            // if (i === this.props.moveableItemIds.length - 1) {
+            this.props.dispatch({
+               type: actions.STORE_CURRENT_LOADOUT,
+               payload: processLoadout(this.props.currentLoadout), // process the loadout because the levels and counters would have changed
+            });
+            // }
+         })
+         .catch((error) => {
+            console.log("axios error", error);
+         });
+      // }
+   }
+
    render() {
       console.log("Rendering page...");
 
@@ -378,8 +420,25 @@ class ItemList extends React.Component {
          (level === 1 && this.props.currentUserLoadout.isAdmin === 1) ||
          (level !== 1 && this.props.currentUserLoadout.canEdit === 1);
 
+      // generate thew summary text that will be part of the move buttons here button
+      let moveableItemsSummary = "";
+      if (this.props.moveableItemIds.length === 1) {
+         moveableItemsSummary = this.props.currentLoadout.find((item) => {
+            return item.id === this.props.moveableItemIds[0];
+         }).name;
+      } else if (this.props.moveableItemIds.length > 1) {
+         moveableItemsSummary =
+            this.props.moveableItemIds.length + "Picked Up Items";
+      }
+
       return (
-         <div className={`ui-theme-${this.props.currentUser.uiTheme}`}>
+         <div
+            className={classnames(
+               !this.props.isEditMode &&
+                  `ui-theme-${this.props.currentUser.uiTheme}`,
+               this.props.isEditMode && `ui-theme-2`
+            )}
+         >
             <Header />
             <div
                className={classnames(
@@ -622,30 +681,44 @@ class ItemList extends React.Component {
                               {this.props.isEditMode && (
                                  <>
                                     <div
-                                       className="button secondary-action-button"
+                                       className="button secondary-action-button d-flex"
                                        onClick={(e) => {
                                           this.addItemAndFocus();
                                        }}
                                     >
-                                       Add item inside&nbsp;
-                                       {currentItem.name}
+                                       <span
+                                          className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                       >
+                                          <AddIcon />
+                                       </span>
+                                       <span className="flex-fill">
+                                          Add item inside&nbsp;
+                                          {currentItem.name}
+                                       </span>
                                     </div>
 
                                     {this.props.moveableItemIds.length > 0 && (
                                        <>
                                           <div
-                                             className="button secondary-action-button"
+                                             className="button secondary-action-button d-flex"
                                              onClick={(e) => {
                                                 this.moveItemsHere();
                                              }}
                                           >
-                                             Move&nbsp;
-                                             {this.props.moveableItemIds.length}
-                                             &nbsp;Picked Up Items To&nbsp;
-                                             {currentItem.name}
+                                             <span
+                                                className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                             >
+                                                <PutDownItem />
+                                             </span>
+                                             <span className="flex-fill">
+                                                Move&nbsp;{moveableItemsSummary}
+                                                &nbsp;To&nbsp;
+                                                {currentItem.name}
+                                             </span>
                                           </div>
+
                                           <div
-                                             className="button secondary-action-button"
+                                             className="button secondary-action-button d-flex"
                                              onClick={() => {
                                                 this.props.dispatch({
                                                    type:
@@ -653,7 +726,14 @@ class ItemList extends React.Component {
                                                 });
                                              }}
                                           >
-                                             Cancel Move
+                                             <span
+                                                className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                             >
+                                                <PutDownItem />
+                                             </span>
+                                             <span className="flex-fill">
+                                                Cancel Move
+                                             </span>
                                           </div>
                                        </>
                                     )}
