@@ -21,7 +21,7 @@ const setUserLastLoginAt = require("../../queries/setUserLastLoginAt");
 const checkPasswordAgainstUserId = require("../../validation/checkPasswordAgainstUserId");
 
 // TODO: generate uuid on server instead of client
-// TODO: generate dates on server instrea of client
+// TODO: generate dates on server instead of client
 
 // @route      POST api/v1/users (going to post one thing to this list of things)
 // @desc       Create a new user
@@ -59,6 +59,7 @@ router.post("/", async (req, res) => {
                      createdAt: users[0].created_at,
                      lastLoginAt: users[0].last_login_at,
                      thisLoginAt: thisLoginAt,
+                     uiTheme: users[0].ui_theme,
                   };
 
                   // this contains the user, a secret and the timeframe
@@ -67,7 +68,7 @@ router.post("/", async (req, res) => {
                      user,
                      process.env.JWT_ACCESS_SECRET,
                      {
-                        expiresIn: "TOKEN_EXPIRE_TIME",
+                        expiresIn: TOKEN_EXPIRE_TIME,
                      }
                   );
 
@@ -157,11 +158,11 @@ router.post("/auth", async (req, res) => {
    }
 });
 
-// @route      POST api/v1/users/delete
+// @route      DELETE api/v1/users/
 // @desc       Delete an existing user
 // @access     Private
 // test:
-router.post("/delete", validateJwt, async (req, res) => {
+router.delete("/", validateJwt, async (req, res) => {
    const { password } = req.body; // grabbing variable from req.body
    const userId = req.user.id; // get the user id from the JWT
 

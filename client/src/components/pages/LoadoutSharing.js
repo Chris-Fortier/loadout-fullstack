@@ -65,7 +65,7 @@ class LoadoutSharing extends React.Component {
       // post to API
       axios
          .post(
-            "/api/v1/user-loadouts/insert?username=" +
+            "/api/v1/user-loadouts/?username=" +
                username +
                "&loadoutId=" +
                loadoutId +
@@ -121,8 +121,8 @@ class LoadoutSharing extends React.Component {
 
    async removeUserLoadoutThenMove() {
       axios
-         .put(
-            "/api/v1/user-loadouts/delete?userId=" +
+         .delete(
+            "/api/v1/user-loadouts/?userId=" +
                this.props.currentUser.id +
                "&loadoutId=" +
                this.props.currentUserLoadout.loadoutId
@@ -146,7 +146,7 @@ class LoadoutSharing extends React.Component {
 
       // server update
       axios
-         .put(
+         .delete(
             "/api/v1/loadouts/delete-loadout?loadoutId=" +
                this.props.currentUserLoadout.loadoutId
          )

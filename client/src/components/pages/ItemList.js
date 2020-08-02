@@ -124,7 +124,7 @@ class ItemList extends React.Component {
 
       // set the status in the database
       axios
-         .post(
+         .put(
             "/api/v1/loadouts/set-descendants-status?newStatus=" +
                0 +
                "&itemId=" +

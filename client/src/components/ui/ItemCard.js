@@ -51,7 +51,7 @@ class ItemCard extends React.Component {
 
          // set the status in the database
          axios
-            .post(
+            .put(
                "/api/v1/loadouts/set-status?newStatus=" +
                   newStatus +
                   "&itemId=" +

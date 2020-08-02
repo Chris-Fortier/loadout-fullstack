@@ -59,11 +59,11 @@ router.post("/insert", async (req, res) => {
       });
 });
 
-// @route      POST api/v1/loadouts/delete
+// @route      DELETE api/v1/loadouts/delete
 // @desc       Delete an existing item
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/delete?itemId=089abe6c-4f07-4a6e-b8b5-290333335251
-router.post("/delete", async (req, res) => {
+router.delete("/delete", async (req, res) => {
    const { itemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
    console.log({ itemId });
 
@@ -78,11 +78,11 @@ router.post("/delete", async (req, res) => {
       });
 });
 
-// @route      POST api/v1/loadouts/set-name
+// @route      PUT api/v1/loadouts/set-name
 // @desc       Rename the item
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/set-name?itemId=0674f34b-f0d8-4eac-bbc1-213d37acdf3f&newName=sleepwear7
-router.post("/set-name", (req, res) => {
+router.put("/set-name", (req, res) => {
    console.log("set-name called", [
       req.query.newName,
       Date.now(),
@@ -101,11 +101,11 @@ router.post("/set-name", (req, res) => {
       });
 });
 
-// @route      POST api/v1/loadouts/set-status
+// @route      PUT api/v1/loadouts/set-status
 // @desc       set the status to something
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/set-status?newStatus=1&itemId=0674f34b-f0d8-4eac-bbc1-213d37acdf3f "sleepwear"
-router.post("/set-status", validateJwt, (req, res) => {
+router.put("/set-status", validateJwt, (req, res) => {
    const userId = req.user.id; // get the user id from the validateJwt
 
    // first get the permissions that the given user has for this item
@@ -308,11 +308,11 @@ router.get("/select-descendants", (req, res) => {
       });
 });
 
-// @route      POST api/v1/loadouts/set-descendants-status
+// @route      PUT api/v1/loadouts/set-descendants-status
 // @desc       set the status of all an item's or loadout's descendants something
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/set-descendants-status?newStatus=1&itemId=41b9bde9-4731-44d2-b471-d46d21aca680
-router.post("/set-descendants-status", (req, res) => {
+router.put("/set-descendants-status", (req, res) => {
    db.query(setLoadoutDescendantsStatus, [
       req.query.newStatus,
       Date.now(),
@@ -329,12 +329,12 @@ router.post("/set-descendants-status", (req, res) => {
       });
 });
 
-// @route      PUT api/v1/loadouts/insert-loadout
+// @route      POST api/v1/loadouts/insert-loadout
 // @desc       create a new loadout and user loadout with full permissions for the creator
 //             this is all done on the server after a simple API call, all the API needs is the token of the creator
 // @access     Private
 // test: http://localhost:3060/api/v1/loadouts/insert-loadout
-router.put("/insert-loadout", validateJwt, async (req, res) => {
+router.post("/insert-loadout", validateJwt, async (req, res) => {
    const userId = req.user.id; // get the user id from the validateJwt
 
    // first, make the new loadout
@@ -391,12 +391,12 @@ router.put("/insert-loadout", validateJwt, async (req, res) => {
       });
 });
 
-// @route      PUT api/v1/loadouts/delete-loadout
+// @route      DELETE api/v1/loadouts/delete-loadout
 // @desc       Delete a loadout and all user loadouts associated with it
 //                only if the provided user token has admin privledges
 // @access     Private
 // test:       http://localhost:3060/api/v1/loadouts/delete-loadout?loadoutId=244331be-05f0-4dd5-ad8e-dc279a74d2aa
-router.put("/delete-loadout", validateJwt, async (req, res) => {
+router.delete("/delete-loadout", validateJwt, async (req, res) => {
    const userId = req.user.id; // get the user id from the validateJwt
    const loadoutId = req.query.loadoutId;
 

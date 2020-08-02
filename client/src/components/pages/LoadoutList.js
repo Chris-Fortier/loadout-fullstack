@@ -55,7 +55,7 @@ class LoadoutList extends React.Component {
 
       // server update
       axios
-         .put("/api/v1/loadouts/insert-loadout")
+         .post("/api/v1/loadouts/insert-loadout")
          .then((res) => {
             console.log("axios res.data", res.data);
 

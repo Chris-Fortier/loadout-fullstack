@@ -67,12 +67,12 @@ router.get("/", validateJwt, (req, res) => {
       });
 });
 
-// @route      POST api/v1/user-loadouts/insert (going to post one thing to this list of things)
+// @route      POST api/v1/user-loadouts/ (going to post one thing to this list of things)
 // @desc       Create a new user loadout
 // @access     Private
-// test: http://localhost:3060/api/v1/user-loadouts/insert?username=sean&loadoutId=42655170-7e10-4431-8d98-c2774f6414a4&canEdit=0&canPack=1&isAdmin=0
-router.post("/insert", async (req, res) => {
-   console.log("router.post api/v1/user-loadouts/insert...");
+// test: http://localhost:3060/api/v1/user-loadouts/?username=sean&loadoutId=42655170-7e10-4431-8d98-c2774f6414a4&canEdit=0&canPack=1&isAdmin=0
+router.post("/", async (req, res) => {
+   console.log("router.post api/v1/user-loadouts/...");
    const { username, loadoutId, canEdit, canPack, isAdmin } = req.query; // destructuring to simplify code below, grabbing variables from req.body
    const addUserError = await getAddUserError(username, loadoutId); // check if there are any errors with the username that the user is trying to add
    let dbError = ""; // this will store some text describing an error from the database
@@ -116,12 +116,12 @@ router.post("/insert", async (req, res) => {
    }
 });
 
-// @route      PUT api/v1/user-loadouts/delete
+// @route      DELETE api/v1/user-loadouts/
 // @desc       delete a user loadout
 //                only if the provided user token has admin privledges adn they are not deleting themself
 // @access     Private
-// test:       http://localhost:3060/api/v1/user-loadouts/delete?userId=a7ce95c7-d9ca-4788-912e-a4e91b7f7e66&loadoutId=8fc62fd2-0fd0-4b25-b3f4-7698a8301d2b
-router.put("/delete", validateJwt, async (req, res) => {
+// test:       http://localhost:3060/api/v1/user-loadouts/?userId=a7ce95c7-d9ca-4788-912e-a4e91b7f7e66&loadoutId=8fc62fd2-0fd0-4b25-b3f4-7698a8301d2b
+router.delete("/", validateJwt, async (req, res) => {
    const deleterUserId = req.user.id; // the user id of the user who is trying to delete the user loadout
    const userId = req.query.userId; // the user id of the user loadout
    const loadoutId = req.query.loadoutId; // the loadout id of the user loadout
@@ -182,12 +182,12 @@ router.put("/delete", validateJwt, async (req, res) => {
       });
 });
 
-// @route      PUT api/v1/user-loadouts/set-permissions
+// @route      PUT api/v1/user-loadouts/
 // @desc       sets permissions on a user loadout
 //                only if the provided user token has admin privledges
 // @access     Private
-// test:       http://localhost:3060/api/v1/user-loadouts/set-permissions?userId=a7ce95c7-d9ca-4788-912e-a4e91b7f7e66&loadoutId=3196365f-538d-4ffe-9fd4-b45e8560397e&canPack=3&canEdit=3&isAdmin=3
-router.put("/set-permissions", validateJwt, async (req, res) => {
+// test:       http://localhost:3060/api/v1/user-loadouts/?userId=a7ce95c7-d9ca-4788-912e-a4e91b7f7e66&loadoutId=3196365f-538d-4ffe-9fd4-b45e8560397e&canPack=3&canEdit=3&isAdmin=3
+router.put("/", validateJwt, async (req, res) => {
    const adminUserId = req.user.id; // get the user id from the validateJwt, this is the admin's user id who is trying to make the change
    const userId = req.query.userId; // the user id of the user's permissions we are dealing with
    const loadoutId = req.query.loadoutId;

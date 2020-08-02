@@ -27,7 +27,7 @@ class LoadoutUserCard extends React.Component {
       console.log({ canPack, canEdit, isAdmin });
       axios
          .put(
-            "/api/v1/user-loadouts/set-permissions?userId=" +
+            "/api/v1/user-loadouts/?userId=" +
                this.props.userLoadout.userId +
                "&loadoutId=" +
                this.props.userLoadout.loadoutId +
@@ -114,8 +114,8 @@ class LoadoutUserCard extends React.Component {
       // server update
 
       axios
-         .put(
-            "/api/v1/user-loadouts/delete?userId=" +
+         .delete(
+            "/api/v1/user-loadouts/?userId=" +
                this.props.userLoadout.userId +
                "&loadoutId=" +
                this.props.userLoadout.loadoutId

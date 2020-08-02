@@ -29,9 +29,7 @@ export function renameItem(itemId, newName) {
 
    // do an api call to rename an item on server
    axios
-      .post(
-         "/api/v1/loadouts/set-name?itemId=" + itemId + "&newName=" + newName
-      )
+      .put("/api/v1/loadouts/set-name?itemId=" + itemId + "&newName=" + newName)
       .then((res) => {
          console.log("axios res", res);
       })
@@ -44,7 +42,7 @@ export function renameItem(itemId, newName) {
 export function setDescendantsStatus(itemId, newStatus) {
    // server update
    axios
-      .post(
+      .put(
          "/api/v1/loadouts/set-descendants-status?newStatus=" +
             newStatus +
             "&itemId=" +
@@ -65,7 +63,7 @@ export function deleteItem(itemId) {
 
    // server update
    axios
-      .post("/api/v1/loadouts/delete?itemId=" + itemId)
+      .delete("/api/v1/loadouts/delete?itemId=" + itemId)
       .then((res) => {
          console.log("axios res", res);
       })

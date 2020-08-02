@@ -201,7 +201,7 @@ class AccountSettings extends React.Component {
       // console.log("client", user);
 
       axios
-         .post("/api/v1/users/delete", user)
+         .delete("/api/v1/users/", user)
          .then((res) => {
             console.log("axios res", res);
             this.setState({
