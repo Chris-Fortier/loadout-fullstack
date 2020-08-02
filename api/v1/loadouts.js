@@ -17,6 +17,7 @@ const validateJwt = require("../../utils/validateJwt");
 const insertUserLoadout = require("../../queries/insertUserLoadout");
 const selectUserLoadoutByIds = require("../../queries/selectUserLoadoutByIds");
 const deleteUserLoadoutsByLoadout = require("../../queries/deleteUserLoadoutsByLoadout");
+const selectUserPermissionsForItem = require("../../queries/selectUserPermissionsForItem");
 
 // @route      POST api/v1/loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new item
@@ -103,19 +104,39 @@ router.post("/set-name", (req, res) => {
 // @route      POST api/v1/loadouts/set-status
 // @desc       set the status to something
 // @access     Public
-// test: http://localhost:3060/api/v1/loadouts/set-status?newStatus=1&itemId=0674f34b-f0d8-4eac-bbc1-213d37acdf3f
-router.post("/set-status", (req, res) => {
-   console.log("set-status called", [
-      req.query.newStatus,
-      Date.now(),
-      req.query.itemId,
-   ]);
+// test: http://localhost:3060/api/v1/loadouts/set-status?newStatus=1&itemId=0674f34b-f0d8-4eac-bbc1-213d37acdf3f "sleepwear"
+router.post("/set-status", validateJwt, (req, res) => {
+   const userId = req.user.id; // get the user id from the validateJwt
 
-   db.query(setItemStatus, [req.query.newStatus, Date.now(), req.query.itemId])
-      // db.query(setItemStatus, [req.query.itemId])
+   // first get the permissions that the given user has for this item
+   db.query(selectUserPermissionsForItem, [req.query.itemId, userId])
       .then((dbRes) => {
-         console.log("dbRes", dbRes);
-         res.status(200).json("Item status changed");
+         // see if permissions info was received (user has the loadout shared with them)
+         if (dbRes.length > 0) {
+            // if they have can_pack permission, set the status
+            if (dbRes[0].can_pack === 1) {
+               db.query(setItemStatus, [
+                  req.query.newStatus,
+                  Date.now(),
+                  req.query.itemId,
+               ])
+                  .then((dbRes) => {
+                     res.status(200).json("Item status changed");
+                  })
+                  .catch((err) => {
+                     // console.log("err", err);
+                     res.status(400).json(err);
+                  });
+            } else {
+               res.status(400).json(
+                  "This user does not have can_pack permissions on this loadout."
+               );
+            }
+         } else {
+            res.status(400).json(
+               "This user does not have access to this loadout."
+            );
+         }
       })
       .catch((err) => {
          console.log("err", err);
