@@ -5,6 +5,12 @@ const bcrypt = require("bcrypt");
 
 // this checks if its the correct password for the userId, it takes a hashed password
 module.exports = async function checkPasswordAgainstUserId(password, userId) {
+   console.log("checkPasswordAgainstUserId()...");
+   console.log({ password, userId });
+   if (password === undefined) {
+      // check if password input is blank
+      return "Your password is undefined.";
+   }
    if (password === "") {
       // check if password input is blank
       return "Please enter your password.";

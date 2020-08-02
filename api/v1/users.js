@@ -158,11 +158,12 @@ router.post("/auth", async (req, res) => {
    }
 });
 
-// @route      DELETE api/v1/users/
+// @route      PUT api/v1/users/delete
 // @desc       Delete an existing user
 // @access     Private
 // test:
-router.delete("/", validateJwt, async (req, res) => {
+router.put("/delete", validateJwt, async (req, res) => {
+   console.log("req.body", req.body);
    const { password } = req.body; // grabbing variable from req.body
    const userId = req.user.id; // get the user id from the JWT
 
@@ -212,6 +213,8 @@ router.delete("/", validateJwt, async (req, res) => {
 // @access     Private
 // test:
 router.put("/set-username", validateJwt, async (req, res) => {
+   // console.log("req.body", req.body);
+
    const { newUsername, password } = req.body; // grabbing variables from req.body
    const userId = req.user.id; // get the user id from the JWT
    console.log({ userId });

@@ -190,6 +190,7 @@ class AccountSettings extends React.Component {
    }
 
    validateAndDeleteUser() {
+      console.log("validateAndDeleteUser()...");
       const passwordInput = document.getElementById(
          "password-for-delete-account"
       ).value;
@@ -198,10 +199,10 @@ class AccountSettings extends React.Component {
       const user = {
          password: passwordInput, // send the plain text password over secure connection, the server will hash it
       };
-      // console.log("client", user);
+      // console.log("user", user);
 
       axios
-         .delete("/api/v1/users/", user)
+         .put("/api/v1/users/delete", user)
          .then((res) => {
             console.log("axios res", res);
             this.setState({
@@ -304,7 +305,7 @@ class AccountSettings extends React.Component {
                                        className="my-input"
                                        id="password-for-username-change"
                                        placeholder="Enter your password"
-                                       autocomplete="new-password"
+                                       autoComplete="new-password"
                                     />
                                     {this.state.changeUsernamePasswordError !==
                                        "" && (
