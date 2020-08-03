@@ -41,6 +41,10 @@ export function getUserLoadouts() {
             type: actions.STORE_CURRENT_LOADOUT,
             payload: [],
          });
+
+         store.dispatch({
+            type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+         });
       })
       .catch((error) => {
          // handle error

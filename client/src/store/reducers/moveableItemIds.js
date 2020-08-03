@@ -17,8 +17,8 @@ export default function moveableItems(moveableItemIds = [], action) {
             }
             return [...moveableItemIds];
          } else {
-            // return [...moveableItemIds, action.payload]; // add the new item to the end
-            return [action.payload]; // replace the list with only this item as I currently only support moving one node at a time
+            return [...moveableItemIds, action.payload]; // add the new item to the end
+            // return [action.payload]; // replace the list with only this item as I currently only support moving one node at a time
          }
       case actions.CLEAR_MOVEABLE_ITEM_IDS:
          console.log("FIRED CLEAR_MOVEABLE_ITEM_IDS");

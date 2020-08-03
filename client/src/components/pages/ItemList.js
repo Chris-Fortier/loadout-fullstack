@@ -272,110 +272,40 @@ class ItemList extends React.Component {
    }
 
    // moves all the items listed in moveableItemIds here
-   // this did all the testing on the client
-   moveItemsHereOld() {
-      // TODO: prevent moving an item inside itself or own descendants, otherwise you will generate impossible loops
-      const badNewParents = []; // start a list of parents that the items cannot be moved to
-      console.log("badNewParents", badNewParents);
-
-      console.log("this.props.currentLoadout", this.props.currentLoadout);
-
-      const currentLoadout = this.props.currentLoadout; // required in order to access this.props.currentLoadout in the local function
-
-      // add all child ids of an item to badNewParents, then continue with its grandchildren
-      function addChildIdsToBadNewParents(parentId) {
-         // find each child
-         for (let c in currentLoadout) {
-            if (currentLoadout[c].parentId === parentId) {
-               badNewParents.push(currentLoadout[c].id);
-               console.log("badNewParents", badNewParents);
-               addChildIdsToBadNewParents(currentLoadout[c].id); // continue with its grandchildren
-            }
-         }
-      }
-
-      // add all child ids of an item to badNewParents, starting with all the items currently in the list
-      for (let i in this.props.moveableItemIds) {
-         badNewParents.push(this.props.moveableItemIds[i]); // add this item's id to the list
-         console.log("badNewParents", badNewParents);
-         addChildIdsToBadNewParents(
-            // this.props.currentLoadout.find((item) => {
-            //    return item.id === this.props.moveableItemIds[i].id;
-            // })
-            this.props.moveableItemIds[i]
-         ); // add its children and descendants
-      }
-
-      console.log("badNewParents", badNewParents);
-
-      // if the target new parent is in the list of bad parents, you cannot move the items here
-      if (badNewParents.includes(this.props.currentItem.id)) {
-         console.log(
-            "You cannot move an item inside itself or its own descendants."
-         );
-      } else {
-         // you can move them here
-
-         const newLoadout = this.props.currentLoadout.map((item) => {
-            const newItem = { ...item };
-            // if this item is in the list of moveable items
-            if (this.props.moveableItemIds.includes(item.id)) {
-               newItem.parentId = this.props.currentItem.id; // assign the new parent
-            }
-            return newItem;
-         });
-
-         // send the new loadout to Redux
-         this.props.dispatch({
-            type: actions.STORE_CURRENT_LOADOUT,
-            payload: processLoadout(newLoadout), // process the loadout because the levels and counters would have changed
-         });
-
-         // clear the moveable items
-         this.props.dispatch({
-            type: actions.CLEAR_MOVEABLE_ITEM_IDS,
-         });
-      }
-   }
-
-   // moves all the items listed in moveableItemIds here
    // all the testing is done on the server
    moveItemsHere() {
-      // for (let i in this.props.moveableItemIds) {
-      axios
-         .put(
-            "/api/v1/loadouts/move-item?itemId=" +
-               this.props.moveableItemIds[0] +
-               "&newParentId=" +
-               this.props.currentItem.id
-         )
-         .then((res) => {
-            console.log("axios res", res);
+      const listOfItemIdsToMove = [...this.props.moveableItemIds]; // make a copy because we will be removing them from the store
+      // clear the moveable items
+      this.props.dispatch({
+         type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+      });
 
-            // update the parent on the client
-            this.props.currentLoadout.find((item) => {
-               return item.id === this.props.moveableItemIds[0];
-            }).parentId = this.props.currentItem.id;
+      for (let i in listOfItemIdsToMove) {
+         axios
+            .put(
+               "/api/v1/loadouts/move-item?itemId=" +
+                  listOfItemIdsToMove[i] +
+                  "&newParentId=" +
+                  this.props.currentItem.id
+            )
+            .then((res) => {
+               console.log("axios res", res);
 
-            // clear the moveable items
-            // TODO: just make it remove the first item
-            this.props.dispatch({
-               type: actions.TOGGLE_MOVEABLE_ITEM_ID,
-               payload: this.props.moveableItemIds[0],
+               // update the parent on the client
+               this.props.currentLoadout.find((item) => {
+                  return item.id === listOfItemIdsToMove[i];
+               }).parentId = this.props.currentItem.id;
+
+               // send the updated loadout to Redux
+               this.props.dispatch({
+                  type: actions.STORE_CURRENT_LOADOUT,
+                  payload: processLoadout(this.props.currentLoadout), // process the loadout because the levels and counters would have changed
+               });
+            })
+            .catch((error) => {
+               console.log("axios error", error);
             });
-
-            // send the updated loadout to Redux
-            // if (i === this.props.moveableItemIds.length - 1) {
-            this.props.dispatch({
-               type: actions.STORE_CURRENT_LOADOUT,
-               payload: processLoadout(this.props.currentLoadout), // process the loadout because the levels and counters would have changed
-            });
-            // }
-         })
-         .catch((error) => {
-            console.log("axios error", error);
-         });
-      // }
+      }
    }
 
    render() {
@@ -423,12 +353,20 @@ class ItemList extends React.Component {
       // generate thew summary text that will be part of the move buttons here button
       let moveableItemsSummary = "";
       if (this.props.moveableItemIds.length === 1) {
-         moveableItemsSummary = this.props.currentLoadout.find((item) => {
-            return item.id === this.props.moveableItemIds[0];
-         }).name;
+         const singleItem = (moveableItemsSummary = this.props.currentLoadout.find(
+            (item) => {
+               return item.id === this.props.moveableItemIds[0];
+            }
+         ));
+         if (singleItem !== undefined) {
+            moveableItemsSummary = singleItem.name;
+         } else {
+            // the name is unavailable with this method because we are in a different loadout
+            moveableItemsSummary = "Item";
+         }
       } else if (this.props.moveableItemIds.length > 1) {
          moveableItemsSummary =
-            this.props.moveableItemIds.length + "Picked Up Items";
+            this.props.moveableItemIds.length + " Picked Up Items";
       }
 
       return (

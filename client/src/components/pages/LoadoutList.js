@@ -33,6 +33,9 @@ class LoadoutList extends React.Component {
          type: actions.STORE_CURRENT_LOADOUT,
          payload: [],
       });
+      props.dispatch({
+         type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+      });
 
       // if the user finds themselves on this page but they are not logged in, send them to the landing page
       // TODO, this is duplicated code
