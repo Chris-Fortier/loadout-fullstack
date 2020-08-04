@@ -188,33 +188,33 @@ class ItemCard extends React.Component {
                   <>
                      <span
                         onClick={(e) => {
-                           (item.status === 0 ||
-                              this.props.currentUserLoadout.canPack === 0) &&
-                              movePageToDifferentItem(this.props.item.id, +1);
+                           // (item.status === 0 ||
+                           //    this.props.currentUserLoadout.canPack === 0) &&
+                           movePageToDifferentItem(this.props.item.id, +1);
                         }}
                         className={classnames(
-                           `button navigation-link item-card-text level-text-color-this level-text-color-${childLevelRotated}`,
-                           { disabled: item.status === 1 }
+                           `button navigation-link item-card-text level-text-color-this level-text-color-${childLevelRotated}`
+                           // { disabled: item.status === 1 }
                         )}
                      >
                         {item.contentSummary}&nbsp;&nbsp;
                      </span>
                      <span
                         className={classnames(
-                           `icon-dark item-card-icon item-icon-colors item-icon-colors-${thisLevelRotated}`,
-                           {
-                              clickable:
-                                 item.status === 0 ||
-                                 this.props.currentUserLoadout.canPack === 0,
-                              disabled:
-                                 item.status === 1 &&
-                                 this.props.currentUserLoadout.canPack === 1,
-                           }
+                           `icon-dark item-card-icon item-icon-colors item-icon-colors-${thisLevelRotated} clickable`
+                           // {
+                           //    clickable:
+                           //       item.status === 0 ||
+                           //       this.props.currentUserLoadout.canPack === 0,
+                           //    disabled:
+                           //       item.status === 1 &&
+                           //       this.props.currentUserLoadout.canPack === 1,
+                           // }
                         )}
                         onClick={(e) => {
-                           (item.status === 0 ||
-                              this.props.currentUserLoadout.canPack === 0) &&
-                              movePageToDifferentItem(this.props.item.id, +1);
+                           // (item.status === 0 ||
+                           //    this.props.currentUserLoadout.canPack === 0) &&
+                           movePageToDifferentItem(this.props.item.id, +1);
                         }}
                      >
                         {item.status === 1 && <ChildrenPackedIcon2 />}

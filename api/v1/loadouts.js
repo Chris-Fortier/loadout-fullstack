@@ -122,6 +122,8 @@ router.put("/set-status", validateJwt, (req, res) => {
                   req.query.itemId,
                ])
                   .then((dbRes) => {
+                     // TODO: if the status was set to unpacked, unpack ancestors
+
                      res.status(200).json("Item status changed");
                   })
                   .catch((err) => {

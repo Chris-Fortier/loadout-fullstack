@@ -1,4 +1,5 @@
 import axios from "axios";
+
 // import store from "../store/store";
 
 // this file will store functions relating to changing items in the loadouts
@@ -79,6 +80,8 @@ export function deleteItem(itemId) {
 // processes all the items in a loadout, counting items and subitems, given a list of items (loadout)
 // this is a pure function
 export function processLoadout(loadout) {
+   console.log("processLoadout()...");
+
    // initialize values in each item
    for (let i in loadout) {
       loadout[i].numChildren = 0;
@@ -91,23 +94,42 @@ export function processLoadout(loadout) {
    }
 
    // increment an ancestor's counter by 1 and then do it again to its ancestor unless its null
-   function incrementAncestorCounter(index, status) {
+   function incrementAncestorCounter(index, status, hasUnresolvedDescendants) {
       if (loadout[index].parentId !== null) {
          // find its parent and add to its numDescendants counter
          for (let a in loadout) {
-            // check if that is its grandparent
+            // check if that is its parent
             if (loadout[index].parentId === loadout[a].id) {
-               loadout[a].numDescendants++;
-               if (status === 1) {
-                  // count if it has a resolved status
-                  loadout[a].numResolvedDescendants++;
-               } else {
-                  // count if it has an unresolved status
-                  loadout[a].numUnresolvedDescendants++;
+               // if this isn't a compartment/group
+               if (status !== 4) {
+                  loadout[a].numDescendants++;
+                  if (!hasUnresolvedDescendants) {
+                     // count if it has a resolved status
+                     loadout[a].numResolvedDescendants++;
+                  } else {
+                     // count if it has an unresolved status
+                     loadout[a].numUnresolvedDescendants++;
+                     hasUnresolvedDescendants = true;
+                  }
+
+                  // if it has any unresolved descendants, change the status
+                  if (hasUnresolvedDescendants) {
+                     // if it is set to packed, set it to unpacked
+                     if (loadout[a].status === 1) {
+                        loadout[a].status = 0;
+                        console.log(
+                           "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ANCESTOR STATUS CHANGED!"
+                        );
+                     }
+                  }
                }
 
                // continue incrementing counters on all ancestors
-               incrementAncestorCounter(a);
+               incrementAncestorCounter(
+                  a,
+                  loadout[a].status,
+                  hasUnresolvedDescendants
+               );
             }
          }
       }
@@ -119,31 +141,59 @@ export function processLoadout(loadout) {
       for (let p in loadout) {
          // check if that is its parent
          if (loadout[i].parentId === loadout[p].id) {
+            let hasUnresolvedDescendants = false;
             loadout[i].parentName = loadout[p].name;
-            loadout[p].numChildren++;
-            loadout[p].numDescendants++;
-            if (loadout[i].status === 1) {
-               // count if it has a resolved status
-               loadout[p].numResolvedChildren++;
-               loadout[p].numResolvedDescendants++;
-            } else {
-               // count if it has an unresolved status
-               loadout[p].numUnresolvedChildren++;
-               loadout[p].numUnresolvedDescendants++;
+            // if this isn't a compartment/group
+            if (loadout[i].status !== 4) {
+               loadout[p].numChildren++;
+               loadout[p].numDescendants++;
+
+               if (loadout[i].status === 1 || loadout[i].status === 2) {
+                  // count if it has a resolved status
+                  loadout[p].numResolvedChildren++;
+                  loadout[p].numResolvedDescendants++;
+               } else {
+                  // count if it has an unresolved status
+                  loadout[p].numUnresolvedChildren++;
+                  loadout[p].numUnresolvedDescendants++;
+                  hasUnresolvedDescendants = true;
+               }
+               // if it has any unresolved descendants, change the status
+               if (hasUnresolvedDescendants) {
+                  // if it is set to packed, set it to unpacked
+                  if (loadout[p].status === 1) {
+                     loadout[p].status = 0;
+                     console.log(
+                        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PARENT STATUS CHANGED!"
+                     );
+                  }
+               }
             }
+
             // increment counters on all ancestors starting with the parent
-            incrementAncestorCounter(p, loadout[i].status);
+            incrementAncestorCounter(
+               p,
+               loadout[i].status,
+               hasUnresolvedDescendants
+            );
          }
       }
    }
 
    // get content summaries
    for (let i in loadout) {
-      if (loadout[i].numUnresolvedDescendants > 0) {
-         loadout[i].contentSummary =
-            loadout[i].numUnresolvedDescendants + " left";
-      } else if (loadout[i].status === 0) {
-         loadout[i].contentSummary = "ready";
+      // if (loadout[i].numUnresolvedDescendants > 0) {
+      //    loadout[i].contentSummary =
+      //       loadout[i].numUnresolvedDescendants + " left";
+      // } else if (loadout[i].status === 0) {
+      //    loadout[i].contentSummary = "ready";
+      // }
+      if (loadout[i].numDescendants > 0) {
+         loadout[
+            i
+         ].contentSummary = `${loadout[i].numResolvedDescendants} / ${loadout[i].numDescendants}`;
+      } else {
+         loadout[i].contentSummary = "";
       }
    }
 
@@ -160,8 +210,6 @@ export function processLoadout(loadout) {
 
    // get each item's level starting with the root node
    assignLevel(null, 1); // start with 1 instead of 0 because 0 is for the My Loadouts level, root node of a loadout is level 1
-
-   // TODO: make sure ancestors of unresolved items are also unresolved (might need to do api calls to unresolve them)
 
    return loadout;
 }
