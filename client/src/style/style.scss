@@ -194,10 +194,6 @@ body {
    // font-size: 1.25rem;
 }
 
-.item-card-container {
-   margin: -$item-card-spacing/2; // compensate for outermost stuff
-}
-
 .item-card,
 .item-card-edit {
    border: 2px solid rgba(0, 0, 0, 0.25);
@@ -281,16 +277,32 @@ body {
    width: 100%;
 }
 
-.super-item-card {
-   // border-radius: 0.25rem; // Bootstrap default
+.item-card-main-group,
+.item-card-sub-group {
    border-radius: 6px; // make more noticable
+
+   padding: $item-card-spacing/2;
+
+   h4 {
+      margin: $item-card-spacing/2;
+      margin-bottom: 0;
+   }
+
+   // these make the margins not collapse between them
+   display: inline-block; // make it so multiple cards appear on the same row in larger widths
+   width: calc(100% - 12px); // base size in small widths
+}
+
+.item-card-main-group {
+   // margin: $item-card-spacing/2;
+   margin-bottom: 64px;
+}
+
+.item-card-sub-group {
    margin: $item-card-spacing/2;
 
-   // padding inside the full page card
-   .card-header,
-   .card-body {
-      padding: $item-card-spacing/2;
-      // padding-bottom: 0px;
+   h4 {
+      font-size: 24px;
    }
 }
 
