@@ -389,7 +389,6 @@ class ItemList extends React.Component {
       return (
          <div
             className={classnames(
-               "mb-8",
                thisItem.level > 1 &&
                   `card super-item-card this-bg this-bg-level-${thisLevelRotated} item-card-border-${thisLevelRotated}`
             )}
@@ -433,58 +432,6 @@ class ItemList extends React.Component {
                         </span>
                      </div>
                   )}
-               </div>
-
-               <div className="row">
-                  <div className="col">
-                     {thisItem.level === 1 && (
-                        <div>
-                           <span
-                              className="clickable"
-                              onClick={(e) => {
-                                 this.gotoSharing(e);
-                              }}
-                           >
-                              <span
-                                 className={`button theme-icon-color standard-sized-icon`}
-                              >
-                                 <IconUserCouple />
-                              </span>
-                              &nbsp;
-                              <span className="button navigation-link">
-                                 Loadout Settings
-                              </span>
-                              &nbsp;&nbsp;
-                              <SharingStrip
-                                 loadout={this.props.currentUserLoadout}
-                              />
-                           </span>
-                        </div>
-                     )}
-
-                     {thisItem.level > 0 && (
-                        <div>
-                           <span
-                              className="clickable"
-                              onClick={(e) => {
-                                 this.props.currentUserLoadout.canEdit === 1 &&
-                                    this.toggleEditMode(e);
-                              }}
-                           >
-                              <span
-                                 className={`button theme-icon-color standard-sized-icon`}
-                              >
-                                 <IconEdit />
-                              </span>
-                              &nbsp;
-                              <span className="button navigation-link">
-                                 {this.props.isEditMode && <>Done Editing</>}
-                                 {!this.props.isEditMode && <>Edit Loadout</>}
-                              </span>
-                           </span>
-                        </div>
-                     )}
-                  </div>
                </div>
             </div>
             <div className={classnames(thisItem.level > 1 && "card-body")}>
@@ -663,6 +610,7 @@ class ItemList extends React.Component {
             )}
          >
             <Header />
+
             <div
                className={classnames(
                   "item-list parent-bg",
@@ -673,6 +621,60 @@ class ItemList extends React.Component {
                )}
             >
                <div className="container-fluid item-cards-container scroll-fix">
+                  <div className="row">
+                     <div className="col">
+                        {pageItem.level === 1 && (
+                           <div>
+                              <span
+                                 className="clickable"
+                                 onClick={(e) => {
+                                    this.gotoSharing(e);
+                                 }}
+                              >
+                                 <span
+                                    className={`button theme-icon-color standard-sized-icon`}
+                                 >
+                                    <IconUserCouple />
+                                 </span>
+                                 &nbsp;
+                                 <span className="button navigation-link">
+                                    Loadout Settings
+                                 </span>
+                                 &nbsp;&nbsp;
+                                 <SharingStrip
+                                    loadout={this.props.currentUserLoadout}
+                                 />
+                              </span>
+                           </div>
+                        )}
+
+                        {pageItem.level > 0 && (
+                           <div>
+                              <span
+                                 className="clickable"
+                                 onClick={(e) => {
+                                    this.props.currentUserLoadout.canEdit ===
+                                       1 && this.toggleEditMode(e);
+                                 }}
+                              >
+                                 <span
+                                    className={`button theme-icon-color standard-sized-icon`}
+                                 >
+                                    <IconEdit />
+                                 </span>
+                                 &nbsp;
+                                 <span className="button navigation-link">
+                                    {this.props.isEditMode && <>Done Editing</>}
+                                    {!this.props.isEditMode && (
+                                       <>Edit Loadout</>
+                                    )}
+                                 </span>
+                              </span>
+                           </div>
+                        )}
+                     </div>
+                  </div>
+
                   <div className="row">
                      <div className="col">
                         <div>
@@ -735,7 +737,9 @@ class ItemList extends React.Component {
                         )} */}
 
                         {/* <img src={iconEdit} className="icon-dark" /> */}
-                        {this.renderCompartment(pageItem)}
+                        <div className="item-card-container">
+                           {this.renderCompartment(pageItem)}
+                        </div>
                      </div>
                   </div>
                </div>

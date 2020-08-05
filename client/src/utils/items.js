@@ -96,7 +96,6 @@ export function processLoadout(loadout) {
    // send data up the chain
    for (let i in loadout) {
       const thisItem = loadout[i]; // item that's data we are sending up
-      console.log(`   counting ${thisItem.name}`);
       let ancestorId = thisItem.parentId; // the nearest ancestor
 
       // determine how this will be counted
@@ -144,10 +143,6 @@ export function processLoadout(loadout) {
          }
 
          ancestorId = ancestorItem.parentId; // go up to next ancestor
-
-         console.log(
-            `      in ${ancestorItem.name} ${descendantCount} ${resolvedDescendantCount} ${unresolvedDescendantCount}`
-         );
       }
    }
 

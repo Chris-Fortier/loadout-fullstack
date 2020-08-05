@@ -194,40 +194,38 @@ body {
    // font-size: 1.25rem;
 }
 
-.item-card {
-   // border-radius: 0.25rem; // Bootstrap default
+.item-card-container {
+   margin: -$item-card-spacing/2; // compensate for outermost stuff
+}
+
+.item-card,
+.item-card-edit {
    border: 2px solid rgba(0, 0, 0, 0.25);
    border-radius: 6px; // make more noticable
-   // margin-bottom: $item-card-spacing; // space between item cards
-
-   padding: 5px;
-
+   // padding: 5px;
    line-height: 0.9; // this works well with this font if multiple lines are needed
    font-size: 24px;
-   // text-transform: capitalize; // makes first letter of each word uppercase
-
-   // height: 42px; // this is a good fixed size, but if the title spills over multiple lines, it runs off the card
-
-   // background-color: gray; // troubleshooting default color
-
-   // box-shadow: 0 6px 6px rgba(0, 0, 0, 0.3), 0 3px 3px rgba(0, 0, 0, 0.23);
    box-shadow: $item-card-shadow;
-
-   // remove margin when a button is inside of an item card
    .button {
       margin: 0;
    }
-
    margin: $item-card-spacing/2; // for space between card sections and buttons
-
    display: inline-block; // make it so multiple cards appear on the same row in larger widths
-   width: 100%; // base size in small widths
+   width: calc(100% - 12px); // base size in small widths
+
+   .primary-action-button,
+   .secondary-action-button .danger-action-button {
+      font-size: 1rem; // override so that buttons inside the item cards have base size font
+      margin-top: $space-between-button-rows/2; // for space between card sections and buttons
+      margin-bottom: $space-between-button-rows/2; // for space between card sections and buttons
+   }
 }
-.item-card:first-child {
-   margin-top: 0;
-}
-.item-card:last-child {
-   margin-bottom: 0;
+
+.item-card {
+   // border-radius: 0.25rem; // Bootstrap default
+   // margin-bottom: $item-card-spacing; // space between item cards
+
+   padding: 5px;
 }
 
 // for loadout level cards
@@ -249,66 +247,12 @@ body {
 
 .item-card-edit {
    // border-radius: 0.25rem; // Bootstrap default
-   border: 2px solid rgba(0, 0, 0, 0.25);
-   border-radius: 6px; // make more noticable
 
    padding-top: 0; // remove the padding inside the card as it will be controlled by the contents
    padding-bottom: 0; // remove the padding inside the card as it will be controlled by the contents
    padding-left: 5px; // still want padding on the sides
    padding-right: 5px; // still want padding on the sides
-
-   line-height: 0.9; // this works well with this font if multiple lines are needed
-   font-size: 24px;
-   // text-transform: capitalize; // makes first letter of each word uppercase
-
-   box-shadow: $item-card-shadow;
-
-   // remove margin when a button is inside of an item card
-   // .button {
-   //    margin: 0;
-   // }
-
-   margin-top: $item-card-spacing/2; // for space between card sections and buttons
-   margin-bottom: $item-card-spacing/2; // for space between card sections and buttons
-
-   display: inline-block; // make it so multiple cards appear on the same row in larger widths
-   width: 100%; // base size in small widths
-
-   .primary-action-button,
-   .secondary-action-button .danger-action-button {
-      font-size: 1rem; // override so that buttons inside the item cards have base size font
-      margin-top: $space-between-button-rows/2; // for space between card sections and buttons
-      margin-bottom: $space-between-button-rows/2; // for space between card sections and buttons
-   }
 }
-.item-card-edit:first-child {
-   margin-top: 0;
-}
-.item-card-edit:last-child {
-   margin-bottom: 0;
-}
-
-// this used if the screen is wide enough for two "columns" of item cards
-// .item-card-double {
-//    display: inline-block;
-//    width: calc(50% - 6px);
-// }
-
-// .item-card-double:nth-child(odd) {
-//    margin-right: $item-card-spacing;
-// }
-
-// // for text within an item card
-// .item-card-text {
-//    // this is to center the text vertically within the card
-//    padding-top: 8px;
-//    padding-bottom: 6px;
-
-//    // line-height: 0.9; // this works well with this font if multiple lines are needed
-//    // font-size: 1.2rem;
-
-//    color: rgba(255, 255, 255, 0.8);
-// }
 
 // style text for the packed / total items numbers
 .packed-counter {
@@ -340,12 +284,12 @@ body {
 .super-item-card {
    // border-radius: 0.25rem; // Bootstrap default
    border-radius: 6px; // make more noticable
-   margin-bottom: $item-card-spacing;
+   margin: $item-card-spacing/2;
 
    // padding inside the full page card
    .card-header,
    .card-body {
-      padding: $item-card-spacing;
+      padding: $item-card-spacing/2;
       // padding-bottom: 0px;
    }
 }
@@ -875,7 +819,7 @@ li {
    .item-card,
    .item-card-edit {
       display: inline-block; // make it so multiple cards appear on the same row
-      width: calc(50% - 6px);
+      width: calc(50% - 12px);
    }
 
    // // puts a margin between the two item cards on the same "row"

@@ -2,3 +2,4 @@
    - make it so unpack rollout is not in every compartment
    - maybe new item should be up top of the section
    - make a button to delete a compartment
+- remove the unnecessary callback function for re-rendering the page
