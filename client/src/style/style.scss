@@ -218,8 +218,7 @@ body {
       margin: 0;
    }
 
-   margin-top: $item-card-spacing/2; // for space between card sections and buttons
-   margin-bottom: $item-card-spacing/2; // for space between card sections and buttons
+   margin: $item-card-spacing/2; // for space between card sections and buttons
 
    display: inline-block; // make it so multiple cards appear on the same row in larger widths
    width: 100%; // base size in small widths
@@ -349,6 +348,11 @@ body {
       padding: $item-card-spacing;
       // padding-bottom: 0px;
    }
+}
+
+.item-compartment {
+   border: 1px solid white;
+   padding: $item-card-spacing/2;
 }
 
 // no space after last item-card
@@ -874,9 +878,9 @@ li {
       width: calc(50% - 6px);
    }
 
-   // puts a margin between the two item cards on the same "row"
-   .item-card:nth-child(odd),
-   .item-card-edit:nth-child(odd) {
-      margin-right: $item-card-spacing;
-   }
+   // // puts a margin between the two item cards on the same "row"
+   // .item-card:nth-child(odd),
+   // .item-card-edit:nth-child(odd) {
+   //    margin-right: $item-card-spacing;
+   // }
 }

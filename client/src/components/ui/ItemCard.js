@@ -31,7 +31,7 @@ class ItemCard extends React.Component {
 
       // only toggle packed if all its descendants are packed and if the user has permission to pack
       if (
-         this.props.item.numUnresolvedChildren === 0 &&
+         this.props.item.numUnresolvedDescendants === 0 &&
          this.props.currentUserLoadout.canPack === 1
       ) {
          if (oldStatus === 0) {
@@ -88,7 +88,7 @@ class ItemCard extends React.Component {
          <div
             className={classnames(
                level <= 1 && "loadout-card",
-               level > 1 && "item-card",
+               level > 1 && `item-card item-card-border-${thisLevelRotated}`,
                level > 1 &&
                   item.status === 0 &&
                   "child-bg child-bg-level-" + String(level % LEVEL_COLORS),
@@ -133,11 +133,10 @@ class ItemCard extends React.Component {
                            // UI_APPEARANCE === "colors" && "item-icon-colors",
                            {
                               clickable:
-                                 item.numResolvedChildren ===
-                                    item.numChildren &&
+                                 item.numUnresolvedDescendants === 0 &&
                                  this.props.currentUserLoadout.canPack === 1,
                               disabled:
-                                 item.numResolvedChildren < item.numChildren ||
+                                 item.numUnresolvedDescendants > 0 ||
                                  this.props.currentUserLoadout.canPack === 0,
                            }
                         )}
@@ -147,11 +146,11 @@ class ItemCard extends React.Component {
                      >
                         {item.status === 1 && <PackedIcon />}
                         {item.status === 0 &&
-                           item.numResolvedChildren >= item.numChildren && (
+                           item.numUnresolvedDescendants === 0 && (
                               <ReadyToPackIcon />
                            )}
                         {item.status === 0 &&
-                           item.numResolvedChildren < item.numChildren && (
+                           item.numUnresolvedDescendants > 0 && (
                               <NotReadyToPackIcon />
                            )}
                      </span>
@@ -168,8 +167,7 @@ class ItemCard extends React.Component {
                         <span
                            className={classnames({
                               clickable:
-                                 item.numResolvedChildren ===
-                                    item.numChildren &&
+                                 item.numUnresolvedDescendants === 0 &&
                                  this.props.currentUserLoadout.canPack === 1,
                               // disabled:
                               //    item.numResolvedChildren < item.numChildren,
@@ -184,7 +182,7 @@ class ItemCard extends React.Component {
                   </>
                )}
 
-               {item.numChildren > 0 && (
+               {item.numDescendants > 0 && (
                   <>
                      <span
                         onClick={(e) => {
@@ -219,11 +217,11 @@ class ItemCard extends React.Component {
                      >
                         {item.status === 1 && <ChildrenPackedIcon2 />}
                         {item.status === 0 &&
-                           item.numResolvedChildren >= item.numChildren && (
+                           item.numUnresolvedDescendants === 0 && (
                               <ChildrenPackedIcon2 />
                            )}
                         {item.status === 0 &&
-                           item.numResolvedChildren < item.numChildren && (
+                           item.numUnresolvedDescendants > 0 && (
                               <ChildrenUnpackedIcon />
                            )}
                      </span>

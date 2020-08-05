@@ -106,7 +106,10 @@ class ItemList extends React.Component {
          for (let c in currentLoadout) {
             if (currentLoadout[c].parentId === currentLoadout[parentIndex].id) {
                console.log(currentLoadout[c].name, "unpacked");
-               currentLoadout[c].status = 0; // unpack it
+               // if its not a compartment
+               if (currentLoadout[c].status !== 4) {
+                  currentLoadout[c].status = 0; // unpack it
+               }
                unpackDescendants(c); // unpack any descendants
             }
          }
@@ -204,10 +207,10 @@ class ItemList extends React.Component {
    }
 
    // adds a new item on the server, updates the page and focuses on the text of the new item
-   addItemAndFocus() {
+   addItemAndFocus(parentId) {
       // send request to server to add an item inside a parent
       axios
-         .post("/api/v1/loadouts/insert?parentId=" + this.props.currentItem.id)
+         .post("/api/v1/loadouts/insert?parentId=" + parentId)
          .then((res) => {
             // an item was added, get the response new item
             const newItem = res.data; // get the new item
@@ -235,10 +238,10 @@ class ItemList extends React.Component {
    }
 
    // renames item on server and also in redux store
-   renameThisItem(e) {
+   renameThisItem(e, itemId) {
       console.log("the focus left this item");
       const currentItemName = this.props.currentLoadout.find((item) => {
-         return item.id === this.props.currentItem.id;
+         return item.id === itemId;
       }).name;
       console.log("currentItemName", currentItemName);
       if (e.target.value !== currentItemName) {
@@ -253,7 +256,7 @@ class ItemList extends React.Component {
          // rename the item on client in currentLoadout
          // make local changes so we can see them immediately
          const foundItem = this.props.currentLoadout.find(
-            (item) => item.id === this.props.currentItem.id
+            (item) => item.id === itemId
          ); // find the specific item to change the name of
          console.log("foundItem.name", foundItem.name);
          foundItem.name = e.target.value; // rename the item to the new name
@@ -265,7 +268,7 @@ class ItemList extends React.Component {
 
          // if this is the currentUserLoadout, we need to change the name there too
 
-         renameItem(this.props.currentItem.id, e.target.value); // send the change of the name to the server
+         renameItem(itemId, e.target.value); // send the change of the name to the server
       } else {
          console.log("the name was not changed");
       }
@@ -273,7 +276,7 @@ class ItemList extends React.Component {
 
    // moves all the items listed in moveableItemIds here
    // all the testing is done on the server
-   moveItemsHere() {
+   moveItemsHere(destId) {
       const listOfItemIdsToMove = [...this.props.moveableItemIds]; // make a copy because we will be removing them from the store
       // clear the moveable items
       this.props.dispatch({
@@ -286,7 +289,7 @@ class ItemList extends React.Component {
                "/api/v1/loadouts/move-item?itemId=" +
                   listOfItemIdsToMove[i] +
                   "&newParentId=" +
-                  this.props.currentItem.id
+                  destId
             )
             .then((res) => {
                console.log("axios res", res);
@@ -294,7 +297,7 @@ class ItemList extends React.Component {
                // update the parent on the client
                this.props.currentLoadout.find((item) => {
                   return item.id === listOfItemIdsToMove[i];
-               }).parentId = this.props.currentItem.id;
+               }).parentId = destId;
 
                // send the updated loadout to Redux
                this.props.dispatch({
@@ -308,47 +311,32 @@ class ItemList extends React.Component {
       }
    }
 
-   render() {
-      console.log("Rendering page...");
+   renderCompartment(thisItem) {
+      console.log("renderCompartment()...", thisItem);
 
-      // get this list of this item's children
-      const childItems = this.props.currentLoadout.filter((item) => {
-         return item.parentId === this.props.currentItem.id;
-      });
-      console.log("childItems", childItems);
+      // set the rotating level colors
+      const thisLevelRotated = (thisItem.level + LEVEL_COLORS) % LEVEL_COLORS;
+      const parentLevelRotated =
+         (thisItem.level + LEVEL_COLORS - 1) % LEVEL_COLORS;
+      const childLevelRotated =
+         (thisItem.level + LEVEL_COLORS + 1) % LEVEL_COLORS;
 
-      // get the current item object from the current loadout
-      let currentItem = {};
-      // console.log("this.props.currentItem.id", this.props.currentItem.id);
-      // console.log("this.props.currentLoadout", this.props.currentLoadout);
-
-      // default level before data is loaded so we won't briefly see a white background
-      let level = 1;
-      let thisLevelRotated = 1;
-      let parentLevelRotated = 0;
-      let childLevelRotated = 2;
-
-      if (this.props.currentLoadout.length > 0) {
-         currentItem = this.props.currentLoadout.filter((item) => {
-            // console.log(item.id, this.props.currentItem.id);
-            return item.id === this.props.currentItem.id;
-         })[0];
-         level = currentItem.level; // set level to this to use the new level generated in processLoadout
-         thisLevelRotated = (level + LEVEL_COLORS) % LEVEL_COLORS;
-         parentLevelRotated = (level + LEVEL_COLORS - 1) % LEVEL_COLORS;
-         childLevelRotated = (level + LEVEL_COLORS + 1) % LEVEL_COLORS;
-      }
-
-      // get the current item
-      // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
-      // console.log("currentItem.level", currentItem.level);
-      // let level = currentItem.level;
-      // const level = this.props.currentLevel;
-
-      // stores whether the current user can edit the name of the current item (if the level is 1 they must be an admin, otherwise they must have editing rights)
+      // stores whether the current user can edit the name of the compartment item (if the level is 1 they must be an admin, otherwise they must have editing rights)
       const thisUserCanEdit =
-         (level === 1 && this.props.currentUserLoadout.isAdmin === 1) ||
-         (level !== 1 && this.props.currentUserLoadout.canEdit === 1);
+         (thisItem.level === 1 &&
+            this.props.currentUserLoadout.isAdmin === 1) ||
+         (thisItem.level !== 1 && this.props.currentUserLoadout.canEdit === 1);
+
+      // get this list of this item's direct children
+      // this filters out compartments/groups
+      const childItems = this.props.currentLoadout.filter((item) => {
+         return item.parentId === thisItem.id && item.status !== 4;
+      });
+
+      // get the list of this item's compartments
+      const childCompartments = this.props.currentLoadout.filter((item) => {
+         return item.parentId === thisItem.id && item.status === 4;
+      });
 
       // generate thew summary text that will be part of the move buttons here button
       let moveableItemsSummary = "";
@@ -372,6 +360,257 @@ class ItemList extends React.Component {
       return (
          <div
             className={classnames(
+               "mb-8",
+               thisItem.level > 1 &&
+                  `card super-item-card this-bg this-bg-level-${thisLevelRotated} item-card-border-${thisLevelRotated}`
+            )}
+         >
+            <div className={classnames(thisItem.level > 1 && "card-header")}>
+               <div className="row">
+                  {(!this.props.isEditMode || !thisUserCanEdit) && (
+                     <>
+                        <div className="col">
+                           <h4
+                              className={`level-text-color-this level-text-color-${thisLevelRotated}`}
+                           >
+                              {thisItem.name}
+                           </h4>
+                        </div>
+                        {thisItem.level > 0 && (
+                           <div className="col">
+                              <h4
+                                 className={`float-right level-text-color-child level-text-color-${childLevelRotated}`}
+                              >
+                                 {thisItem.contentSummary}
+                              </h4>
+                           </div>
+                        )}
+                     </>
+                  )}
+                  {this.props.isEditMode && thisUserCanEdit && (
+                     <div className="col">
+                        <span className="flex-fill">
+                           <h4>
+                              <input
+                                 className={`edit-name level-text-color-this level-text-color-${thisLevelRotated}`}
+                                 defaultValue={thisItem.name}
+                                 onBlur={(e) =>
+                                    this.renameThisItem(e, thisItem.id)
+                                 }
+                                 maxLength={MAX_ITEM_NAME_LENGTH}
+                                 id="page-item-name-input"
+                              />
+                           </h4>
+                        </span>
+                     </div>
+                  )}
+               </div>
+
+               <div className="row">
+                  <div className="col">
+                     {thisItem.level === 1 && (
+                        <div>
+                           <span
+                              className="clickable"
+                              onClick={(e) => {
+                                 this.gotoSharing(e);
+                              }}
+                           >
+                              <span
+                                 className={`button theme-icon-color standard-sized-icon`}
+                              >
+                                 <IconUserCouple />
+                              </span>
+                              &nbsp;
+                              <span className="button navigation-link">
+                                 Loadout Settings
+                              </span>
+                              &nbsp;&nbsp;
+                              <SharingStrip
+                                 loadout={this.props.currentUserLoadout}
+                              />
+                           </span>
+                        </div>
+                     )}
+
+                     {thisItem.level > 0 && (
+                        <div>
+                           <span
+                              className="clickable"
+                              onClick={(e) => {
+                                 this.props.currentUserLoadout.canEdit === 1 &&
+                                    this.toggleEditMode(e);
+                              }}
+                           >
+                              <span
+                                 className={`button theme-icon-color standard-sized-icon`}
+                              >
+                                 <IconEdit />
+                              </span>
+                              &nbsp;
+                              <span className="button navigation-link">
+                                 {this.props.isEditMode && <>Done Editing</>}
+                                 {!this.props.isEditMode && <>Edit Loadout</>}
+                              </span>
+                           </span>
+                        </div>
+                     )}
+                  </div>
+               </div>
+            </div>
+            <div className={classnames(thisItem.level > 1 && "card-body")}>
+               <div className="row">
+                  <div className="col">
+                     {/* {this.renderContainingItems(thisItem)} */}
+                     {!this.props.isEditMode &&
+                        childItems.map((item) => (
+                           <ItemCard
+                              item={item}
+                              key={item.id}
+                              rerenderParentCallback={
+                                 this.rerenderParentCallback
+                              }
+                           />
+                        ))}
+                     {this.props.isEditMode &&
+                        childItems.map((item) => (
+                           <ItemCardEdit item={item} key={item.id} />
+                        ))}
+                     {childCompartments.map((compartment) =>
+                        this.renderCompartment(compartment)
+                     )}
+                  </div>
+               </div>
+               {!this.props.isEditMode && thisItem.level !== 0 && (
+                  <>
+                     <div className={classnames("card-section")}>
+                        <span
+                           className={classnames(
+                              "button navigation-link w-100",
+                              (thisItem.numResolvedDescendants === 0 ||
+                                 this.props.currentUserLoadout.canPack === 0) &&
+                                 "disabled"
+                           )}
+                           onClick={() =>
+                              thisItem.numResolvedDescendants !== 0 &&
+                              this.props.currentUserLoadout.canPack === 1 &&
+                              this.toggleUnpackRollout()
+                           }
+                        >
+                           Unpack {thisItem.name}
+                           ...
+                        </span>
+                        {this.state.isShowingUnpackConfirmation &&
+                           thisItem.numResolvedDescendants !== 0 &&
+                           this.rolloutUnpackConfirmation(
+                              `Unpack all ${thisItem.numDescendants} items and subitems inside ${thisItem.name}`
+                           )}
+                     </div>
+                  </>
+               )}
+               {this.props.isEditMode && (
+                  <>
+                     <div
+                        className="button secondary-action-button d-flex"
+                        onClick={(e) => {
+                           this.addItemAndFocus(thisItem.id);
+                        }}
+                     >
+                        <span
+                           className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                        >
+                           <AddIcon />
+                        </span>
+                        <span className="flex-fill">
+                           Add item inside&nbsp;
+                           {thisItem.name}
+                        </span>
+                     </div>
+
+                     {this.props.moveableItemIds.length > 0 && (
+                        <>
+                           <div
+                              className="button secondary-action-button d-flex"
+                              onClick={(e) => {
+                                 this.moveItemsHere(thisItem.id);
+                              }}
+                           >
+                              <span
+                                 className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                              >
+                                 <PutDownItem />
+                              </span>
+                              <span className="flex-fill">
+                                 Move&nbsp;{moveableItemsSummary}
+                                 &nbsp;To&nbsp;
+                                 {thisItem.name}
+                              </span>
+                           </div>
+
+                           <div
+                              className="button secondary-action-button d-flex"
+                              onClick={() => {
+                                 this.props.dispatch({
+                                    type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+                                 });
+                              }}
+                           >
+                              <span
+                                 className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                              >
+                                 <PutDownItem />
+                              </span>
+                              <span className="flex-fill">Cancel Move</span>
+                           </div>
+                        </>
+                     )}
+                  </>
+               )}
+            </div>
+         </div>
+      );
+   }
+
+   rotateLevel(level) {
+      return (level + LEVEL_COLORS) % LEVEL_COLORS;
+   }
+
+   render() {
+      console.log("Rendering page...");
+
+      // get the current item object from the current loadout
+      let pageItem = {};
+      // console.log("this.props.currentItem.id", this.props.currentItem.id);
+      // console.log("this.props.currentLoadout", this.props.currentLoadout);
+
+      // default level before data is loaded so we won't briefly see a white background
+      // let level = 1;
+      // let thisLevelRotated = 1;
+      // let parentLevelRotated = 0;
+      // let childLevelRotated = 2;
+
+      if (this.props.currentLoadout.length > 0) {
+         pageItem = this.props.currentLoadout.filter((item) => {
+            // console.log(item.id, this.props.currentItem.id);
+            return item.id === this.props.currentItem.id;
+         })[0];
+         // level = pageItem.level; // set level to this to use the new level generated in processLoadout
+         // thisLevelRotated = (level + LEVEL_COLORS) % LEVEL_COLORS;
+         // parentLevelRotated = (level + LEVEL_COLORS - 1) % LEVEL_COLORS;
+         // childLevelRotated = (level + LEVEL_COLORS + 1) % LEVEL_COLORS;
+      }
+
+      // get the current item
+      // const currentItem = this.getItemFromStore(); // get the current item from store based on the store's itemIndexPath
+      // console.log("currentItem.level", currentItem.level);
+      // let level = currentItem.level;
+      // const level = this.props.currentLevel;
+
+      const parentLevelRotated = this.rotateLevel(pageItem.level - 1);
+
+      return (
+         <div
+            className={classnames(
                !this.props.isEditMode &&
                   `ui-theme-${this.props.currentUser.uiTheme}`,
                this.props.isEditMode && `ui-theme-2`
@@ -381,8 +620,10 @@ class ItemList extends React.Component {
             <div
                className={classnames(
                   "item-list parent-bg",
-                  level < 2 && `parent-bg-level-${thisLevelRotated}`,
-                  level >= 2 && ` parent-bg-level-${parentLevelRotated}`
+                  pageItem.level < 2 &&
+                     `parent-bg-level-${this.rotateLevel(pageItem.level)}`,
+                  pageItem.level >= 2 &&
+                     ` parent-bg-level-${parentLevelRotated}`
                )}
             >
                <div className="container-fluid item-cards-container scroll-fix">
@@ -390,12 +631,12 @@ class ItemList extends React.Component {
                      <div className="col">
                         <div>
                            <span className={classnames(`up-level clickable`)}>
-                              {currentItem.parentId !== null && (
+                              {pageItem.upLevelId !== null && (
                                  <span
                                     onClick={(e) => {
                                        // move to the parent item
                                        movePageToDifferentItem(
-                                          currentItem.parentId,
+                                          pageItem.upLevelId,
                                           -1
                                        );
                                        // change the text in the page item editable input
@@ -406,7 +647,7 @@ class ItemList extends React.Component {
                                        ) {
                                           document.getElementById(
                                              "page-item-name-input"
-                                          ).value = currentItem.parentName;
+                                          ).value = pageItem.upLevelName;
                                        }
                                     }}
                                  >
@@ -419,11 +660,11 @@ class ItemList extends React.Component {
                                        className={`button navigation-link level-text-color-parent level-text-color-${parentLevelRotated}`}
                                     >
                                        Back to&nbsp;
-                                       {currentItem.parentName}
+                                       {pageItem.upLevelName}
                                     </span>
                                  </span>
                               )}
-                              {currentItem.parentId === null && (
+                              {pageItem.upLevelId === null && (
                                  <Link to="/loadout-list">
                                     <div
                                        className={`button item-icon-colors standard-sized-icon item-icon-colors-${parentLevelRotated}`}
@@ -448,237 +689,7 @@ class ItemList extends React.Component {
                         )} */}
 
                         {/* <img src={iconEdit} className="icon-dark" /> */}
-                        <div
-                           className={classnames(
-                              "mb-8",
-                              level > 1 &&
-                                 `card super-item-card this-bg this-bg-level-${thisLevelRotated}`
-                           )}
-                        >
-                           <div
-                              className={classnames(level > 1 && "card-header")}
-                           >
-                              <div className="row">
-                                 {(!this.props.isEditMode ||
-                                    !thisUserCanEdit) && (
-                                    <>
-                                       <div className="col">
-                                          <h4
-                                             className={`level-text-color-this level-text-color-${thisLevelRotated}`}
-                                          >
-                                             {currentItem.name}
-                                          </h4>
-                                       </div>
-                                       {level > 0 && (
-                                          <div className="col">
-                                             <h4
-                                                className={`float-right level-text-color-child level-text-color-${childLevelRotated}`}
-                                             >
-                                                {currentItem.contentSummary}
-                                             </h4>
-                                          </div>
-                                       )}
-                                    </>
-                                 )}
-                                 {this.props.isEditMode && thisUserCanEdit && (
-                                    <div className="col">
-                                       <span className="flex-fill">
-                                          <h4>
-                                             <input
-                                                className={`edit-name level-text-color-this level-text-color-${thisLevelRotated}`}
-                                                defaultValue={currentItem.name}
-                                                onBlur={(e) =>
-                                                   this.renameThisItem(e)
-                                                }
-                                                maxLength={MAX_ITEM_NAME_LENGTH}
-                                                id="page-item-name-input"
-                                             />
-                                          </h4>
-                                       </span>
-                                    </div>
-                                 )}
-                              </div>
-
-                              <div className="row">
-                                 <div className="col">
-                                    {level === 1 && (
-                                       <div>
-                                          <span
-                                             className="clickable"
-                                             onClick={(e) => {
-                                                this.gotoSharing(e);
-                                             }}
-                                          >
-                                             <span
-                                                className={`button theme-icon-color standard-sized-icon`}
-                                             >
-                                                <IconUserCouple />
-                                             </span>
-                                             &nbsp;
-                                             <span className="button navigation-link">
-                                                Loadout Settings
-                                             </span>
-                                             &nbsp;&nbsp;
-                                             <SharingStrip
-                                                loadout={
-                                                   this.props.currentUserLoadout
-                                                }
-                                             />
-                                          </span>
-                                       </div>
-                                    )}
-
-                                    {level > 0 && (
-                                       <div>
-                                          <span
-                                             className="clickable"
-                                             onClick={(e) => {
-                                                this.props.currentUserLoadout
-                                                   .canEdit === 1 &&
-                                                   this.toggleEditMode(e);
-                                             }}
-                                          >
-                                             <span
-                                                className={`button theme-icon-color standard-sized-icon`}
-                                             >
-                                                <IconEdit />
-                                             </span>
-                                             &nbsp;
-                                             <span className="button navigation-link">
-                                                {this.props.isEditMode && (
-                                                   <>Done Editing</>
-                                                )}
-                                                {!this.props.isEditMode && (
-                                                   <>Edit Loadout</>
-                                                )}
-                                             </span>
-                                          </span>
-                                       </div>
-                                    )}
-                                 </div>
-                              </div>
-                           </div>
-                           <div
-                              className={classnames(level > 1 && "card-body")}
-                           >
-                              <div className="row">
-                                 <div className="col">
-                                    {/* {this.renderContainingItems(currentItem)} */}
-                                    {!this.props.isEditMode &&
-                                       childItems.map((item) => (
-                                          <ItemCard
-                                             item={item}
-                                             key={item.id}
-                                             rerenderParentCallback={
-                                                this.rerenderParentCallback
-                                             }
-                                          />
-                                       ))}
-                                    {this.props.isEditMode &&
-                                       childItems.map((item) => (
-                                          <ItemCardEdit
-                                             item={item}
-                                             key={item.id}
-                                          />
-                                       ))}
-                                 </div>
-                              </div>
-                              {!this.props.isEditMode && level !== 0 && (
-                                 <>
-                                    <div className={classnames("card-section")}>
-                                       <span
-                                          className={classnames(
-                                             "button navigation-link w-100",
-                                             (currentItem.numResolvedDescendants ===
-                                                0 ||
-                                                this.props.currentUserLoadout
-                                                   .canPack === 0) &&
-                                                "disabled"
-                                          )}
-                                          onClick={() =>
-                                             currentItem.numResolvedDescendants !==
-                                                0 &&
-                                             this.props.currentUserLoadout
-                                                .canPack === 1 &&
-                                             this.toggleUnpackRollout()
-                                          }
-                                       >
-                                          Unpack {currentItem.name}
-                                          ...
-                                       </span>
-                                       {this.state
-                                          .isShowingUnpackConfirmation &&
-                                          currentItem.numResolvedDescendants !==
-                                             0 &&
-                                          this.rolloutUnpackConfirmation(
-                                             `Unpack all ${currentItem.numDescendants} items and subitems inside ${currentItem.name}`
-                                          )}
-                                    </div>
-                                 </>
-                              )}
-                              {this.props.isEditMode && (
-                                 <>
-                                    <div
-                                       className="button secondary-action-button d-flex"
-                                       onClick={(e) => {
-                                          this.addItemAndFocus();
-                                       }}
-                                    >
-                                       <span
-                                          className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                                       >
-                                          <AddIcon />
-                                       </span>
-                                       <span className="flex-fill">
-                                          Add item inside&nbsp;
-                                          {currentItem.name}
-                                       </span>
-                                    </div>
-
-                                    {this.props.moveableItemIds.length > 0 && (
-                                       <>
-                                          <div
-                                             className="button secondary-action-button d-flex"
-                                             onClick={(e) => {
-                                                this.moveItemsHere();
-                                             }}
-                                          >
-                                             <span
-                                                className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                                             >
-                                                <PutDownItem />
-                                             </span>
-                                             <span className="flex-fill">
-                                                Move&nbsp;{moveableItemsSummary}
-                                                &nbsp;To&nbsp;
-                                                {currentItem.name}
-                                             </span>
-                                          </div>
-
-                                          <div
-                                             className="button secondary-action-button d-flex"
-                                             onClick={() => {
-                                                this.props.dispatch({
-                                                   type:
-                                                      actions.CLEAR_MOVEABLE_ITEM_IDS,
-                                                });
-                                             }}
-                                          >
-                                             <span
-                                                className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                                             >
-                                                <PutDownItem />
-                                             </span>
-                                             <span className="flex-fill">
-                                                Cancel Move
-                                             </span>
-                                          </div>
-                                       </>
-                                    )}
-                                 </>
-                              )}
-                           </div>
-                        </div>
+                        {this.renderCompartment(pageItem)}
                      </div>
                   </div>
                </div>

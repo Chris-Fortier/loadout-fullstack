@@ -450,6 +450,36 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
    .edit-name {
       background-color: rgba(0, 0, 0, 0.6);
    }
+
+   .super-item-card {
+      border: 2px solid #448424;
+   }
+
+   .card-header {
+      border-bottom: 1px solid #448424;
+   }
+
+   .item-card-border-0 {
+      border: 2px solid map-get($level-text-colors, 0);
+   }
+   .item-card-border-1 {
+      border: 2px solid map-get($level-text-colors, 1);
+   }
+   .item-card-border-2 {
+      border: 2px solid map-get($level-text-colors, 2);
+   }
+   .item-card-border-3 {
+      border: 2px solid map-get($level-text-colors, 3);
+   }
+   .item-card-border-4 {
+      border: 2px solid map-get($level-text-colors, 4);
+   }
+   .item-card-border-5 {
+      border: 2px solid map-get($level-text-colors, 5);
+   }
+   .item-card-border-6 {
+      border: 2px solid map-get($level-text-colors, 6);
+   }
 }
 
 // shared with light and dark themes

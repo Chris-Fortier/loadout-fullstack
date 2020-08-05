@@ -1,0 +1,6 @@
+--going up a level if in a compartment should take you all the way up to parent item
+- unpack rollout not in every compartment
+- unpack all changes compartments to unpacked, should ignore them
+- maybe new item should be up top of the section
+- new compartment button
+--unpack any parent that has unresolved descendants

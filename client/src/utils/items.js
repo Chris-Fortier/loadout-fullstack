@@ -93,92 +93,150 @@ export function processLoadout(loadout) {
       loadout[i].contentSummary = "";
    }
 
-   // increment an ancestor's counter by 1 and then do it again to its ancestor unless its null
-   function incrementAncestorCounter(index, status, hasUnresolvedDescendants) {
-      if (loadout[index].parentId !== null) {
-         // find its parent and add to its numDescendants counter
-         for (let a in loadout) {
-            // check if that is its parent
-            if (loadout[index].parentId === loadout[a].id) {
-               // if this isn't a compartment/group
-               if (status !== 4) {
-                  loadout[a].numDescendants++;
-                  if (!hasUnresolvedDescendants) {
-                     // count if it has a resolved status
-                     loadout[a].numResolvedDescendants++;
-                  } else {
-                     // count if it has an unresolved status
-                     loadout[a].numUnresolvedDescendants++;
-                     hasUnresolvedDescendants = true;
-                  }
-
-                  // if it has any unresolved descendants, change the status
-                  if (hasUnresolvedDescendants) {
-                     // if it is set to packed, set it to unpacked
-                     if (loadout[a].status === 1) {
-                        loadout[a].status = 0;
-                        console.log(
-                           "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ANCESTOR STATUS CHANGED!"
-                        );
-                     }
-                  }
-               }
-
-               // continue incrementing counters on all ancestors
-               incrementAncestorCounter(
-                  a,
-                  loadout[a].status,
-                  hasUnresolvedDescendants
-               );
-            }
-         }
-      }
-   }
-
-   // add each item to its parent and ancestor counters
+   // send data up the chain
    for (let i in loadout) {
-      // find its parent and add to its numChildren counter
-      for (let p in loadout) {
-         // check if that is its parent
-         if (loadout[i].parentId === loadout[p].id) {
-            let hasUnresolvedDescendants = false;
-            loadout[i].parentName = loadout[p].name;
-            // if this isn't a compartment/group
-            if (loadout[i].status !== 4) {
-               loadout[p].numChildren++;
-               loadout[p].numDescendants++;
+      const thisItem = loadout[i]; // item that's data we are sending up
+      console.log(`   counting ${thisItem.name}`);
+      let ancestorId = thisItem.parentId; // the nearest ancestor
 
-               if (loadout[i].status === 1 || loadout[i].status === 2) {
-                  // count if it has a resolved status
-                  loadout[p].numResolvedChildren++;
-                  loadout[p].numResolvedDescendants++;
-               } else {
-                  // count if it has an unresolved status
-                  loadout[p].numUnresolvedChildren++;
-                  loadout[p].numUnresolvedDescendants++;
-                  hasUnresolvedDescendants = true;
-               }
-               // if it has any unresolved descendants, change the status
-               if (hasUnresolvedDescendants) {
-                  // if it is set to packed, set it to unpacked
-                  if (loadout[p].status === 1) {
-                     loadout[p].status = 0;
-                     console.log(
-                        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PARENT STATUS CHANGED!"
-                     );
-                  }
-               }
+      // determine how this will be counted
+      let descendantCount = 0;
+      let resolvedDescendantCount = 0;
+      let unresolvedDescendantCount = 0;
+      let thisIsUnResolved = false;
+      if (thisItem.status !== 4) {
+         descendantCount = 1;
+      }
+      if (thisItem.status === 1 || thisItem.status === 2) {
+         resolvedDescendantCount = 1;
+      }
+      if (thisItem.status === 0 || thisItem.status === 3) {
+         unresolvedDescendantCount = 1;
+         thisIsUnResolved = true;
+      }
+
+      // do stuff for each ancestor
+      while (ancestorId !== null) {
+         // get the ancestor item
+         const ancestorItem = loadout.find((item) => {
+            return item.id === ancestorId;
+         });
+
+         // add to counters
+         ancestorItem.numDescendants += descendantCount;
+         ancestorItem.numResolvedDescendants += resolvedDescendantCount;
+         ancestorItem.numUnresolvedDescendants += unresolvedDescendantCount;
+
+         // unpack any ancestor if this item is unresolved
+         if (thisIsUnResolved) {
+            // if it is set to packed, set it to unpacked
+            if (ancestorItem.status === 1) {
+               ancestorItem.status = 0;
+               console.log(
+                  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ANCESTOR STATUS CHANGED!"
+               );
+               // TODO update on server too
+
+               // TODO now the count will be off, so I need to change to counters to compensate
+               unresolvedDescendantCount = 2;
+               resolvedDescendantCount = -1;
             }
-
-            // increment counters on all ancestors starting with the parent
-            incrementAncestorCounter(
-               p,
-               loadout[i].status,
-               hasUnresolvedDescendants
-            );
          }
+
+         ancestorId = ancestorItem.parentId; // go up to next ancestor
+
+         console.log(
+            `      in ${ancestorItem.name} ${descendantCount} ${resolvedDescendantCount} ${unresolvedDescendantCount}`
+         );
       }
    }
+
+   // // increment an ancestor's counter by 1 and then do it again to its ancestor unless its null
+   // function incrementAncestorCounter(index, status, hasUnresolvedDescendants) {
+   //    if (loadout[index].parentId !== null) {
+   //       // find its parent and add to its numDescendants counter
+   //       for (let a in loadout) {
+   //          // check if that is its parent
+   //          if (loadout[index].parentId === loadout[a].id) {
+   //             // if this isn't a compartment/group
+   //             if (status !== 4) {
+   //                loadout[a].numDescendants++;
+   //                if (!hasUnresolvedDescendants) {
+   //                   // count if it has a resolved status
+   //                   loadout[a].numResolvedDescendants++;
+   //                } else {
+   //                   // count if it has an unresolved status
+   //                   loadout[a].numUnresolvedDescendants++;
+   //                   hasUnresolvedDescendants = true;
+   //                }
+
+   //                // if it has any unresolved descendants, change the status
+   //                if (hasUnresolvedDescendants) {
+   //                   // if it is set to packed, set it to unpacked
+   //                   if (loadout[a].status === 1) {
+   //                      loadout[a].status = 0;
+   //                      console.log(
+   //                         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ANCESTOR STATUS CHANGED!"
+   //                      );
+   //                   }
+   //                }
+   //             }
+
+   //             // continue incrementing counters on all ancestors
+   //             incrementAncestorCounter(
+   //                a,
+   //                loadout[a].status,
+   //                hasUnresolvedDescendants
+   //             );
+   //          }
+   //       }
+   //    }
+   // }
+
+   // // add each item to its parent and ancestor counters
+   // for (let i in loadout) {
+   //    // find its parent and add to its numChildren counter
+   //    for (let p in loadout) {
+   //       // check if that is its parent
+   //       if (loadout[i].parentId === loadout[p].id) {
+   //          let hasUnresolvedDescendants = false;
+   //          loadout[i].parentName = loadout[p].name;
+   //          // if this isn't a compartment/group
+   //          if (loadout[i].status !== 4) {
+   //             loadout[p].numChildren++;
+   //             loadout[p].numDescendants++;
+
+   //             if (loadout[i].status === 1 || loadout[i].status === 2) {
+   //                // count if it has a resolved status
+   //                loadout[p].numResolvedChildren++;
+   //                loadout[p].numResolvedDescendants++;
+   //             } else {
+   //                // count if it has an unresolved status
+   //                loadout[p].numUnresolvedChildren++;
+   //                loadout[p].numUnresolvedDescendants++;
+   //                hasUnresolvedDescendants = true;
+   //             }
+   //             // if it has any unresolved descendants, change the status
+   //             if (hasUnresolvedDescendants) {
+   //                // if it is set to packed, set it to unpacked
+   //                if (loadout[p].status === 1) {
+   //                   loadout[p].status = 0;
+   //                   console.log(
+   //                      "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PARENT STATUS CHANGED!"
+   //                   );
+   //                }
+   //             }
+   //          }
+
+   //          // increment counters on all ancestors starting with the parent
+   //          incrementAncestorCounter(
+   //             p,
+   //             loadout[i].status,
+   //             hasUnresolvedDescendants
+   //          );
+   //       }
+   //    }
+   // }
 
    // get content summaries
    for (let i in loadout) {
@@ -198,18 +256,43 @@ export function processLoadout(loadout) {
    }
 
    // assign all children of an item to a certain level, then continue with its grandchildren
-   function assignLevel(parentId, level) {
+   function assignLevel(
+      parentId = null,
+      level = 1,
+      nearestItemAncestorId = null,
+      nearestItemAncestorName = ""
+   ) {
       // find each child
       for (let c in loadout) {
          if (loadout[c].parentId === parentId) {
-            loadout[c].level = level;
-            assignLevel(loadout[c].id, level + 1); // assign this item's children levels and so on
+            let levelToAssign = level;
+            if (loadout[c].status === 4) {
+               levelToAssign = level - 1; // containers get the same level as their parent
+            }
+            loadout[c].level = levelToAssign;
+            loadout[c].upLevelId = nearestItemAncestorId; // assign where the up level link goes to
+            loadout[c].upLevelName = nearestItemAncestorName; // assign where the up level link goes to
+            if (loadout[c].status !== 4) {
+               assignLevel(
+                  loadout[c].id,
+                  levelToAssign + 1,
+                  loadout[c].id,
+                  loadout[c].name
+               ); // any children will up level link to this because this is not a compartment
+            } else {
+               assignLevel(
+                  loadout[c].id,
+                  levelToAssign + 1,
+                  nearestItemAncestorId,
+                  nearestItemAncestorName
+               ); // assign this item's children levels and so on
+            }
          }
       }
    }
 
    // get each item's level starting with the root node
-   assignLevel(null, 1); // start with 1 instead of 0 because 0 is for the My Loadouts level, root node of a loadout is level 1
+   assignLevel(); // start with 1 instead of 0 because 0 is for the My Loadouts level, root node of a loadout is level 1
 
    return loadout;
 }
