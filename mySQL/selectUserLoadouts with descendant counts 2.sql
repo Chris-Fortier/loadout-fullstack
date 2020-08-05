@@ -1,7 +1,11 @@
 USE loadout_app;
 SELECT * FROM loadouts;
+SELECT * FROM users;
 
 -- '42655170-7e10-4431-8d98-c2774f6414a4' is One-Night Camping Trip
+
+SELECT * FROM xref_user_loadouts
+WHERE user_id = '0e3e3882-1264-467c-94bf-f9850b7edbd4';
 
 -- count descendants of a single item
 SELECT

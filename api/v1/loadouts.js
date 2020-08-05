@@ -29,6 +29,8 @@ router.post("/insert", async (req, res) => {
    console.log({ parentId });
    // console.log("uuid", uuid.v4());
 
+   // TODO: add security (use insert-compartment as a template)
+
    // newItemId = uuid.v4();
 
    const newItem = {
@@ -52,11 +54,70 @@ router.post("/insert", async (req, res) => {
             createdAt: newItem.created_at,
             lastEditAt: newItem.last_edit_at,
             lastPackAt: newItem.last_pack_at,
-         }); // return the entire new item in camcelCase form
+         }); // return the entire new item in camelCase form
       })
       .catch((err) => {
          console.log("err", err);
          res.status(400).json({ dbError });
+      });
+});
+
+// @route      POST api/v1/loadouts/insert-compartment
+// @desc       Create a new compartment
+// @access     Public
+// test: http://localhost:3060/api/v1/loadouts/insert-compartment?parentId=41b9bde9-4731-44d2-b471-d46d21aca680
+router.post("/insert-compartment", validateJwt, async (req, res) => {
+   const userId = req.user.id; // get the user id from the validateJwt
+   const { parentId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+
+   // first get the permissions that the given user has for the destination parent
+   db.query(selectUserPermissionsForItem, [req.query.parentId, userId])
+      .then((dbRes) => {
+         // see if permissions info was received (user has the loadout shared with them)
+         if (dbRes.length > 0) {
+            // if they have can_edit permission, add the compartment
+            if (dbRes[0].can_edit === 1) {
+               const newCompartment = {
+                  id: uuid.v4(), // generate the uuid
+                  name: "Untitled Compartment",
+                  parent_id: parentId, // use given value for parent
+                  status: 4, // status 4 for a compartment
+                  created_at: Date.now(), // set this date to now
+                  last_edit_at: Date.now(), // set this date to now
+                  last_pack_at: Date.now(), // set this date to now
+               };
+
+               db.query(insertItem, newCompartment)
+                  .then((dbRes) => {
+                     console.log("dbRes", dbRes);
+                     res.status(200).json({
+                        id: newCompartment.id,
+                        name: newCompartment.name,
+                        parentId: newCompartment.parent_id,
+                        status: newCompartment.status,
+                        createdAt: newCompartment.created_at,
+                        lastEditAt: newCompartment.last_edit_at,
+                        lastPackAt: newCompartment.last_pack_at,
+                     }); // return the entire new item in camelCase form
+                  })
+                  .catch((err) => {
+                     console.log("err", err);
+                     res.status(400).json({ dbError });
+                  });
+            } else {
+               res.status(400).json(
+                  "This user does not have can_edit permissions on this loadout."
+               );
+            }
+         } else {
+            res.status(400).json(
+               "This user does not have access to this loadout."
+            );
+         }
+      })
+      .catch((err) => {
+         console.log("err", err);
+         res.status(400).json(err);
       });
 });
 

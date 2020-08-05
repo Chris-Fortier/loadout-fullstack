@@ -237,6 +237,35 @@ class ItemList extends React.Component {
          });
    }
 
+   // adds a new compartment on the server, updates the page and focuses on the text of the new compartment
+   addCompartmentAndFocus(parentId) {
+      // send request to server to add an compartment inside a parent
+      axios
+         .post("/api/v1/loadouts/insert-compartment?parentId=" + parentId)
+         .then((res) => {
+            // an compartment was added, get the response new compartment
+            const newCompartment = res.data; // get the new compartment
+
+            const inputElementId = "edit-name-input-" + newCompartment.id;
+
+            // update currentLoadout in Redux
+            this.props.currentLoadout.push(newCompartment);
+            this.props.dispatch({
+               type: actions.STORE_CURRENT_LOADOUT,
+               payload: processLoadout(this.props.currentLoadout),
+            });
+
+            // sets focus to the new card and selects it's text
+            const input = document.getElementById(inputElementId);
+            input.focus();
+            input.select();
+         })
+         .catch((error) => {
+            // handle error
+            console.log("axios error", error);
+         });
+   }
+
    // renames item on server and also in redux store
    renameThisItem(e, itemId) {
       console.log("the focus left this item");
@@ -523,6 +552,23 @@ class ItemList extends React.Component {
                         </span>
                         <span className="flex-fill">
                            Add item inside&nbsp;
+                           {thisItem.name}
+                        </span>
+                     </div>
+
+                     <div
+                        className="button secondary-action-button d-flex"
+                        onClick={(e) => {
+                           this.addCompartmentAndFocus(thisItem.id);
+                        }}
+                     >
+                        <span
+                           className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                        >
+                           <AddIcon />
+                        </span>
+                        <span className="flex-fill">
+                           Add compartment inside&nbsp;
                            {thisItem.name}
                         </span>
                      </div>

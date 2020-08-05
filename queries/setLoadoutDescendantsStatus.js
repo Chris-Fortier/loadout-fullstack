@@ -20,7 +20,8 @@ UPDATE loadout_app.loadouts SET status = ?, last_pack_at = ? WHERE id IN (
 	  inner join cte
 			  on p.parent_id = cte.id
 )
-select id from cte);
+select id from cte)
+AND status != 4;
 `;
 
 module.exports = setLoadoutDescendantsStatus;
