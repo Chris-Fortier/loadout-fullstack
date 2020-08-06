@@ -9,6 +9,11 @@
      - I think this happens if I delete an item that contains subitems when it reprocesses the loadout still containing orphaned items
    - need a rollout before deleting a compartment
   - rename "compartment" to "group"
-  - fix the formatting with compartments on the loadout top level page
+  - maybe to make it simpler, once the first compartment is made inside an item
+    - move all its children to that compartment
+    - only allow new items to be made inside compartments of this item by only rendering buttons there
+    - only allow new compartments to be made at the item root level
+  - add compartment buttons should be colored with the compartment color while add items are colored with the subitem color
 
 # current change
+

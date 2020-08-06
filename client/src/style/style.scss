@@ -312,8 +312,10 @@ body {
    margin: $item-card-spacing/2;
 
    h4 {
-      font-size: 24px;
+      font-size: 28px;
    }
+
+   width: calc(100% - 12px); // base size in small widths
 }
 
 .item-compartment {
