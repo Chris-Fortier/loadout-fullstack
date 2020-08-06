@@ -19,6 +19,8 @@ const selectUserLoadoutByIds = require("../../queries/selectUserLoadoutByIds");
 const deleteUserLoadoutsByLoadout = require("../../queries/deleteUserLoadoutsByLoadout");
 const selectUserPermissionsForItem = require("../../queries/selectUserPermissionsForItem");
 const moveItem = require("../../queries/moveItem");
+const countChildCompartments = require("../../queries/countChildCompartments");
+const moveChildrenToCompartment = require("../../queries/moveChildrenToCompartment");
 
 // @route      POST api/v1/loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new item
@@ -71,38 +73,90 @@ router.post("/insert-compartment", validateJwt, async (req, res) => {
    const { parentId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
 
    // first get the permissions that the given user has for the destination parent
-   db.query(selectUserPermissionsForItem, [req.query.parentId, userId])
+   db.query(selectUserPermissionsForItem, [parentId, userId])
       .then((dbRes) => {
          // see if permissions info was received (user has the loadout shared with them)
          if (dbRes.length > 0) {
-            // if they have can_edit permission, add the compartment
+            // if they have can_edit permission, we can add the compartment
             if (dbRes[0].can_edit === 1) {
-               const newCompartment = {
-                  id: uuid.v4(), // generate the uuid
-                  name: "Untitled Compartment",
-                  parent_id: parentId, // use given value for parent
-                  status: 4, // status 4 for a compartment
-                  created_at: Date.now(), // set this date to now
-                  last_edit_at: Date.now(), // set this date to now
-                  last_pack_at: Date.now(), // set this date to now
-               };
-
-               db.query(insertItem, newCompartment)
+               // first we need to determine if this will be the first child compartment of this item
+               db.query(countChildCompartments, [parentId])
                   .then((dbRes) => {
-                     console.log("dbRes", dbRes);
-                     res.status(200).json({
-                        id: newCompartment.id,
-                        name: newCompartment.name,
-                        parentId: newCompartment.parent_id,
-                        status: newCompartment.status,
-                        createdAt: newCompartment.created_at,
-                        lastEditAt: newCompartment.last_edit_at,
-                        lastPackAt: newCompartment.last_pack_at,
-                     }); // return the entire new item in camelCase form
+                     // use the result to determine if this will be the first compartment or not
+                     let isFirstChildCompartment = false;
+                     if (dbRes[0].num_compartments === 0) {
+                        isFirstChildCompartment = true;
+                     }
+                     // console.log(
+                     //    "isFirstChildCompartment?",
+                     //    dbRes[0].num_compartments
+                     // );
+
+                     // make the new compartment
+                     newCompartmentId = uuid.v4();
+                     const newCompartment = {
+                        id: newCompartmentId, // generate the uuid
+                        name: "Untitled Compartment",
+                        parent_id: parentId, // use given value for parent
+                        status: 4, // status 4 for a compartment
+                        created_at: Date.now(), // set this date to now
+                        last_edit_at: Date.now(), // set this date to now
+                        last_pack_at: Date.now(), // set this date to now
+                     };
+                     db.query(insertItem, newCompartment)
+                        .then((dbRes) => {
+                           console.log("dbRes", dbRes);
+
+                           // if this is the first child compartment of the parent item, also move all the parent item's direct children to it
+                           if (isFirstChildCompartment) {
+                              console.log(
+                                 "moving other children to first compartment"
+                              );
+                              db.query(moveChildrenToCompartment, [
+                                 newCompartmentId,
+                                 parentId,
+                              ])
+                                 .then((dbRes) => {
+                                    console.log("dbRes", dbRes);
+                                    res.status(200).json({
+                                       id: newCompartment.id,
+                                       name: newCompartment.name,
+                                       parentId: newCompartment.parent_id,
+                                       status: newCompartment.status,
+                                       createdAt: newCompartment.created_at,
+                                       lastEditAt: newCompartment.last_edit_at,
+                                       lastPackAt: newCompartment.last_pack_at,
+                                       isFirstChildCompartment, // also return if this was the first child compartment so the client knows what to do
+                                    }); // return the entire new item in camelCase form
+                                 })
+                                 .catch((err) => {
+                                    console.log("err", err);
+                                    res.status(400).json({ dbError });
+                                 });
+                           } else {
+                              console.log(
+                                 "other compartment already exist here, not moving anything"
+                              );
+                              res.status(200).json({
+                                 id: newCompartment.id,
+                                 name: newCompartment.name,
+                                 parentId: newCompartment.parent_id,
+                                 status: newCompartment.status,
+                                 createdAt: newCompartment.created_at,
+                                 lastEditAt: newCompartment.last_edit_at,
+                                 lastPackAt: newCompartment.last_pack_at,
+                                 isFirstChildCompartment, // also return if this was the first child compartment so the client knows what to do
+                              }); // return the entire new item in camelCase form
+                           }
+                        })
+                        .catch((err) => {
+                           console.log("err", err);
+                           res.status(400).json({ dbError });
+                        });
                   })
                   .catch((err) => {
                      console.log("err", err);
-                     res.status(400).json({ dbError });
+                     res.status(400).json(err);
                   });
             } else {
                res.status(400).json(

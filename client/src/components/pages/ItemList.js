@@ -253,7 +253,24 @@ class ItemList extends React.Component {
                "compartment-name-input-" + newCompartment.id;
 
             // update currentLoadout in Redux
-            this.props.currentLoadout.push(newCompartment);
+            this.props.currentLoadout.push(newCompartment); // add the new compartment
+            // if the server says it is the first compartment for the item, move the items children to it to match what happened on the server
+            console.log("newCompartment", newCompartment);
+            if (newCompartment.isFirstChildCompartment) {
+               console.log("moving root children to first compartment");
+               for (let i in this.props.currentLoadout) {
+                  if (
+                     this.props.currentLoadout[i].parentId === parentId &&
+                     this.props.currentLoadout[i].status !== 4
+                  ) {
+                     console.log(
+                        `   moving ${this.props.currentLoadout[i].name}`
+                     );
+                     this.props.currentLoadout[i].parentId = newCompartment.id;
+                  }
+               }
+            }
+            // push to Redux
             this.props.dispatch({
                type: actions.STORE_CURRENT_LOADOUT,
                payload: processLoadout(this.props.currentLoadout),
@@ -304,7 +321,7 @@ class ItemList extends React.Component {
 
    // moves all the items listed in moveableItemIds here
    // all the testing is done on the server
-   moveItemsHere(destId) {
+   moveItems(destId) {
       const listOfItemIdsToMove = [...this.props.moveableItemIds]; // make a copy because we will be removing them from the store
       // clear the moveable items
       this.props.dispatch({
@@ -384,6 +401,13 @@ class ItemList extends React.Component {
          moveableItemsSummary =
             this.props.moveableItemIds.length + " Picked Up Items";
       }
+
+      // determine if this item has compartments or not
+      const hasCompartments =
+         this.props.currentLoadout.filter((item) => {
+            return item.parentId === thisItem.id && item.status === 4;
+         }).length > 0;
+      console.log({ name: thisItem.name, hasCompartments });
 
       return (
          <div
@@ -468,22 +492,24 @@ class ItemList extends React.Component {
                         {childItems.map((item) => (
                            <ItemCardEdit item={item} key={item.id} />
                         ))}
-                        <div
-                           className="button secondary-action-button d-flex item-card-inline-button"
-                           onClick={(e) => {
-                              this.addItemAndFocus(thisItem.id);
-                           }}
-                        >
-                           <span
-                              className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                        {!hasCompartments && (
+                           <div
+                              className="button secondary-action-button d-flex item-card-inline-button"
+                              onClick={(e) => {
+                                 this.addItemAndFocus(thisItem.id);
+                              }}
                            >
-                              <AddIcon />
-                           </span>
-                           <span className="flex-fill">
-                              Add item inside&nbsp;
-                              {thisItem.name}
-                           </span>
-                        </div>
+                              <span
+                                 className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                              >
+                                 <AddIcon />
+                              </span>
+                              <span className="flex-fill">
+                                 Add item inside&nbsp;
+                                 {thisItem.name}
+                              </span>
+                           </div>
+                        )}
                         {thisItem.status !== 4 && (
                            <div
                               className="button secondary-action-button d-flex"
@@ -502,43 +528,46 @@ class ItemList extends React.Component {
                               </span>
                            </div>
                         )}
-                        {this.props.moveableItemIds.length > 0 && (
-                           <>
-                              <div
-                                 className="button secondary-action-button d-flex"
-                                 onClick={(e) => {
-                                    this.moveItemsHere(thisItem.id);
-                                 }}
-                              >
-                                 <span
-                                    className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                        {this.props.moveableItemIds.length > 0 &&
+                           !hasCompartments && (
+                              <>
+                                 <div
+                                    className="button secondary-action-button d-flex"
+                                    onClick={(e) => {
+                                       this.moveItems(thisItem.id);
+                                    }}
                                  >
-                                    <PutDownItem />
-                                 </span>
-                                 <span className="flex-fill">
-                                    Move&nbsp;{moveableItemsSummary}
-                                    &nbsp;To&nbsp;
-                                    {thisItem.name}
-                                 </span>
-                              </div>
+                                    <span
+                                       className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                    >
+                                       <PutDownItem />
+                                    </span>
+                                    <span className="flex-fill">
+                                       Move&nbsp;{moveableItemsSummary}
+                                       &nbsp;To&nbsp;
+                                       {thisItem.name}
+                                    </span>
+                                 </div>
 
-                              <div
-                                 className="button secondary-action-button d-flex"
-                                 onClick={() => {
-                                    this.props.dispatch({
-                                       type: actions.CLEAR_MOVEABLE_ITEM_IDS,
-                                    });
-                                 }}
-                              >
-                                 <span
-                                    className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                 <div
+                                    className="button secondary-action-button d-flex"
+                                    onClick={() => {
+                                       this.props.dispatch({
+                                          type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+                                       });
+                                    }}
                                  >
-                                    <PutDownItem />
-                                 </span>
-                                 <span className="flex-fill">Cancel Move</span>
-                              </div>
-                           </>
-                        )}{" "}
+                                    <span
+                                       className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                    >
+                                       <PutDownItem />
+                                    </span>
+                                    <span className="flex-fill">
+                                       Cancel Move
+                                    </span>
+                                 </div>
+                              </>
+                           )}
                      </>
                   )}
                   {childCompartments.map((compartment) =>
