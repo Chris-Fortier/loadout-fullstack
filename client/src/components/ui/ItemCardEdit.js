@@ -15,7 +15,13 @@ import {
    PutDownItem,
 } from "../../icons/loadout-icons.js";
 import classnames from "classnames";
-import { renameItem, deleteItem, processLoadout } from "../../utils/items";
+import {
+   renameItem,
+   // deleteItem,
+   // processLoadout,
+   toggleMoveableItemId,
+   deleteItemId,
+} from "../../utils/items";
 import actions from "../../store/actions";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 
@@ -68,14 +74,6 @@ class ItemCardEdit extends React.Component {
       });
    }
 
-   // add or remove as a moveable item
-   toggleMoveableItemId() {
-      this.props.dispatch({
-         type: actions.TOGGLE_MOVEABLE_ITEM_ID,
-         payload: this.props.item.id,
-      });
-   }
-
    rolloutDeleteConfirmation() {
       return (
          <>
@@ -85,7 +83,7 @@ class ItemCardEdit extends React.Component {
                   "danger-action-button": this.props.item.numChildren > 0,
                })}
                onClick={(e) => {
-                  this.deleteThisItem();
+                  deleteItemId(this.props.currentLoadout, this.props.item.id);
                }}
             >
                Delete {this.props.item.name}
@@ -111,24 +109,6 @@ class ItemCardEdit extends React.Component {
             </div>
          </>
       );
-   }
-
-   // renames item on server and also in redux store
-   deleteThisItem() {
-      console.log("will delete ", this.props.item.name);
-
-      // make local changes so we can see them immediately
-      const foundItemIndex = this.props.currentLoadout.findIndex(
-         (item) => item.id === this.props.item.id
-      ); // find the specific item to change the name of
-      this.props.currentLoadout.splice(foundItemIndex, 1); // make a new array of items with the deleted item removed
-      // send update to Redux
-      this.props.dispatch({
-         type: actions.STORE_CURRENT_LOADOUT,
-         payload: processLoadout(this.props.currentLoadout), // need to process in this case because I am changing the amount of items
-      });
-
-      deleteItem(this.props.item.id); // send the deletion request to the server
    }
 
    render() {
@@ -161,10 +141,10 @@ class ItemCardEdit extends React.Component {
                   >
                      <DeleteIcon />
                   </span>
-                  &nbsp;&nbsp;&nbsp;
+                  <span className="icon-button-gap"></span>
                   <span
                      className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
-                     onClick={() => this.toggleMoveableItemId()}
+                     onClick={() => toggleMoveableItemId(item.id)}
                   >
                      {!this.props.moveableItemIds.includes(
                         this.props.item.id
@@ -173,7 +153,7 @@ class ItemCardEdit extends React.Component {
                         this.props.item.id
                      ) && <PutDownItem />}
                   </span>
-                  <span style={{ width: "8px" }}></span>
+                  <span className="icon-button-gap"></span>
                   <span className="flex-fill">
                      <input
                         className={`edit-name level-text-color-child level-text-color-${thisLevelRotated}`}
@@ -183,7 +163,7 @@ class ItemCardEdit extends React.Component {
                         maxLength={MAX_ITEM_NAME_LENGTH}
                      />
                   </span>
-                  <span style={{ width: "8px" }}></span>
+                  <span className="icon-button-gap"></span>
                   <span
                      className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
                      onClick={(e) => {

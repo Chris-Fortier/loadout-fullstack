@@ -195,7 +195,8 @@ body {
 }
 
 .item-card,
-.item-card-edit {
+.item-card-edit,
+.item-card-inline-button {
    border: 2px solid rgba(0, 0, 0, 0.25);
    border-radius: 6px; // make more noticable
    // padding: 5px;
@@ -224,6 +225,23 @@ body {
    padding: 5px;
 }
 
+.item-card-edit {
+   // border-radius: 0.25rem; // Bootstrap default
+
+   padding-top: 0; // remove the padding inside the card as it will be controlled by the contents
+   padding-bottom: 0; // remove the padding inside the card as it will be controlled by the contents
+   padding-left: 5px; // still want padding on the sides
+   padding-right: 5px; // still want padding on the sides
+}
+
+// .item-card-inline-button {
+
+// }
+
+.icon-button-gap {
+   width: 12px;
+}
+
 // for loadout level cards
 .loadout-card {
    border: 2px solid rgba(0, 0, 0, 0);
@@ -239,15 +257,6 @@ body {
    .button {
       margin: 0;
    }
-}
-
-.item-card-edit {
-   // border-radius: 0.25rem; // Bootstrap default
-
-   padding-top: 0; // remove the padding inside the card as it will be controlled by the contents
-   padding-bottom: 0; // remove the padding inside the card as it will be controlled by the contents
-   padding-left: 5px; // still want padding on the sides
-   padding-right: 5px; // still want padding on the sides
 }
 
 // style text for the packed / total items numbers
@@ -290,12 +299,13 @@ body {
 
    // these make the margins not collapse between them
    display: inline-block; // make it so multiple cards appear on the same row in larger widths
-   width: calc(100% - 12px); // base size in small widths
+   // width: calc(100% - 12px); // base size in small widths
 }
 
 .item-card-main-group {
    // margin: $item-card-spacing/2;
    margin-bottom: 64px;
+   width: calc(100%); // base size in small widths
 }
 
 .item-card-sub-group {

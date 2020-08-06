@@ -1,6 +1,6 @@
 import axios from "axios";
-
-// import store from "../store/store";
+import store from "../store/store";
+import actions from "../store/actions";
 
 // this file will store functions relating to changing items in the loadouts
 
@@ -290,4 +290,26 @@ export function processLoadout(loadout) {
    assignLevel(); // start with 1 instead of 0 because 0 is for the My Loadouts level, root node of a loadout is level 1
 
    return loadout;
+}
+
+// add or remove as a moveable item
+export function toggleMoveableItemId(itemId) {
+   store.dispatch({
+      type: actions.TOGGLE_MOVEABLE_ITEM_ID,
+      payload: itemId,
+   });
+}
+
+// deletes item on server and also in redux store
+export function deleteItemId(loadout, itemId) {
+   // make local changes so we can see them immediately
+   const foundItemIndex = loadout.findIndex((item) => item.id === itemId); // find the specific item to change the name of
+   loadout.splice(foundItemIndex, 1); // make a new array of items with the deleted item removed
+   // send update to Redux
+   store.dispatch({
+      type: actions.STORE_CURRENT_LOADOUT,
+      payload: processLoadout(loadout), // need to process in this case because I am changing the amount of items
+   });
+
+   deleteItem(itemId); // send the deletion request to the server
 }

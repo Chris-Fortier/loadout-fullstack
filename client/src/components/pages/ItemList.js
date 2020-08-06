@@ -9,11 +9,21 @@ import ItemCard from "../ui/ItemCard";
 import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
-import { renameItem, processLoadout } from "../../utils/items";
+import {
+   renameItem,
+   processLoadout,
+   toggleMoveableItemId,
+   deleteItemId,
+} from "../../utils/items";
 import isEmpty from "lodash/isEmpty";
 import SharingStrip from "../ui/SharingStrip";
 import axios from "axios";
-import { PutDownItem, AddIcon } from "../../icons/loadout-icons";
+import {
+   PickUpItem,
+   PutDownItem,
+   AddIcon,
+   DeleteIcon,
+} from "../../icons/loadout-icons";
 
 class ItemList extends React.Component {
    constructor(props) {
@@ -239,7 +249,8 @@ class ItemList extends React.Component {
             // an compartment was added, get the response new compartment
             const newCompartment = res.data; // get the new compartment
 
-            const inputElementId = "edit-name-input-" + newCompartment.id;
+            const inputElementId =
+               "compartment-name-input-" + newCompartment.id;
 
             // update currentLoadout in Redux
             this.props.currentLoadout.push(newCompartment);
@@ -268,12 +279,7 @@ class ItemList extends React.Component {
       console.log("currentItemName", currentItemName);
       if (e.target.value !== currentItemName) {
          console.log("the name was changed");
-         console.log(
-            "will rename ",
-            this.props.currentItem.name,
-            "to",
-            e.target.value
-         );
+         console.log("will rename ", currentItemName, "to", e.target.value);
 
          // rename the item on client in currentLoadout
          // make local changes so we can see them immediately
@@ -410,17 +416,40 @@ class ItemList extends React.Component {
                   </>
                )}
                {this.props.isEditMode && thisUserCanEdit && (
-                  <div className="col">
+                  <div className="col d-flex">
+                     <span
+                        className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                        // onClick={() => this.toggleDeleteRollout()} TODO: need to make a rollout
+                        onClick={() =>
+                           deleteItemId(this.props.currentLoadout, thisItem.id)
+                        }
+                     >
+                        <DeleteIcon />
+                     </span>
+                     <span className="icon-button-gap"></span>
+                     <span
+                        className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                        onClick={() => toggleMoveableItemId(thisItem.id)}
+                     >
+                        {!this.props.moveableItemIds.includes(thisItem.id) && (
+                           <PickUpItem />
+                        )}
+                        {this.props.moveableItemIds.includes(thisItem.id) && (
+                           <PutDownItem />
+                        )}
+                     </span>
+                     <span className="icon-button-gap"></span>
+
                      <span className="flex-fill">
                         <h4>
                            <input
                               className={`edit-name level-text-color-this level-text-color-${thisLevelRotated}`}
-                              defaultValue={thisItem.name}
+                              value={thisItem.name}
                               onBlur={(e) =>
                                  this.renameThisItem(e, thisItem.id)
                               }
                               maxLength={MAX_ITEM_NAME_LENGTH}
-                              id="page-item-name-input"
+                              id={`compartment-name-input-${thisItem.id}`}
                            />
                         </h4>
                      </span>
@@ -434,117 +463,118 @@ class ItemList extends React.Component {
                      childItems.map((item) => (
                         <ItemCard item={item} key={item.id} />
                      ))}
-                  {this.props.isEditMode &&
-                     childItems.map((item) => (
-                        <ItemCardEdit item={item} key={item.id} />
-                     ))}
+                  {this.props.isEditMode && (
+                     <>
+                        {childItems.map((item) => (
+                           <ItemCardEdit item={item} key={item.id} />
+                        ))}
+                        <div
+                           className="button secondary-action-button d-flex item-card-inline-button"
+                           onClick={(e) => {
+                              this.addItemAndFocus(thisItem.id);
+                           }}
+                        >
+                           <span
+                              className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                           >
+                              <AddIcon />
+                           </span>
+                           <span className="flex-fill">
+                              Add item inside&nbsp;
+                              {thisItem.name}
+                           </span>
+                        </div>
+                        {thisItem.status !== 4 && (
+                           <div
+                              className="button secondary-action-button d-flex"
+                              onClick={(e) => {
+                                 this.addCompartmentAndFocus(thisItem.id);
+                              }}
+                           >
+                              <span
+                                 className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                              >
+                                 <AddIcon />
+                              </span>
+                              <span className="flex-fill">
+                                 Add compartment inside&nbsp;
+                                 {thisItem.name}
+                              </span>
+                           </div>
+                        )}
+                        {this.props.moveableItemIds.length > 0 && (
+                           <>
+                              <div
+                                 className="button secondary-action-button d-flex"
+                                 onClick={(e) => {
+                                    this.moveItemsHere(thisItem.id);
+                                 }}
+                              >
+                                 <span
+                                    className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                 >
+                                    <PutDownItem />
+                                 </span>
+                                 <span className="flex-fill">
+                                    Move&nbsp;{moveableItemsSummary}
+                                    &nbsp;To&nbsp;
+                                    {thisItem.name}
+                                 </span>
+                              </div>
+
+                              <div
+                                 className="button secondary-action-button d-flex"
+                                 onClick={() => {
+                                    this.props.dispatch({
+                                       type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+                                    });
+                                 }}
+                              >
+                                 <span
+                                    className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                 >
+                                    <PutDownItem />
+                                 </span>
+                                 <span className="flex-fill">Cancel Move</span>
+                              </div>
+                           </>
+                        )}{" "}
+                     </>
+                  )}
                   {childCompartments.map((compartment) =>
                      this.renderCompartment(compartment)
                   )}
                </div>
             </div>
-            {!this.props.isEditMode && thisItem.level !== 0 && (
-               <>
-                  <div className={classnames("card-section")}>
-                     <span
-                        className={classnames(
-                           "button navigation-link w-100",
-                           (thisItem.numResolvedDescendants === 0 ||
-                              this.props.currentUserLoadout.canPack === 0) &&
-                              "disabled"
-                        )}
-                        onClick={() =>
+            {!this.props.isEditMode &&
+               thisItem.level !== 0 &&
+               thisItem.status !== 4 && (
+                  <>
+                     <div className={classnames("card-section")}>
+                        <span
+                           className={classnames(
+                              "button navigation-link w-100",
+                              (thisItem.numResolvedDescendants === 0 ||
+                                 this.props.currentUserLoadout.canPack === 0) &&
+                                 "disabled"
+                           )}
+                           onClick={() =>
+                              thisItem.numResolvedDescendants !== 0 &&
+                              this.props.currentUserLoadout.canPack === 1 &&
+                              this.toggleUnpackRollout()
+                           }
+                        >
+                           Unpack {thisItem.name}
+                           ...
+                        </span>
+                        {this.state.isShowingUnpackConfirmation &&
                            thisItem.numResolvedDescendants !== 0 &&
-                           this.props.currentUserLoadout.canPack === 1 &&
-                           this.toggleUnpackRollout()
-                        }
-                     >
-                        Unpack {thisItem.name}
-                        ...
-                     </span>
-                     {this.state.isShowingUnpackConfirmation &&
-                        thisItem.numResolvedDescendants !== 0 &&
-                        this.rolloutUnpackConfirmation(
-                           `Unpack all ${thisItem.numDescendants} items and subitems inside ${thisItem.name}`
-                        )}
-                  </div>
-               </>
-            )}
-            {this.props.isEditMode && (
-               <>
-                  <div
-                     className="button secondary-action-button d-flex"
-                     onClick={(e) => {
-                        this.addItemAndFocus(thisItem.id);
-                     }}
-                  >
-                     <span
-                        className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                     >
-                        <AddIcon />
-                     </span>
-                     <span className="flex-fill">
-                        Add item inside&nbsp;
-                        {thisItem.name}
-                     </span>
-                  </div>
-
-                  <div
-                     className="button secondary-action-button d-flex"
-                     onClick={(e) => {
-                        this.addCompartmentAndFocus(thisItem.id);
-                     }}
-                  >
-                     <span
-                        className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                     >
-                        <AddIcon />
-                     </span>
-                     <span className="flex-fill">
-                        Add compartment inside&nbsp;
-                        {thisItem.name}
-                     </span>
-                  </div>
-
-                  {this.props.moveableItemIds.length > 0 && (
-                     <>
-                        <div
-                           className="button secondary-action-button d-flex"
-                           onClick={(e) => {
-                              this.moveItemsHere(thisItem.id);
-                           }}
-                        >
-                           <span
-                              className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                           >
-                              <PutDownItem />
-                           </span>
-                           <span className="flex-fill">
-                              Move&nbsp;{moveableItemsSummary}
-                              &nbsp;To&nbsp;
-                              {thisItem.name}
-                           </span>
-                        </div>
-
-                        <div
-                           className="button secondary-action-button d-flex"
-                           onClick={() => {
-                              this.props.dispatch({
-                                 type: actions.CLEAR_MOVEABLE_ITEM_IDS,
-                              });
-                           }}
-                        >
-                           <span
-                              className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                           >
-                              <PutDownItem />
-                           </span>
-                           <span className="flex-fill">Cancel Move</span>
-                        </div>
-                     </>
-                  )}
-               </>
-            )}
+                           this.rolloutUnpackConfirmation(
+                              `Unpack all ${thisItem.numDescendants} items and subitems inside ${thisItem.name}`
+                           )}
+                     </div>
+                  </>
+               )}
          </div>
       );
    }
@@ -589,9 +619,9 @@ class ItemList extends React.Component {
       return (
          <div
             className={classnames(
-               !this.props.isEditMode &&
-                  `ui-theme-${this.props.currentUser.uiTheme}`,
-               this.props.isEditMode && `ui-theme-2`
+               // !this.props.isEditMode &&
+               `ui-theme-${this.props.currentUser.uiTheme}`
+               // this.props.isEditMode && `ui-theme-2`
             )}
          >
             <Header />
