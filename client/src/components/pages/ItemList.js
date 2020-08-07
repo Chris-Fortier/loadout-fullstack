@@ -418,29 +418,37 @@ class ItemList extends React.Component {
                thisItem.status === 4 && "item-card-sub-group"
             )}
          >
-            <div className="row">
+            <div>
                {(!this.props.isEditMode || !thisUserCanEdit) && (
-                  <>
-                     <div className="col">
-                        <h4
-                           className={`level-text-color-this level-text-color-${thisLevelRotated}`}
-                        >
-                           {thisItem.name}
-                        </h4>
-                     </div>
+                  <div className="d-flex">
+                     <span
+                        className={classnames(
+                           `flex-fill level-text-color-this level-text-color-${thisLevelRotated}`,
+                           {
+                              "page-item-title": thisItem.status !== 4,
+                              "compartment-title": thisItem.status === 4,
+                           }
+                        )}
+                     >
+                        {thisItem.name}
+                     </span>
                      {thisItem.level > 0 && (
-                        <div className="col">
-                           <h4
-                              className={`float-right level-text-color-child level-text-color-${childLevelRotated}`}
-                           >
-                              {thisItem.contentSummary}
-                           </h4>
-                        </div>
+                        <span
+                           className={classnames(
+                              `page-item-title level-text-color-child level-text-color-${childLevelRotated}`,
+                              {
+                                 "page-item-title": thisItem.status !== 4,
+                                 "compartment-title": thisItem.status === 4,
+                              }
+                           )}
+                        >
+                           {thisItem.contentSummary}
+                        </span>
                      )}
-                  </>
+                  </div>
                )}
                {this.props.isEditMode && thisUserCanEdit && (
-                  <div className="col d-flex">
+                  <div className="d-flex">
                      <span
                         className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
                         // onClick={() => this.toggleDeleteRollout()} TODO: need to make a rollout
@@ -454,6 +462,7 @@ class ItemList extends React.Component {
                      <span
                         className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
                         onClick={() => toggleMoveableItemId(thisItem.id)}
+                        title="Pick up or put down"
                      >
                         {!this.props.moveableItemIds.includes(thisItem.id) && (
                            <PickUpItem />
@@ -463,20 +472,75 @@ class ItemList extends React.Component {
                         )}
                      </span>
                      <span className="icon-button-gap"></span>
+                     <input
+                        className={classnames(
+                           `flex-fill level-text-color-this level-text-color-${thisLevelRotated}`,
+                           {
+                              "page-item-input": thisItem.status !== 4,
+                              "compartment-input": thisItem.status === 4,
+                           }
+                        )}
+                        value={thisItem.name}
+                        onBlur={(e) => this.renameThisItem(e, thisItem.id)}
+                        maxLength={MAX_ITEM_NAME_LENGTH}
+                        id={`compartment-name-input-${thisItem.id}`}
+                     />
+                     {thisItem.status !== 4 && (
+                        <>
+                           <span className="icon-button-gap"></span>
 
-                     <span className="flex-fill">
-                        <h4>
-                           <input
-                              className={`edit-name level-text-color-this level-text-color-${thisLevelRotated}`}
-                              value={thisItem.name}
-                              onBlur={(e) =>
-                                 this.renameThisItem(e, thisItem.id)
-                              }
-                              maxLength={MAX_ITEM_NAME_LENGTH}
-                              id={`compartment-name-input-${thisItem.id}`}
-                           />
-                        </h4>
-                     </span>
+                           <span
+                              className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                              onClick={(e) => {
+                                 this.addCompartmentAndFocus(thisItem.id);
+                              }}
+                              title={`Add compartment inside ${thisItem.name}`}
+                           >
+                              <AddIcon />
+                           </span>
+                        </>
+                     )}
+                     {!hasCompartments && (
+                        <>
+                           <span className="icon-button-gap"></span>
+                           <span
+                              className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                              onClick={(e) => {
+                                 this.addItemAndFocus(thisItem.id);
+                              }}
+                              title={`Add item inside ${thisItem.name}`}
+                           >
+                              <AddIcon />
+                           </span>
+                        </>
+                     )}
+                     {this.props.moveableItemIds.length > 0 &&
+                        !hasCompartments && (
+                           <>
+                              <span className="icon-button-gap"></span>
+                              <span
+                                 className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                 onClick={(e) => {
+                                    this.moveItems(thisItem.id);
+                                 }}
+                                 title={`Move ${moveableItemsSummary} To ${thisItem.name}`}
+                              >
+                                 <PutDownItem />
+                              </span>
+                              <span className="icon-button-gap"></span>
+                              <span
+                                 className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
+                                 onClick={() => {
+                                    this.props.dispatch({
+                                       type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+                                    });
+                                 }}
+                                 title="Cancel Move"
+                              >
+                                 <PickUpItem />
+                              </span>
+                           </>
+                        )}
                   </div>
                )}
             </div>
@@ -492,7 +556,7 @@ class ItemList extends React.Component {
                         {childItems.map((item) => (
                            <ItemCardEdit item={item} key={item.id} />
                         ))}
-                        {!hasCompartments && (
+                        {/* {!hasCompartments && (
                            <div
                               className="button secondary-action-button d-flex item-card-inline-button"
                               onClick={(e) => {
@@ -509,8 +573,8 @@ class ItemList extends React.Component {
                                  {thisItem.name}
                               </span>
                            </div>
-                        )}
-                        {thisItem.status !== 4 && (
+                        )} */}
+                        {/* {thisItem.status !== 4 && (
                            <div
                               className="button secondary-action-button d-flex"
                               onClick={(e) => {
@@ -527,8 +591,8 @@ class ItemList extends React.Component {
                                  {thisItem.name}
                               </span>
                            </div>
-                        )}
-                        {this.props.moveableItemIds.length > 0 &&
+                        )} */}
+                        {/* {this.props.moveableItemIds.length > 0 &&
                            !hasCompartments && (
                               <>
                                  <div
@@ -567,7 +631,7 @@ class ItemList extends React.Component {
                                     </span>
                                  </div>
                               </>
-                           )}
+                           )} */}
                      </>
                   )}
                   {childCompartments.map((compartment) =>

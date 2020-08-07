@@ -596,6 +596,44 @@ $iconWidth: 30px;
    margin-bottom: 0;
 }
 
+.page-item-title,
+.compartment-title {
+   margin: $item-card-spacing/2;
+}
+
+.page-item-title,
+.page-item-input {
+   font-size: 32px;
+}
+
+.page-item-input,
+.compartment-input {
+   margin-top: 2px;
+   margin-bottom: 3px;
+}
+
+.page-item-input {
+   height: 32px;
+}
+
+.compartment-title,
+.compartment-input {
+   font-size: 28px;
+}
+
+.compartment-input {
+   height: 28px;
+}
+
+input {
+   background-color: black;
+   // padding: 0px;
+   // margin: 0px;
+   outline: none;
+   border: 0px;
+   vertical-align: baseline;
+}
+
 // for an invalid input
 .input-invalid {
    // background-color: rgba(255, 191, 191, 0.75);

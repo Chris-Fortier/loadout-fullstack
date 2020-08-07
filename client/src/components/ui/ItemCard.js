@@ -157,11 +157,6 @@ class ItemCard extends React.Component {
                      <span
                         className={classnames(
                            `flex-fill item-card-text level-text-color-child level-text-color-${thisLevelRotated}`
-                           // (UI_APPEARANCE === "light" ||
-                           //    UI_APPEARANCE === "dark") &&
-                           //    "level-text-color-" +
-                           //       String(level % LEVEL_COLORS),
-                           // UI_APPEARANCE === "colors" && "light-text-color"
                         )}
                      >
                         <span
