@@ -14,17 +14,20 @@ import {
 } from "../../icons/loadout-icons.js";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import axios from "axios";
-import { processLoadout } from "../../utils/items";
+import { processLoadout, deleteItemId } from "../../utils/items";
 import actions from "../../store/actions";
 
 // new version of item card that deals with database data
 
 class ItemCard extends React.Component {
-   // recountPageItems() {
-   //    console.log("recountPageItems()...");
-   //    console.log(this.props.currentItem);
-   //    console.log(this.props.childItems);
-   // }
+   constructor(props) {
+      super(props);
+
+      // set default state values
+      this.state = {
+         isShowingDeleteConfirmation: false,
+      };
+   }
 
    // toggle the packed status of this item
    toggleIsPacked() {
@@ -77,6 +80,85 @@ class ItemCard extends React.Component {
                // TODO: client side error message
             });
       }
+   }
+
+   // toggle the delete confirmation
+   toggleDeleteRollout() {
+      console.log("this.state", this.state);
+      this.setState({
+         isShowingDeleteConfirmation: !this.state.isShowingDeleteConfirmation,
+      });
+   }
+
+   renderDeleteConfirmation() {
+      return (
+         <div
+            id="myModal"
+            className="modal"
+            onClick={() => {
+               this.toggleDeleteRollout();
+            }}
+         >
+            <div
+               className="modal-content"
+               onClick={(e) => {
+                  e.stopPropagation();
+               }} // this stops it from doing the parent onClick even (stops it from closing if you click inside the modal)
+            >
+               <span
+                  className="close"
+                  onClick={() => this.toggleDeleteRollout()}
+               >
+                  &times;
+               </span>
+               <p>{`Are you sure you want to delete ${this.props.item.name}?`}</p>
+               {this.props.item.numDescendants > 0 && (
+                  <>
+                     {/* <div
+                        className="button primary-action-button"
+                        // onClick={() => {
+                        //    this.confirmUnpackDescendants();
+                        // }}
+                     >
+                        {`Delete ${this.props.item.name} only but KEEP It's ${this.props.item.numDescendants} Subitems`}
+                     </div> */}
+                     <div
+                        className="button danger-action-button"
+                        onClick={() => {
+                           deleteItemId(
+                              this.props.currentLoadout,
+                              this.props.item.id
+                           );
+                        }}
+                     >
+                        {`Delete ${this.props.item.name} and also DELETE it's ${this.props.item.numDescendants} Subitems`}
+                     </div>
+                  </>
+               )}
+               {this.props.item.numDescendants === 0 && (
+                  <div
+                     className="button primary-action-button"
+                     onClick={() => {
+                        deleteItemId(
+                           this.props.currentLoadout,
+                           this.props.item.id
+                        );
+                     }}
+                  >
+                     {`Delete ${this.props.item.name}`}
+                  </div>
+               )}
+               <div
+                  className="button secondary-action-button"
+                  onClick={() => {
+                     this.toggleDeleteRollout();
+                  }}
+               >
+                  Cancel
+               </div>
+            </div>
+         </div>
+      );
    }
 
    render() {
@@ -182,6 +264,9 @@ class ItemCard extends React.Component {
                      <span
                         className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
                         // onClick={() => this.toggleDeleteRollout()}
+                        onClick={() => {
+                           this.toggleDeleteRollout();
+                        }}
                      >
                         <DeleteIcon />
                      </span>
@@ -245,6 +330,8 @@ class ItemCard extends React.Component {
                   </>
                )}
             </div>
+            {this.state.isShowingDeleteConfirmation &&
+               this.renderDeleteConfirmation()}
          </div>
       );
    }

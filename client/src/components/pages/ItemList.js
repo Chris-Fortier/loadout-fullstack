@@ -6,7 +6,6 @@ import classnames from "classnames";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import ItemCard from "../ui/ItemCard";
-import ItemCardEdit from "../ui/ItemCardEdit";
 import { Link } from "react-router-dom"; // a React element for linking
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import {
@@ -64,37 +63,46 @@ class ItemList extends React.Component {
    // methods happen here, such as what happens when you click on a button
 
    // roll out a dialog for unpacking an item's contents
-   rolloutUnpackConfirmation(unpackDescendantsText) {
+   renderUnpackConfirmation(item) {
       return (
-         <div>
-            {/* {unpackChildrenText !== "" && (
-               <div
-                  className="button primary-action-button"
-                  onClick={(e) => {
-                     this.confirmUnpackChildren();
-                  }}
+         <div
+            id="myModal"
+            className="modal"
+            onClick={() => {
+               this.hideUnpackConfirmation();
+            }}
+         >
+            <div
+               className="modal-content"
+               onClick={(e) => {
+                  e.stopPropagation();
+               }} // this stops it from doing the parent onClick even (stops it from closing if you click inside the modal)
+            >
+               <span
+                  className="close"
+                  onClick={() => this.hideUnpackConfirmation()}
                >
-                  {unpackChildrenText}
-               </div>
-            )} */}
-
-            {unpackDescendantsText !== "" && (
+                  &times;
+               </span>
+               <p>Unpack {item.name}</p>
                <div
                   className="button primary-action-button"
-                  onClick={(e) => {
+                  onClick={() => {
+                     // console.log(`${option.text} clicked`);
                      this.confirmUnpackDescendants();
                   }}
                >
-                  {unpackDescendantsText}
+                  {`Unpack all ${item.numDescendants} items and subitems inside ${item.name}`}
                </div>
-            )}
-
-            <div
-               className={classnames("button navigation-link")}
-               onClick={() => this.toggleUnpackRollout()}
-            >
-               <br />
-               Cancel
+               <div
+                  className="button secondary-action-button"
+                  onClick={() => {
+                     // console.log(`${option.text} clicked`);
+                     this.hideUnpackConfirmation();
+                  }}
+               >
+                  Cancel
+               </div>
             </div>
          </div>
       );
@@ -361,8 +369,8 @@ class ItemList extends React.Component {
 
       // set the rotating level colors
       const thisLevelRotated = (thisItem.level + LEVEL_COLORS) % LEVEL_COLORS;
-      const parentLevelRotated =
-         (thisItem.level + LEVEL_COLORS - 1) % LEVEL_COLORS;
+      // const parentLevelRotated =
+      //    (thisItem.level + LEVEL_COLORS - 1) % LEVEL_COLORS;
       const childLevelRotated =
          (thisItem.level + LEVEL_COLORS + 1) % LEVEL_COLORS;
 
@@ -577,9 +585,7 @@ class ItemList extends React.Component {
                         </span>
                         {this.state.isShowingUnpackConfirmation &&
                            thisItem.numResolvedDescendants !== 0 &&
-                           this.rolloutUnpackConfirmation(
-                              `Unpack all ${thisItem.numDescendants} items and subitems inside ${thisItem.name}`
-                           )}
+                           this.renderUnpackConfirmation(thisItem)}
                      </div>
                   </>
                )}

@@ -202,8 +202,9 @@ body {
    width: calc(100% - 12px); // base size in small widths
 
    .primary-action-button,
-   .secondary-action-button .danger-action-button {
-      font-size: 1rem; // override so that buttons inside the item cards have base size font
+   .secondary-action-button,
+   .danger-action-button {
+      // font-size: 1rem; // override so that buttons inside the item cards have base size font
       margin-top: $space-between-button-rows/2; // for space between card sections and buttons
       margin-bottom: $space-between-button-rows/2; // for space between card sections and buttons
    }
@@ -806,6 +807,49 @@ li {
    font-size: 1.25em;
    line-height: 1.25em;
 }
+
+///////////////////////////////
+//https://www.w3schools.com/howto/howto_css_modals.asp
+
+/* The Modal (background) */
+.modal {
+   // display: none; /* Hidden by default */ // will show and hide this with React and Redux
+   position: fixed; /* Stay in place */
+   z-index: 1; /* Sit on top */
+   left: 0;
+   top: 0;
+   width: 100%; /* Full width */
+   height: 100%; /* Full height */
+   overflow: auto; /* Enable scroll if needed */
+   background-color: rgb(0, 0, 0); /* Fallback color */
+   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+   // background-color: #fefefe; // color set by theme
+   margin: 15% auto; /* 15% from the top and centered */
+   padding: 20px;
+   border: 1px solid #888;
+   width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+   color: #aaa;
+   float: right;
+   font-size: 28px;
+   font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+   color: black;
+   text-decoration: none;
+   cursor: pointer;
+}
+
+/////////////////////////////////
 
 // li:nth-child(even) {
 //    background-color: hsl(180, 25, 90);

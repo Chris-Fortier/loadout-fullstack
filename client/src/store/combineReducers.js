@@ -13,7 +13,7 @@ export default combineReducers({
    currentUser,
    currentItem,
    currentUserLoadout,
-   userLoadouts, // stores all the curent user's userLoadouts
+   userLoadouts, // stores all the current user's userLoadouts
    currentLoadoutUserLoadouts, // stores all the user loadouts for the current loadout
    isEditMode,
    currentLoadout, // stores the entire current loadout and all its descendants
