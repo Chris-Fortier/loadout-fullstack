@@ -186,7 +186,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
    }
 
    .icon-parent {
-      width: 1em; //$iconWidth;
+      // width: 1em; //$iconWidth;
       align-self: center;
       .primary {
          fill: $light-text-color;
@@ -300,7 +300,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
    }
 
    .item-icon-colors {
-      width: 1em;
+      // width: 1em;
       align-self: center;
 
       .parent-item {
@@ -447,7 +447,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
       }
    }
 
-   .edit-name {
+   input {
       background-color: rgba(0, 0, 0, 0.6);
    }
 
@@ -480,13 +480,17 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
    .item-card-border-6 {
       border: 2px solid map-get($level-text-colors, 6);
    }
+
+   .modal-content {
+      background-color: black;
+   }
 }
 
 // shared with light and dark themes
 .ui-theme-2,
 .ui-theme-1 {
    .item-icon-colors-0 {
-      width: 1em;
+      // width: 1em;
       align-self: center;
       // colors for the packing icons
       .parent-item {
@@ -500,7 +504,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
       }
    }
    .item-icon-colors-1 {
-      width: 1em;
+      // width: 1em;
       align-self: center;
       // colors for the packing icons
       .parent-item {
@@ -514,7 +518,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
       }
    }
    .item-icon-colors-2 {
-      width: 1em;
+      // width: 1em;
       align-self: center;
       // colors for the packing icons
       .parent-item {
@@ -528,7 +532,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
       }
    }
    .item-icon-colors-3 {
-      width: 1em;
+      // width: 1em;
       align-self: center;
       // colors for the packing icons
       .parent-item {
@@ -542,7 +546,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
       }
    }
    .item-icon-colors-4 {
-      width: 1em;
+      // width: 1em;
       align-self: center;
       // colors for the packing icons
       .parent-item {
@@ -556,7 +560,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
       }
    }
    .item-icon-colors-5 {
-      width: 1em;
+      // width: 1em;
       align-self: center;
       // colors for the packing icons
       .parent-item {
@@ -570,7 +574,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
       }
    }
    .item-icon-colors-6 {
-      width: 1em;
+      // width: 1em;
       align-self: center;
       // colors for the packing icons
       .parent-item {

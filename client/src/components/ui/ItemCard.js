@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { LEVEL_COLORS } from "../../utils/helpers";
+import { LEVEL_COLORS, MAX_ITEM_NAME_LENGTH } from "../../utils/helpers";
 import classnames from "classnames";
 import {
    PackedIcon,
@@ -8,6 +8,9 @@ import {
    NotReadyToPackIcon,
    ChildrenUnpackedIcon,
    ChildrenPackedIcon2,
+   DeleteIcon,
+   PickUpItem,
+   PutDownItem,
 } from "../../icons/loadout-icons.js";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import axios from "axios";
@@ -95,9 +98,10 @@ class ItemCard extends React.Component {
                level > 1 &&
                   item.status === 1 &&
                   "child-packed-bg child-packed-bg-level-" +
-                     String(level % LEVEL_COLORS)
+                     String(level % LEVEL_COLORS),
+               this.props.moveableItemIds.includes(this.props.item.id) &&
+                  "picked-up-item"
             )}
-            id={"item-card-" + item.index}
          >
             {/* <div className="float-left"> */}
             <div className="d-flex">
@@ -119,18 +123,13 @@ class ItemCard extends React.Component {
                   </span>
                )}
 
-               {level > 1 && (
+               {level > 1 && !this.props.isEditMode && (
                   <>
                      <span
                         className={classnames(
                            "item-card-icon",
                            `item-icon-colors-${thisLevelRotated}`,
                            "item-icon-colors",
-                           // (UI_APPEARANCE === "light" ||
-                           //    UI_APPEARANCE === "dark") &&
-                           //    "item-icon-colors-" +
-                           //       String(level % LEVEL_COLORS),
-                           // UI_APPEARANCE === "colors" && "item-icon-colors",
                            {
                               clickable:
                                  item.numUnresolvedDescendants === 0 &&
@@ -154,6 +153,7 @@ class ItemCard extends React.Component {
                               <NotReadyToPackIcon />
                            )}
                      </span>
+                     <span className="icon-button-gap"></span>
                      <span
                         className={classnames(
                            `flex-fill item-card-text level-text-color-child level-text-color-${thisLevelRotated}`
@@ -171,54 +171,76 @@ class ItemCard extends React.Component {
                               this.toggleIsPacked();
                            }}
                         >
-                           &nbsp;&nbsp;{item.name}
+                           {item.name}
                         </span>
                      </span>
                   </>
                )}
 
-               {item.numDescendants > 0 && (
+               {level > 1 && this.props.isEditMode && (
                   <>
                      <span
-                        onClick={(e) => {
-                           // (item.status === 0 ||
-                           //    this.props.currentUserLoadout.canPack === 0) &&
-                           movePageToDifferentItem(this.props.item.id, +1);
-                        }}
-                        className={classnames(
-                           `button navigation-link item-card-text level-text-color-this level-text-color-${childLevelRotated}`
-                           // { disabled: item.status === 1 }
-                        )}
+                        className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                        // onClick={() => this.toggleDeleteRollout()}
                      >
-                        {item.contentSummary}&nbsp;&nbsp;
+                        <DeleteIcon />
                      </span>
+                     <span className="icon-button-gap"></span>
+                     <span
+                        className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                        // onClick={() => toggleMoveableItemId(item.id)}
+                     >
+                        {!this.props.moveableItemIds.includes(
+                           this.props.item.id
+                        ) && <PickUpItem />}
+                        {this.props.moveableItemIds.includes(
+                           this.props.item.id
+                        ) && <PutDownItem />}
+                     </span>
+                     <span className="icon-button-gap"></span>
+                     <input
+                        className={`flex-fill card-item-input level-text-color-child level-text-color-${thisLevelRotated}`}
+                        id={"edit-name-input-" + item.id}
+                        defaultValue={item.name}
+                        // onBlur={(e) => this.renameThisItem(e)}
+                        maxLength={MAX_ITEM_NAME_LENGTH}
+                     />
+                  </>
+               )}
+
+               {item.numDescendants > 0 && !this.props.isEditMode && (
+                  <span
+                     onClick={(e) => {
+                        movePageToDifferentItem(this.props.item.id, +1);
+                     }}
+                     className={classnames(
+                        `button navigation-link item-card-text level-text-color-this level-text-color-${childLevelRotated}`
+                     )}
+                  >
+                     {item.contentSummary}
+                  </span>
+               )}
+
+               {(item.numDescendants > 0 || this.props.isEditMode) && (
+                  <>
+                     {" "}
+                     <span className="icon-button-gap"></span>
                      <span
                         className={classnames(
                            `icon-dark item-card-icon item-icon-colors item-icon-colors-${thisLevelRotated} clickable`
-                           // {
-                           //    clickable:
-                           //       item.status === 0 ||
-                           //       this.props.currentUserLoadout.canPack === 0,
-                           //    disabled:
-                           //       item.status === 1 &&
-                           //       this.props.currentUserLoadout.canPack === 1,
-                           // }
                         )}
                         onClick={(e) => {
-                           // (item.status === 0 ||
-                           //    this.props.currentUserLoadout.canPack === 0) &&
                            movePageToDifferentItem(this.props.item.id, +1);
                         }}
                      >
-                        {item.status === 1 && <ChildrenPackedIcon2 />}
-                        {item.status === 0 &&
+                        {!this.props.isEditMode &&
                            item.numUnresolvedDescendants === 0 && (
                               <ChildrenPackedIcon2 />
                            )}
-                        {item.status === 0 &&
-                           item.numUnresolvedDescendants > 0 && (
-                              <ChildrenUnpackedIcon />
-                           )}
+                        {(this.props.isEditMode ||
+                           item.numUnresolvedDescendants > 0) && (
+                           <ChildrenUnpackedIcon />
+                        )}
                      </span>
                   </>
                )}
@@ -235,6 +257,8 @@ function mapStateToProps(state) {
       currentItem: state.currentItem,
       currentUserLoadout: state.currentUserLoadout,
       currentLoadout: state.currentLoadout,
+      isEditMode: state.isEditMode,
+      moveableItemIds: state.moveableItemIds,
    };
 }
 

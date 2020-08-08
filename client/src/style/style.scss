@@ -177,15 +177,6 @@ body {
    height: calc((100vh - 340px) * 0.25);
 }
 
-.big-checkbox {
-   width: 20px;
-   height: 20px;
-}
-
-// h2 {
-//    font-size: 75px;
-// }
-
 // style text for switch labels
 .display-switch-label {
    font-weight: 300;
@@ -234,10 +225,6 @@ body {
    padding-right: 5px; // still want padding on the sides
 }
 
-// .item-card-inline-button {
-
-// }
-
 .icon-button-gap {
    width: 12px;
 }
@@ -263,27 +250,6 @@ body {
 .packed-counter {
    // font-weight: 500;
    color: $darker-stuff;
-}
-
-.edit-name {
-   // this is to center the text vertically within the card
-   padding-top: 1px;
-   padding-bottom: 0px;
-   padding-left: 0.25em;
-   padding-right: 0.25em;
-
-   // line-height: 0.9; // this works well with this font if multiple lines are needed
-   // font-size: 1.2rem;
-   // text-transform: capitalize; // makes first letter of each word uppercase
-
-   // color: rgba(0, 0, 0, 0.8);
-
-   // background-color: rgba(255, 255, 255, 0.4);
-   // margin-top: -10px;
-   // margin-bottom: -10px;
-   // margin: 0;
-   border: none;
-   width: 100%;
 }
 
 .item-card-main-group,
@@ -322,17 +288,6 @@ body {
    border: 1px solid white;
    padding: $item-card-spacing/2;
 }
-
-// no space after last item-card
-// .item-card:last-of-type {
-//    margin-bottom: 0;
-// }
-
-// .btn {
-//    text-transform: uppercase;
-//    font-weight: 700;
-//    color: $darker-stuff;
-// }
 
 // style for the header on the top of the page
 .page-header {
@@ -435,7 +390,7 @@ $iconWidth: 30px;
 
 // size and color of icons
 .icon-dark {
-   width: 1em; //$iconWidth;
+   // width: 1em; //$iconWidth;
 
    align-self: center;
 
@@ -452,7 +407,7 @@ $iconWidth: 30px;
 
 // size and color of icons
 .icon-light {
-   width: 1em; //$iconWidth;
+   // width: 1em; //$iconWidth;
 
    align-self: center;
 
@@ -467,7 +422,7 @@ $iconWidth: 30px;
 
 // use to enlarge item card icons (1rem is no change)
 .item-card-icon {
-   width: 1.25rem;
+   width: 24px;
    // -webkit-filter: drop-shadow($pack-icon-shadow);
    // filter: drop-shadow($pack-icon-shadow);
 }
@@ -478,7 +433,7 @@ $iconWidth: 30px;
 }
 
 .standard-sized-icon {
-   width: 1rem;
+   width: 20px;
 }
 
 // vertically align item card text
@@ -488,7 +443,7 @@ $iconWidth: 30px;
 
 // assign this class to the div around an inline icon
 .packed-checkbox-container {
-   width: $iconWidth;
+   // width: $iconWidth;
    // display: inline-block;
    // margin-left: 10px;
    margin-right: -5px;
@@ -621,17 +576,28 @@ $iconWidth: 30px;
    font-size: 28px;
 }
 
+.compartment-title {
+   height: 21px; // to make the height match what the input version ends up being
+}
+
 .compartment-input {
    height: 28px;
 }
 
+.card-item-input {
+   height: 24px;
+}
+
 input {
-   background-color: black;
+   // background-color: black;
    // padding: 0px;
    // margin: 0px;
-   outline: none;
+   // outline: none;
    border: 0px;
-   vertical-align: baseline;
+   // vertical-align: baseline;
+   padding-left: 6px;
+   padding-right: 6px;
+   width: 50%; // strange that any lower percentage seems to work
 }
 
 // for an invalid input

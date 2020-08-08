@@ -9,6 +9,7 @@
      - I think this happens if I delete an item that contains subitems when it reprocesses the loadout still containing orphaned items
    - need a rollout before deleting a compartment (or modal?)
   - rename "compartment" to "group"?
+  - upon deleting last compartment, put child items in root of parent item
 - modal dialog boxes instead of rollouts?
   - delete item
   - unpack all
@@ -20,5 +21,12 @@
     - Edit
     - Sharing
   - Refresh button
+- rollout to show the items currently "picked up"
+- add ability to "collapse" compartments
+
+# before next Heroku push:
+- test in dark and colors mode
+- full test of making a new account and all the functionality shown in demo
+- clear warnings
 
 # current change

@@ -435,7 +435,7 @@ class ItemList extends React.Component {
                      {thisItem.level > 0 && (
                         <span
                            className={classnames(
-                              `page-item-title level-text-color-child level-text-color-${childLevelRotated}`,
+                              `level-text-color-child level-text-color-${childLevelRotated}`,
                               {
                                  "page-item-title": thisItem.status !== 4,
                                  "compartment-title": thisItem.status === 4,
@@ -544,101 +544,16 @@ class ItemList extends React.Component {
                   </div>
                )}
             </div>
-            <div className="row">
-               <div className="col">
-                  {/* {this.renderContainingItems(thisItem)} */}
-                  {!this.props.isEditMode &&
-                     childItems.map((item) => (
-                        <ItemCard item={item} key={item.id} />
-                     ))}
-                  {this.props.isEditMode && (
-                     <>
-                        {childItems.map((item) => (
-                           <ItemCardEdit item={item} key={item.id} />
-                        ))}
-                        {/* {!hasCompartments && (
-                           <div
-                              className="button secondary-action-button d-flex item-card-inline-button"
-                              onClick={(e) => {
-                                 this.addItemAndFocus(thisItem.id);
-                              }}
-                           >
-                              <span
-                                 className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                              >
-                                 <AddIcon />
-                              </span>
-                              <span className="flex-fill">
-                                 Add item inside&nbsp;
-                                 {thisItem.name}
-                              </span>
-                           </div>
-                        )} */}
-                        {/* {thisItem.status !== 4 && (
-                           <div
-                              className="button secondary-action-button d-flex"
-                              onClick={(e) => {
-                                 this.addCompartmentAndFocus(thisItem.id);
-                              }}
-                           >
-                              <span
-                                 className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                              >
-                                 <AddIcon />
-                              </span>
-                              <span className="flex-fill">
-                                 Add compartment inside&nbsp;
-                                 {thisItem.name}
-                              </span>
-                           </div>
-                        )} */}
-                        {/* {this.props.moveableItemIds.length > 0 &&
-                           !hasCompartments && (
-                              <>
-                                 <div
-                                    className="button secondary-action-button d-flex"
-                                    onClick={(e) => {
-                                       this.moveItems(thisItem.id);
-                                    }}
-                                 >
-                                    <span
-                                       className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                                    >
-                                       <PutDownItem />
-                                    </span>
-                                    <span className="flex-fill">
-                                       Move&nbsp;{moveableItemsSummary}
-                                       &nbsp;To&nbsp;
-                                       {thisItem.name}
-                                    </span>
-                                 </div>
-
-                                 <div
-                                    className="button secondary-action-button d-flex"
-                                    onClick={() => {
-                                       this.props.dispatch({
-                                          type: actions.CLEAR_MOVEABLE_ITEM_IDS,
-                                       });
-                                    }}
-                                 >
-                                    <span
-                                       className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
-                                    >
-                                       <PutDownItem />
-                                    </span>
-                                    <span className="flex-fill">
-                                       Cancel Move
-                                    </span>
-                                 </div>
-                              </>
-                           )} */}
-                     </>
-                  )}
-                  {childCompartments.map((compartment) =>
-                     this.renderCompartment(compartment)
-                  )}
-               </div>
-            </div>
+            {/* <div className="row">
+               <div className="col"> */}
+            {childItems.map((item) => (
+               <ItemCard item={item} key={item.id} />
+            ))}
+            {childCompartments.map((compartment) =>
+               this.renderCompartment(compartment)
+            )}
+            {/* </div>
+            </div> */}
             {!this.props.isEditMode &&
                thisItem.level !== 0 &&
                thisItem.status !== 4 && (
