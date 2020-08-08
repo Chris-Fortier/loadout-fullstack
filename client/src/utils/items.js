@@ -121,28 +121,33 @@ export function processLoadout(loadout) {
             return item.id === ancestorId;
          });
 
-         // add to counters
-         ancestorItem.numDescendants += descendantCount;
-         ancestorItem.numResolvedDescendants += resolvedDescendantCount;
-         ancestorItem.numUnresolvedDescendants += unresolvedDescendantCount;
+         // if this item is not an orphan
+         if (ancestorItem !== undefined) {
+            // add to counters
+            ancestorItem.numDescendants += descendantCount;
+            ancestorItem.numResolvedDescendants += resolvedDescendantCount;
+            ancestorItem.numUnresolvedDescendants += unresolvedDescendantCount;
 
-         // unpack any ancestor if this item is unresolved
-         if (thisIsUnResolved) {
-            // if it is set to packed, set it to unpacked
-            if (ancestorItem.status === 1) {
-               ancestorItem.status = 0;
-               console.log(
-                  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ANCESTOR STATUS CHANGED!"
-               );
-               // TODO update on server too
+            // unpack any ancestor if this item is unresolved
+            if (thisIsUnResolved) {
+               // if it is set to packed, set it to unpacked
+               if (ancestorItem.status === 1) {
+                  ancestorItem.status = 0;
+                  console.log(
+                     "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ANCESTOR STATUS CHANGED!"
+                  );
+                  // TODO update on server too
 
-               // TODO now the count will be off, so I need to change to counters to compensate
-               unresolvedDescendantCount = 2;
-               resolvedDescendantCount = -1;
+                  // TODO now the count will be off, so I need to change to counters to compensate
+                  unresolvedDescendantCount = 2;
+                  resolvedDescendantCount = -1;
+               }
             }
-         }
 
-         ancestorId = ancestorItem.parentId; // go up to next ancestor
+            ancestorId = ancestorItem.parentId; // go up to next ancestor
+         } else {
+            ancestorId = null; // set it to null and this will stop trying to find ancestors for this orphan
+         }
       }
    }
 

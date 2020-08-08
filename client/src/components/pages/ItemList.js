@@ -35,6 +35,7 @@ class ItemList extends React.Component {
          isPackedOnBottom: false,
          // isEditMode: false,
          isShowingUnpackConfirmation: false,
+         deleteModelContainer: {}, // stores the container object of the container in question or an empty object if there is no modal
       };
 
       // initialize Redux stuff that should be empty if on this page:
@@ -459,9 +460,8 @@ class ItemList extends React.Component {
                   <div className="d-flex">
                      <span
                         className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
-                        // onClick={() => this.toggleDeleteRollout()} TODO: need to make a rollout
                         onClick={() =>
-                           deleteItemId(this.props.currentLoadout, thisItem.id)
+                           this.setState({ deleteModelContainer: thisItem })
                         }
                      >
                         <DeleteIcon />
@@ -597,6 +597,81 @@ class ItemList extends React.Component {
       return (level + LEVEL_COLORS) % LEVEL_COLORS;
    }
 
+   // TODO: kind of duplicated the delete modal from ItemCard
+
+   renderContainerDeleteConfirmation() {
+      return (
+         <div
+            id="myModal"
+            className="modal"
+            onClick={() => {
+               this.setState({ deleteModelContainer: {} });
+            }}
+         >
+            <div
+               className="modal-content"
+               onClick={(e) => {
+                  e.stopPropagation();
+               }} // this stops it from doing the parent onClick even (stops it from closing if you click inside the modal)
+            >
+               <span
+                  className="close"
+                  onClick={() => this.setState({ deleteModelContainer: {} })}
+               >
+                  &times;
+               </span>
+               <p>{`Are you sure you want to delete ${this.state.deleteModelContainer.name}?`}</p>
+               {this.state.deleteModelContainer.numDescendants > 0 && (
+                  <>
+                     {/* <div
+                        className="button primary-action-button"
+                        // onClick={() => {
+                        //    this.confirmUnpackDescendants();
+                        // }}
+                     >
+                        {`Delete ${this.state.deleteModelContainer.name} only but KEEP It's ${this.state.deleteModelContainer.numDescendants} Subitems`}
+                     </div> */}
+                     <div
+                        className="button danger-action-button"
+                        onClick={() => {
+                           deleteItemId(
+                              this.props.currentLoadout,
+                              this.state.deleteModelContainer.id
+                           );
+                           this.setState({ deleteModelContainer: {} });
+                        }}
+                     >
+                        {`Delete ${this.state.deleteModelContainer.name} and also DELETE it's ${this.state.deleteModelContainer.numDescendants} Subitems`}
+                     </div>
+                  </>
+               )}
+               {this.state.deleteModelContainer.numDescendants === 0 && (
+                  <div
+                     className="button primary-action-button"
+                     onClick={() => {
+                        deleteItemId(
+                           this.props.currentLoadout,
+                           this.state.deleteModelContainer.id
+                        );
+                        this.setState({ deleteModelContainer: {} });
+                     }}
+                  >
+                     {`Delete ${this.state.deleteModelContainer.name}`}
+                  </div>
+               )}
+               <div
+                  className="button secondary-action-button"
+                  onClick={() => {
+                     this.setState({ deleteModelContainer: {} });
+                  }}
+               >
+                  Cancel
+               </div>
+            </div>
+         </div>
+      );
+   }
+
    render() {
       console.log("Rendering page...");
 
@@ -652,54 +727,46 @@ class ItemList extends React.Component {
                <div className="container-fluid item-cards-container scroll-fix">
                   <div className="row">
                      <div className="col">
-                        {pageItem.level === 1 && (
-                           <div>
-                              <span
-                                 className="clickable"
-                                 onClick={(e) => {
-                                    this.gotoSharing(e);
-                                 }}
-                              >
-                                 <span
-                                    className={`button theme-icon-color standard-sized-icon`}
-                                 >
-                                    <IconUserCouple />
-                                 </span>
-                                 &nbsp;
-                                 <span className="button navigation-link">
-                                    Loadout Settings
-                                 </span>
-                                 &nbsp;&nbsp;
-                                 <SharingStrip
-                                    loadout={this.props.currentUserLoadout}
-                                 />
-                              </span>
-                           </div>
-                        )}
+                        <span
+                           className="clickable float-right"
+                           onClick={(e) => {
+                              this.gotoSharing(e);
+                           }}
+                        >
+                           <span
+                              className={`button theme-icon-color standard-sized-icon`}
+                           >
+                              <IconUserCouple />
+                           </span>
+                           &nbsp;
+                           <span className="button navigation-link">
+                              Loadout Settings
+                           </span>
+                           &nbsp;&nbsp;
+                           <SharingStrip
+                              loadout={this.props.currentUserLoadout}
+                           />
+                        </span>
 
                         {pageItem.level > 0 && (
-                           <div>
+                           <span
+                              className="clickable"
+                              onClick={(e) => {
+                                 this.props.currentUserLoadout.canEdit === 1 &&
+                                    this.toggleEditMode(e);
+                              }}
+                           >
                               <span
-                                 className="clickable"
-                                 onClick={(e) => {
-                                    this.props.currentUserLoadout.canEdit ===
-                                       1 && this.toggleEditMode(e);
-                                 }}
+                                 className={`button theme-icon-color standard-sized-icon`}
                               >
-                                 <span
-                                    className={`button theme-icon-color standard-sized-icon`}
-                                 >
-                                    <IconEdit />
-                                 </span>
-                                 &nbsp;
-                                 <span className="button navigation-link">
-                                    {this.props.isEditMode && <>Done Editing</>}
-                                    {!this.props.isEditMode && (
-                                       <>Edit Loadout</>
-                                    )}
-                                 </span>
+                                 <IconEdit />
                               </span>
-                           </div>
+                              &nbsp;
+                              <span className="button navigation-link">
+                                 {this.props.isEditMode && <>Done Editing</>}
+                                 {!this.props.isEditMode && <>Edit Loadout</>}
+                              </span>
+                           </span>
                         )}
                      </div>
                   </div>
@@ -771,6 +838,8 @@ class ItemList extends React.Component {
                   </div>
                </div>
             </div>
+            {!isEmpty(this.state.deleteModelContainer) &&
+               this.renderContainerDeleteConfirmation()}
          </div>
       );
    }
