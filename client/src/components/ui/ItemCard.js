@@ -14,7 +14,12 @@ import {
 } from "../../icons/loadout-icons.js";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import axios from "axios";
-import { processLoadout, deleteItemId } from "../../utils/items";
+import {
+   processLoadout,
+   deleteItemId,
+   renameItem,
+   toggleMoveableItemId,
+} from "../../utils/items";
 import actions from "../../store/actions";
 
 // new version of item card that deals with database data
@@ -83,7 +88,7 @@ class ItemCard extends React.Component {
    }
 
    // toggle the delete confirmation
-   toggleDeleteRollout() {
+   toggleDeleteModal() {
       console.log("this.state", this.state);
       this.setState({
          isShowingDeleteConfirmation: !this.state.isShowingDeleteConfirmation,
@@ -96,7 +101,7 @@ class ItemCard extends React.Component {
             id="myModal"
             className="modal"
             onClick={() => {
-               this.toggleDeleteRollout();
+               this.toggleDeleteModal();
             }}
          >
             <div
@@ -105,10 +110,7 @@ class ItemCard extends React.Component {
                   e.stopPropagation();
                }} // this stops it from doing the parent onClick even (stops it from closing if you click inside the modal)
             >
-               <span
-                  className="close"
-                  onClick={() => this.toggleDeleteRollout()}
-               >
+               <span className="close" onClick={() => this.toggleDeleteModal()}>
                   &times;
                </span>
                <p>{`Are you sure you want to delete ${this.props.item.name}?`}</p>
@@ -151,7 +153,7 @@ class ItemCard extends React.Component {
                <div
                   className="button secondary-action-button"
                   onClick={() => {
-                     this.toggleDeleteRollout();
+                     this.toggleDeleteModal();
                   }}
                >
                   Cancel
@@ -159,6 +161,37 @@ class ItemCard extends React.Component {
             </div>
          </div>
       );
+   }
+
+   // renames item on server and also in redux store
+   renameThisItem(e) {
+      console.log("the focus left this item");
+      if (e.target.value !== this.props.item.name) {
+         console.log("the name was changed");
+         console.log(
+            "will rename ",
+            this.props.item.name,
+            "to",
+            e.target.value
+         );
+
+         // rename the item on client
+         // make local changes so we can see them immediately
+         const foundItem = this.props.currentLoadout.find(
+            (item) => item.id === this.props.item.id
+         ); // find the specific item to change the name of
+         console.log("foundItem.name", foundItem.name);
+         foundItem.name = e.target.value; // rename the item to the new name
+         // send update to Redux
+         this.props.dispatch({
+            type: actions.STORE_CURRENT_LOADOUT,
+            payload: this.props.currentLoadout,
+         });
+
+         renameItem(this.props.item.id, e.target.value); // send the change of the name to the server
+      } else {
+         console.log("the name was not changed");
+      }
    }
 
    render() {
@@ -263,9 +296,8 @@ class ItemCard extends React.Component {
                   <>
                      <span
                         className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
-                        // onClick={() => this.toggleDeleteRollout()}
                         onClick={() => {
-                           this.toggleDeleteRollout();
+                           this.toggleDeleteModal();
                         }}
                      >
                         <DeleteIcon />
@@ -273,7 +305,7 @@ class ItemCard extends React.Component {
                      <span className="icon-button-gap"></span>
                      <span
                         className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
-                        // onClick={() => toggleMoveableItemId(item.id)}
+                        onClick={() => toggleMoveableItemId(item.id)}
                      >
                         {!this.props.moveableItemIds.includes(
                            this.props.item.id
@@ -287,7 +319,7 @@ class ItemCard extends React.Component {
                         className={`flex-fill card-item-input level-text-color-child level-text-color-${thisLevelRotated}`}
                         id={"edit-name-input-" + item.id}
                         defaultValue={item.name}
-                        // onBlur={(e) => this.renameThisItem(e)}
+                        onBlur={(e) => this.renameThisItem(e)}
                         maxLength={MAX_ITEM_NAME_LENGTH}
                      />
                   </>

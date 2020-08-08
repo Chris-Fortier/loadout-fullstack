@@ -6,8 +6,6 @@
   - rename "compartment" to "group"?
   - upon deleting last compartment, put child items in root of parent item
   - I can't edit the compartments of the highest level if don't have admin
-  - restore move item functionality
-  - restore edit item name functionality
 - modal dialog boxes instead of rollouts?
   - delete a user from loadout?
   - removed yourself from loadout?
