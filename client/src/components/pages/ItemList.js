@@ -113,139 +113,159 @@ class ItemList extends React.Component {
       const parentLevelRotated = this.rotateLevel(pageItem.level - 1);
 
       return (
-         <div
-            className={classnames(
-               // !this.props.isEditMode &&
-               `ui-theme-${this.props.currentUser.uiTheme}`
-               // this.props.isEditMode && `ui-theme-2`
-            )}
-         >
-            <Header />
-
+         <>
             <div
                className={classnames(
-                  "item-list parent-bg",
-                  pageItem.level < 2 &&
-                     `parent-bg-level-${this.rotateLevel(pageItem.level)}`,
-                  pageItem.level >= 2 &&
-                     ` parent-bg-level-${parentLevelRotated}`
+                  // !this.props.isEditMode &&
+                  `ui-theme-${this.props.currentUser.uiTheme}`
+                  // this.props.isEditMode && `ui-theme-2`
                )}
             >
-               <div className="container-fluid item-cards-container scroll-fix">
-                  <div className="row">
-                     <div className="col">
-                        <span
-                           className="clickable float-right"
-                           onClick={(e) => {
-                              this.gotoSharing(e);
-                           }}
-                        >
-                           <span
-                              className={`button theme-icon-color standard-sized-icon`}
-                           >
-                              <IconUserCouple />
-                           </span>
-                           &nbsp;
-                           <span className="button navigation-link">
-                              Loadout Settings
-                           </span>
-                           &nbsp;&nbsp;
-                           <SharingStrip
-                              loadout={this.props.currentUserLoadout}
-                           />
-                        </span>
+               <Header />
 
-                        {pageItem.level > 0 && (
-                           <span
-                              className="clickable"
-                              onClick={(e) => {
-                                 this.props.currentUserLoadout.canEdit === 1 &&
-                                    this.toggleEditMode(e);
-                              }}
-                           >
-                              <span
-                                 className={`button theme-icon-color standard-sized-icon`}
-                              >
-                                 <IconEdit />
-                              </span>
-                              &nbsp;
-                              <span className="button navigation-link">
-                                 {this.props.isEditMode && <>Done Editing</>}
-                                 {!this.props.isEditMode && <>Edit Loadout</>}
-                              </span>
-                           </span>
-                        )}
-                     </div>
-                  </div>
-
-                  <div className="row">
-                     <div className="col">
-                        <div>
-                           <span className={classnames(`up-level clickable`)}>
-                              {pageItem.upLevelId !== null && (
+               <div
+                  className={classnames(
+                     "item-list parent-bg",
+                     pageItem.level < 2 &&
+                        `parent-bg-level-${this.rotateLevel(pageItem.level)}`,
+                     pageItem.level >= 2 &&
+                        ` parent-bg-level-${parentLevelRotated}`
+                  )}
+               >
+                  <div className="container-fluid item-cards-container scroll-fix">
+                     {this.props.currentLoadout.length > 0 && (
+                        <>
+                           <div className="row">
+                              <div className="col">
                                  <span
+                                    className="clickable float-right"
                                     onClick={(e) => {
-                                       // move to the parent item
-                                       movePageToDifferentItem(
-                                          pageItem.upLevelId,
-                                          -1
-                                       );
-                                       // change the text in the page item editable input
-                                       if (
-                                          document.getElementById(
-                                             "page-item-name-input"
-                                          ) !== null
-                                       ) {
-                                          document.getElementById(
-                                             "page-item-name-input"
-                                          ).value = pageItem.upLevelName;
-                                       }
+                                       this.gotoSharing(e);
                                     }}
                                  >
-                                    <div
-                                       className={`button item-icon-colors standard-sized-icon item-icon-colors-${parentLevelRotated}`}
-                                    >
-                                       <IconUpLevel />
-                                    </div>
                                     <span
-                                       className={`button navigation-link level-text-color-parent level-text-color-${parentLevelRotated}`}
+                                       className={`button theme-icon-color standard-sized-icon`}
                                     >
-                                       Back to&nbsp;
-                                       {pageItem.upLevelName}
+                                       <IconUserCouple />
                                     </span>
+                                    &nbsp;
+                                    <span className="button navigation-link">
+                                       Loadout Settings
+                                    </span>
+                                    &nbsp;&nbsp;
+                                    <SharingStrip
+                                       loadout={this.props.currentUserLoadout}
+                                    />
                                  </span>
-                              )}
-                              {pageItem.upLevelId === null && (
-                                 <Link to="/loadout-list">
-                                    <div
-                                       className={`button item-icon-colors standard-sized-icon item-icon-colors-${parentLevelRotated}`}
-                                    >
-                                       <IconUpLevel />
-                                    </div>
-                                    <span
-                                       className={`button navigation-link level-text-color-parent level-text-color-${parentLevelRotated}`}
-                                    >
-                                       Back to My Loadouts
-                                    </span>
-                                 </Link>
-                              )}
-                           </span>
-                        </div>
 
-                        {/* the following adds empty space above the super card in edit mode so it doesn't shift */}
-                        {/* {level !== 0 && this.props.isEditMode && (
+                                 {pageItem.level > 0 && (
+                                    <span
+                                       className="clickable"
+                                       onClick={(e) => {
+                                          this.props.currentUserLoadout
+                                             .canEdit === 1 &&
+                                             this.toggleEditMode(e);
+                                       }}
+                                    >
+                                       <span
+                                          className={`button theme-icon-color standard-sized-icon`}
+                                       >
+                                          <IconEdit />
+                                       </span>
+                                       &nbsp;
+                                       <span className="button navigation-link">
+                                          {this.props.isEditMode && (
+                                             <>Done Editing</>
+                                          )}
+                                          {!this.props.isEditMode && (
+                                             <>Edit Loadout</>
+                                          )}
+                                       </span>
+                                    </span>
+                                 )}
+                              </div>
+                           </div>
+
+                           <div className="row">
+                              <div className="col">
+                                 <div>
+                                    <span
+                                       className={classnames(
+                                          `up-level clickable`
+                                       )}
+                                    >
+                                       {pageItem.upLevelId !== null && (
+                                          <span
+                                             onClick={(e) => {
+                                                // move to the parent item
+                                                movePageToDifferentItem(
+                                                   pageItem.upLevelId,
+                                                   -1
+                                                );
+                                                // change the text in the page item editable input
+                                                if (
+                                                   document.getElementById(
+                                                      "page-item-name-input"
+                                                   ) !== null
+                                                ) {
+                                                   document.getElementById(
+                                                      "page-item-name-input"
+                                                   ).value =
+                                                      pageItem.upLevelName;
+                                                }
+                                             }}
+                                          >
+                                             <div
+                                                className={`button item-icon-colors standard-sized-icon item-icon-colors-${parentLevelRotated}`}
+                                             >
+                                                <IconUpLevel />
+                                             </div>
+                                             <span
+                                                className={`button navigation-link level-text-color-parent level-text-color-${parentLevelRotated}`}
+                                             >
+                                                Back to&nbsp;
+                                                {pageItem.upLevelName}
+                                             </span>
+                                          </span>
+                                       )}
+                                       {pageItem.upLevelId === null && (
+                                          <Link to="/loadout-list">
+                                             <div
+                                                className={`button item-icon-colors standard-sized-icon item-icon-colors-${parentLevelRotated}`}
+                                             >
+                                                <IconUpLevel />
+                                             </div>
+                                             <span
+                                                className={`button navigation-link level-text-color-parent level-text-color-${parentLevelRotated}`}
+                                             >
+                                                Back to My Loadouts
+                                             </span>
+                                          </Link>
+                                       )}
+                                    </span>
+                                 </div>
+
+                                 {/* the following adds empty space above the super card in edit mode so it doesn't shift */}
+                                 {/* {level !== 0 && this.props.isEditMode && (
                            <div className="up-level">
                               <br />
                            </div>
                         )} */}
 
-                        {/* <img src={iconEdit} className="icon-dark" /> */}
-                        <Compartment compartment={pageItem} key={pageItem.id} />
-                     </div>
+                                 {/* <img src={iconEdit} className="icon-dark" /> */}
+                                 <Compartment
+                                    compartment={pageItem}
+                                    key={pageItem.id}
+                                 />
+                              </div>
+                           </div>
+                        </>
+                     )}
+                     {this.props.currentLoadout.length === 0 && <>Loading...</>}
                   </div>
                </div>
             </div>
-         </div>
+         </>
       );
    }
 }

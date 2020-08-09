@@ -224,395 +224,420 @@ class LoadoutSharing extends React.Component {
             <Header />
             <div className="item-list parent-bg-level-2 parent-bg">
                <div className="container-fluid single-wide-container scroll-fix">
-                  <div className="row">
-                     <div className="col">
-                        <Link
-                           className={classnames(`up-level clickable`)}
-                           to={this.props.currentItem.backRoute}
-                        >
-                           <div
-                              className={`button standard-sized-icon theme-icon-color`}
-                           >
-                              <IconUpLevel />
-                           </div>
-                           <span
-                              className={`button navigation-link level-text-color-this`}
-                           >
-                              {this.props.currentItem.backRoute ===
-                                 "/item-list" && <>Back to Loadout</>}
-                              {this.props.currentItem.backRoute ===
-                                 "/loadout-list" && <>Back to My Loadouts</>}
-                           </span>
-                        </Link>
+                  {this.props.currentLoadoutUserLoadouts.length > 0 && (
+                     <>
+                        <div className="row">
+                           <div className="col">
+                              <Link
+                                 className={classnames(`up-level clickable`)}
+                                 to={this.props.currentItem.backRoute}
+                              >
+                                 <div
+                                    className={`button standard-sized-icon theme-icon-color`}
+                                 >
+                                    <IconUpLevel />
+                                 </div>
+                                 <span
+                                    className={`button navigation-link level-text-color-this`}
+                                 >
+                                    {this.props.currentItem.backRoute ===
+                                       "/item-list" && <>Back to Loadout</>}
+                                    {this.props.currentItem.backRoute ===
+                                       "/loadout-list" && (
+                                       <>Back to My Loadouts</>
+                                    )}
+                                 </span>
+                              </Link>
 
-                        <div className="">
-                           <div className="">
-                              <div className="row">
-                                 <>
-                                    <div className="col">
-                                       {(this.props.currentUserLoadout
-                                          .isAdmin === 0 ||
-                                          true) && (
-                                          <h4>
-                                             {currentLoadoutFromStore.name}
-                                             <br />
-                                             Sharing Settings
-                                          </h4>
-                                       )}
-                                       {this.props.currentUserLoadout
-                                          .isAdmin === 1 &&
-                                          false && (
-                                             <span className="flex-fill">
+                              <div className="">
+                                 <div className="">
+                                    <div className="row">
+                                       <>
+                                          <div className="col">
+                                             {(this.props.currentUserLoadout
+                                                .isAdmin === 0 ||
+                                                true) && (
                                                 <h4>
-                                                   <input
-                                                      className="edit-name mb-2"
-                                                      defaultValue={
-                                                         currentLoadoutFromStore.name
-                                                      }
-                                                      onBlur={(e) =>
-                                                         this.renameThisItem(e)
-                                                      }
-                                                      maxLength={
-                                                         MAX_ITEM_NAME_LENGTH
-                                                      }
-                                                      id="page-item-name-input"
-                                                   />
+                                                   {
+                                                      currentLoadoutFromStore.name
+                                                   }
+                                                   <br />
                                                    Sharing Settings
                                                 </h4>
-                                             </span>
-                                          )}
-                                       {this.props.currentUserLoadout
-                                          .isAdmin === 1 && (
-                                          <div className="card-section">
-                                             <span
-                                                className="button navigation-link w-100"
-                                                onClick={() =>
-                                                   this.toggleDeleteRollout()
-                                                }
-                                             >
-                                                Delete this loadout...
-                                             </span>
-                                             {this.state
-                                                .deleteRolloutIsOpen && (
-                                                <>
-                                                   <div
-                                                      className="button danger-action-button"
-                                                      onClick={() =>
-                                                         this.deleteLoadout()
-                                                      }
-                                                   >
-                                                      Delete this loadout for
-                                                      all users
-                                                   </div>
-                                                   <div
-                                                      className="button navigation-link"
+                                             )}
+                                             {this.props.currentUserLoadout
+                                                .isAdmin === 1 &&
+                                                false && (
+                                                   <span className="flex-fill">
+                                                      <h4>
+                                                         <input
+                                                            className="edit-name mb-2"
+                                                            defaultValue={
+                                                               currentLoadoutFromStore.name
+                                                            }
+                                                            onBlur={(e) =>
+                                                               this.renameThisItem(
+                                                                  e
+                                                               )
+                                                            }
+                                                            maxLength={
+                                                               MAX_ITEM_NAME_LENGTH
+                                                            }
+                                                            id="page-item-name-input"
+                                                         />
+                                                         Sharing Settings
+                                                      </h4>
+                                                   </span>
+                                                )}
+                                             {this.props.currentUserLoadout
+                                                .isAdmin === 1 && (
+                                                <div className="card-section">
+                                                   <span
+                                                      className="button navigation-link w-100"
                                                       onClick={() =>
                                                          this.toggleDeleteRollout()
                                                       }
                                                    >
-                                                      <br />
-                                                      Cancel
-                                                   </div>
-                                                </>
+                                                      Delete this loadout...
+                                                   </span>
+                                                   {this.state
+                                                      .deleteRolloutIsOpen && (
+                                                      <>
+                                                         <div
+                                                            className="button danger-action-button"
+                                                            onClick={() =>
+                                                               this.deleteLoadout()
+                                                            }
+                                                         >
+                                                            Delete this loadout
+                                                            for all users
+                                                         </div>
+                                                         <div
+                                                            className="button navigation-link"
+                                                            onClick={() =>
+                                                               this.toggleDeleteRollout()
+                                                            }
+                                                         >
+                                                            <br />
+                                                            Cancel
+                                                         </div>
+                                                      </>
+                                                   )}
+                                                </div>
                                              )}
-                                          </div>
-                                       )}
-                                       {this.props.currentUserLoadout
-                                          .isAdmin === 0 && (
-                                          <div className="card-section">
-                                             <span
-                                                className="button navigation-link w-100"
-                                                onClick={() =>
-                                                   this.toggleRemoveRollout()
-                                                }
-                                             >
-                                                Remove yourself from this
-                                                loadout...
-                                             </span>
-                                             {this.state
-                                                .removeRolloutIsOpen && (
-                                                <>
-                                                   <div
-                                                      className="button primary-action-button"
-                                                      onClick={() => {
-                                                         this.removeUserLoadoutThenMove();
-                                                      }}
-                                                   >
-                                                      Remove your access to this
-                                                      shared loadout
-                                                   </div>
-                                                   <div
-                                                      className="button navigation-link"
+                                             {this.props.currentUserLoadout
+                                                .isAdmin === 0 && (
+                                                <div className="card-section">
+                                                   <span
+                                                      className="button navigation-link w-100"
                                                       onClick={() =>
                                                          this.toggleRemoveRollout()
                                                       }
                                                    >
-                                                      <br />
-                                                      Cancel
-                                                   </div>
-                                                </>
-                                             )}
-                                          </div>
-                                       )}
-
-                                       {/* table */}
-                                       <table className="table mb-8">
-                                          <thead>
-                                             {/* large header */}
-                                             <tr className="d-none d-sm-table-row">
-                                                <th
-                                                   scope="col"
-                                                   className="display-switch-label"
-                                                   style={{ width: "270px" }}
-                                                >
-                                                   Shared with
-                                                </th>
-                                                <th
-                                                   scope="col"
-                                                   className="display-switch-label"
-                                                >
-                                                   <div
-                                                      className={classnames(
-                                                         "d-flex loadout-card-icon theme-icon-color"
-                                                      )}
-                                                   >
-                                                      <IconPackage />
-                                                   </div>
-                                                   <div>
-                                                      <span className="d-none d-md-inline">
-                                                         Can&nbsp;
-                                                      </span>
-                                                      Pack
-                                                   </div>
-                                                </th>
-                                                <th
-                                                   scope="col"
-                                                   className="display-switch-label"
-                                                >
-                                                   <div
-                                                      className={classnames(
-                                                         "d-flex loadout-card-icon theme-icon-color"
-                                                      )}
-                                                   >
-                                                      <IconEdit />
-                                                   </div>
-                                                   <div>
-                                                      <span className="d-none d-md-inline">
-                                                         Can&nbsp;
-                                                      </span>
-                                                      Edit
-                                                   </div>
-                                                </th>
-                                                <th
-                                                   scope="col"
-                                                   className="display-switch-label"
-                                                >
-                                                   <div
-                                                      className={classnames(
-                                                         "d-flex loadout-card-icon theme-icon-color"
-                                                      )}
-                                                   >
-                                                      <IconKey />
-                                                   </div>
-                                                   <div>
-                                                      <span className="d-none d-md-inline">
-                                                         Is&nbsp;
-                                                      </span>
-                                                      Admin
-                                                   </div>
-                                                </th>
-                                                <th
-                                                   scope="col"
-                                                   className="display-switch-label"
-                                                >
-                                                   <div
-                                                      className={classnames(
-                                                         "d-flex loadout-card-icon theme-icon-color"
-                                                      )}
-                                                   ></div>
-                                                   <div>
-                                                      <span className="d-none d-md-inline">
-                                                         Remove/Add
-                                                      </span>
-                                                      <span className="d-md-none d-inline">
-                                                         Rem/Add
-                                                      </span>
-                                                   </div>
-                                                </th>
-                                             </tr>
-
-                                             {/* small header */}
-                                             <tr className="d-table-row d-sm-none">
-                                                <th
-                                                   scope="col"
-                                                   className="display-switch-label"
-                                                   style={{ width: "80%" }}
-                                                >
-                                                   Shared with
-                                                </th>
-
-                                                <th
-                                                   scope="col"
-                                                   className="display-switch-label"
-                                                >
-                                                   <div
-                                                      className={classnames(
-                                                         "d-flex loadout-card-icon theme-icon-color"
-                                                      )}
-                                                   ></div>
-                                                   <div>
-                                                      <span className="d-none d-md-inline">
-                                                         Remove/Add
-                                                      </span>
-                                                      <span className="d-md-none d-inline">
-                                                         Rem/Add
-                                                      </span>
-                                                   </div>
-                                                </th>
-                                             </tr>
-                                          </thead>
-                                          <tbody>
-                                             {thisLoadoutUser.map(
-                                                (userLoadout) => (
-                                                   <LoadoutUserCard
-                                                      userLoadout={userLoadout}
-                                                      key={userLoadout.id}
-                                                   />
-                                                )
-                                             )}
-                                             {otherLoadoutUsers.map(
-                                                (userLoadout) => (
-                                                   <LoadoutUserCard
-                                                      userLoadout={userLoadout}
-                                                      key={userLoadout.id}
-                                                   />
-                                                )
+                                                      Remove yourself from this
+                                                      loadout...
+                                                   </span>
+                                                   {this.state
+                                                      .removeRolloutIsOpen && (
+                                                      <>
+                                                         <div
+                                                            className="button primary-action-button"
+                                                            onClick={() => {
+                                                               this.removeUserLoadoutThenMove();
+                                                            }}
+                                                         >
+                                                            Remove your access
+                                                            to this shared
+                                                            loadout
+                                                         </div>
+                                                         <div
+                                                            className="button navigation-link"
+                                                            onClick={() =>
+                                                               this.toggleRemoveRollout()
+                                                            }
+                                                         >
+                                                            <br />
+                                                            Cancel
+                                                         </div>
+                                                      </>
+                                                   )}
+                                                </div>
                                              )}
 
-                                             {this.props.currentUserLoadout
-                                                .isAdmin === 1 && (
-                                                <>
-                                                   {/* large footer */}
-                                                   <tr className="sharedUserRow d-none d-sm-table-row">
+                                             {/* table */}
+                                             <table className="table mb-8">
+                                                <thead>
+                                                   {/* large header */}
+                                                   <tr className="d-none d-sm-table-row">
                                                       <th
-                                                         scope="row"
-                                                         colSpan="4"
+                                                         scope="col"
+                                                         className="display-switch-label"
+                                                         style={{
+                                                            width: "270px",
+                                                         }}
                                                       >
-                                                         <input
-                                                            className={classnames(
-                                                               "edit-name",
-                                                               {
-                                                                  "my-input": true,
-                                                                  "input-invalid": this
-                                                                     .state
-                                                                     .hasAddUserError,
-                                                               }
-                                                            )}
-                                                            id="add-user-username-input-large"
-                                                            aria-describedby="UsernameHelp"
-                                                            placeholder="Enter another username"
-                                                            maxLength={
-                                                               MAX_USERNAME_LENGTH
-                                                            }
-                                                         />
-                                                         {this.state
-                                                            .hasAddUserError && (
-                                                            <div
-                                                               className="text-danger"
-                                                               style={{
-                                                                  "font-weight":
-                                                                     "400",
-                                                               }}
-                                                               id="add-user-error"
-                                                            >
-                                                               {
-                                                                  this.state
-                                                                     .addUserError
-                                                               }
-                                                            </div>
-                                                         )}
+                                                         Shared with
                                                       </th>
-                                                      <td>
-                                                         <div className="d-flex">
-                                                            <span
-                                                               className={classnames(
-                                                                  "item-card-icon clickable"
-                                                               )}
-                                                               onClick={() =>
-                                                                  this.validateAndAddUserLoadout(
-                                                                     "add-user-username-input-large"
-                                                                  )
-                                                               }
-                                                            >
-                                                               <AddIcon />
+                                                      <th
+                                                         scope="col"
+                                                         className="display-switch-label"
+                                                      >
+                                                         <div
+                                                            className={classnames(
+                                                               "d-flex loadout-card-icon theme-icon-color"
+                                                            )}
+                                                         >
+                                                            <IconPackage />
+                                                         </div>
+                                                         <div>
+                                                            <span className="d-none d-md-inline">
+                                                               Can&nbsp;
+                                                            </span>
+                                                            Pack
+                                                         </div>
+                                                      </th>
+                                                      <th
+                                                         scope="col"
+                                                         className="display-switch-label"
+                                                      >
+                                                         <div
+                                                            className={classnames(
+                                                               "d-flex loadout-card-icon theme-icon-color"
+                                                            )}
+                                                         >
+                                                            <IconEdit />
+                                                         </div>
+                                                         <div>
+                                                            <span className="d-none d-md-inline">
+                                                               Can&nbsp;
+                                                            </span>
+                                                            Edit
+                                                         </div>
+                                                      </th>
+                                                      <th
+                                                         scope="col"
+                                                         className="display-switch-label"
+                                                      >
+                                                         <div
+                                                            className={classnames(
+                                                               "d-flex loadout-card-icon theme-icon-color"
+                                                            )}
+                                                         >
+                                                            <IconKey />
+                                                         </div>
+                                                         <div>
+                                                            <span className="d-none d-md-inline">
+                                                               Is&nbsp;
+                                                            </span>
+                                                            Admin
+                                                         </div>
+                                                      </th>
+                                                      <th
+                                                         scope="col"
+                                                         className="display-switch-label"
+                                                      >
+                                                         <div
+                                                            className={classnames(
+                                                               "d-flex loadout-card-icon theme-icon-color"
+                                                            )}
+                                                         ></div>
+                                                         <div>
+                                                            <span className="d-none d-md-inline">
+                                                               Remove/Add
+                                                            </span>
+                                                            <span className="d-md-none d-inline">
+                                                               Rem/Add
                                                             </span>
                                                          </div>
-                                                      </td>
+                                                      </th>
                                                    </tr>
-                                                   {/* small footer */}
-                                                   <tr className="sharedUserRow d-table-row d-sm-none">
-                                                      <th scope="row">
-                                                         <input
-                                                            className={classnames(
-                                                               {
-                                                                  "my-input": true,
-                                                                  "input-invalid": this
-                                                                     .state
-                                                                     .hasAddUserError,
-                                                               }
-                                                            )}
-                                                            id="add-user-username-input-small"
-                                                            aria-describedby="UsernameHelp"
-                                                            placeholder="Enter another username"
-                                                            maxLength={
-                                                               MAX_USERNAME_LENGTH
-                                                            }
-                                                         />
-                                                         {this.state
-                                                            .hasAddUserError && (
-                                                            <div
-                                                               className="text-danger"
-                                                               style={{
-                                                                  "font-weight":
-                                                                     "400",
-                                                               }}
-                                                               id="add-user-error"
-                                                            >
-                                                               {
-                                                                  this.state
-                                                                     .addUserError
-                                                               }
-                                                            </div>
-                                                         )}
+
+                                                   {/* small header */}
+                                                   <tr className="d-table-row d-sm-none">
+                                                      <th
+                                                         scope="col"
+                                                         className="display-switch-label"
+                                                         style={{
+                                                            width: "80%",
+                                                         }}
+                                                      >
+                                                         Shared with
                                                       </th>
-                                                      <td>
-                                                         <div className="d-flex">
-                                                            <span
-                                                               className={classnames(
-                                                                  "item-card-icon clickable"
-                                                               )}
-                                                               onClick={() =>
-                                                                  this.validateAndAddUserLoadout(
-                                                                     "add-user-username-input-small"
-                                                                  )
-                                                               }
-                                                            >
-                                                               <AddIcon />
+
+                                                      <th
+                                                         scope="col"
+                                                         className="display-switch-label"
+                                                      >
+                                                         <div
+                                                            className={classnames(
+                                                               "d-flex loadout-card-icon theme-icon-color"
+                                                            )}
+                                                         ></div>
+                                                         <div>
+                                                            <span className="d-none d-md-inline">
+                                                               Remove/Add
+                                                            </span>
+                                                            <span className="d-md-none d-inline">
+                                                               Rem/Add
                                                             </span>
                                                          </div>
-                                                      </td>
-                                                   </tr>{" "}
-                                                </>
-                                             )}
-                                          </tbody>
-                                       </table>
+                                                      </th>
+                                                   </tr>
+                                                </thead>
+                                                <tbody>
+                                                   {thisLoadoutUser.map(
+                                                      (userLoadout) => (
+                                                         <LoadoutUserCard
+                                                            userLoadout={
+                                                               userLoadout
+                                                            }
+                                                            key={userLoadout.id}
+                                                         />
+                                                      )
+                                                   )}
+                                                   {otherLoadoutUsers.map(
+                                                      (userLoadout) => (
+                                                         <LoadoutUserCard
+                                                            userLoadout={
+                                                               userLoadout
+                                                            }
+                                                            key={userLoadout.id}
+                                                         />
+                                                      )
+                                                   )}
+
+                                                   {this.props
+                                                      .currentUserLoadout
+                                                      .isAdmin === 1 && (
+                                                      <>
+                                                         {/* large footer */}
+                                                         <tr className="sharedUserRow d-none d-sm-table-row">
+                                                            <th
+                                                               scope="row"
+                                                               colSpan="4"
+                                                            >
+                                                               <input
+                                                                  className={classnames(
+                                                                     "edit-name",
+                                                                     {
+                                                                        "my-input": true,
+                                                                        "input-invalid": this
+                                                                           .state
+                                                                           .hasAddUserError,
+                                                                     }
+                                                                  )}
+                                                                  id="add-user-username-input-large"
+                                                                  aria-describedby="UsernameHelp"
+                                                                  placeholder="Enter another username"
+                                                                  maxLength={
+                                                                     MAX_USERNAME_LENGTH
+                                                                  }
+                                                               />
+                                                               {this.state
+                                                                  .hasAddUserError && (
+                                                                  <div
+                                                                     className="text-danger"
+                                                                     style={{
+                                                                        "font-weight":
+                                                                           "400",
+                                                                     }}
+                                                                     id="add-user-error"
+                                                                  >
+                                                                     {
+                                                                        this
+                                                                           .state
+                                                                           .addUserError
+                                                                     }
+                                                                  </div>
+                                                               )}
+                                                            </th>
+                                                            <td>
+                                                               <div className="d-flex">
+                                                                  <span
+                                                                     className={classnames(
+                                                                        "item-card-icon clickable"
+                                                                     )}
+                                                                     onClick={() =>
+                                                                        this.validateAndAddUserLoadout(
+                                                                           "add-user-username-input-large"
+                                                                        )
+                                                                     }
+                                                                  >
+                                                                     <AddIcon />
+                                                                  </span>
+                                                               </div>
+                                                            </td>
+                                                         </tr>
+                                                         {/* small footer */}
+                                                         <tr className="sharedUserRow d-table-row d-sm-none">
+                                                            <th scope="row">
+                                                               <input
+                                                                  className={classnames(
+                                                                     {
+                                                                        "my-input": true,
+                                                                        "input-invalid": this
+                                                                           .state
+                                                                           .hasAddUserError,
+                                                                     }
+                                                                  )}
+                                                                  id="add-user-username-input-small"
+                                                                  aria-describedby="UsernameHelp"
+                                                                  placeholder="Enter another username"
+                                                                  maxLength={
+                                                                     MAX_USERNAME_LENGTH
+                                                                  }
+                                                               />
+                                                               {this.state
+                                                                  .hasAddUserError && (
+                                                                  <div
+                                                                     className="text-danger"
+                                                                     style={{
+                                                                        "font-weight":
+                                                                           "400",
+                                                                     }}
+                                                                     id="add-user-error"
+                                                                  >
+                                                                     {
+                                                                        this
+                                                                           .state
+                                                                           .addUserError
+                                                                     }
+                                                                  </div>
+                                                               )}
+                                                            </th>
+                                                            <td>
+                                                               <div className="d-flex">
+                                                                  <span
+                                                                     className={classnames(
+                                                                        "item-card-icon clickable"
+                                                                     )}
+                                                                     onClick={() =>
+                                                                        this.validateAndAddUserLoadout(
+                                                                           "add-user-username-input-small"
+                                                                        )
+                                                                     }
+                                                                  >
+                                                                     <AddIcon />
+                                                                  </span>
+                                                               </div>
+                                                            </td>
+                                                         </tr>{" "}
+                                                      </>
+                                                   )}
+                                                </tbody>
+                                             </table>
+                                          </div>
+                                       </>
                                     </div>
-                                 </>
+                                 </div>
                               </div>
                            </div>
                         </div>
-                     </div>
-                  </div>
+                     </>
+                  )}
+                  {this.props.currentLoadoutUserLoadouts.length === 0 && (
+                     <>Loading...</>
+                  )}
                </div>
             </div>
          </div>
