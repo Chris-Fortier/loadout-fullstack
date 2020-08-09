@@ -68,6 +68,12 @@ export function movePageToDifferentItem(
    }
 
    window.scrollTo(0, 0); // sets focus to the top of the page
+
+   // set all the inputs to the name of the item they represent
+   // const inputElements = document.getElementsByTagName("input");
+   // for (let i in inputElements) {
+   //    console.log(inputElements[i].value);
+   // }
 }
 
 // refreshes the page every interval
