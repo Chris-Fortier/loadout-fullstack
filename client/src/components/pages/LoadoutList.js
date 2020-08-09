@@ -43,6 +43,11 @@ class LoadoutList extends React.Component {
          console.log("There is no user object, kicking to landing page.");
          this.props.history.push("/");
       }
+
+      this.state = {
+         // message: `Getting your loadouts from the server...`,
+         message: "",
+      };
    }
 
    // methods happen here, such as what happens when you click on a button
@@ -150,10 +155,7 @@ class LoadoutList extends React.Component {
                                        //    loadout list, the user is loading too
                                        //    slow, need to fix
                                        // </div>
-                                       <div>
-                                          {this.props.currentUser.username} does
-                                          not have any loadouts.
-                                       </div>
+                                       <div>{this.state.message}</div>
                                     )}
                                     {this.props.userLoadouts.map((loadout) => (
                                        <LoadoutCard

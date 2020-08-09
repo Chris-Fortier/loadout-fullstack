@@ -45,10 +45,17 @@ export function getUserLoadouts() {
          store.dispatch({
             type: actions.CLEAR_MOVEABLE_ITEM_IDS,
          });
+
+         // if (loadouts.length === 0) {
+         //    return "This user does not have any loadouts.";
+         // } else {
+         //    return "User loadouts received.";
+         // }
       })
       .catch((error) => {
          // handle error
          console.log("axios error", error);
+         // return "There was an error accessing your loadouts.";
       });
 }
 
