@@ -1,41 +1,19 @@
 import React from "react";
 import Header from "../ui/Header";
 import { IconEdit, IconUpLevel, IconUserCouple } from "../../icons/icons.js";
-import { MAX_ITEM_NAME_LENGTH, LEVEL_COLORS } from "../../utils/helpers";
+import { LEVEL_COLORS } from "../../utils/helpers";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
-// import ItemCard from "../ui/ItemCard";
 import { Link } from "react-router-dom"; // a React element for linking
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
-import {
-   renameItem,
-   processLoadout,
-   // toggleMoveableItemId,
-   // deleteItemId,
-} from "../../utils/items";
 import isEmpty from "lodash/isEmpty";
 import SharingStrip from "../ui/SharingStrip";
-import axios from "axios";
-// import {
-//    PickUpItem,
-//    PutDownItem,
-//    AddIcon,
-//    DeleteIcon,
-// } from "../../icons/loadout-icons";
 import Compartment from "../ui/Compartment";
 
 class ItemList extends React.Component {
    constructor(props) {
       super(props); // boilerplate
-
-      // set default state values
-
-      this.state = {
-         // isShowingPacked: true,
-         // isPackedOnBottom: false,
-         // isEditMode: false,
-      };
 
       // initialize Redux stuff that should be empty if on this page:
       props.dispatch({

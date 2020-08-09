@@ -202,6 +202,35 @@ class ItemCard extends React.Component {
       const thisLevelRotated = (level + LEVEL_COLORS) % LEVEL_COLORS;
       const childLevelRotated = (level + LEVEL_COLORS + 1) % LEVEL_COLORS;
 
+      // set the tooltip for the pack/unpack toggler
+      let packTooltip = "";
+      if (this.props.currentUserLoadout.canPack === 0) {
+         packTooltip =
+            "You do not have permission to pack/unpack on this loadout.";
+      } else if (item.numUnresolvedDescendants > 0) {
+         packTooltip = "You need to pack this item's subitems first.";
+      } else if (item.status === 0) {
+         packTooltip = "Pack";
+      } else if (item.status === 1) {
+         packTooltip = "Unpack";
+      }
+
+      // set the tooltip for the move button
+      let moveTooltip = "";
+      if (this.props.moveableItemIds.includes(this.props.item.id)) {
+         moveTooltip = "Put item back";
+      } else {
+         moveTooltip = "Move this item";
+      }
+
+      // set the tooltip for the subitems button
+      let subitemsTooltip = "";
+      if (this.props.isEditMode) {
+         subitemsTooltip = "Edit subitems...";
+      } else {
+         subitemsTooltip = "View subitems...";
+      }
+
       return (
          <div
             className={classnames(
@@ -257,6 +286,7 @@ class ItemCard extends React.Component {
                         onClick={(e) => {
                            this.toggleIsPacked();
                         }}
+                        title={packTooltip}
                      >
                         {item.status === 1 && <PackedIcon />}
                         {item.status === 0 &&
@@ -268,7 +298,13 @@ class ItemCard extends React.Component {
                               <NotReadyToPackIcon />
                            )}
                      </span>
-                     <span className="icon-button-gap"></span>
+                     <span
+                        className="icon-button-gap"
+                        // onClick={(e) => {
+                        //    this.toggleIsPacked();
+                        // }}
+                        // title={packTooltip}
+                     ></span>
                      <span
                         className={classnames(
                            `flex-fill item-card-text level-text-color-child level-text-color-${thisLevelRotated}`
@@ -285,6 +321,7 @@ class ItemCard extends React.Component {
                            onClick={(e) => {
                               this.toggleIsPacked();
                            }}
+                           title={packTooltip}
                         >
                            {item.name}
                         </span>
@@ -299,6 +336,7 @@ class ItemCard extends React.Component {
                         onClick={() => {
                            this.toggleDeleteModal();
                         }}
+                        title="Delete this item..."
                      >
                         <DeleteIcon />
                      </span>
@@ -306,6 +344,7 @@ class ItemCard extends React.Component {
                      <span
                         className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
                         onClick={() => toggleMoveableItemId(item.id)}
+                        title={moveTooltip}
                      >
                         {!this.props.moveableItemIds.includes(
                            this.props.item.id
@@ -333,6 +372,7 @@ class ItemCard extends React.Component {
                      className={classnames(
                         `button navigation-link item-card-text level-text-color-this level-text-color-${childLevelRotated}`
                      )}
+                     title={subitemsTooltip}
                   >
                      {item.contentSummary}
                   </span>
@@ -340,7 +380,6 @@ class ItemCard extends React.Component {
 
                {(item.numDescendants > 0 || this.props.isEditMode) && (
                   <>
-                     {" "}
                      <span className="icon-button-gap"></span>
                      <span
                         className={classnames(
@@ -349,6 +388,7 @@ class ItemCard extends React.Component {
                         onClick={(e) => {
                            movePageToDifferentItem(this.props.item.id, +1);
                         }}
+                        title={subitemsTooltip}
                      >
                         {!this.props.isEditMode &&
                            item.numUnresolvedDescendants === 0 && (

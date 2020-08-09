@@ -465,14 +465,22 @@ class Compartment extends React.Component {
                )}
                {this.props.isEditMode && thisUserCanEdit && (
                   <div className="d-flex">
-                     <span
-                        className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
-                        onClick={() =>
-                           this.setState({ deleteModelContainer: thisItem })
-                        }
-                     >
-                        <DeleteIcon />
-                     </span>
+                     {thisItem.status === 4 && (
+                        <>
+                           <span
+                              className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                              onClick={() =>
+                                 this.setState({
+                                    deleteModelContainer: thisItem,
+                                 })
+                              }
+                              title="Delete this compartment..."
+                           >
+                              <DeleteIcon />
+                           </span>
+                           <span className="icon-button-gap"></span>
+                        </>
+                     )}
                      {/* <span className="icon-button-gap"></span>
                      <span
                         className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
@@ -486,7 +494,6 @@ class Compartment extends React.Component {
                            <PutDownItem />
                         )}
                      </span> */}
-                     <span className="icon-button-gap"></span>
                      <input
                         className={classnames(
                            `flex-fill level-text-color-this level-text-color-${thisLevelRotated}`,
