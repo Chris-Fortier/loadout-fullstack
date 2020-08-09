@@ -10,7 +10,7 @@ import {
    ChildrenPackedIcon2,
    DeleteIcon,
    PickUpItem,
-   PutDownItem,
+   CancelMoveIcon,
 } from "../../icons/loadout-icons.js";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import axios from "axios";
@@ -351,7 +351,7 @@ class ItemCard extends React.Component {
                         ) && <PickUpItem />}
                         {this.props.moveableItemIds.includes(
                            this.props.item.id
-                        ) && <PutDownItem />}
+                        ) && <CancelMoveIcon />}
                      </span>
                      <span className="icon-button-gap"></span>
                      <input

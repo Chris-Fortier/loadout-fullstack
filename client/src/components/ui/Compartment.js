@@ -18,10 +18,11 @@ import isEmpty from "lodash/isEmpty";
 // import SharingStrip from "../ui/SharingStrip";
 import axios from "axios";
 import {
-   PickUpItem,
+   CancelMoveIcon,
    PutDownItem,
    AddIcon,
    DeleteIcon,
+   UnpackAllIcon,
 } from "../../icons/loadout-icons";
 import store from "../../store/store";
 
@@ -65,7 +66,7 @@ class Compartment extends React.Component {
                      this.confirmUnpackDescendants();
                   }}
                >
-                  {`Unpack all ${item.numDescendants} items and subitems inside ${item.name}`}
+                  {`Unpack all ${item.numResolvedDescendants} packed items and subitems inside ${item.name}`}
                </div>
                <div
                   className="button secondary-action-button"
@@ -437,6 +438,26 @@ class Compartment extends React.Component {
             <div>
                {(!this.props.isEditMode || !thisUserCanEdit) && (
                   <div className="d-flex">
+                     {!this.props.isEditMode &&
+                        thisItem.level !== 0 &&
+                        thisItem.status !== 4 &&
+                        thisItem.numResolvedDescendants !== 0 &&
+                        this.props.currentUserLoadout.canPack === 1 && (
+                           <>
+                              <span
+                                 className={classnames(
+                                    `icon-dark item-card-icon item-icon-colors item-icon-colors-${thisLevelRotated} clickable`
+                                 )}
+                                 onClick={(e) => {
+                                    this.toggleUnpackRollout();
+                                 }}
+                                 title="Unpack.."
+                              >
+                                 <UnpackAllIcon />
+                              </span>
+                              {/* <span className="icon-button-gap"></span> */}
+                           </>
+                        )}
                      <span
                         className={classnames(
                            `flex-fill level-text-color-this level-text-color-${thisLevelRotated}`,
@@ -560,7 +581,7 @@ class Compartment extends React.Component {
                                  }}
                                  title="Cancel Move"
                               >
-                                 <PickUpItem />
+                                 <CancelMoveIcon />
                               </span>
                            </>
                         )}
@@ -585,35 +606,6 @@ class Compartment extends React.Component {
                   isEditMode={this.props.isEditMode}
                />
             ))}
-            {/* </div>
-            </div> */}
-            {!this.props.isEditMode &&
-               thisItem.level !== 0 &&
-               thisItem.status !== 4 && (
-                  <>
-                     <div className={classnames("card-section")}>
-                        <span
-                           className={classnames(
-                              "button navigation-link w-100",
-                              (thisItem.numResolvedDescendants === 0 ||
-                                 this.props.currentUserLoadout.canPack === 0) &&
-                                 "disabled"
-                           )}
-                           onClick={() =>
-                              thisItem.numResolvedDescendants !== 0 &&
-                              this.props.currentUserLoadout.canPack === 1 &&
-                              this.toggleUnpackRollout()
-                           }
-                        >
-                           Unpack {thisItem.name}
-                           ...
-                        </span>
-                        {this.state.isShowingUnpackConfirmation &&
-                           thisItem.numResolvedDescendants !== 0 &&
-                           this.renderUnpackConfirmation(thisItem)}
-                     </div>
-                  </>
-               )}
             {!isEmpty(this.state.deleteModelContainer) &&
                this.renderContainerDeleteConfirmation()}
          </div>
