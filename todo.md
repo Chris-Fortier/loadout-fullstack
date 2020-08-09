@@ -1,7 +1,7 @@
 - new compartment system
   - rename "compartment" to "group"?
   - I can't edit the compartments of the highest level if don't have admin
-  - weird state when loading the loadout (shows an icon)
+  - fix unpack all not working anymore
 - modal dialog boxes instead of rollouts?
   - delete a user from loadout?
   - removed yourself from loadout?
