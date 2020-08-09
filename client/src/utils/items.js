@@ -72,9 +72,20 @@ export function deleteItem(itemId) {
          // handle error
          console.log("axios error", error);
       });
+}
 
-   // client side part (this is too keep what we see consistent with the database until it refreshes from the database)
-   // refreshPage(item.parentId);
+// delete an item
+export function promoteChildrenThenDeleteItem(itemId) {
+   // server update
+   axios
+      .put("/api/v1/loadouts/promote-descendants-then-delete?itemId=" + itemId)
+      .then((res) => {
+         console.log("axios res", res);
+      })
+      .catch((error) => {
+         // handle error
+         console.log("axios error", error);
+      });
 }
 
 // processes all the items in a loadout, counting items and subitems, given a list of items (loadout)
@@ -151,93 +162,6 @@ export function processLoadout(loadout) {
       }
    }
 
-   // // increment an ancestor's counter by 1 and then do it again to its ancestor unless its null
-   // function incrementAncestorCounter(index, status, hasUnresolvedDescendants) {
-   //    if (loadout[index].parentId !== null) {
-   //       // find its parent and add to its numDescendants counter
-   //       for (let a in loadout) {
-   //          // check if that is its parent
-   //          if (loadout[index].parentId === loadout[a].id) {
-   //             // if this isn't a compartment/group
-   //             if (status !== 4) {
-   //                loadout[a].numDescendants++;
-   //                if (!hasUnresolvedDescendants) {
-   //                   // count if it has a resolved status
-   //                   loadout[a].numResolvedDescendants++;
-   //                } else {
-   //                   // count if it has an unresolved status
-   //                   loadout[a].numUnresolvedDescendants++;
-   //                   hasUnresolvedDescendants = true;
-   //                }
-
-   //                // if it has any unresolved descendants, change the status
-   //                if (hasUnresolvedDescendants) {
-   //                   // if it is set to packed, set it to unpacked
-   //                   if (loadout[a].status === 1) {
-   //                      loadout[a].status = 0;
-   //                      console.log(
-   //                         "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ANCESTOR STATUS CHANGED!"
-   //                      );
-   //                   }
-   //                }
-   //             }
-
-   //             // continue incrementing counters on all ancestors
-   //             incrementAncestorCounter(
-   //                a,
-   //                loadout[a].status,
-   //                hasUnresolvedDescendants
-   //             );
-   //          }
-   //       }
-   //    }
-   // }
-
-   // // add each item to its parent and ancestor counters
-   // for (let i in loadout) {
-   //    // find its parent and add to its numChildren counter
-   //    for (let p in loadout) {
-   //       // check if that is its parent
-   //       if (loadout[i].parentId === loadout[p].id) {
-   //          let hasUnresolvedDescendants = false;
-   //          loadout[i].parentName = loadout[p].name;
-   //          // if this isn't a compartment/group
-   //          if (loadout[i].status !== 4) {
-   //             loadout[p].numChildren++;
-   //             loadout[p].numDescendants++;
-
-   //             if (loadout[i].status === 1 || loadout[i].status === 2) {
-   //                // count if it has a resolved status
-   //                loadout[p].numResolvedChildren++;
-   //                loadout[p].numResolvedDescendants++;
-   //             } else {
-   //                // count if it has an unresolved status
-   //                loadout[p].numUnresolvedChildren++;
-   //                loadout[p].numUnresolvedDescendants++;
-   //                hasUnresolvedDescendants = true;
-   //             }
-   //             // if it has any unresolved descendants, change the status
-   //             if (hasUnresolvedDescendants) {
-   //                // if it is set to packed, set it to unpacked
-   //                if (loadout[p].status === 1) {
-   //                   loadout[p].status = 0;
-   //                   console.log(
-   //                      "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PARENT STATUS CHANGED!"
-   //                   );
-   //                }
-   //             }
-   //          }
-
-   //          // increment counters on all ancestors starting with the parent
-   //          incrementAncestorCounter(
-   //             p,
-   //             loadout[i].status,
-   //             hasUnresolvedDescendants
-   //          );
-   //       }
-   //    }
-   // }
-
    // get content summaries
    for (let i in loadout) {
       // if (loadout[i].numUnresolvedDescendants > 0) {
@@ -308,7 +232,7 @@ export function toggleMoveableItemId(itemId) {
 // deletes item on server and also in redux store
 export function deleteItemId(loadout, itemId) {
    // make local changes so we can see them immediately
-   const foundItemIndex = loadout.findIndex((item) => item.id === itemId); // find the specific item to change the name of
+   const foundItemIndex = loadout.findIndex((item) => item.id === itemId); // find the specific item
    loadout.splice(foundItemIndex, 1); // make a new array of items with the deleted item removed
    // send update to Redux
    store.dispatch({
@@ -317,4 +241,25 @@ export function deleteItemId(loadout, itemId) {
    });
 
    deleteItem(itemId); // send the deletion request to the server
+}
+
+// promotes children (along with descendants) then deletes item
+export function promoteChildrenThenDeleteItemId(loadout, itemId) {
+   // make local changes so we can see them immediately
+   const foundItemIndex = loadout.findIndex((item) => item.id === itemId); // find the specific item
+   // first promote the children
+   for (let i in loadout) {
+      // for every child of the item
+      if (loadout[i].parentId === itemId) {
+         loadout[i].parentId = loadout[foundItemIndex].parentId; // set the parent of the child to the item's parent
+      }
+   }
+   loadout.splice(foundItemIndex, 1); // delete the item
+   // send update to Redux
+   store.dispatch({
+      type: actions.STORE_CURRENT_LOADOUT,
+      payload: processLoadout(loadout), // need to process in this case because I am changing the amount of items
+   });
+
+   promoteChildrenThenDeleteItem(itemId); // send the deletion request to the server
 }

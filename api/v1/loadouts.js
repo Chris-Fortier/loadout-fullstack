@@ -21,6 +21,7 @@ const selectUserPermissionsForItem = require("../../queries/selectUserPermission
 const moveItem = require("../../queries/moveItem");
 const countChildCompartments = require("../../queries/countChildCompartments");
 const moveChildrenToCompartment = require("../../queries/moveChildrenToCompartment");
+const moveChildren = require("../../queries/moveChildren");
 
 // @route      POST api/v1/loadouts/insert (going to post one thing to this list of things)
 // @desc       Create a new item
@@ -66,7 +67,7 @@ router.post("/insert", async (req, res) => {
 
 // @route      POST api/v1/loadouts/insert-compartment
 // @desc       Create a new compartment
-// @access     Public
+// @access     Private
 // test: http://localhost:3060/api/v1/loadouts/insert-compartment?parentId=41b9bde9-4731-44d2-b471-d46d21aca680
 router.post("/insert-compartment", validateJwt, async (req, res) => {
    const userId = req.user.id; // get the user id from the validateJwt
@@ -183,6 +184,8 @@ router.delete("/delete", async (req, res) => {
    const { itemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
    console.log({ itemId });
 
+   // TODO: add security
+
    db.query(deleteItem, [itemId])
       .then((dbRes) => {
          console.log("dbRes", dbRes);
@@ -199,6 +202,8 @@ router.delete("/delete", async (req, res) => {
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/set-name?itemId=0674f34b-f0d8-4eac-bbc1-213d37acdf3f&newName=sleepwear7
 router.put("/set-name", (req, res) => {
+   // TODO: add security
+
    console.log("set-name called", [
       req.query.newName,
       Date.now(),
@@ -219,7 +224,7 @@ router.put("/set-name", (req, res) => {
 
 // @route      PUT api/v1/loadouts/set-status
 // @desc       set the status to something
-// @access     Public
+// @access     Private
 // test: http://localhost:3060/api/v1/loadouts/set-status?newStatus=1&itemId=0674f34b-f0d8-4eac-bbc1-213d37acdf3f "sleepwear"
 router.put("/set-status", validateJwt, (req, res) => {
    const userId = req.user.id; // get the user id from the validateJwt
@@ -267,6 +272,7 @@ router.put("/set-status", validateJwt, (req, res) => {
 // @access     Public
 // test:
 router.get("/info", (req, res) => {
+   // TODO: add security
    console.log("req.query", req.query);
 
    // put the query into some consts
@@ -332,6 +338,7 @@ router.get("/info", (req, res) => {
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/children?itemId=42655170-7e10-4431-8d98-c2774f6414a4
 router.get("/children", validateJwt, (req, res) => {
+   // TODO: add security
    console.log(req.query);
    const itemId = req.query.itemId; // put the query into some consts
 
@@ -431,6 +438,7 @@ router.get("/select-descendants", (req, res) => {
 // @access     Public
 // test: http://localhost:3060/api/v1/loadouts/set-descendants-status?newStatus=1&itemId=41b9bde9-4731-44d2-b471-d46d21aca680
 router.put("/set-descendants-status", (req, res) => {
+   // TODO: add security
    db.query(setLoadoutDescendantsStatus, [
       req.query.newStatus,
       Date.now(),
@@ -511,7 +519,7 @@ router.post("/insert-loadout", validateJwt, async (req, res) => {
 
 // @route      DELETE api/v1/loadouts/delete-loadout
 // @desc       Delete a loadout and all user loadouts associated with it
-//                only if the provided user token has admin privledges
+//                only if the provided user token has admin permissions
 // @access     Private
 // test:       http://localhost:3060/api/v1/loadouts/delete-loadout?loadoutId=244331be-05f0-4dd5-ad8e-dc279a74d2aa
 router.delete("/delete-loadout", validateJwt, async (req, res) => {
@@ -684,5 +692,73 @@ router.put("/move-item", validateJwt, async (req, res) => {
       res.status(400).json("You cannot move an item inside of itself.");
    }
 });
+
+// @route      PUT api/v1/loadouts/promote-descendants-then-delete
+// @desc       Create a new compartment
+// @access     Private
+// test: http://localhost:3060/api/v1/loadouts/promote-descendants-then-delete?itemId=b195dc3e-7771-4bde-bc86-4b64e8951d37
+router.put(
+   "/promote-descendants-then-delete",
+   validateJwt,
+   async (req, res) => {
+      const userId = req.user.id; // get the user id from the validateJwt
+      const { itemId } = req.query; // destructuring to simplify code below, grabbing variables from req.body
+
+      // first get the permissions that the given user has for the item
+      db.query(selectUserPermissionsForItem, [itemId, userId])
+         .then((dbRes) => {
+            // see if permissions info was received (user has the loadout shared with them)
+            if (dbRes.length > 0) {
+               // if they have can_edit permission, we can do this
+               if (dbRes[0].can_edit === 1) {
+                  // get the parent which will be the new parent of the children
+                  db.query(selectLoadout, [itemId])
+                     .then((dbRes) => {
+                        parentId = dbRes[0].parent_id; // get the parentId
+                        // if the parent is not null (you can't promote children to the top level as their can be only one root node for each loadout)
+                        if (parentId !== null) {
+                           // move the children of the item to the item's parent
+                           db.query(moveChildren, [parentId, itemId])
+                              .then((dbRes) => {
+                                 // delete the item
+                                 db.query(deleteItem, [itemId])
+                                    .then((dbRes) => {
+                                       console.log("dbRes", dbRes);
+                                       res.status(200).json(
+                                          "Children promoted then Item deleted"
+                                       );
+                                    })
+                                    .catch((err) => {
+                                       console.log("err", err);
+                                       res.status(400).json({ dbError });
+                                    });
+                              })
+                              .catch((err) => {
+                                 console.log("err", err);
+                                 res.status(400).json({ dbError });
+                              });
+                        }
+                     })
+                     .catch((err) => {
+                        console.log("err", err);
+                        res.status(400).json(err);
+                     });
+               } else {
+                  res.status(400).json(
+                     "This user does not have can_edit permissions on this loadout."
+                  );
+               }
+            } else {
+               res.status(400).json(
+                  "This user does not have access to this loadout."
+               );
+            }
+         })
+         .catch((err) => {
+            console.log("err", err);
+            res.status(400).json(err);
+         });
+   }
+);
 
 module.exports = router;

@@ -19,6 +19,7 @@ import {
    deleteItemId,
    renameItem,
    toggleMoveableItemId,
+   promoteChildrenThenDeleteItemId,
 } from "../../utils/items";
 import actions from "../../store/actions";
 
@@ -110,20 +111,20 @@ class ItemCard extends React.Component {
                   e.stopPropagation();
                }} // this stops it from doing the parent onClick even (stops it from closing if you click inside the modal)
             >
-               <span className="close" onClick={() => this.toggleDeleteModal()}>
-                  &times;
-               </span>
-               <p>{`Are you sure you want to delete ${this.props.item.name}?`}</p>
+               <p>{`Are you sure you want to delete item "${this.props.item.name}"?`}</p>
                {this.props.item.numDescendants > 0 && (
                   <>
-                     {/* <div
+                     <div
                         className="button primary-action-button"
-                        // onClick={() => {
-                        //    this.confirmUnpackDescendants();
-                        // }}
+                        onClick={() => {
+                           promoteChildrenThenDeleteItemId(
+                              this.props.currentLoadout,
+                              this.props.item.id
+                           );
+                        }}
                      >
-                        {`Delete ${this.props.item.name} only but KEEP It's ${this.props.item.numDescendants} Subitems`}
-                     </div> */}
+                        {`Delete but promote it's ${this.props.item.numDescendants} subitems`}
+                     </div>
                      <div
                         className="button danger-action-button"
                         onClick={() => {
@@ -133,7 +134,7 @@ class ItemCard extends React.Component {
                            );
                         }}
                      >
-                        {`Delete ${this.props.item.name} and also DELETE it's ${this.props.item.numDescendants} Subitems`}
+                        {`Delete it's ${this.props.item.numDescendants} subitems too`}
                      </div>
                   </>
                )}
@@ -147,7 +148,7 @@ class ItemCard extends React.Component {
                         );
                      }}
                   >
-                     {`Delete ${this.props.item.name}`}
+                     {`Delete item "${this.props.item.name}"`}
                   </div>
                )}
                <div

@@ -1,21 +1,15 @@
 import React from "react";
-// import Header from "../ui/Header";
-// import { IconEdit, IconUpLevel, IconUserCouple } from "../../icons/icons.js";
 import { MAX_ITEM_NAME_LENGTH, LEVEL_COLORS } from "../../utils/helpers";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import ItemCard from "../ui/ItemCard";
-// import { Link } from "react-router-dom"; // a React element for linking
-// import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import {
    renameItem,
    processLoadout,
-   // toggleMoveableItemId,
    deleteItemId,
+   promoteChildrenThenDeleteItemId,
 } from "../../utils/items";
-import isEmpty from "lodash/isEmpty";
-// import SharingStrip from "../ui/SharingStrip";
 import axios from "axios";
 import {
    CancelMoveIcon,
@@ -31,7 +25,7 @@ class Compartment extends React.Component {
       super(props); // boilerplate
 
       this.state = {
-         deleteModelContainer: {}, // stores the container object of the container in question or an empty object if there is no modal
+         isShowingDeleteConfirmation: false,
          isShowingUnpackConfirmation: false,
       };
    }
@@ -52,12 +46,6 @@ class Compartment extends React.Component {
                   e.stopPropagation();
                }} // this stops it from doing the parent onClick even (stops it from closing if you click inside the modal)
             >
-               <span
-                  className="close"
-                  onClick={() => this.hideUnpackConfirmation()}
-               >
-                  &times;
-               </span>
                <p>Unpack {item.name}</p>
                <div
                   className="button primary-action-button"
@@ -306,12 +294,24 @@ class Compartment extends React.Component {
    // TODO: kind of duplicated the delete modal from ItemCard
 
    renderContainerDeleteConfirmation() {
+      // count the number of compartments the parent item has
+      let numSiblingCompartments = 0; // this number includes this compartment
+      for (let i in this.props.currentLoadout) {
+         if (
+            this.props.currentLoadout[i].parentId ===
+            this.props.compartment.parentId
+         ) {
+            numSiblingCompartments++;
+         }
+      }
+      console.log({ numSiblingCompartments });
+
       return (
          <div
             id="myModal"
             className="modal"
             onClick={() => {
-               this.setState({ deleteModelContainer: {} });
+               this.setState({ isShowingDeleteConfirmation: false });
             }}
          >
             <div
@@ -320,47 +320,62 @@ class Compartment extends React.Component {
                   e.stopPropagation();
                }} // this stops it from doing the parent onClick even (stops it from closing if you click inside the modal)
             >
-               <span
-                  className="close"
-                  onClick={() => this.setState({ deleteModelContainer: {} })}
-               >
-                  &times;
-               </span>
-               <p>{`Are you sure you want to delete ${this.state.deleteModelContainer.name}?`}</p>
-               {this.state.deleteModelContainer.numDescendants > 0 && (
+               <p>{`Are you sure you want to delete compartment "${this.props.compartment.name}"?`}</p>
+               {this.props.compartment.numDescendants > 0 &&
+                  numSiblingCompartments === 1 && (
+                     <>
+                        <div
+                           className="button primary-action-button"
+                           onClick={() => {
+                              promoteChildrenThenDeleteItemId(
+                                 this.props.currentLoadout,
+                                 this.props.compartment.id
+                              );
+                              this.setState({
+                                 isShowingDeleteConfirmation: false,
+                              });
+                           }}
+                        >
+                           {`Delete but promote it's ${this.props.compartment.numDescendants} subitems`}
+                        </div>
+                     </>
+                  )}
+               {this.props.compartment.numDescendants > 0 && (
                   <>
                      <div
                         className="button danger-action-button"
                         onClick={() => {
                            deleteItemId(
                               this.props.currentLoadout,
-                              this.state.deleteModelContainer.id
+                              this.props.compartment.id
                            );
-                           this.setState({ deleteModelContainer: {} });
+                           this.setState({
+                              isShowingDeleteConfirmation: false,
+                           });
                         }}
                      >
-                        {`Delete ${this.state.deleteModelContainer.name} and also DELETE it's ${this.state.deleteModelContainer.numDescendants} Subitems`}
+                        {`Delete it's ${this.props.compartment.numDescendants} subitems too`}
                      </div>
                   </>
                )}
-               {this.state.deleteModelContainer.numDescendants === 0 && (
+               {this.props.compartment.numDescendants === 0 && (
                   <div
                      className="button primary-action-button"
                      onClick={() => {
                         deleteItemId(
                            this.props.currentLoadout,
-                           this.state.deleteModelContainer.id
+                           this.props.compartment.id
                         );
-                        this.setState({ deleteModelContainer: {} });
+                        this.setState({ isShowingDeleteConfirmation: false });
                      }}
                   >
-                     {`Delete ${this.state.deleteModelContainer.name}`}
+                     {`Delete compartment "${this.props.compartment.name}"`}
                   </div>
                )}
                <div
                   className="button secondary-action-button"
                   onClick={() => {
-                     this.setState({ deleteModelContainer: {} });
+                     this.setState({ isShowingDeleteConfirmation: false });
                   }}
                >
                   Cancel
@@ -492,7 +507,7 @@ class Compartment extends React.Component {
                               className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
                               onClick={() =>
                                  this.setState({
-                                    deleteModelContainer: thisItem,
+                                    isShowingDeleteConfirmation: true,
                                  })
                               }
                               title="Delete this compartment..."
@@ -606,7 +621,7 @@ class Compartment extends React.Component {
                   isEditMode={this.props.isEditMode}
                />
             ))}
-            {!isEmpty(this.state.deleteModelContainer) &&
+            {this.state.isShowingDeleteConfirmation &&
                this.renderContainerDeleteConfirmation()}
          </div>
       );
