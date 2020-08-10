@@ -1,7 +1,12 @@
-- new compartment system
+- before next Heroku
   - rename "compartment" to "group"?
   - I can't edit the compartments of the highest level if don't have admin
-  - fix unpack all not working anymore
+  - disable edit loadout link when user has no edit permissions
+  - test
+    - test in dark and colors mode
+    - full test of making a new account and all the functionality shown in demo
+    - clear warnings
+    - text in chrome and firefox
 - modal dialog boxes instead of rollouts?
   - delete a user from loadout?
   - removed yourself from loadout?
@@ -16,12 +21,5 @@
 - add ability to "collapse" compartments
 - show the "owner" of loadout on my loadouts page
 - make user able to choose dark mode
-- fix when you try deleting a picked up item, the modal is semi transparent
-
-# before next Heroku push:
-- test in dark and colors mode
-- full test of making a new account and all the functionality shown in demo
-- clear warnings
-- text in chrome and firefox
 
 # current change

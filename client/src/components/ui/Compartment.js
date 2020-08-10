@@ -623,6 +623,8 @@ class Compartment extends React.Component {
             ))}
             {this.state.isShowingDeleteConfirmation &&
                this.renderContainerDeleteConfirmation()}
+            {this.state.isShowingUnpackConfirmation &&
+               this.renderUnpackConfirmation(thisItem)}
          </div>
       );
    }

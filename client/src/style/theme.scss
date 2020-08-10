@@ -171,16 +171,16 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
    }
 
    .secondary-action-button {
-      color: white;
+      // color: white;
       border: 2px solid #404040;
    }
    .secondary-action-button:hover:not(.disabled) {
-      color: darken(white, 10);
+      // color: darken(white, 10);
       background-color: rgba(0, 0, 0, 0.125);
       border: 2px solid darken(#404040, 10);
    }
    .secondary-action-button:active:not(.disabled) {
-      color: darken(white, 20);
+      // color: darken(white, 20);
       background-color: rgba(0, 0, 0, 0.25);
       border: 2px solid darken(#404040, 20);
    }
@@ -312,6 +312,15 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
       .child-item {
          fill: $dark-text-color;
       }
+   }
+
+   input {
+      background-color: rgba(255, 255, 255, 0.6);
+      color: black !important;
+   }
+
+   .modal-content {
+      background-color: lightgray;
    }
 }
 
@@ -449,7 +458,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
 
    input {
       // background-color: rgba(0, 0, 0, 0.6);
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(0, 0, 0, 0.6);
    }
 
    .item-card-group {

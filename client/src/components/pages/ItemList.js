@@ -72,6 +72,9 @@ class ItemList extends React.Component {
          type: actions.SET_EDIT_MODE,
          payload: !this.props.isEditMode,
       });
+      this.props.dispatch({
+         type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+      });
       // this.hideUnpackConfirmation();
    }
 
