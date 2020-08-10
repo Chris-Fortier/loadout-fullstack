@@ -446,8 +446,13 @@ class Compartment extends React.Component {
             className={classnames(
                thisItem.level > 1 &&
                   `this-bg this-bg-level-${thisLevelRotated} item-card-border-${thisLevelRotated}`,
-               thisItem.status !== 4 && "item-card-main-group",
-               thisItem.status === 4 && "item-card-sub-group"
+               thisItem.status !== 4 &&
+                  thisItem.level > 1 &&
+                  "item-card-main-group",
+               thisItem.status === 4 &&
+                  thisItem.level > 1 &&
+                  "item-card-sub-group",
+               thisItem.level <= 1 && "item-card-open-group"
             )}
          >
             <div>
@@ -459,6 +464,7 @@ class Compartment extends React.Component {
                         thisItem.numResolvedDescendants !== 0 &&
                         this.props.currentUserLoadout.canPack === 1 && (
                            <>
+                              <span style={{ width: "6px" }}></span>
                               <span
                                  className={classnames(
                                     `icon-dark item-card-icon item-icon-colors item-icon-colors-${thisLevelRotated} clickable`

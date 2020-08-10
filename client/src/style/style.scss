@@ -289,6 +289,11 @@ body {
    width: calc(100% - 12px); // base size in small widths
 }
 
+.item-card-open-group {
+   margin-top: 6px;
+   margin-bottom: 18px;
+}
+
 .item-compartment {
    border: 1px solid white;
    padding: $item-card-spacing/2;
