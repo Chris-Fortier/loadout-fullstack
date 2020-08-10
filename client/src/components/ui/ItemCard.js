@@ -8,9 +8,9 @@ import {
    NotReadyToPackIcon,
    ChildrenUnpackedIcon,
    ChildrenPackedIcon2,
-   DeleteIcon,
    PickUpItem,
    CancelMoveIcon,
+   DeleteItemIcon2,
 } from "../../icons/loadout-icons.js";
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import axios from "axios";
@@ -334,13 +334,13 @@ class ItemCard extends React.Component {
                   {level > 1 && this.props.isEditMode && (
                      <>
                         <span
-                           className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                           className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
                            onClick={() => {
                               this.toggleDeleteModal();
                            }}
                            title="Delete this item..."
                         >
-                           <DeleteIcon />
+                           <DeleteItemIcon2 />
                         </span>
                         <span className="icon-button-gap"></span>
                         <span

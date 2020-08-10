@@ -241,7 +241,7 @@ export function PickUpItem() {
       <svg viewBox="0 0 24 24">
          <rect className="this-item" width="8" height="8" x="3" y="13" />
          <path
-            className="primary"
+            className="move-color"
             d="m 13,3 v 2 c 1.5,0 3.057292,0 4.585938,0 L 13.292969,9.2929688 14.707031,10.707031 19,6.4140625 C 19,7.9427083 19,9.4713542 19,11 h 2 c 0,-2.6666667 0,-5.3333333 0,-8 -2.666667,0 -5.333333,0 -8,0 z"
          />
       </svg>
@@ -253,7 +253,7 @@ export function PutDownItem() {
       <svg viewBox="0 0 24 24">
          <rect className="this-item" width="8" height="8" x="13" y="3" />
          <path
-            className="primary"
+            className="move-color"
             d="M 11,21 V 19 C 9.471354,19 7.942708,19 6.414062,19 L 10.707031,14.707031 9.292969,13.292969 5,17.585937 C 5,16.057292 5,14.528646 5,13 H 3 c 0,2.666667 0,5.333333 0,8 2.666667,0 5.333333,0 8,0 z"
          />
       </svg>
@@ -265,11 +265,11 @@ export function CancelMoveIcon() {
       <svg viewBox="0 0 24 24">
          <rect className="this-item" width="8" height="8" x="3" y="13" />
          <path
-            className="primary"
+            className="move-color"
             d="M 15.750001,1.5 C 12.03402,1.5 9,4.5340195 9,8.2500003 9,11.965981 12.03402,15 15.750001,15 19.46598,15 22.5,11.965979 22.5,8.2500003 22.5,4.5340195 19.46598,1.5 15.750001,1.5 Z m 0,2.0265834 c 2.620732,0 4.723415,2.1026831 4.723415,4.7234169 0,2.6207317 -2.102683,4.7234167 -4.723415,4.7234167 -2.620734,0 -4.723418,-2.102685 -4.723418,-4.7234167 0,-2.6207338 2.102684,-4.7234169 4.723418,-4.7234169 z"
          />
          <path
-            className="primary"
+            className="move-color"
             d="M 19.073029,3.5 11,11.57303 12.426971,13 20.5,4.926971 Z"
          />
       </svg>
@@ -286,6 +286,76 @@ export function UnpackAllIcon() {
          <path
             className="child-item"
             d="M 19.828125 2.84375 L 17 5.671875 L 19.828125 8.5 L 22.65625 5.671875 L 19.828125 2.84375 z M 20 10 L 20 14 L 24 14 L 24 10 L 20 10 z M 19.828125 15.5 L 17 18.328125 L 19.828125 21.15625 L 22.65625 18.328125 L 19.828125 15.5 z "
+         />
+      </svg>
+   );
+}
+
+export function DeleteItemIcon2() {
+   return (
+      <svg viewBox="0 0 24 24">
+         <rect className="this-item" width="8" height="8" x="3" y="13" />
+         {/* <path
+            className="delete-color"
+            d="M 19.035534,2.8431458 15.5,6.3786797 11.964466,2.8431458 9.8431458,4.9644661 13.37868,8.5 9.8431458,12.035534 11.964466,14.156854 15.5,10.62132 l 3.535534,3.535534 2.12132,-2.12132 L 17.62132,8.5 21.156854,4.9644661 Z"
+         /> */}
+         <path
+            className="delete-color"
+            d="M 18.242641,2.9289322 14,7.1715729 9.7573593,2.9289322 6.9289322,5.7573593 11.171573,10 6.9289322,14.242641 9.7573593,17.071068 14,12.828427 18.242641,17.071068 21.071068,14.242641 16.828427,10 21.071068,5.7573593 Z"
+         />
+      </svg>
+   );
+}
+
+export function AddItemIcon() {
+   return (
+      <svg viewBox="0 0 24 24">
+         <rect className="this-item" width="8" height="8" x="3" y="13" />
+         {/* <path
+            className="add-color"
+            d="M 14 2 L 14 7 L 9 7 L 9 10 L 14 10 L 14 15 L 17 15 L 17 10 L 22 10 L 22 7 L 17 7 L 17 2 L 14 2 z "
+         /> */}
+         <path
+            className="add-color"
+            d="M 12,2 V 8 H 6 v 4 h 6 v 6 h 4 v -6 h 6 V 8 H 16 V 2 Z"
+         />
+      </svg>
+   );
+}
+
+export function DeleteCompartmentIcon() {
+   return (
+      <svg viewBox="0 0 24 24">
+         {/* <path
+            className="this-item"
+            d="m 2,12 c 0,3.333333 0,6.666667 0,10 H 12 V 12 Z m 2,2 h 6 v 6 H 4 Z"
+         /> */}
+         <path
+            className="this-item"
+            d="m 2,9 c 0,4.333333 0,8.666667 0,13 H 15 V 9 Z m 2,2 h 9 v 9 H 4 Z"
+         />
+         <path
+            className="delete-color"
+            d="M 18.242641,2.9289322 14,7.1715729 9.7573593,2.9289322 6.9289322,5.7573593 11.171573,10 6.9289322,14.242641 9.7573593,17.071068 14,12.828427 18.242641,17.071068 21.071068,14.242641 16.828427,10 21.071068,5.7573593 Z"
+         />
+      </svg>
+   );
+}
+
+export function AddCompartmentIcon() {
+   return (
+      <svg viewBox="0 0 24 24">
+         {/* <path
+            className="this-item"
+            d="m 2,12 c 0,3.333333 0,6.666667 0,10 H 12 V 12 Z m 2,2 h 6 v 6 H 4 Z"
+         /> */}
+         <path
+            className="this-item"
+            d="m 2,9 c 0,4.333333 0,8.666667 0,13 H 15 V 9 Z m 2,2 h 9 v 9 H 4 Z"
+         />
+         <path
+            className="add-color"
+            d="M 12,2 V 8 H 6 v 4 h 6 v 6 h 4 v -6 h 6 V 8 H 16 V 2 Z"
          />
       </svg>
    );

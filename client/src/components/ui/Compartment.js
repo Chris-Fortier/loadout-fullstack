@@ -14,9 +14,10 @@ import axios from "axios";
 import {
    CancelMoveIcon,
    PutDownItem,
-   AddIcon,
-   DeleteIcon,
+   AddCompartmentIcon,
+   DeleteCompartmentIcon,
    UnpackAllIcon,
+   AddItemIcon,
 } from "../../icons/loadout-icons";
 import store from "../../store/store";
 
@@ -519,7 +520,7 @@ class Compartment extends React.Component {
                               }
                               title="Delete this compartment..."
                            >
-                              <DeleteIcon />
+                              <DeleteCompartmentIcon />
                            </span>
                            <span className="icon-button-gap"></span>
                         </>
@@ -562,7 +563,7 @@ class Compartment extends React.Component {
                               }}
                               title={`Add compartment inside ${thisItem.name}`}
                            >
-                              <AddIcon />
+                              <AddCompartmentIcon />
                            </span>
                         </>
                      )}
@@ -576,7 +577,7 @@ class Compartment extends React.Component {
                               }}
                               title={`Add item inside ${thisItem.name}`}
                            >
-                              <AddIcon />
+                              <AddItemIcon />
                            </span>
                         </>
                      )}

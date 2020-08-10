@@ -140,6 +140,18 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
 
 // UI THEMES
 
+.add-color {
+   fill: hsl(120, 75, 40);
+}
+
+.delete-color {
+   fill: hsl(0, 67, 50);
+}
+
+.move-color {
+   fill: hsl(240, 75, 55);
+}
+
 // colors mode
 .ui-theme-0 {
    .level-text-color-this {
