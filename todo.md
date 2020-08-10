@@ -1,8 +1,5 @@
 - before next Heroku
   - rename "compartment" to "group"?
-  - I can't edit the compartments of the highest level if don't have admin
-  - I can't move items to different compartments on the the parent level
-  - disable edit loadout link when user has no edit permissions
   - test
     - test in dark and colors mode
     - full test of making a new account and all the functionality shown in demo

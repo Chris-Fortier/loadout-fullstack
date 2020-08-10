@@ -402,7 +402,8 @@ class Compartment extends React.Component {
       const thisUserCanEdit =
          (thisItem.level === 1 &&
             this.props.currentUserLoadout.isAdmin === 1) ||
-         (thisItem.level !== 1 && this.props.currentUserLoadout.canEdit === 1);
+         ((thisItem.level !== 1 || thisItem.status === 4) &&
+            this.props.currentUserLoadout.canEdit === 1);
 
       // get this list of this item's direct children
       // this filters out compartments/groups

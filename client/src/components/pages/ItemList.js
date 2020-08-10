@@ -115,6 +115,15 @@ class ItemList extends React.Component {
 
       const parentLevelRotated = this.rotateLevel(pageItem.level - 1);
 
+      // get tooltip for Edit Loadout link
+      let editTooltip = "";
+      if (this.props.currentUserLoadout.canEdit === 1) {
+         editTooltip = "Enter edit mode";
+      } else {
+         editTooltip =
+            "This user does not have edit permissions on this loadout.";
+      }
+
       return (
          <>
             <div
@@ -161,31 +170,42 @@ class ItemList extends React.Component {
                                     />
                                  </span>
 
-                                 {pageItem.level > 0 && (
-                                    <span
-                                       className="clickable"
-                                       onClick={(e) => {
+                                 <span
+                                    className={classnames({
+                                       clickable:
                                           this.props.currentUserLoadout
-                                             .canEdit === 1 &&
-                                             this.toggleEditMode(e);
-                                       }}
+                                             .canEdit === 1,
+                                       disabled:
+                                          this.props.currentUserLoadout
+                                             .canEdit !== 1,
+                                    })}
+                                    onClick={(e) => {
+                                       this.props.currentUserLoadout.canEdit ===
+                                          1 && this.toggleEditMode(e);
+                                    }}
+                                    title={editTooltip}
+                                 >
+                                    <span
+                                       className={`button theme-icon-color standard-sized-icon`}
                                     >
-                                       <span
-                                          className={`button theme-icon-color standard-sized-icon`}
-                                       >
-                                          <IconEdit />
-                                       </span>
-                                       &nbsp;
-                                       <span className="button navigation-link">
-                                          {this.props.isEditMode && (
-                                             <>Done Editing</>
-                                          )}
-                                          {!this.props.isEditMode && (
-                                             <>Edit Loadout</>
-                                          )}
-                                       </span>
+                                       <IconEdit />
                                     </span>
-                                 )}
+                                    &nbsp;
+                                    <span
+                                       className={classnames({
+                                          "button navigation-link":
+                                             this.props.currentUserLoadout
+                                                .canEdit === 1,
+                                       })}
+                                    >
+                                       {this.props.isEditMode && (
+                                          <>Done Editing</>
+                                       )}
+                                       {!this.props.isEditMode && (
+                                          <>Edit Loadout</>
+                                       )}
+                                    </span>
+                                 </span>
                               </div>
                            </div>
 
