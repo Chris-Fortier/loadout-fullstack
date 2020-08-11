@@ -407,6 +407,7 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
 }
 
 // dark mode
+$border-darken-amount: 5;
 .ui-theme-1 {
    color: $light-text-color; // main font color for this theme
 
@@ -482,25 +483,32 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
    }
 
    .item-card-border-0 {
-      border: 2px solid map-get($level-text-colors, 0);
+      border: 2px solid
+         darken(map-get($level-text-colors, 0), $border-darken-amount);
    }
    .item-card-border-1 {
-      border: 2px solid map-get($level-text-colors, 1);
+      border: 2px solid
+         darken(map-get($level-text-colors, 1), $border-darken-amount);
    }
    .item-card-border-2 {
-      border: 2px solid map-get($level-text-colors, 2);
+      border: 2px solid
+         darken(map-get($level-text-colors, 2), $border-darken-amount);
    }
    .item-card-border-3 {
-      border: 2px solid map-get($level-text-colors, 3);
+      border: 2px solid
+         darken(map-get($level-text-colors, 3), $border-darken-amount);
    }
    .item-card-border-4 {
-      border: 2px solid map-get($level-text-colors, 4);
+      border: 2px solid
+         darken(map-get($level-text-colors, 4), $border-darken-amount);
    }
    .item-card-border-5 {
-      border: 2px solid map-get($level-text-colors, 5);
+      border: 2px solid
+         darken(map-get($level-text-colors, 5), $border-darken-amount);
    }
    .item-card-border-6 {
-      border: 2px solid map-get($level-text-colors, 6);
+      border: 2px solid
+         darken(map-get($level-text-colors, 6), $border-darken-amount);
    }
 
    .modal-content {

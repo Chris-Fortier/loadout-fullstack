@@ -3,7 +3,8 @@
     - test in dark and colors mode
     - full test of making a new account and all the functionality shown in demo
     - clear warnings
-    - text in chrome and firefox
+    - test in chrome and firefox
+    --compare to existing
 - modal dialog boxes instead of rollouts?
   - delete a user from loadout?
   - removed yourself from loadout?
