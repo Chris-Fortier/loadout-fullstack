@@ -47,7 +47,7 @@ class Compartment extends React.Component {
                   e.stopPropagation();
                }} // this stops it from doing the parent onClick even (stops it from closing if you click inside the modal)
             >
-               <p>Unpack {item.name}</p>
+               <p>{`Unpack "${item.name}"`}</p>
                <div
                   className="button primary-action-button"
                   onClick={() => {

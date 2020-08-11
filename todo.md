@@ -1,9 +1,4 @@
 - before next Heroku
-  - test
-    - test in dark and colors mode
-    - full test of making a new account and all the functionality shown in demo
-    --test in chrome and firefox
-    --compare to existing
 - modal dialog boxes instead of rollouts?
   - delete a user from loadout?
   - removed yourself from loadout?
@@ -14,6 +9,7 @@
     - Edit
     - Sharing
   - Refresh button
+- formatting on iPhone 5/SE
 - rollout to show the items currently "picked up"
 - add ability to "collapse" compartments
 - show the "owner" of loadout on my loadouts page
