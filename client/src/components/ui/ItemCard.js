@@ -227,9 +227,9 @@ class ItemCard extends React.Component {
       // set the tooltip for the subitems button
       let subitemsTooltip = "";
       if (this.props.isEditMode) {
-         subitemsTooltip = "Edit subitems...";
+         subitemsTooltip = `Edit subitems of "${this.props.item.name}"...`;
       } else {
-         subitemsTooltip = "View subitems...";
+         subitemsTooltip = `View subitems of "${this.props.item.name}"...`;
       }
 
       return (

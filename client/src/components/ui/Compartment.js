@@ -55,7 +55,7 @@ class Compartment extends React.Component {
                      this.confirmUnpackDescendants();
                   }}
                >
-                  {`Unpack all ${item.numResolvedDescendants} packed items and subitems inside ${item.name}`}
+                  {`Unpack all ${item.numResolvedDescendants} packed items and subitems inside "${item.name}"`}
                </div>
                <div
                   className="button secondary-action-button"
@@ -321,7 +321,8 @@ class Compartment extends React.Component {
                   e.stopPropagation();
                }} // this stops it from doing the parent onClick even (stops it from closing if you click inside the modal)
             >
-               <p>{`Are you sure you want to delete compartment "${this.props.compartment.name}"?`}</p>
+               {/* Group/Compartment */}
+               <p>{`Are you sure you want to delete group/compartment "${this.props.compartment.name}"?`}</p>
                {this.props.compartment.numDescendants > 0 &&
                   numSiblingCompartments === 1 && (
                      <>
@@ -370,7 +371,8 @@ class Compartment extends React.Component {
                         this.setState({ isShowingDeleteConfirmation: false });
                      }}
                   >
-                     {`Delete compartment "${this.props.compartment.name}"`}
+                     {/* Group/Compartment */}
+                     {`Delete group/compartment "${this.props.compartment.name}"`}
                   </div>
                )}
                <div
@@ -426,7 +428,7 @@ class Compartment extends React.Component {
             }
          ));
          if (singleItem !== undefined) {
-            moveableItemsSummary = singleItem.name;
+            moveableItemsSummary = `"${singleItem.name}"`;
          } else {
             // the name is unavailable with this method because we are in a different loadout
             moveableItemsSummary = "Item";
@@ -474,7 +476,7 @@ class Compartment extends React.Component {
                                  onClick={(e) => {
                                     this.toggleUnpackRollout();
                                  }}
-                                 title="Unpack.."
+                                 title={`Unpack.. "${thisItem.name}"`}
                               >
                                  <UnpackAllIcon />
                               </span>
@@ -518,7 +520,7 @@ class Compartment extends React.Component {
                                     isShowingDeleteConfirmation: true,
                                  })
                               }
-                              title="Delete this compartment..."
+                              title="Delete this group/compartment..." // Group/Compartment
                            >
                               <DeleteCompartmentIcon />
                            </span>
@@ -561,7 +563,7 @@ class Compartment extends React.Component {
                               onClick={(e) => {
                                  this.addCompartmentAndFocus(thisItem.id);
                               }}
-                              title={`Add compartment inside ${thisItem.name}`}
+                              title={`Add group/compartment inside "${thisItem.name}"`} // Group/Compartment
                            >
                               <AddCompartmentIcon />
                            </span>
@@ -575,7 +577,7 @@ class Compartment extends React.Component {
                               onClick={(e) => {
                                  this.addItemAndFocus(thisItem.id);
                               }}
-                              title={`Add item inside ${thisItem.name}`}
+                              title={`Add item inside "${thisItem.name}"`}
                            >
                               <AddItemIcon />
                            </span>
@@ -590,7 +592,7 @@ class Compartment extends React.Component {
                                  onClick={(e) => {
                                     this.moveItems(thisItem.id);
                                  }}
-                                 title={`Move ${moveableItemsSummary} To ${thisItem.name}`}
+                                 title={`Move ${moveableItemsSummary} to ${thisItem.name}`}
                               >
                                  <PutDownItem />
                               </span>

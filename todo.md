@@ -1,5 +1,4 @@
 - before next Heroku
-  - rename "compartment" to "group"?
   - test
     - test in dark and colors mode
     - full test of making a new account and all the functionality shown in demo
@@ -19,5 +18,6 @@
 - add ability to "collapse" compartments
 - show the "owner" of loadout on my loadouts page
 - make user able to choose dark mode
+- focus on name of new loadout
 
 # current change

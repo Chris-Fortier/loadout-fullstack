@@ -555,7 +555,7 @@ class LoadoutSharing extends React.Component {
                                                                <div className="d-flex">
                                                                   <span
                                                                      className={classnames(
-                                                                        "item-card-icon clickable"
+                                                                        "item-card-icon clickable theme-icon-color"
                                                                      )}
                                                                      onClick={() =>
                                                                         this.validateAndAddUserLoadout(

@@ -97,7 +97,7 @@ router.post("/insert-compartment", validateJwt, async (req, res) => {
                      newCompartmentId = uuid.v4();
                      const newCompartment = {
                         id: newCompartmentId, // generate the uuid
-                        name: "Untitled Compartment",
+                        name: "Untitled Group/Compartment", // Group/Compartment
                         parent_id: parentId, // use given value for parent
                         status: 4, // status 4 for a compartment
                         created_at: Date.now(), // set this date to now
