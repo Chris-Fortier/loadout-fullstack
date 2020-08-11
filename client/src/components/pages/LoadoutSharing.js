@@ -384,7 +384,7 @@ class LoadoutSharing extends React.Component {
                                                       >
                                                          <div
                                                             className={classnames(
-                                                               "d-flex loadout-card-icon theme-icon-color"
+                                                               "standard-sized-icon loadout-card-icon theme-icon-color"
                                                             )}
                                                          >
                                                             <IconPackage />
@@ -402,7 +402,7 @@ class LoadoutSharing extends React.Component {
                                                       >
                                                          <div
                                                             className={classnames(
-                                                               "d-flex loadout-card-icon theme-icon-color"
+                                                               "standard-sized-icon loadout-card-icon theme-icon-color"
                                                             )}
                                                          >
                                                             <IconEdit />
@@ -420,7 +420,7 @@ class LoadoutSharing extends React.Component {
                                                       >
                                                          <div
                                                             className={classnames(
-                                                               "d-flex loadout-card-icon theme-icon-color"
+                                                               "standard-sized-icon loadout-card-icon theme-icon-color"
                                                             )}
                                                          >
                                                             <IconKey />

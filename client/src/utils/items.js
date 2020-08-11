@@ -128,6 +128,7 @@ export function processLoadout(loadout) {
       // do stuff for each ancestor
       while (ancestorId !== null) {
          // get the ancestor item
+         // eslint-disable-next-line
          const ancestorItem = loadout.find((item) => {
             return item.id === ancestorId;
          });
