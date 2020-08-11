@@ -514,7 +514,7 @@ class Compartment extends React.Component {
                      {thisItem.status === 4 && (
                         <>
                            <span
-                              className={`item-card-icon clickable item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                              className={`item-card-icon clickable item-icon-colors item-icon-colors-${childLevelRotated}`}
                               onClick={() =>
                                  this.setState({
                                     isShowingDeleteConfirmation: true,
@@ -559,7 +559,7 @@ class Compartment extends React.Component {
                            <span className="icon-button-gap"></span>
 
                            <span
-                              className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${thisLevelRotated}`}
+                              className={`item-card-icon clickable theme-icon-color item-icon-colors item-icon-colors-${childLevelRotated}`}
                               onClick={(e) => {
                                  this.addCompartmentAndFocus(thisItem.id);
                               }}

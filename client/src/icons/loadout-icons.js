@@ -331,7 +331,7 @@ export function DeleteCompartmentIcon() {
             d="m 2,12 c 0,3.333333 0,6.666667 0,10 H 12 V 12 Z m 2,2 h 6 v 6 H 4 Z"
          /> */}
          <path
-            className="this-item"
+            className="parent-item"
             d="m 2,9 c 0,4.333333 0,8.666667 0,13 H 15 V 9 Z m 2,2 h 9 v 9 H 4 Z"
          />
          <path
@@ -350,7 +350,7 @@ export function AddCompartmentIcon() {
             d="m 2,12 c 0,3.333333 0,6.666667 0,10 H 12 V 12 Z m 2,2 h 6 v 6 H 4 Z"
          /> */}
          <path
-            className="this-item"
+            className="parent-item"
             d="m 2,9 c 0,4.333333 0,8.666667 0,13 H 15 V 9 Z m 2,2 h 9 v 9 H 4 Z"
          />
          <path
