@@ -864,10 +864,16 @@ li {
 
 // LOADOUT TABS
 
-.loadout-tab {
+.loadout-tab-bar {
    text-align: center;
    margin-left: 15px;
    margin-right: 15px;
+   line-height: 1;
+   margin-bottom: 6px;
+}
+.loadout-tab,
+.loadout-tab-selected {
+   padding-top: 6px;
 }
 
 // END LOADOUT TABS

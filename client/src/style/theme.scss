@@ -515,7 +515,7 @@ $border-darken-amount: 5;
       background-color: black;
    }
 
-   .loadout-tab {
+   .loadout-tab-bar {
       background-color: hsl(0, 0, 25);
       color: hsl(0, 0, 75);
       .primary {
@@ -525,10 +525,31 @@ $border-darken-amount: 5;
          fill: hsl(0, 0, 67);
       }
    }
-   // .loadout-tab:hover {
-   //    background-color: hsl(0, 0, 20);
-   //    color: hsl(0, 0, 70);
-   // }
+
+   .loadout-tab {
+      border: 1px solid hsla(0, 0, 0, 0.25);
+   }
+
+   .loadout-tab:hover {
+      background-color: hsl(0, 0, 22.5);
+      color: hsl(0, 0, 67.5);
+      .primary {
+         fill: hsl(0, 0, 29.7);
+      }
+      .secondary {
+         fill: hsl(0, 0, 60.3);
+      }
+   }
+   .loadout-tab:active {
+      background-color: hsl(0, 0, 20);
+      color: hsl(0, 0, 60);
+      .primary {
+         fill: hsl(0, 0, 26.4);
+      }
+      .secondary {
+         fill: hsl(0, 0, 53.6);
+      }
+   }
 
    .loadout-tab-selected {
       background-color: hsl(0, 0, 75);

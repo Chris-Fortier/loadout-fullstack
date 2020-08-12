@@ -56,9 +56,10 @@ class LoadoutHeader extends React.Component {
 
       return (
          <div className="container-fluid header-container">
-            <div className="row loadout-tab">
+            <div className="row loadout-tab-bar">
                <div
                   className={classnames("col", {
+                     "loadout-tab": mode !== "pack",
                      "loadout-tab-selected": mode === "pack",
                      clickable: mode !== "pack",
                   })}
@@ -85,7 +86,8 @@ class LoadoutHeader extends React.Component {
                         >
                            <IconPackage />
                         </span>
-                        &nbsp;Pack
+                        <br className="d-inline d-sm-none" />
+                        Pack
                      </>
                   )}
                   {canPack === 0 && <>View Only</>}
@@ -93,6 +95,7 @@ class LoadoutHeader extends React.Component {
 
                <div
                   className={classnames("col", {
+                     "loadout-tab": mode !== "edit",
                      "loadout-tab-selected": mode === "edit",
                      disabled: canEdit === 0,
                      clickable: canEdit === 1 && mode !== "edit",
@@ -115,11 +118,13 @@ class LoadoutHeader extends React.Component {
                   >
                      <IconEdit />
                   </span>
-                  &nbsp;Edit
+                  <br className="d-inline d-sm-none" />
+                  Edit
                </div>
 
                <div
                   className={classnames("col", {
+                     "loadout-tab": mode !== "settings",
                      "loadout-tab-selected": mode === "settings",
                      clickable: mode !== "settings",
                   })}
@@ -142,7 +147,8 @@ class LoadoutHeader extends React.Component {
                   >
                      <IconUserCouple />
                   </span>
-                  &nbsp;Sharing
+                  <br className="d-inline d-sm-none" />
+                  Sharing
                </div>
             </div>
          </div>
