@@ -514,6 +514,26 @@ $border-darken-amount: 5;
    .modal-content {
       background-color: black;
    }
+
+   .loadout-tab {
+      background-color: hsl(0, 0, 25);
+      color: hsl(0, 0, 75);
+      .primary {
+         fill: hsl(0, 0, 33);
+      }
+      .secondary {
+         fill: hsl(0, 0, 67);
+      }
+   }
+   // .loadout-tab:hover {
+   //    background-color: hsl(0, 0, 20);
+   //    color: hsl(0, 0, 70);
+   // }
+
+   .loadout-tab-selected {
+      background-color: hsl(0, 0, 75);
+      color: hsl(0, 0, 25);
+   }
 }
 
 // shared with light and dark themes

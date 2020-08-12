@@ -17,3 +17,17 @@
 - focus on name of new loadout
 
 # current change
+
+
+
+disabled
+	less opacity
+	ghostbusters cursor
+	explanation tooltip
+hover
+	only if not disabled
+	explanation of what will happen
+active
+	
+selected
+	not clickable or hoverable

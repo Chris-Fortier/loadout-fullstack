@@ -13,6 +13,7 @@ import { getUserLoadoutsForALoadout } from "../../utils/userLoadouts";
 import { renameItem } from "../../utils/items";
 // import actions from "../../store/actions";
 import isEmpty from "lodash/isEmpty";
+import LoadoutHeader from "../ui/LoadoutHeader";
 
 class LoadoutSharing extends React.Component {
    constructor(props) {
@@ -223,6 +224,7 @@ class LoadoutSharing extends React.Component {
          <div className={`ui-theme-${this.props.currentUser.uiTheme}`}>
             <Header />
             <div className="item-list parent-bg-level-2 parent-bg">
+               <LoadoutHeader parentProps={this.props} />
                <div className="container-fluid single-wide-container scroll-fix">
                   {this.props.currentLoadoutUserLoadouts.length > 0 && (
                      <>

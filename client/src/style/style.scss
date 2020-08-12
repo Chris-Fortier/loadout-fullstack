@@ -862,6 +862,16 @@ li {
 
 /////////////////////////////////
 
+// LOADOUT TABS
+
+.loadout-tab {
+   text-align: center;
+   margin-left: 15px;
+   margin-right: 15px;
+}
+
+// END LOADOUT TABS
+
 // li:nth-child(even) {
 //    background-color: hsl(180, 25, 90);
 // }
@@ -911,3 +921,15 @@ li {
    //    margin-right: $item-card-spacing;
    // }
 }
+
+// @media (prefers-color-scheme: dark) {
+//    * {
+//       color: blue;
+//    }
+// }
+
+// @media (prefers-color-scheme: light) {
+//    * {
+//       color: red;
+//    }
+// }

@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../ui/Header";
-import { IconEdit, IconUpLevel, IconUserCouple } from "../../icons/icons.js";
+import { IconUpLevel, IconUserCouple } from "../../icons/icons.js";
 import { LEVEL_COLORS } from "../../utils/helpers";
 import classnames from "classnames";
 import { connect } from "react-redux";
@@ -10,6 +10,7 @@ import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import isEmpty from "lodash/isEmpty";
 import SharingStrip from "../ui/SharingStrip";
 import Compartment from "../ui/Compartment";
+import LoadoutHeader from "../ui/LoadoutHeader";
 
 class ItemList extends React.Component {
    constructor(props) {
@@ -50,10 +51,10 @@ class ItemList extends React.Component {
       });
    }
 
-   // open the loadout sharing settings (made this a function to avoid styling associated with Link)
-   gotoSharing() {
-      this.props.history.push("/loadout-sharing");
-   }
+   // // open the loadout sharing settings (made this a function to avoid styling associated with Link)
+   // gotoSharing() {
+   //    this.props.history.push("/loadout-sharing");
+   // }
 
    // // toggle show packed items
    // toggleShowPacked() {
@@ -65,18 +66,18 @@ class ItemList extends React.Component {
    //    this.setState({ isPackedOnBottom: !this.state.isPackedOnBottom });
    // }
 
-   // toggle mode from pack to edit
-   toggleEditMode() {
-      // this.setState({ isEditMode: !this.state.isEditMode });
-      this.props.dispatch({
-         type: actions.SET_EDIT_MODE,
-         payload: !this.props.isEditMode,
-      });
-      this.props.dispatch({
-         type: actions.CLEAR_MOVEABLE_ITEM_IDS,
-      });
-      // this.hideUnpackConfirmation();
-   }
+   // // toggle mode from pack to edit
+   // toggleEditMode() {
+   //    // this.setState({ isEditMode: !this.state.isEditMode });
+   //    this.props.dispatch({
+   //       type: actions.SET_EDIT_MODE,
+   //       payload: !this.props.isEditMode,
+   //    });
+   //    this.props.dispatch({
+   //       type: actions.CLEAR_MOVEABLE_ITEM_IDS,
+   //    });
+   //    // this.hideUnpackConfirmation();
+   // }
 
    rotateLevel(level) {
       return (level + LEVEL_COLORS) % LEVEL_COLORS;
@@ -144,10 +145,11 @@ class ItemList extends React.Component {
                         ` parent-bg-level-${parentLevelRotated}`
                   )}
                >
+                  <LoadoutHeader parentProps={this.props} />
                   <div className="container-fluid item-cards-container scroll-fix">
                      {this.props.currentLoadout.length > 0 && (
                         <>
-                           <div className="row">
+                           {/* <div className="row">
                               <div className="col">
                                  <span
                                     className="clickable float-right"
@@ -207,7 +209,7 @@ class ItemList extends React.Component {
                                     </span>
                                  </span>
                               </div>
-                           </div>
+                           </div> */}
 
                            <div className="row">
                               <div className="col">
