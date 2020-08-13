@@ -221,7 +221,7 @@ class LoadoutSharing extends React.Component {
       console.log("currentLoadoutFromStore", currentLoadoutFromStore);
 
       return (
-         <div className={`ui-theme-${this.props.currentUser.uiTheme}`}>
+         <div className="ui-theme">
             <Header />
             <div className="item-list parent-bg-level-2 parent-bg">
                <LoadoutHeader parentProps={this.props} />

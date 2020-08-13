@@ -131,40 +131,9 @@ body {
 
 // style specific to the landing page
 .landing-page {
-   // input,
-   // p {
-   //    font-size: 1.25rem;
-   // }
-
    h1 {
       text-shadow: 3px 3px 2px $darker-stuff;
    }
-   .card {
-      background-color: rgba(
-         255,
-         255,
-         255,
-         0.8
-      ); // sets opacity of the card but not its decendants, so I can have opaque sub-elements
-
-      // input {
-      //    opacity: default;
-      // }
-   }
-
-   // .btn-primary {
-   //    color: $lighter-stuff;
-   //    text-transform: uppercase;
-   //    // font-size: 1.25rem;
-   //    font-weight: 600;
-   // }
-
-   // .btn-secondary {
-   //    color: $lighter-stuff;
-   //    text-transform: capitalize;
-   //    // font-size: 1.25rem;
-   //    font-weight: 300;
-   // }
 
    img {
       -webkit-filter: drop-shadow(0 0 4px rgba(0, 0, 0, 1));
@@ -352,7 +321,6 @@ h4 {
 h5 {
    font-size: 32px;
    // text-transform: capitalize; // makes first letter of each word uppercase
-   color: $darker-stuff;
    line-height: 0.9; // makes the title tighter if it used multiple lines
 }
 
@@ -517,7 +485,6 @@ $iconWidth: 30px;
 .card-section {
    margin-top: $space-between-sections/2; // for space between card sections and buttons
    margin-bottom: $space-between-sections/2; // for space between card sections and buttons
-   border: $outline-style;
    background: none;
    padding: $card-section-padding;
    box-shadow: $inner-shadow;
@@ -756,7 +723,6 @@ input {
 .form-label {
    text-transform: uppercase;
    font-weight: 300;
-   color: rgba(0, 0, 0, 0.5);
 }
 
 // .my-button {

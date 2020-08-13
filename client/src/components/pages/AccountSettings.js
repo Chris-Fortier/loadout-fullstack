@@ -233,7 +233,7 @@ class AccountSettings extends React.Component {
 
    render() {
       return (
-         <div className="landing-bg-2 ui-theme-0">
+         <div className="landing-bg-2 ui-theme">
             <div className="container-fluid landing-page">
                <div className="row space-above-faceplate"></div>
                <div className="row">

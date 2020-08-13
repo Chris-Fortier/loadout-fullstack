@@ -131,6 +131,7 @@ $space-between-sections: 16px;
 $card-section-padding: 9px;
 
 $outline-style: 1px solid rgba(0, 0, 0, 0.5);
+$outline-style-dark-theme: 1px solid rgba(255, 255, 255, 0.5);
 
 // font colors
 $light-text-color: rgba(255, 255, 255, 0.6);
@@ -152,518 +153,647 @@ $dark-text-color-dim: rgba(0, 0, 0, 0.3);
    fill: hsl(240, 75, 55);
 }
 
-// colors mode
-.ui-theme-0 {
-   .level-text-color-this {
+// default theme
+@media (prefers-color-scheme: light) {
+   .ui-theme {
+      color: $light-text-color; // main font color for this theme
+
+      .text-danger {
+         color: hsl(0, 75, 45);
+      }
+
+      .landing-page {
+         .card {
+            background-color: hsla(
+               0,
+               0,
+               100,
+               0.8
+            ); // sets opacity of the card but not its descendants, so I can have opaque sub-elements
+         }
+      }
+
+      // h5 {
+      //    color: $lighter-stuff;
+      // }
+
+      .form-label {
+         color: $dark-text-color;
+         opacity: 0.7;
+      }
+
+      .card-section {
+         border: $outline-style;
+      }
+
+      .my-input {
+         background-color: white;
+         color: black;
+      }
+
+      // button {
+      //    color: $light-text-color;
+      // }
+
+      .contrast-icon {
+         fill: $dark-text-color;
+      }
+
+      .level-text-color-this {
+         color: $dark-text-color;
+      }
+      .level-text-color-parent {
+         color: $light-text-color;
+      }
+      .level-text-color-child {
+         color: $light-text-color;
+      }
+
       color: $dark-text-color;
-   }
-   .level-text-color-parent {
-      color: $light-text-color;
-   }
-   .level-text-color-child {
-      color: $light-text-color;
-   }
 
-   color: $dark-text-color;
-
-   .primary-action-button {
-      background-color: #404040;
-      color: white;
-      border: 2px solid #404040;
-   }
-   .primary-action-button:hover:not(.disabled) {
-      color: darken(white, 10);
-      background-color: darken(#404040, 10);
-      border: 2px solid darken(#404040, 10);
-   }
-   .primary-action-button:active:not(.disabled) {
-      color: darken(white, 20);
-      background-color: darken(#404040, 20);
-      border: 2px solid darken(#404040, 20);
-   }
-
-   .secondary-action-button {
-      // color: white;
-      border: 2px solid #404040;
-   }
-   .secondary-action-button:hover:not(.disabled) {
-      // color: darken(white, 10);
-      background-color: rgba(0, 0, 0, 0.125);
-      border: 2px solid darken(#404040, 10);
-   }
-   .secondary-action-button:active:not(.disabled) {
-      // color: darken(white, 20);
-      background-color: rgba(0, 0, 0, 0.25);
-      border: 2px solid darken(#404040, 20);
-   }
-
-   .icon-parent {
-      // width: 1em; //$iconWidth;
-      align-self: center;
-      .primary {
-         fill: $light-text-color;
+      .primary-action-button {
+         background-color: #404040;
+         color: white;
+         border: 2px solid #404040;
       }
-      .secondary {
-         fill: $light-text-color-dim;
+      .primary-action-button:hover:not(.disabled) {
+         color: darken(white, 10);
+         background-color: darken(#404040, 10);
+         border: 2px solid darken(#404040, 10);
       }
-   }
-   .theme-icon-color {
-      // width: 1em; //$iconWidth;
-      align-self: center;
-      .primary {
-         fill: $dark-text-color;
+      .primary-action-button:active:not(.disabled) {
+         color: darken(white, 20);
+         background-color: darken(#404040, 20);
+         border: 2px solid darken(#404040, 20);
       }
-      .secondary {
-         fill: $dark-text-color-dim;
+
+      .secondary-action-button {
+         // color: white;
+         border: 2px solid #404040;
       }
-   }
-
-   .edit-name {
-      background-color: rgba(255, 255, 255, 0.6);
-      color: black;
-   }
-
-   .this-bg-level-0 {
-      background-color: map-get($level-colors, 0);
-   }
-   .this-bg-level-1 {
-      background-color: map-get($level-colors, 1);
-   }
-   .this-bg-level-2 {
-      background-color: map-get($level-colors, 2);
-   }
-   .this-bg-level-3 {
-      background-color: map-get($level-colors, 3);
-   }
-   .this-bg-level-4 {
-      background-color: map-get($level-colors, 4);
-   }
-   .this-bg-level-5 {
-      background-color: map-get($level-colors, 5);
-   }
-   .this-bg-level-6 {
-      background-color: map-get($level-colors, 6);
-   }
-
-   .parent-bg-level-0 {
-      background-color: map-get($parent-colors, 0);
-   }
-   .parent-bg-level-1 {
-      background-color: map-get($parent-colors, 1);
-   }
-   .parent-bg-level-2 {
-      background-color: map-get($parent-colors, 2);
-   }
-   .parent-bg-level-3 {
-      background-color: map-get($parent-colors, 3);
-   }
-   .parent-bg-level-4 {
-      background-color: map-get($parent-colors, 4);
-   }
-   .parent-bg-level-5 {
-      background-color: map-get($parent-colors, 5);
-   }
-   .parent-bg-level-6 {
-      background-color: map-get($parent-colors, 6);
-   }
-
-   .child-bg-level-0 {
-      background-color: map-get($child-colors, 0);
-   }
-   .child-bg-level-1 {
-      background-color: map-get($child-colors, 1);
-   }
-   .child-bg-level-2 {
-      background-color: map-get($child-colors, 2);
-   }
-   .child-bg-level-3 {
-      background-color: map-get($child-colors, 3);
-   }
-   .child-bg-level-4 {
-      background-color: map-get($child-colors, 4);
-   }
-   .child-bg-level-5 {
-      background-color: map-get($child-colors, 5);
-   }
-   .child-bg-level-6 {
-      background-color: map-get($child-colors, 6);
-   }
-
-   .child-packed-bg-level-0 {
-      background-color: map-get($packed-colors, 0);
-   }
-   .child-packed-bg-level-1 {
-      background-color: map-get($packed-colors, 1);
-   }
-   .child-packed-bg-level-2 {
-      background-color: map-get($packed-colors, 2);
-   }
-   .child-packed-bg-level-3 {
-      background-color: map-get($packed-colors, 3);
-   }
-   .child-packed-bg-level-4 {
-      background-color: map-get($packed-colors, 4);
-   }
-   .child-packed-bg-level-5 {
-      background-color: map-get($packed-colors, 5);
-   }
-   .child-packed-bg-level-6 {
-      background-color: map-get($packed-colors, 6);
-   }
-
-   .item-icon-colors {
-      // width: 1em;
-      align-self: center;
-
-      .parent-item {
-         fill: $dark-text-color;
+      .secondary-action-button:hover:not(.disabled) {
+         // color: darken(white, 10);
+         background-color: rgba(0, 0, 0, 0.125);
+         border: 2px solid darken(#404040, 10);
       }
-      .this-item {
-         fill: $light-text-color;
+      .secondary-action-button:active:not(.disabled) {
+         // color: darken(white, 20);
+         background-color: rgba(0, 0, 0, 0.25);
+         border: 2px solid darken(#404040, 20);
       }
-      .child-item {
-         fill: $dark-text-color;
+
+      .icon-parent {
+         // width: 1em; //$iconWidth;
+         align-self: center;
+         .primary {
+            fill: $light-text-color;
+         }
+         .secondary {
+            fill: $light-text-color-dim;
+         }
       }
-   }
+      .theme-icon-color {
+         // width: 1em; //$iconWidth;
+         align-self: center;
+         .primary {
+            fill: $dark-text-color;
+         }
+         .secondary {
+            fill: $dark-text-color-dim;
+         }
+      }
 
-   input {
-      background-color: rgba(255, 255, 255, 0.6);
-      color: black !important;
-   }
+      .edit-name {
+         background-color: rgba(255, 255, 255, 0.6);
+         color: black;
+      }
 
-   .modal-content {
-      background-color: lightgray;
+      .this-bg-level-0 {
+         background-color: map-get($level-colors, 0);
+      }
+      .this-bg-level-1 {
+         background-color: map-get($level-colors, 1);
+      }
+      .this-bg-level-2 {
+         background-color: map-get($level-colors, 2);
+      }
+      .this-bg-level-3 {
+         background-color: map-get($level-colors, 3);
+      }
+      .this-bg-level-4 {
+         background-color: map-get($level-colors, 4);
+      }
+      .this-bg-level-5 {
+         background-color: map-get($level-colors, 5);
+      }
+      .this-bg-level-6 {
+         background-color: map-get($level-colors, 6);
+      }
+
+      .parent-bg-level-0 {
+         background-color: map-get($parent-colors, 0);
+      }
+      .parent-bg-level-1 {
+         background-color: map-get($parent-colors, 1);
+      }
+      .parent-bg-level-2 {
+         background-color: map-get($parent-colors, 2);
+      }
+      .parent-bg-level-3 {
+         background-color: map-get($parent-colors, 3);
+      }
+      .parent-bg-level-4 {
+         background-color: map-get($parent-colors, 4);
+      }
+      .parent-bg-level-5 {
+         background-color: map-get($parent-colors, 5);
+      }
+      .parent-bg-level-6 {
+         background-color: map-get($parent-colors, 6);
+      }
+
+      .child-bg-level-0 {
+         background-color: map-get($child-colors, 0);
+      }
+      .child-bg-level-1 {
+         background-color: map-get($child-colors, 1);
+      }
+      .child-bg-level-2 {
+         background-color: map-get($child-colors, 2);
+      }
+      .child-bg-level-3 {
+         background-color: map-get($child-colors, 3);
+      }
+      .child-bg-level-4 {
+         background-color: map-get($child-colors, 4);
+      }
+      .child-bg-level-5 {
+         background-color: map-get($child-colors, 5);
+      }
+      .child-bg-level-6 {
+         background-color: map-get($child-colors, 6);
+      }
+
+      .child-packed-bg-level-0 {
+         background-color: map-get($packed-colors, 0);
+      }
+      .child-packed-bg-level-1 {
+         background-color: map-get($packed-colors, 1);
+      }
+      .child-packed-bg-level-2 {
+         background-color: map-get($packed-colors, 2);
+      }
+      .child-packed-bg-level-3 {
+         background-color: map-get($packed-colors, 3);
+      }
+      .child-packed-bg-level-4 {
+         background-color: map-get($packed-colors, 4);
+      }
+      .child-packed-bg-level-5 {
+         background-color: map-get($packed-colors, 5);
+      }
+      .child-packed-bg-level-6 {
+         background-color: map-get($packed-colors, 6);
+      }
+
+      .item-icon-colors {
+         // width: 1em;
+         align-self: center;
+
+         .parent-item {
+            fill: $dark-text-color;
+         }
+         .this-item {
+            fill: $light-text-color;
+         }
+         .child-item {
+            fill: $dark-text-color;
+         }
+      }
+
+      input {
+         background-color: rgba(255, 255, 255, 0.6);
+         color: black !important;
+      }
+
+      .modal-content {
+         background-color: lightgray;
+      }
+
+      .loadout-tab-bar {
+         background-color: hsl(0, 0, 75);
+         color: hsl(0, 0, 25);
+         // same as dark mode
+         .primary {
+            fill: hsl(0, 0, 33);
+         }
+         .secondary {
+            fill: hsl(0, 0, 67);
+         }
+      }
+
+      // same as dark mode
+      .loadout-tab {
+         border: 1px solid hsla(0, 0, 0, 0.25);
+      }
+
+      .loadout-tab:hover {
+         background-color: hsl(0, 0, 67.5);
+         color: hsl(0, 0, 22.5);
+         // same as dark mode
+         .primary {
+            fill: hsl(0, 0, 29.7);
+         }
+         .secondary {
+            fill: hsl(0, 0, 60.3);
+         }
+      }
+      .loadout-tab:active {
+         background-color: hsl(0, 0, 60);
+         color: hsl(0, 0, 20);
+         // same as dark mode
+         .primary {
+            fill: hsl(0, 0, 26.4);
+         }
+         .secondary {
+            fill: hsl(0, 0, 53.6);
+         }
+      }
+
+      .loadout-tab-selected {
+         background-color: hsl(0, 0, 25);
+         color: hsl(0, 0, 75);
+      }
    }
 }
 
-// light mode
-.ui-theme-2 {
-   color: $dark-text-color;
+// // light mode
+// .ui-theme-2 {
+//    color: $dark-text-color;
 
-   .primary-action-button {
-      background-color: #404040;
-      color: white;
-      border: 2px solid #404040;
-   }
-   .primary-action-button:hover:not(.disabled) {
-      color: darken(white, 10);
-      background-color: darken(#404040, 10);
-      border: 2px solid darken(#404040, 10);
-   }
-   .primary-action-button:active:not(.disabled) {
-      color: darken(white, 20);
-      background-color: darken(#404040, 20);
-      border: 2px solid darken(#404040, 20);
-   }
+//    .primary-action-button {
+//       background-color: #404040;
+//       color: white;
+//       border: 2px solid #404040;
+//    }
+//    .primary-action-button:hover:not(.disabled) {
+//       color: darken(white, 10);
+//       background-color: darken(#404040, 10);
+//       border: 2px solid darken(#404040, 10);
+//    }
+//    .primary-action-button:active:not(.disabled) {
+//       color: darken(white, 20);
+//       background-color: darken(#404040, 20);
+//       border: 2px solid darken(#404040, 20);
+//    }
 
-   .secondary-action-button {
-      color: $dark-text-color;
-      border: 2px solid $dark-text-color;
-   }
-   .secondary-action-button:hover:not(.disabled) {
-      color: darken($dark-text-color, 10);
-      background-color: rgba(0, 0, 0, 0.125);
-      border: 2px solid darken($dark-text-color, 10);
-   }
-   .secondary-action-button:active:not(.disabled) {
-      color: darken($dark-text-color, 20);
-      background-color: rgba(0, 0, 0, 0.25);
-      border: 2px solid darken($dark-text-color, 20);
-   }
+//    .secondary-action-button {
+//       color: $dark-text-color;
+//       border: 2px solid $dark-text-color;
+//    }
+//    .secondary-action-button:hover:not(.disabled) {
+//       color: darken($dark-text-color, 10);
+//       background-color: rgba(0, 0, 0, 0.125);
+//       border: 2px solid darken($dark-text-color, 10);
+//    }
+//    .secondary-action-button:active:not(.disabled) {
+//       color: darken($dark-text-color, 20);
+//       background-color: rgba(0, 0, 0, 0.25);
+//       border: 2px solid darken($dark-text-color, 20);
+//    }
 
-   .this-bg {
-      background-color: $this-bg-light;
-   }
+//    .this-bg {
+//       background-color: $this-bg-light;
+//    }
 
-   .parent-bg {
-      background-color: $parent-bg-light;
-   }
+//    .parent-bg {
+//       background-color: $parent-bg-light;
+//    }
 
-   .child-bg {
-      background-color: $child-bg-light;
-   }
-   .child-packed-bg {
-      background-color: $child-bg-light-packed;
-   }
+//    .child-bg {
+//       background-color: $child-bg-light;
+//    }
+//    .child-packed-bg {
+//       background-color: $child-bg-light-packed;
+//    }
 
-   .theme-icon-color {
-      // width: 1em; //$iconWidth;
-      align-self: center;
-      .primary {
-         fill: $dark-text-color;
-      }
-      .secondary {
-         fill: $dark-text-color-dim;
-      }
-   }
+//    .theme-icon-color {
+//       // width: 1em; //$iconWidth;
+//       align-self: center;
+//       .primary {
+//          fill: $dark-text-color;
+//       }
+//       .secondary {
+//          fill: $dark-text-color-dim;
+//       }
+//    }
 
-   .edit-name {
-      background-color: rgba(255, 255, 255, 0.6);
-   }
+//    .edit-name {
+//       background-color: rgba(255, 255, 255, 0.6);
+//    }
 
-   .secondary-action-button {
-      color: $dark-text-color;
-   }
-}
+//    .secondary-action-button {
+//       color: $dark-text-color;
+//    }
+// }
 
 // dark mode
 $border-darken-amount: 5;
-.ui-theme-1 {
-   color: $light-text-color; // main font color for this theme
+@media (prefers-color-scheme: dark) {
+   .ui-theme {
+      color: $light-text-color; // main font color for this theme
 
-   .primary-action-button {
-      color: $dark-text-color;
-      background-color: $light-text-color;
-   }
-   .primary-action-button:hover:not(.disabled) {
-      color: darken($dark-text-color, 20);
-      background-color: darken($light-text-color, 20);
-   }
-   .primary-action-button:active:not(.disabled) {
-      color: darken($dark-text-color, 40);
-      background-color: darken($light-text-color, 40);
-   }
+      .text-danger {
+         color: hsl(0, 75, 45);
+      }
 
-   .secondary-action-button {
-      color: $light-text-color;
-      border: 2px solid $light-text-color;
-   }
-   .secondary-action-button:hover:not(.disabled) {
-      color: darken($light-text-color, 10);
-      background-color: rgba(0, 0, 0, 0.125);
-      border: 2px solid darken($light-text-color, 10);
-   }
-   .secondary-action-button:active:not(.disabled) {
-      color: darken($light-text-color, 20);
-      background-color: rgba(0, 0, 0, 0.25);
-      border: 2px solid darken($light-text-color, 20);
-   }
+      .landing-page {
+         .card {
+            background-color: hsla(
+               0,
+               0,
+               15,
+               0.8
+            ); // sets opacity of the card but not its descendants, so I can have opaque sub-elements
+         }
+      }
 
-   .this-bg {
-      background-color: $this-bg-dark;
-   }
+      h5 {
+         color: $lighter-stuff;
+      }
 
-   .parent-bg {
-      background-color: $parent-bg-dark;
-   }
+      .form-label {
+         color: $light-text-color;
+         opacity: 0.7;
+      }
 
-   .child-bg {
-      background-color: $child-bg-dark;
-   }
-   .child-packed-bg {
-      background-color: $child-bg-dark-packed;
-   }
+      .card-section {
+         border: $outline-style-dark-theme;
+      }
 
-   .display-switch-label {
-      color: rgba(255, 255, 255, 0.5);
-   }
+      .my-input {
+         background-color: black;
+         color: white;
+      }
 
-   .theme-icon-color {
-      // width: 1em; //$iconWidth;
-      align-self: center;
-      .primary {
+      button {
+         color: $light-text-color;
+      }
+
+      .contrast-icon {
          fill: $light-text-color;
       }
-      .secondary {
-         fill: $light-text-color-dim;
+
+      .primary-action-button {
+         color: $dark-text-color;
+         background-color: $light-text-color;
       }
-   }
-
-   input {
-      // background-color: rgba(0, 0, 0, 0.6);
-      background-color: rgba(0, 0, 0, 0.6);
-   }
-
-   .item-card-group {
-      border: 2px solid #448424;
-   }
-
-   .card-header {
-      border-bottom: 1px solid #448424;
-   }
-
-   .item-card-border-0 {
-      border: 2px solid
-         darken(map-get($level-text-colors, 0), $border-darken-amount);
-   }
-   .item-card-border-1 {
-      border: 2px solid
-         darken(map-get($level-text-colors, 1), $border-darken-amount);
-   }
-   .item-card-border-2 {
-      border: 2px solid
-         darken(map-get($level-text-colors, 2), $border-darken-amount);
-   }
-   .item-card-border-3 {
-      border: 2px solid
-         darken(map-get($level-text-colors, 3), $border-darken-amount);
-   }
-   .item-card-border-4 {
-      border: 2px solid
-         darken(map-get($level-text-colors, 4), $border-darken-amount);
-   }
-   .item-card-border-5 {
-      border: 2px solid
-         darken(map-get($level-text-colors, 5), $border-darken-amount);
-   }
-   .item-card-border-6 {
-      border: 2px solid
-         darken(map-get($level-text-colors, 6), $border-darken-amount);
-   }
-
-   .modal-content {
-      background-color: black;
-   }
-
-   .loadout-tab-bar {
-      background-color: hsl(0, 0, 25);
-      color: hsl(0, 0, 75);
-      .primary {
-         fill: hsl(0, 0, 33);
+      .primary-action-button:hover:not(.disabled) {
+         color: darken($dark-text-color, 20);
+         background-color: darken($light-text-color, 20);
       }
-      .secondary {
-         fill: hsl(0, 0, 67);
+      .primary-action-button:active:not(.disabled) {
+         color: darken($dark-text-color, 40);
+         background-color: darken($light-text-color, 40);
       }
-   }
 
-   .loadout-tab {
-      border: 1px solid hsla(0, 0, 0, 0.25);
-   }
+      .secondary-action-button {
+         color: $light-text-color;
+         border: 2px solid $light-text-color;
+      }
+      .secondary-action-button:hover:not(.disabled) {
+         color: darken($light-text-color, 10);
+         background-color: rgba(0, 0, 0, 0.125);
+         border: 2px solid darken($light-text-color, 10);
+      }
+      .secondary-action-button:active:not(.disabled) {
+         color: darken($light-text-color, 20);
+         background-color: rgba(0, 0, 0, 0.25);
+         border: 2px solid darken($light-text-color, 20);
+      }
 
-   .loadout-tab:hover {
-      background-color: hsl(0, 0, 22.5);
-      color: hsl(0, 0, 67.5);
-      .primary {
-         fill: hsl(0, 0, 29.7);
+      .this-bg {
+         background-color: $this-bg-dark;
       }
-      .secondary {
-         fill: hsl(0, 0, 60.3);
-      }
-   }
-   .loadout-tab:active {
-      background-color: hsl(0, 0, 20);
-      color: hsl(0, 0, 60);
-      .primary {
-         fill: hsl(0, 0, 26.4);
-      }
-      .secondary {
-         fill: hsl(0, 0, 53.6);
-      }
-   }
 
-   .loadout-tab-selected {
-      background-color: hsl(0, 0, 75);
-      color: hsl(0, 0, 25);
+      .parent-bg {
+         background-color: $parent-bg-dark;
+      }
+
+      .child-bg {
+         background-color: $child-bg-dark;
+      }
+      .child-packed-bg {
+         background-color: $child-bg-dark-packed;
+      }
+
+      .display-switch-label {
+         color: rgba(255, 255, 255, 0.5);
+      }
+
+      .theme-icon-color {
+         // width: 1em; //$iconWidth;
+         align-self: center;
+         .primary {
+            fill: $light-text-color;
+         }
+         .secondary {
+            fill: $light-text-color-dim;
+         }
+      }
+
+      input {
+         // background-color: rgba(0, 0, 0, 0.6);
+         background-color: rgba(0, 0, 0, 0.6);
+      }
+
+      .item-card-group {
+         border: 2px solid #448424;
+      }
+
+      .card-header {
+         border-bottom: 1px solid #448424;
+      }
+
+      .item-card-border-0 {
+         border: 2px solid
+            darken(map-get($level-text-colors, 0), $border-darken-amount);
+      }
+      .item-card-border-1 {
+         border: 2px solid
+            darken(map-get($level-text-colors, 1), $border-darken-amount);
+      }
+      .item-card-border-2 {
+         border: 2px solid
+            darken(map-get($level-text-colors, 2), $border-darken-amount);
+      }
+      .item-card-border-3 {
+         border: 2px solid
+            darken(map-get($level-text-colors, 3), $border-darken-amount);
+      }
+      .item-card-border-4 {
+         border: 2px solid
+            darken(map-get($level-text-colors, 4), $border-darken-amount);
+      }
+      .item-card-border-5 {
+         border: 2px solid
+            darken(map-get($level-text-colors, 5), $border-darken-amount);
+      }
+      .item-card-border-6 {
+         border: 2px solid
+            darken(map-get($level-text-colors, 6), $border-darken-amount);
+      }
+
+      .item-icon-colors-0 {
+         // width: 1em;
+         align-self: center;
+         // colors for the packing icons
+         .parent-item {
+            fill: map-get($level-text-colors, 6);
+         }
+         .this-item {
+            fill: map-get($level-text-colors, 0);
+         }
+         .child-item {
+            fill: map-get($level-text-colors, 1);
+         }
+      }
+      .item-icon-colors-1 {
+         // width: 1em;
+         align-self: center;
+         // colors for the packing icons
+         .parent-item {
+            fill: map-get($level-text-colors, 0);
+         }
+         .this-item {
+            fill: map-get($level-text-colors, 1);
+         }
+         .child-item {
+            fill: map-get($level-text-colors, 2);
+         }
+      }
+      .item-icon-colors-2 {
+         // width: 1em;
+         align-self: center;
+         // colors for the packing icons
+         .parent-item {
+            fill: map-get($level-text-colors, 1);
+         }
+         .this-item {
+            fill: map-get($level-text-colors, 2);
+         }
+         .child-item {
+            fill: map-get($level-text-colors, 3);
+         }
+      }
+      .item-icon-colors-3 {
+         // width: 1em;
+         align-self: center;
+         // colors for the packing icons
+         .parent-item {
+            fill: map-get($level-text-colors, 2);
+         }
+         .this-item {
+            fill: map-get($level-text-colors, 3);
+         }
+         .child-item {
+            fill: map-get($level-text-colors, 4);
+         }
+      }
+      .item-icon-colors-4 {
+         // width: 1em;
+         align-self: center;
+         // colors for the packing icons
+         .parent-item {
+            fill: map-get($level-text-colors, 3);
+         }
+         .this-item {
+            fill: map-get($level-text-colors, 4);
+         }
+         .child-item {
+            fill: map-get($level-text-colors, 5);
+         }
+      }
+      .item-icon-colors-5 {
+         // width: 1em;
+         align-self: center;
+         // colors for the packing icons
+         .parent-item {
+            fill: map-get($level-text-colors, 4);
+         }
+         .this-item {
+            fill: map-get($level-text-colors, 5);
+         }
+         .child-item {
+            fill: map-get($level-text-colors, 6);
+         }
+      }
+      .item-icon-colors-6 {
+         // width: 1em;
+         align-self: center;
+         // colors for the packing icons
+         .parent-item {
+            fill: map-get($level-text-colors, 5);
+         }
+         .this-item {
+            fill: map-get($level-text-colors, 6);
+         }
+         .child-item {
+            fill: map-get($level-text-colors, 0);
+         }
+      }
+
+      .modal-content {
+         background-color: black;
+      }
+
+      .loadout-tab-bar {
+         background-color: hsl(0, 0, 25);
+         color: hsl(0, 0, 75);
+         .primary {
+            fill: hsl(0, 0, 33);
+         }
+         .secondary {
+            fill: hsl(0, 0, 67);
+         }
+      }
+
+      .loadout-tab {
+         border: 1px solid hsla(0, 0, 0, 0.25);
+      }
+
+      .loadout-tab:hover {
+         background-color: hsl(0, 0, 22.5);
+         color: hsl(0, 0, 67.5);
+         .primary {
+            fill: hsl(0, 0, 29.7);
+         }
+         .secondary {
+            fill: hsl(0, 0, 60.3);
+         }
+      }
+      .loadout-tab:active {
+         background-color: hsl(0, 0, 20);
+         color: hsl(0, 0, 60);
+         .primary {
+            fill: hsl(0, 0, 26.4);
+         }
+         .secondary {
+            fill: hsl(0, 0, 53.6);
+         }
+      }
+
+      .loadout-tab-selected {
+         background-color: hsl(0, 0, 75);
+         color: hsl(0, 0, 25);
+      }
    }
 }
 
-// shared with light and dark themes
-.ui-theme-2,
-.ui-theme-1 {
-   .item-icon-colors-0 {
-      // width: 1em;
-      align-self: center;
-      // colors for the packing icons
-      .parent-item {
-         fill: map-get($level-text-colors, 6);
-      }
-      .this-item {
-         fill: map-get($level-text-colors, 0);
-      }
-      .child-item {
-         fill: map-get($level-text-colors, 1);
-      }
-   }
-   .item-icon-colors-1 {
-      // width: 1em;
-      align-self: center;
-      // colors for the packing icons
-      .parent-item {
-         fill: map-get($level-text-colors, 0);
-      }
-      .this-item {
-         fill: map-get($level-text-colors, 1);
-      }
-      .child-item {
-         fill: map-get($level-text-colors, 2);
-      }
-   }
-   .item-icon-colors-2 {
-      // width: 1em;
-      align-self: center;
-      // colors for the packing icons
-      .parent-item {
-         fill: map-get($level-text-colors, 1);
-      }
-      .this-item {
-         fill: map-get($level-text-colors, 2);
-      }
-      .child-item {
-         fill: map-get($level-text-colors, 3);
-      }
-   }
-   .item-icon-colors-3 {
-      // width: 1em;
-      align-self: center;
-      // colors for the packing icons
-      .parent-item {
-         fill: map-get($level-text-colors, 2);
-      }
-      .this-item {
-         fill: map-get($level-text-colors, 3);
-      }
-      .child-item {
-         fill: map-get($level-text-colors, 4);
-      }
-   }
-   .item-icon-colors-4 {
-      // width: 1em;
-      align-self: center;
-      // colors for the packing icons
-      .parent-item {
-         fill: map-get($level-text-colors, 3);
-      }
-      .this-item {
-         fill: map-get($level-text-colors, 4);
-      }
-      .child-item {
-         fill: map-get($level-text-colors, 5);
-      }
-   }
-   .item-icon-colors-5 {
-      // width: 1em;
-      align-self: center;
-      // colors for the packing icons
-      .parent-item {
-         fill: map-get($level-text-colors, 4);
-      }
-      .this-item {
-         fill: map-get($level-text-colors, 5);
-      }
-      .child-item {
-         fill: map-get($level-text-colors, 6);
-      }
-   }
-   .item-icon-colors-6 {
-      // width: 1em;
-      align-self: center;
-      // colors for the packing icons
-      .parent-item {
-         fill: map-get($level-text-colors, 5);
-      }
-      .this-item {
-         fill: map-get($level-text-colors, 6);
-      }
-      .child-item {
-         fill: map-get($level-text-colors, 0);
-      }
-   }
-}
-
-// shared between colors and light themes
-.ui-theme-0,
-.ui-theme-2 {
-   .display-switch-label {
-      color: rgba(0, 0, 0, 0.5);
-   }
-}
+// // shared between colors and light themes
+// .ui-theme-0,
+// .ui-theme-2 {
+//    .display-switch-label {
+//       color: rgba(0, 0, 0, 0.5);
+//    }
+// }

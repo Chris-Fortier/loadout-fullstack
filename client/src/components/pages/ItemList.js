@@ -127,13 +127,7 @@ class ItemList extends React.Component {
 
       return (
          <>
-            <div
-               className={classnames(
-                  // !this.props.isEditMode &&
-                  `ui-theme-${this.props.currentUser.uiTheme}`
-                  // this.props.isEditMode && `ui-theme-2`
-               )}
-            >
+            <div className="ui-theme">
                <Header />
 
                <div

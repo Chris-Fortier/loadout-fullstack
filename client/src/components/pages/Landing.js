@@ -1,20 +1,12 @@
 import React from "react";
-// import { Link } from "react-router-dom"; // a React element for linking
 import { v4 as getUuid } from "uuid";
 import classnames from "classnames";
-import {
-   IconUserAdd,
-   // IconUserCheck,
-   // IconKey,
-   // IconHome,
-   // IconEdit,
-} from "../../icons/icons.js";
+import { IconUserAdd } from "../../icons/icons.js";
 import { withRouter } from "react-router-dom"; // a React element for linking
 import axios from "axios";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
 import LoadoutLogo from "../../logo/loadout.svg";
-// import { NUM_BACKGROUNDS } from "../../utils/helpers";
 import jwtDecode from "jwt-decode";
 import { MAX_USERNAME_LENGTH } from "../../utils/helpers.js";
 
@@ -267,23 +259,11 @@ class Landing extends React.Component {
                   className="button navigation-link"
                   onClick={() => this.setNewAccountMode()}
                >
-                  <span className="icon-dark left standard-sized-icon">
+                  <span className="contrast-icon icon-dark left standard-sized-icon">
                      <IconUserAdd />
                   </span>
                   &nbsp;Make a New Account
                </div>
-               {/* <div
-                  className="button navigation-link float-right"
-                  onClick={() =>
-                     this.bypassLogIn({
-                        id: "0e3e3882-1264-467c-94bf-f9850b7edbd4",
-                        username: "chris",
-                        createdAt: "1594145052944",
-                     })
-                  }
-               >
-                  bypass log in
-               </div> */}
             </div>
          </div>
       );
@@ -294,17 +274,11 @@ class Landing extends React.Component {
          <div className="card mb-3">
             <div className="card-body">
                <h5>
-                  <span className="icon-dark left standard-sized-icon">
+                  <span className="contrast-icon icon-dark left standard-sized-icon">
                      <IconUserAdd />
                   </span>
                   Sign Up
                </h5>
-               {/* <p>
-                  <span className="icon-dark left">
-                     <IconUserAdd />
-                  </span>
-                  Make a New Account
-               </p> */}
                <input
                   id="signup-username-input"
                   placeholder="Enter A Username"
@@ -360,7 +334,7 @@ class Landing extends React.Component {
             className={classnames(
                this.state.landingMode === "log-in" && "landing-bg-0",
                this.state.landingMode === "new-account" && "landing-bg-1",
-               "ui-theme-0"
+               "ui-theme"
             )}
          >
             <div className="container-fluid landing-page">

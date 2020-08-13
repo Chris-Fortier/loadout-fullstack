@@ -118,7 +118,7 @@ class LoadoutList extends React.Component {
       console.log("this.props.currentUser", this.props.currentUser);
 
       return (
-         <div className={`ui-theme-${this.props.currentUser.uiTheme}`}>
+         <div className="ui-theme">
             <Header />
             <div
                className={classnames(`item-list parent-bg parent-bg-level-0`)}
