@@ -553,9 +553,10 @@ $iconWidth: 30px;
    font-size: 28px;
 }
 
-.compartment-title {
-   height: 21px; // to make the height match what the input version ends up being
-}
+// disabled this so it can wrap
+// .compartment-title {
+//    height: 21px; // to make the height match what the input version ends up being
+// }
 
 // .compartment-input {
 //    height: 28px;
