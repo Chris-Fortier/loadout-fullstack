@@ -50,7 +50,7 @@ class LoadoutHeader extends React.Component {
       }
 
       return (
-         <div className="container-fluid header-container">
+         <div className="container-fluid header-container sticky-menu">
             <div className="row loadout-tab-bar">
                <div
                   className={classnames("col", {
