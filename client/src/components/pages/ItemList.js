@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../ui/Header";
-import { IconUpLevel, IconUserCouple } from "../../icons/icons.js";
+import { IconUpLevel } from "../../icons/icons.js";
 import { LEVEL_COLORS } from "../../utils/helpers";
 import classnames from "classnames";
 import { connect } from "react-redux";
@@ -8,7 +8,6 @@ import actions from "../../store/actions";
 import { Link } from "react-router-dom"; // a React element for linking
 import { movePageToDifferentItem } from "../../utils/movePageToDifferentItem";
 import isEmpty from "lodash/isEmpty";
-import SharingStrip from "../ui/SharingStrip";
 import Compartment from "../ui/Compartment";
 import LoadoutHeader from "../ui/LoadoutHeader";
 
@@ -115,15 +114,6 @@ class ItemList extends React.Component {
       // const level = this.props.currentLevel;
 
       const parentLevelRotated = this.rotateLevel(pageItem.level - 1);
-
-      // get tooltip for Edit Loadout link
-      let editTooltip = "";
-      if (this.props.currentUserLoadout.canEdit === 1) {
-         editTooltip = "Enter edit mode";
-      } else {
-         editTooltip =
-            "This user does not have edit permissions on this loadout.";
-      }
 
       return (
          <>

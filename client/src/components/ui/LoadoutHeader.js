@@ -3,12 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import actions from "../../store/actions";
-import {
-   IconPackage,
-   IconEdit,
-   IconUpLevel,
-   IconUserCouple,
-} from "../../icons/icons.js";
+import { IconPackage, IconEdit, IconUserCouple } from "../../icons/icons.js";
 
 // export default function Header() {
 class LoadoutHeader extends React.Component {
